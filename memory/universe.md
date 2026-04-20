@@ -2,13 +2,33 @@
 
 > **Refreshed monthly** by routine #1 on the 1st of each month, or manually if a pair delists.
 > **Source of truth:** Kraken MCP `kraken_pairs` + `kraken_ticker` volume queries.
-> **Last refreshed:** NOT YET (populated on first routine #1 run).
+> **Last refreshed:** 2026-04-20 (standup — ranked by **24h** notional as a proxy until routine #1 runs a real 30d aggregation).
 
 ## Current universe
 
-| Rank | Pair | 30d volume (USD) | Notes |
-|------|------|------------------|-------|
-| — | — | — | Awaiting first routine #1 refresh |
+| Rank | Pair | Kraken symbol | 24h notional (USD) | Notes |
+|------|------|---------------|-------------------:|-------|
+| 1 | BTC/USD | XXBTZUSD | $130.2M | — |
+| 2 | ETH/USD | XETHZUSD | $37.2M | — |
+| 3 | SOL/USD | SOLUSD | $30.0M | — |
+| 4 | XRP/USD | XXRPZUSD | $18.8M | — |
+| 5 | TAO/USD | TAOUSD | $6.80M | — |
+| 6 | HYPE/USD | HYPEUSD | $5.86M | — |
+| 7 | DOGE/USD | XDGUSD | $5.21M | Kraken symbol is XDG |
+| 8 | SUI/USD | SUIUSD | $4.86M | — |
+| 9 | LTC/USD | XLTCZUSD | $2.19M | — |
+| 10 | ADA/USD | ADAUSD | $1.95M | — |
+| 11 | FARTCOIN/USD | FARTCOINUSD | $1.52M | Meme — watch for volume decay |
+| 12 | AVAX/USD | AVAXUSD | $1.21M | — |
+| 13 | LINK/USD | LINKUSD | $1.17M | — |
+| 14 | PENGU/USD | PENGUUSD | $1.07M | Meme — watch for volume decay |
+| 15 | TRX/USD | TRXUSD | $1.04M | — |
+
+## Near-miss (watch for next refresh)
+
+- DOT/USD — $0.89M
+- NEAR/USD — $0.73M
+- UNI/USD — $0.73M
 
 ## Refresh rules
 
