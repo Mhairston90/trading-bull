@@ -4,6 +4,17 @@
 **Mode:** local — REQUIRES TradingView Desktop app running
 **Context budget target:** 180K tokens (heaviest routine)
 
+## DAY GATE (run first, before anything else)
+
+Claude Code Desktop runs this Daily, not weekly. Before doing any work, check today's day of week (US Pacific). If today is NOT Saturday, do these 4 things and STOP:
+1. Append one row to `memory/research_log.md`: `<UTC timestamp> | harness | day-gate | not Saturday, skipping | no action`
+2. `git add memory/research_log.md`
+3. `git commit --allow-empty -m "routine-04-harness: day-gate skip (not Sat)"`
+4. `git push origin main`
+Then exit. Do not READ the rest of the files, do not run TradingView, do not propose anything.
+
+If today IS Saturday, proceed with the full routine below.
+
 ## READ (in order)
 
 1. `CLAUDE.md`

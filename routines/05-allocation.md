@@ -4,6 +4,17 @@
 **Mode:** local
 **Context budget target:** 120K tokens
 
+## DAY GATE (run first, before anything else)
+
+Claude Code Desktop runs this Daily, not weekly. Before doing any work, check today's day of week (US Pacific). If today is NOT Sunday, do these 4 things and STOP:
+1. Append one row to `memory/research_log.md`: `<UTC timestamp> | allocation | day-gate | not Sunday, skipping | no action`
+2. `git add memory/research_log.md`
+3. `git commit --allow-empty -m "routine-05-allocation: day-gate skip (not Sun)"`
+4. `git push origin main`
+Then exit. Do not READ the rest of the files, do not propose anything, do not apply any pending strategy edits.
+
+If today IS Sunday, proceed with the full routine below.
+
 ## READ (in order)
 
 1. `CLAUDE.md`
