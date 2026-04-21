@@ -11,4 +11,4 @@
 
 ## Entries
 
-_No trades yet._
+| 2026-04-21T18:00:00Z | OPEN | TRX/USD | long | 7531 | 0.331943 | 0.330285 | — | — | — | entry-rule-v0-momentum |
