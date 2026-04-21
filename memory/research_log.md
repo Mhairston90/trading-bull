@@ -27,3 +27,4 @@
 | 2026-04-21T18:05:00Z | overnight | system | News scan deferred: morning-brief skill runs separately and surfaces actionable headlines. v0 strategy is not news-reactive — no entry gate depends on news this run. | deferred |
 | 2026-04-21T18:05:00Z | overnight | system | Universe refresh skipped: today is 2026-04-21 (not 1st of month). Next refresh 2026-05-01. | no action |
 2026-04-21T18:16:46Z | allocation | day-gate | not Sunday, skipping | no action
+2026-04-21T18:17:40Z | harness | day-gate | not Saturday, skipping | no action
