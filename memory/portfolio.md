@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** NOT YET (will be set on first routine run).
+> **Last rebuild:** 2026-04-21T03:30:00Z (routine-01-overnight — no trades; trade_log empty).
 
 ## Account
 
