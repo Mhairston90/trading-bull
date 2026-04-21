@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "kraken": {
+      "type": "stdio",
+      "command": "python",
+      "args": [
+        "C:/Users/Mhair/OneDrive/Desktop/claude/Trading Strategy/kraken_mcp.py"
+      ],
+      "env": {}
+    },
+    "tradingview-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "C:/Users/Mhair/tradingview-mcp-jackson/src/server.js"
+      ],
+      "env": {}
+    }
+  }
+}
