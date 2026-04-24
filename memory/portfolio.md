@@ -2,48 +2,43 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-04-24T17:00:00Z (routine-01-overnight — AVAX entry added; prior wake booked BTC exit + ADA entry).
+> **Last rebuild:** 2026-04-25T00:20:00Z (routine-02-midday — fresh MTM, no exits).
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$2,448.97**
-  - Opening 2026-04-24: $2,483.57
-  - +BTC close proceeds @ 04:00: +$2,496.10
-  - −ADA open outflow @ 17:00: −$2,509.18
-  - +TRX close proceeds @ 20:00: +$2,479.87
-  - −AVAX open outflow @ 17:00: −$2,501.39
+- Cash: **$2,448.97** (unchanged from prior wake — no exits, no entries midday)
 - Realized PnL (all-time): **−$35.83** (−$26.69 TRX + −$9.14 BTC)
-- Unrealized PnL (mark-to-market, 16:00Z just-closed):
+- Unrealized PnL (mark-to-market, live ticker @ 00:20Z):
   - LTC @ 56.59: 45.2 × (56.59 − 55.27) = **+$59.66**
-  - ADA @ 0.251804: 9934 × (0.251804 − 0.251930) = **−$1.25**
-  - AVAX @ 9.41: 265 × (9.41 − 9.4147) = **−$1.25**
-  - Total unrealized: **+$57.16**
+  - ADA @ 0.252045: 9934 × (0.252045 − 0.251930) = **+$1.14**
+  - AVAX @ 9.44: 265 × (9.44 − 9.4147) = **+$6.70**
+  - Total unrealized: **+$67.50**
 - Position values (mark-to-market):
   - LTC: 45.2 × 56.59 = **$2,557.87**
-  - ADA: 9934 × 0.251804 = **$2,501.42**
-  - AVAX: 265 × 9.41 = **$2,493.65**
-  - Total: **$7,552.94**
-- Current equity (cash + positions MTM): **$2,448.97 + $7,552.94 = $10,001.91**
+  - ADA: 9934 × 0.252045 = **$2,503.81**
+  - AVAX: 265 × 9.44 = **$2,501.60**
+  - Total: **$7,563.28**
+- Current equity (cash + positions MTM): **$2,448.97 + $7,563.28 = $10,012.25**
 - Equity peak: **$10,027.55** (set 2026-04-24 midday)
-- Drawdown from peak: **0.26%**
+- Drawdown from peak: **0.15%**
 
 ## Open positions
 
 | Pair | Side | Size | Entry | Stop | Target (static) | Risk at open | R-at-stop | MTM |
 |------|------|------|-------|------|-----------------|--------------|-----------|-----|
 | LTC/USD | long | 45.2 | 55.27 | 54.61 | — (4R exit rule dynamic) | $29.83 (0.30%) | −1R | 56.59 |
-| ADA/USD | long | 9934 | 0.251930 | 0.248716 | — (4R exit rule dynamic) | $31.93 (0.32%) | −1R | 0.251804 |
-| AVAX/USD | long | 265 | 9.4147 | 9.2847 | — (4R exit rule dynamic) | $34.45 (0.34%) | −1R | 9.41 |
+| ADA/USD | long | 9934 | 0.251930 | 0.248716 | — (4R exit rule dynamic) | $31.93 (0.32%) | −1R | 0.252045 |
+| AVAX/USD | long | 265 | 9.4147 | 9.2847 | — (4R exit rule dynamic) | $34.45 (0.34%) | −1R | 9.44 |
 
-Portfolio risk-at-moment: $29.83 + $31.93 + $34.45 = $96.21 / $10,001.91 = **0.96%** (cap 4%).
+Portfolio risk-at-moment: $29.83 + $31.93 + $34.45 = $96.21 / $10,012.25 = **0.96%** (cap 4%).
 
 ## Active kill-switch state
 
-- Daily loss: realized −0.36% + unrealized +0.57% = net +0.21% (cap 5%)
+- Daily loss: realized −0.36% + unrealized +0.67% = net +0.31% (cap 5%)
 - Consecutive losing days: 0 (cap 7)
-- Max drawdown: 0.26% (cap 25%)
-- Equity floor: $10,001.91 > $7,500 floor — OK
+- Max drawdown: 0.15% (cap 25%)
+- Equity floor: $10,012.25 > $7,500 floor — OK
 - **All clear. Trading authorized.**
 
 ## Rolling performance
