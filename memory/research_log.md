@@ -81,3 +81,4 @@
 | 2026-04-25T00:30:00Z | harness | day-gate | not Saturday, skipping | no action |
 | 2026-04-25T00:31:00Z | allocation | day-gate | not Sunday, skipping | no action |
 | 2026-04-24T17:40:00Z | allocation | day-gate | not Sunday, skipping | no action |
+| 2026-04-24T20:10:00Z | midday | kraken | MTM @ 20:06Z — LTC 56.72, ADA 0.251958, AVAX 9.44; no stops pierced intrabar, 19:00Z 1H closes all above 20-EMA; equity $10,017.26, DD 0.10%, day +0.37% net | no action — all clear, silent |
