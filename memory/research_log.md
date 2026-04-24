@@ -63,3 +63,16 @@
 | 2026-04-24T13:00:00Z | overnight | kraken | ETH,SOL,XRP,TAO,HYPE,FARTCOIN,AVAX,LINK all rejected inferentially via kraken_multi_ticker 24h change screen: either <0 (failing momentum prior) or failing at least one of the 3 entry rules; context-budget decision not to compute full indicator set. | REJECT (8 pairs inferred) |
 | 2026-04-24T13:00:00Z | overnight | kraken | kraken_risk_flag: CLEAR — no tier-1/2 incidents or exchange status anomalies. No ACTIONABLE news items surface from morning brief cross-check. | no action (v0 not news-reactive) |
 | 2026-04-24T13:00:00Z | overnight | system | Universe refresh skipped: today is 2026-04-24 (not 1st of month). Next refresh 2026-05-01. | no action |
+| 2026-04-24T17:00:00Z | overnight | kraken-risk-scan | Risk flag CLEAR for 2026-04-23 (scan 2026-04-24T00:00Z); 2 tier-2 military headlines, 0 blocking | macro/military-escalation (Strait of Hormuz, naval blockade) | no action — tier-2 non-blocking; continue trading |
+| 2026-04-24T17:00:00Z | overnight | position-check LTC | 1H close 56.59 > SMA20 56.12; stop 54.61 intact; no +4R TP yet | momentum continuation | HOLD LTC |
+| 2026-04-24T17:00:00Z | overnight | position-check BTC | prior wake @ 04:00Z booked EMA-cross exit fill 77720.72 (−$9.14, +0.10R) — confirmed correct per strategy "1H close < EMA20" | exit-rule-trigger | closed, no duplicate action |
+| 2026-04-24T17:00:00Z | overnight | position-check ADA | prior wake @ 17:00Z booked OPEN 9934 @ 0.251930, stop 0.248716 — confirmed v0 rules pass (1H 0.251804>SMA20 0.2500, RSI14 58.85, 4H 0.252283>SMA50 0.2510) | entry-rule-v0-momentum | open, no duplicate action |
+| 2026-04-24T17:00:00Z | overnight | entry-scan AVAX | PASS: 1H close 9.41>SMA20 9.388, RSI14 56.41, 4H close 9.46>SMA50 9.429 (thin +0.3% margin), ATR14 0.065 | entry-rule-v0-momentum | OPEN 265 @ 9.4147 fill, stop 9.2847, risk $34.45 (0.34%) |
+| 2026-04-24T17:00:00Z | overnight | entry-scan SOL | PASS 1H (86.38>85.924, RSI 57.19) but 4H margin razor-thin (close 86.53 vs SMA50 86.499, +0.04%); below SMA-proxy confidence threshold | skip-thin-4h-margin | REJECT — wait for wider separation |
+| 2026-04-24T17:00:00Z | overnight | entry-scan XDG | 1H close 0.0980656>SMA20 0.09765, BUT RSI14 54.0 < 55 threshold | rule-2-fail | REJECT |
+| 2026-04-24T17:00:00Z | overnight | entry-scan PENGU | 1H close 0.008525 < SMA20 0.008566 | rule-1-fail | REJECT |
+| 2026-04-24T17:00:00Z | overnight | entry-scan SUI | 1H close 0.95 > SMA20 0.94655, BUT RSI14 52.2 < 55 | rule-2-fail | REJECT |
+| 2026-04-24T17:00:00Z | overnight | entry-scan ETH/HYPE/TAO/TRX | all negative 24h change; momentum regime absent | rule-2-fail-inferred | REJECT (no 1H pull — efficiency) |
+| 2026-04-24T17:00:00Z | overnight | entry-scan LINK/FARTCOIN/XRP | positive 24h but marginal (<0.5%); not pulled due to AVAX slot fill using capacity | skipped-not-pulled | no action |
+| 2026-04-24T17:00:00Z | overnight | news-scan | firecrawl news-scan deferred — daily risk_flag covers macro/military tier; no v0 news-reactive rule yet | procedural | no headline-level actionable items recorded |
+| 2026-04-24T17:00:00Z | overnight | universe-refresh | skipped — not 1st of month | procedural | no change |
