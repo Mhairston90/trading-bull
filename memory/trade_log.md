@@ -14,4 +14,6 @@
 | 2026-04-21T18:00:00Z | OPEN | TRX/USD | long | 7531 | 0.331943 | 0.330285 | — | — | — | entry-rule-v0-momentum |
 | 2026-04-21T20:00:00Z | OPEN | LTC/USD | long | 45.2 | 55.27 | 54.61 | — | — | — | entry-rule-v0-momentum |
 | 2026-04-22T04:05:00Z | OPEN | BTC/USD | long | 0.0322 | 77600.4 | 76454.3 | — | — | — | entry-rule-v0-momentum |
+| 2026-04-24T04:00:00Z | CLOSE | BTC/USD | long | 0.0322 | 77720.72 | — | — | +0.10 | -9.14 | exit-ema-cross |
+| 2026-04-24T17:00:00Z | OPEN | ADA/USD | long | 9934 | 0.251930 | 0.248716 | — | — | — | entry-rule-v0-momentum |
 | 2026-04-24T20:00:00Z | CLOSE | TRX/USD | long | 7531 | 0.330120 | — | — | -1.1 | -26.69 | exit-stop-hit |
