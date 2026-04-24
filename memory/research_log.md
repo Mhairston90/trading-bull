@@ -52,3 +52,4 @@
 | 2026-04-22T04:10:00Z | overnight | system | News scan deferred: morning-brief skill runs separately and surfaces actionable headlines. v0 strategy is not news-reactive — no entry gate depends on news this run. Kraken risk flag CLEAR confirms no tier-1/2 incidents. | deferred |
 | 2026-04-22T04:10:00Z | overnight | system | Universe refresh skipped: today is 2026-04-22 (not 1st of month). Next refresh 2026-05-01. | no action |
 | 2026-04-24T20:00:00Z | midday | kraken | Midday health check: TRX last 0.324443 (24h low 0.319711) pierced static stop 0.330285 intrabar — closed at stop with 0.05% slippage (fill 0.330120), realized −$26.69 / −1.1R. LTC @ 56.63 +$61.47 unreal, BTC @ 77777.5 +$5.70 unreal. Equity $10,027.55 (new peak), DD 0.00%, risk-at-moment 0.67%. All kill switches clear. | EXIT TRX (stop-hit); HOLD LTC, BTC |
+| 2026-04-24T17:14:17Z | harness | day-gate | not Saturday, skipping | no action |
