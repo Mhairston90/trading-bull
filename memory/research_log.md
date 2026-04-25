@@ -3,6 +3,8 @@
 > **Append-only.** News and external research notes per routine run.
 > Rows older than 30 days archived by routine #3 monthly sweep.
 
+2026-04-25T17:40:11Z | allocation | day-gate | not Sunday, skipping | no action
+
 ## Schema
 
 | Timestamp (UTC) | Routine | Source | Summary | Action taken |
