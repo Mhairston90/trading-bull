@@ -82,3 +82,4 @@
 | 2026-04-25T00:31:00Z | allocation | day-gate | not Sunday, skipping | no action |
 | 2026-04-24T17:40:00Z | allocation | day-gate | not Sunday, skipping | no action |
 | 2026-04-24T20:10:00Z | midday | kraken | MTM @ 20:06Z — LTC 56.72, ADA 0.251958, AVAX 9.44; no stops pierced intrabar, 19:00Z 1H closes all above 20-EMA; equity $10,017.26, DD 0.10%, day +0.37% net | no action — all clear, silent |
+| 2026-04-25T17:07:23Z | harness | system | Saturday harness verify: tv_health_check failed (CDP connection refused, TradingView Desktop not running); kraken_ticker BTC/USD OK ($77,392.4). Per Ring 3 MCP-failure rule, skip routine. | SKIPPED harness run; Telegram ALERT sent; retry next Saturday or operator can run /loop manually after launching TradingView |
