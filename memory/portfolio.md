@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-04-25T20:00:00Z (routine-02-midday — flushed 3 prior closes from trade_log; flat after EMA-cross exits at 17:00Z).
+> **Last rebuild:** 2026-04-26T04:40:00Z (routine-01-overnight — flat, 0 entries this wake, 0 ACTIONABLE news, all kill switches clear).
 
 ## Account
 
