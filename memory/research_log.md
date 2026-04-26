@@ -95,3 +95,4 @@
 | 2026-04-26T04:40:00Z | overnight | system | News scan deferred per established pattern: kraken_risk_flag CLEAR is the binding macro/news pre-screen for v0 (not news-reactive). Morning brief skill runs separately and surfaces ACTIONABLE headlines. No headline-level actionable items recorded. | deferred |
 | 2026-04-26T04:40:00Z | overnight | system | Universe refresh skipped: today is 2026-04-25/26 (not 1st of month). Next refresh 2026-05-01. | no action |
 | 2026-04-26T04:40:00Z | overnight | system | Routine #1 result: 0 OPEN, 0 CLOSE, 0 ACTIONABLE news. Equity $9,930.76 (flat), DD 0.97%, all kill switches clear. Telegram silent per template (no entries, no exits, no kill-switch trip, no actionable news). | no Telegram |
+2026-04-26T21:14:21Z | harness | day-gate | not Saturday, skipping | no action
