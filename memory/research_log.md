@@ -4,6 +4,7 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 
 2026-04-25T17:40:11Z | allocation | day-gate | not Sunday, skipping | no action
+2026-04-26T20:00:00Z | midday | system | Portfolio flat (0 open positions); no MTM required. Equity $9,930.76, DD 0.97% from peak $10,027.55. All kill switches clear (daily loss 0%, equity > $7,500 floor, DD < 12.5% warn). Midday is position-mgmt only — no entries scanned. | no action
 
 ## Schema
 
