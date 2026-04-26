@@ -21,3 +21,6 @@
 | 2026-04-25T17:00:00Z | CLOSE | LTC/USD | long | 45.2 | 56.432 | — | — | +1.32 | +39.40 | exit-ema-cross |
 | 2026-04-25T17:00:00Z | CLOSE | ADA/USD | long | 9934 | 0.249331 | — | — | -1.21 | -38.77 | exit-ema-cross |
 | 2026-04-25T17:00:00Z | CLOSE | AVAX/USD | long | 265 | 9.335 | — | — | -0.99 | -34.04 | exit-ema-cross |
+| 2026-04-26T21:05:00Z | OPEN | ETH/USD | long | 1.0499 | 2364.72 | 2345.10 | — | — | — | entry-rule-v0-momentum |
+| 2026-04-26T21:05:00Z | OPEN | BTC/USD | long | 0.0317 | 78266.21 | 77803.14 | — | — | — | entry-rule-v0-momentum |
+| 2026-04-26T21:05:00Z | OPEN | SOL/USD | long | 28.6 | 86.79 | 86.10 | — | — | — | entry-rule-v0-momentum |
