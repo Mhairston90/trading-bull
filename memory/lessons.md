@@ -27,6 +27,14 @@ Each lesson is a section:
 **Score:** _(routine #4 will assign)_
 **Status:** active
 
+### 2026-04-27 — Cross-asset cascade stops out all 4 positions in one 1H bar
+
+**Observation:** ETH, BTC, SOL, TAO all opened the prior wake (21:00Z 04/26 for ETH/BTC/SOL, 04:05Z 04/27 for TAO) on momentum entries with all v0 rules passing. In the very next overlapping 1H bar after entry at 05:00Z 2026-04-27, all four hit their 2×ATR stops intra-bar simultaneously. ETH -2.66% intra-bar, BTC -1.68%, SOL -1.95%, TAO -1.97%. No tier-1/2 risk-flag trigger; classifier called markets "calm". Realized −$153.65 (-1.54% of equity).
+**Evidence:** trade_log.md rows OPEN ETH/BTC/SOL 2026-04-26T21:05:00Z, OPEN TAO 2026-04-27T04:05:00Z, all four CLOSEs 2026-04-27T05:00:00Z exit-stop-hit. Strategy v0 max-concurrent 4 → 100% of capacity stopped together. Each individual trade -1.03 to -1.08R; combined -4.23R in single bar.
+**Implication:** v0 sizing assumes positions are independent for the 4% portfolio-risk cap. They are not — top-cap crypto pairs are highly correlated, especially in fast tape. When the strategy fills its 4-slot cap with simultaneously-eligible momentum entries, "portfolio risk-at-moment" understates true tail risk by roughly the correlation factor (~0.7-0.9 across BTC/ETH/SOL on 1H). Routine #4 should evaluate (a) a portfolio-correlation cap that throttles concurrent BTC-correlated entries, (b) staggered entries across 4H instead of all-on-the-same-1H-close, or (c) a regime filter that pauses new momentum entries when 1H ATR has compressed below recent average (volatility-pop precursor). Also consider that filling all 4 slots in one 1H wake from a single regime-flip signal is a recipe for this exact failure mode.
+**Score:** _(routine #4 will assign)_
+**Status:** active
+
 ### 2026-04-24 — Commission drag dominates short-lived EMA-cross exits (BTC)
 
 **Observation:** BTC/USD entered 2026-04-22T04:05Z @ 77600.4, exited 2026-04-24T04:00Z @ 77720.72 on EMA cross. Gross PnL = +$5.39 (price moved +$120 in our favor) but two-side commission (~$13.01 at 0.26% per side) flipped it to net −$9.14.
