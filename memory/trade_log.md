@@ -24,3 +24,4 @@
 | 2026-04-26T21:05:00Z | OPEN | ETH/USD | long | 1.0499 | 2364.72 | 2345.10 | — | — | — | entry-rule-v0-momentum |
 | 2026-04-26T21:05:00Z | OPEN | BTC/USD | long | 0.0317 | 78266.21 | 77803.14 | — | — | — | entry-rule-v0-momentum |
 | 2026-04-26T21:05:00Z | OPEN | SOL/USD | long | 28.6 | 86.79 | 86.10 | — | — | — | entry-rule-v0-momentum |
+| 2026-04-27T04:05:00Z | OPEN | TAO/USD | long | 9.6 | 255.56 | 251.12 | — | — | — | entry-rule-v0-momentum |
