@@ -5,6 +5,7 @@
 
 2026-04-25T17:40:11Z | allocation | day-gate | not Sunday, skipping | no action
 2026-04-26T20:00:00Z | midday | system | Portfolio flat (0 open positions); no MTM required. Equity $9,930.76, DD 0.97% from peak $10,027.55. All kill switches clear (daily loss 0%, equity > $7,500 floor, DD < 12.5% warn). Midday is position-mgmt only — no entries scanned. | no action
+2026-04-27T20:00:00Z | midday | system | Portfolio flat (0 open positions) after 05:00Z stop cascade closed ETH/BTC/SOL/TAO. No MTM/exit checks required. Equity $9,777.08, DD 2.50% from peak $10,027.55. Day realized -1.54% (cap 5%). All kill switches clear: DD < 12.5% warn, equity > $7,500 floor, daily loss < 5%. Midday is position-mgmt only — no entries scanned. | no action
 
 ## Schema
 
@@ -132,3 +133,4 @@
 | 2026-04-27T13:00:00Z | overnight | system | Universe refresh skipped: today is 2026-04-27 (not 1st of month). Next refresh 2026-05-01 (Friday). | no action |
 | 2026-04-27T13:00:00Z | overnight | system | Routine #1 result: 0 OPEN, 4 CLOSE (cross-asset stop cascade ETH/BTC/SOL/TAO at 05:00Z), 0 ACTIONABLE news. Equity $9,777.08 (cash, no positions), realized all-time −$222.89, DD 2.50% from peak $10,027.55. Day realized −$153.65 (-1.54%). Portfolio risk 0.00%. Daily-loss kill switch 1.54% vs 5% cap (clear). DD 2.50% vs 25% cap and 12.5% warn (clear). Equity floor far above $7,500. Telegram digest required per template (4 stop-out CLOSEs occurred). | TELEGRAM SEND — exit digest |
 | 2026-04-28T02:44:14Z | harness | day-gate | not Saturday, skipping | no action
+| 2026-04-28T02:44:30Z | allocation | day-gate | not Sunday (Mon 2026-04-27 PT), skipping | no action |
