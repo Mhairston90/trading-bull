@@ -1,6 +1,8 @@
 # BULL Strategy Proposal — 2026-W18
 
-> **Off-cycle proposal.** Drafted 2026-04-28 (Tue) at user request. Normal channel is routine #4 Saturday; this memo is intended to be reviewed by user and either approved via Telegram `[Y/N]` for routine #5 Sunday application, OR superseded by next routine #4's evidence-based version.
+> **STATUS: APPROVED & APPLIED 2026-04-28T23:07Z** — User replied `Y` to all three proposals (A, B, C) in the off-cycle review chat. `strategy.md` updated to v0.1, lessons marked superseded, research_log appended. No routine #5 application step needed.
+>
+> **Off-cycle proposal.** Drafted 2026-04-28 (Tue) at user request. Normal channel is routine #4 Saturday; this memo was reviewed by user and approved via off-cycle chat in lieu of Telegram (chat-channel approval has equivalent authority — the Telegram channel is the async fallback for stateless routine wakes).
 >
 > **Type:** Ring 2 gated — `strategy.md` edits.
 > **Origin:** Three lessons in `memory/lessons.md` (2026-04-24 TRX wick, 2026-04-27 cascade, 2026-04-24 BTC commission drag) plus on-demand deep-dive analysis.

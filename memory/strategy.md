@@ -1,9 +1,10 @@
-# BULL Strategy — v0 seed (locked 2026-04-20)
+# BULL Strategy — v0.1 (W18 amended 2026-04-28)
 
 > **Gated file.** BULL may propose edits only via weekly memo → Telegram `[Y/N]`. Never edit autonomously.
-> **Version:** v0-seed
-> **Last approved:** 2026-04-20 (standup)
-> **Next review:** routine #4, first Saturday post-standup
+> **Version:** v0.1
+> **Last approved:** 2026-04-28 (off-cycle W18 proposal — A: cluster cap, B: liquidity floor, C: one-per-wake)
+> **Prior version:** v0-seed (2026-04-20 standup)
+> **Next review:** routine #4, first Saturday post-application (2026-05-02)
 
 ## Philosophy
 
@@ -21,9 +22,12 @@ Enter LONG when **all** of the following are true on a just-closed 1H candle:
 2. 1H RSI(14) > 55
 3. 4H close > 4H 50-EMA
 4. Pair has >= 10 candles of history on both 1H and 4H (no ultra-fresh listings)
+4a. **(W18-B)** Pair has 24h notional volume >= **$2.0M USD** at time of entry-scan, measured from Kraken MCP `kraken_ticker`. Filters out thin-liquidity pairs whose 1H bars wick beyond 2×ATR stops (lesson 2026-04-24 TRX). Pairs currently affected: FARTCOIN, AVAX, LINK, PENGU, TRX (re-evaluated each entry-scan, not statically blocked).
 5. No existing open position in this pair
 6. Current open positions < 4 (v0 deliberately uses half the 8-position cap)
+6a. **(W18-A)** Concurrent positions in the BTC-correlated cluster `{BTC, ETH, SOL, TAO, AVAX, SUI, LINK}` <= **2**. Empirically these pairs move together on 1H (cascade event 2026-04-27T05:00Z stopped 4/4 cluster positions in a single bar). Cap limits worst-case correlated tail loss to ~2R.
 7. Portfolio risk-at-moment + this trade's risk <= 4%
+8. **(W18-C)** Max **1** new entry per routine wake. If multiple pairs are eligible at the same wake, prefer the pair with **highest 30d notional rank** (i.e., XBT > ETH > SOL > TAO etc. per `memory/universe.md`). Remaining eligible entries re-evaluated at next wake; if no longer eligible (e.g., RSI dropped below 55), they are skipped — this is intentional, the rule is meant to prevent same-bar cluster fills.
 
 ## Position sizing
 
