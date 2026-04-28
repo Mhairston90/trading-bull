@@ -148,3 +148,4 @@
 | 2026-04-28T17:00:00Z | overnight | system | Universe refresh skipped: today is 2026-04-28 (not 1st of month). Next refresh 2026-05-01 (Friday). | no action |
 | 2026-04-28T17:00:00Z | overnight | system | Routine #1 result: 1 OPEN (TAO/USD), 0 CLOSE, 0 ACTIONABLE news. Equity $9,769.46 (cash $7,325.59 + position $2,443.87), realized −$222.89, unrealized −$7.62 (entry drag), DD 2.57% from peak $10,027.55. Portfolio risk 0.52%, all kill switches clear. 1/4 strategy-cap concurrent slots filled. Telegram digest required per template (new OPEN occurred). | TELEGRAM SEND — entry digest |
 2026-04-28T17:59:42Z | harness | day-gate | not Saturday, skipping | no action
+2026-04-28T17:59:41Z | allocation | day-gate | not Sunday, skipping | no action
