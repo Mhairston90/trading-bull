@@ -29,3 +29,4 @@
 | 2026-04-27T05:00:00Z | CLOSE | BTC/USD | long | 0.0317 | 77764.24 | — | — | -1.08 | -28.77 | exit-stop-hit |
 | 2026-04-27T05:00:00Z | CLOSE | SOL/USD | long | 28.6 | 86.057 | — | — | -1.06 | -33.82 | exit-stop-hit |
 | 2026-04-27T05:00:00Z | CLOSE | TAO/USD | long | 9.6 | 251.004 | — | — | -1.03 | -56.38 | exit-stop-hit |
+| 2026-04-28T17:00:00Z | OPEN | TAO/USD | long | 9.4 | 260.12 | 254.74 | — | — | — | entry-rule-v0-momentum |
