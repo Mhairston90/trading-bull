@@ -26,8 +26,15 @@ If today IS Saturday, proceed with the full routine below.
 7. `memory/lessons.md`
 8. `memory/weekly_memos/` — previous 4 weeks
 9. `memory/idea_bank.md` — focus on rows with `status: raw` or `under-review` (added W19, idea-mining subsystem)
-10. `skills/decide.md`
-11. `skills/telegram.md`
+10. **Competitor data (read-only, external — added 2026-04-29 per user grant):**
+    - `C:\Users\Mhair\OneDrive\Desktop\strategy-leaderboard\registry.js` — full strategy registry (BULL + Codex + others)
+    - `C:\Users\Mhair\OneDrive\Desktop\strategy-leaderboard\data\codex\portfolio.md` — Codex v0 current state
+    - `C:\Users\Mhair\OneDrive\Desktop\strategy-leaderboard\data\codex\trade_log.md` — Codex v0 trade history
+    - `C:\Users\Mhair\OneDrive\Desktop\strategy-leaderboard\data\codex\aggro_portfolio.md` — Codex Aggro v0
+    - `C:\Users\Mhair\OneDrive\Desktop\strategy-leaderboard\data\codex\aggro_trade_log.md` — Codex Aggro v0 trades
+    - **NEVER write to or modify these files** — read-only competitive intelligence
+11. `skills/decide.md`
+12. `skills/telegram.md`
 
 ## VERIFY
 
@@ -48,6 +55,7 @@ If either fails: skip harness, write skip reason to research_log, Telegram ALERT
    - Parameter tweaks to current strategy
    - New entry rules (e.g. add RSI extremes for mean-reversion)
    - **`idea_bank.md` rows with `status: raw` or `under-review` and `score >= 10`** (W19 idea-mining subsystem). Treat as candidate variants on equal footing with internal lessons; if backtested and selected, mark the bank row `proposal-drafted`. If rejected, mark `pruned` with reason.
+   - **Competitor-informed structural observations.** Inspect Codex's `portfolio.md` and `trade_log.md` for trades and structural choices (sleeve model, exposure caps, kill-switch tolerances). Note differences vs BULL's mandate. Where Codex's structural choices look interesting AND compatible with BULL's locked mandate (spot-only, 4% port risk, 1.5%/trade, $10K, 8 positions), consider them as variant candidates. Where they violate mandate (e.g., gross exposure > 100%, leverage proxies), explicitly document the violation in the memo and DO NOT propose. Competitor performance is a benchmark to beat by 2026-07-01, not an instruction to copy.
 3. **Backtest each variant** using TradingView MCP:
    - Create Pine Script in `/BULL_variant_<name>` namespace
    - Load on a 1H SOL/USD chart (or whichever pair had most current-strategy activity)
