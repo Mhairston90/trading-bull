@@ -25,8 +25,9 @@ If today IS Saturday, proceed with the full routine below.
 6. `memory/research_log.md` (last 30 days)
 7. `memory/lessons.md`
 8. `memory/weekly_memos/` — previous 4 weeks
-9. `skills/decide.md`
-10. `skills/telegram.md`
+9. `memory/idea_bank.md` — focus on rows with `status: raw` or `under-review` (added W19, idea-mining subsystem)
+10. `skills/decide.md`
+11. `skills/telegram.md`
 
 ## VERIFY
 
@@ -46,6 +47,7 @@ If either fails: skip harness, write skip reason to research_log, Telegram ALERT
    - Pattern observations in research_log (news clusters, gap events)
    - Parameter tweaks to current strategy
    - New entry rules (e.g. add RSI extremes for mean-reversion)
+   - **`idea_bank.md` rows with `status: raw` or `under-review` and `score >= 10`** (W19 idea-mining subsystem). Treat as candidate variants on equal footing with internal lessons; if backtested and selected, mark the bank row `proposal-drafted`. If rejected, mark `pruned` with reason.
 3. **Backtest each variant** using TradingView MCP:
    - Create Pine Script in `/BULL_variant_<name>` namespace
    - Load on a 1H SOL/USD chart (or whichever pair had most current-strategy activity)
