@@ -28,10 +28,11 @@
 
 1. **Overnight price pull:** Kraken MCP `kraken_multi_ticker` for all 15 universe pairs. Note % moves since yesterday 21:00 PT.
 2. **Position check on each open position:** Did price action overnight hit any stops? If so, execute paper exit at stop price, log to trade_log, rebuild portfolio. (This is the only path that closes during this routine.)
-3. **Entry scan:** For each pair in universe not currently open, fetch 1H + 4H OHLCV and check entry conditions per `strategy.md`. Compute indicators in-line.
-4. **News scan:** Use `skills/research.md` — pull CoinDesk + TheBlock front pages via Firecrawl, extract 24h headlines, classify.
+3. **Entry scan (Technical analyst pass):** For each pair in universe not currently open, fetch 1H + 4H OHLCV and check entry conditions per `strategy.md` (rules 1, 2, 2a, 3, 4, 4a, 5, 5a, 5b, 6, 6a, 7, 8). Compute indicators in-line. Record per-pair Pass/Fail in research_log under `### Technical` subsection.
+4. **News scan (News analyst pass):** Use `skills/research.md` — for each technical-PASS candidate, pull headlines tagged with the pair's base asset over past 6h via Firecrawl from CoinDesk + TheBlock. Log top 3 headlines + tag (`neutral / supportive / contradictory`) under `### News` subsection. **Informational only in v0.2 — does NOT veto.** If Firecrawl unavailable, log `Firecrawl unavailable — skipped this wake` and continue.
+4a. **Sentiment pass:** For each technical-PASS candidate, query Kraken MCP `kraken_spread` and `kraken_depth`. Log spread bps + top-of-book depth under `### Sentiment` subsection. Informational only in v0.2.
 5. **Place eligible new entries:** For each entry signal that passes `pre_entry_check` (see `skills/decide.md`), append OPEN row to `trade_log.md`, rebuild `portfolio.md`.
-6. **Append research_log entries** for every news item and every REJECTed entry (with reason).
+6. **Append research_log entries** using the W19-E analyst-role schema (Technical / News / Sentiment / Decision). Every REJECTed entry should appear in the Technical subsection with cited failing rule.
 7. **First-of-month universe refresh:** If today is the 1st (or first weekday of month if 1st is weekend): query `kraken_pairs` + compute 30d volumes, rewrite `memory/universe.md` with top 15. Commit separately.
 
 ## WRITE

@@ -33,7 +33,7 @@
 
 - `memory/trade_log.md` — only if a stop or exit triggered
 - `memory/portfolio.md` — rewritten with fresh mark-to-market
-- `memory/research_log.md` — one row summarizing midday state (kill-switch proximity, drawdown, any exits)
+- `memory/research_log.md` — one row summarizing midday state (kill-switch proximity, drawdown, any exits). Midday is position-management only and does not run the W19-E analyst-role split; the legacy single-line `Timestamp | Routine | Source | Summary | Action` row remains the convention here. Analyst-role schema applies to entry-scanning routines (#1 overnight, #3 EOD) only.
 
 ## COMMIT
 

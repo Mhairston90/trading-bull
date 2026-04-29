@@ -26,7 +26,11 @@
 
 1. **Final mark-to-market:** Kraken prices as of 21:00 PT close.
 2. **Post-close exit check:** Each open position against just-closed 1H candle. Trigger exits per strategy.md rules. Log + rebuild portfolio.
-3. **EOD entry scan:** For each universe pair without open position, check entry conditions on just-closed 1H candle. Execute eligible entries.
+3. **EOD entry scan (W19-E analyst-role split):** For each universe pair without open position, run the three analyst passes:
+   - **Technical:** check entry conditions per `strategy.md` (rules 1, 2, 2a, 3, 4, 4a, 5, 5a, 5b, 6, 6a, 7, 8) on just-closed 1H candle
+   - **News:** for each technical-PASS candidate, Firecrawl scan headlines (CoinDesk + TheBlock, past 6h, base-asset tagged), tag `neutral / supportive / contradictory`. Informational only — does NOT veto in v0.2.
+   - **Sentiment:** Kraken `kraken_spread` + `kraken_depth` per candidate. Informational only.
+   Execute eligible entries. Log to `research_log.md` using the W19-E schema (Technical / News / Sentiment / Decision subsections).
 4. **Extract lessons:** Review today's trades:
    - Any pair stopped out with large gap? → lesson about gap risk
    - Any winners that went well past 4R before we took profit? → lesson about target placement

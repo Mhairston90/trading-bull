@@ -41,7 +41,7 @@ Each lesson is a section:
 **Evidence:** trade_log.md OPEN TAO 2026-04-28T17:00:00Z, CLOSE TAO 2026-04-29T14:00:00Z (exit-stop-hit). research_log.md entry-scan note 2026-04-28T17:00:00Z flagged "RSI 86.1 climactic" and "divergent tape" as risk patterns at entry; routine-02-midday 2026-04-28T20:00Z flagged 17:00 entry-bar low 253.80 already below stop. Same-day re-entry vector after 04-27 cascade stop on TAO.
 **Implication:** Two warning signals coincided at entry — (a) RSI > 80 (climactic / mean-reversion-prone) and (b) only 2/15 pairs positive (divergent / non-confirmed regime). v0.1 entry rules require RSI > 55 but place no upper cap, and have no regime-confirmation gate. Routine #4 should evaluate (a) an RSI upper cap (e.g., reject entries when 1H RSI14 > 80 — climactic setups have poor expectancy in mean-reverting tape), or (b) a regime-confirmation filter (require ≥ N/15 universe pairs positive 24h before opening new entries), or (c) a same-pair re-entry cooldown (e.g., 24h block on re-entering a pair after a stop-out).
 **Score:** _(routine #4 will assign)_
-**Status:** active
+**Status:** **superseded** — addressed by W19-D (rules 2a RSI ≤ 80, 5a regime-confirmation gate ≥ 4/15 positive, 5b 24h same-pair re-entry cooldown), all three options from this lesson's recommendations adopted simultaneously. Applied to `strategy.md` 2026-04-29.
 
 ### 2026-04-24 — Commission drag dominates short-lived EMA-cross exits (BTC)
 

@@ -2,6 +2,39 @@
 
 > **Append-only.** News and external research notes per routine run.
 > Rows older than 30 days archived by routine #3 monthly sweep.
+>
+> ## Schema (W19-E, effective 2026-04-29)
+>
+> Routine #1 (overnight) and Routine #2 (midday) entry-scan blocks should use the analyst-role split below. Legacy single-line rows above the marker remain as-is.
+>
+> ```markdown
+> ## YYYY-MM-DDTHH:MMZ — routine-NN-<name>
+>
+> ### Technical (rule-driven, deterministic)
+> - Per-pair RSI14, 1H/4H EMA state, 4H regime, ATR14
+> - Pass/fail per entry rule (1, 2, 2a, 3, 4, 4a, 5, 5a, 5b, 6, 6a, 7, 8)
+> - Final candidate list
+>
+> ### News (Firecrawl-driven, informational only in v0.2)
+> - For each candidate, scan 2 sources (e.g. coindesk.com, theblock.co)
+>   for headlines tagged with the pair's base asset over past 6h
+> - Record: top 3 headlines + 1-line summary each
+> - Tag: "neutral / supportive / contradictory" relative to long bias
+> - Does NOT veto entries in v0.2 — informational only
+>
+> ### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+> - For each candidate, record bid/ask spread bps + top-of-book depth
+>   via Kraken MCP `kraken_spread` and `kraken_depth`
+> - Wide spread / thin depth = sentiment caveat, recorded but no veto
+>
+> ### Decision
+> - Final action this wake (OPEN / SKIP / HOLD)
+> - Cite which rule(s) drove the decision
+> ```
+>
+> If Firecrawl is unavailable, the News section logs `Firecrawl unavailable — skipped this wake` and the routine continues. Per Ring 3 (`guardrails.md`), repeated MCP failures still skip the routine entirely.
+
+---
 
 2026-04-25T17:40:11Z | allocation | day-gate | not Sunday, skipping | no action
 2026-04-26T20:00:00Z | midday | system | Portfolio flat (0 open positions); no MTM required. Equity $9,930.76, DD 0.97% from peak $10,027.55. All kill switches clear (daily loss 0%, equity > $7,500 floor, DD < 12.5% warn). Midday is position-mgmt only — no entries scanned. | no action

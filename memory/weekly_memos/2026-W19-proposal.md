@@ -1,7 +1,8 @@
 # BULL Strategy Proposal — 2026-W19
 
-> **STATUS: DRAFT — pending user review**
-> **Off-cycle proposal.** Drafted 2026-04-29 (Wed) at user request after deep-dive on TradingAgents framework (YouTube video analysis). Normal channel is routine #4 Saturday (2026-05-02); this memo is for off-cycle Telegram-equivalent approval.
+> **STATUS: APPROVED & APPLIED 2026-04-29** — User replied `[Y]` in off-cycle review chat to both proposals D and E. `strategy.md` updated to v0.2, `research_log.md` schema header added, routines #1 and #3 updated for analyst-role passes (#2 explicitly retains legacy single-line schema since midday is management-only), lesson 2026-04-29 marked superseded. No routine #5 application step needed.
+>
+> **Off-cycle proposal.** Drafted 2026-04-29 (Wed) at user request after deep-dive on TradingAgents framework (YouTube video analysis). Normal channel is routine #4 Saturday (2026-05-02); this memo was reviewed by user and approved via off-cycle chat in lieu of Telegram (chat-channel approval has equivalent authority per W18 precedent).
 >
 > **Type:** Mixed. Proposal D is Ring 2 (`strategy.md` edits). Proposal E is Ring 1 (process-only change to `research_log.md` convention) but lays groundwork for a future Ring-2 news-veto rule.
 > **Origin:** Lesson `2026-04-29 — RSI extremity + divergent tape (TAO same-day re-entry)` in `memory/lessons.md`, plus comparative analysis vs. TradingAgents multi-agent framework.
