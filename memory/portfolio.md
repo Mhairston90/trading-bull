@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-04-29T14:00:00Z (routine-01-overnight — TAO stop-out at 14:00Z; portfolio flat; all kill switches clear).
+> **Last rebuild:** 2026-04-29T20:07:09Z (routine-02-midday — portfolio flat; no MTM required; all kill switches clear).
 
 ## Account
 
