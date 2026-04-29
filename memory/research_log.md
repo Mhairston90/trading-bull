@@ -159,3 +159,4 @@
 | 2026-04-29T14:00:00Z | overnight | system | News scan deferred per established pattern: kraken_risk_flag CLEAR pre-screen ("Markets calm"), morning-brief skill runs separately. v0.1 not news-reactive. | deferred |
 | 2026-04-29T14:00:00Z | overnight | system | Universe refresh skipped: today is 2026-04-29 (not 1st of month). Next refresh 2026-05-01 (Friday). | no action |
 | 2026-04-29T14:00:00Z | overnight | system | Routine #1 result: 0 OPEN, 1 CLOSE (TAO/USD stop-hit), 0 ACTIONABLE news. Equity $9,712.70 (cash, no positions), realized all-time −$287.26, DD 3.14% from peak $10,027.55 (warn 12.5% / cap 25%). Day realized −$64.37 (−0.66% on pre-close equity, cap 5%). Portfolio risk 0.00%. Equity floor far above $7,500. Telegram digest required per template (CLOSE event occurred). | TELEGRAM SEND — exit digest |
+2026-04-29T17:07:19Z | harness | day-gate | not Saturday, skipping | no action
