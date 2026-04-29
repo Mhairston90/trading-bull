@@ -50,5 +50,22 @@ If routine #6 drops more than 80% of harvested content, that's expected — the 
 
 | id | harvested | source | url | asset | claim | mechanism | sig | fit | test | score | status | notes |
 |----|-----------|--------|-----|-------|-------|-----------|-----|-----|------|-------|--------|-------|
+| IDEA-20260429-01 | 2026-04-29T19:55Z | Glassnode Insights | https://insights.glassnode.com/the-week-onchain-week-17-2026/ | BTC | When BTC trades below the True Market Mean (~$78k) AND Short-Term Holder Cost Basis (~$79k), mid-term bias is bearish; reclaim signals trend shift. | Recent buyers' breakeven cohort generates supply pressure when underwater — rallies into TMM/STHCB historically reject in bear regimes. | 5 | 3 | 2 | 10 | raw | BTC-only structural filter. Custom Pine needed (Glassnode metrics not native to TV). Could inform regime-confirmation gate beyond W19-D 5a. |
+| IDEA-20260429-02 | 2026-04-29T19:55Z | Glassnode Insights | https://insights.glassnode.com/the-week-onchain-week-17-2026/ | BTC | When Short-Term Holder Realized Profit 24h SMA spikes to ~4× recent baseline, expect local-top rejection within ~24h. | Distribution-into-strength by recent buyers exhausts demand absorption; observed repeatedly in current bear cycle. | 5 | 2 | 1 | 8 | raw | BTC-only, low testability — STH realized profit not on free TV. At score floor. May be worth Glassnode API integration if other ideas from this source survive to applied. |
+| IDEA-20260429-03 | 2026-04-29T19:55Z | Glassnode Insights | https://insights.glassnode.com/the-week-onchain-week-17-2026/ | BTC | When 7-day spot CVD on BTC transitions from sustained negative to positive deltas, expect short-term recovery. | Spot CVD is a real-time gauge of buy-vs-sell imbalance; sign-flip indicates exhausted seller initiation. | 4 | 3 | 2 | 9 | raw | CVD not native on Kraken-data TV but approximable. Could complement W19-D 5a regime gate. |
+| IDEA-20260429-04 | 2026-04-29T19:55Z | Glassnode Insights | https://insights.glassnode.com/the-week-onchain-week-17-2026/ | regime | When realized vol and implied vol converge (gap < 2%) on BTC, expect range-bound chop; reduce confidence in momentum entries. | Compressed RV/IV gap = limited directional conviction; momentum strategies underperform in low-vol-spread regimes. | 4 | 4 | 3 | 11 | raw | Universal (not BTC-only). Direct candidate for a vol-compression filter — recall lesson 2026-04-27 cascade explicitly listed "volatility-compression filter" as deferred option (c). Highest-fit harvest from W17 Glassnode. |
 
-(empty — first harvest will be routine #6 first run)
+## Dropped this harvest (logged for audit)
+
+- **Perpetual Market Directional Premium signal** (Glassnode W17): mandate violation — perps outside spot-only.
+- **80K options strike pivot / short gamma zones** (Glassnode W17): mandate violation — options outside spot-only.
+- **Leveraged-token rebalance flows** (Robot Wealth "To Trend or Not To Trend"): mandate / Kraken-listing — no leveraged tokens in BULL universe.
+- **Wealth-management month-end rebalance** (Robot Wealth): equities only, not in mandate.
+- **Crypto trend persistence framing** (Robot Wealth): not a new testable claim — reinforces existing momentum-bucket thesis but adds no rule candidate.
+- **Robot Wealth "For The Love of The Game"** (within 7d window): meta/career advice, no testable claim.
+
+## Harvest history
+
+| harvest_id | wake | sources_attempted | sources_ok | claims_extracted | survived_floor | deduped | appended | notes |
+|------------|------|-------------------|------------|------------------|----------------|---------|----------|-------|
+| HARV-20260429-DRYRUN | 2026-04-29T19:55Z manual dry-run | 2 (Glassnode, Robot Wealth) | 2 | 10 | 4 | 0 | 4 | First-ever harvest. Pre-scheduled run validation. RW "To Trend or Not To Trend" was outside 7d window — included for pipeline-validation only, would be excluded under normal routine. Real Friday-cron run will hit all 10 sources. |
