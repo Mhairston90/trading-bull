@@ -35,6 +35,14 @@ Each lesson is a section:
 **Score:** _(routine #4 will assign)_
 **Status:** **superseded** — addressed by W18-A (BTC-cluster correlation cap: max 2 concurrent in {BTC,ETH,SOL,TAO,AVAX,SUI,LINK}) AND W18-C (one entry per wake), both applied to `strategy.md` 2026-04-28. Implementation chose options (a) and (b) from this lesson's recommendations. Volatility-compression filter (option c) deferred to next routine #4 with backtest evidence.
 
+### 2026-04-29 — RSI extremity + divergent tape = poor entry setup (TAO same-day re-entry)
+
+**Observation:** TAO/USD entered 2026-04-28T17:00Z @ 260.12 with 1H RSI14 ≈ 86.1 (climactic) while broader tape was 12/15 negative (only TAO and XDG positive). Position survived overnight rally to high 266.44 (+2.4% above entry) but reversed sharply, drifted lower through 04-29 morning, and stopped out at 14:00Z 04-29 (low 253.70 < stop 254.74) for −1.02R / −$64.37. Holding period ~21h.
+**Evidence:** trade_log.md OPEN TAO 2026-04-28T17:00:00Z, CLOSE TAO 2026-04-29T14:00:00Z (exit-stop-hit). research_log.md entry-scan note 2026-04-28T17:00:00Z flagged "RSI 86.1 climactic" and "divergent tape" as risk patterns at entry; routine-02-midday 2026-04-28T20:00Z flagged 17:00 entry-bar low 253.80 already below stop. Same-day re-entry vector after 04-27 cascade stop on TAO.
+**Implication:** Two warning signals coincided at entry — (a) RSI > 80 (climactic / mean-reversion-prone) and (b) only 2/15 pairs positive (divergent / non-confirmed regime). v0.1 entry rules require RSI > 55 but place no upper cap, and have no regime-confirmation gate. Routine #4 should evaluate (a) an RSI upper cap (e.g., reject entries when 1H RSI14 > 80 — climactic setups have poor expectancy in mean-reverting tape), or (b) a regime-confirmation filter (require ≥ N/15 universe pairs positive 24h before opening new entries), or (c) a same-pair re-entry cooldown (e.g., 24h block on re-entering a pair after a stop-out).
+**Score:** _(routine #4 will assign)_
+**Status:** active
+
 ### 2026-04-24 — Commission drag dominates short-lived EMA-cross exits (BTC)
 
 **Observation:** BTC/USD entered 2026-04-22T04:05Z @ 77600.4, exited 2026-04-24T04:00Z @ 77720.72 on EMA cross. Gross PnL = +$5.39 (price moved +$120 in our favor) but two-side commission (~$13.01 at 0.26% per side) flipped it to net −$9.14.
