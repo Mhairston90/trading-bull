@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-04-29T20:07:09Z (routine-02-midday — portfolio flat; no MTM required; all kill switches clear).
+> **Last rebuild:** 2026-05-04T19:05:30Z (routine-02-midday — portfolio flat; no MTM required; all kill switches clear).
 
 ## Account
 
@@ -30,13 +30,13 @@
 (none)
 
 Portfolio risk-at-moment: **0.00%** (cap 4%).
-Open positions: **0 / 8** (strategy v0.1 max-concurrent 4 → 0/4 used; cluster cap 0/2).
+Open positions: **0 / 8** (strategy v0.2 max-concurrent 4 → 0/4 used; cluster cap 0/2).
 
 ## Active kill-switch state
 
-- Daily realized: **−0.66%** today (cap 5%) — TAO stop −$64.37 on pre-close equity ~$9,777
-- Daily realized + unrealized: **−0.66%** today (cap 5%) — well within
-- Consecutive losing trading days: 04-24 L, 04-25 L, 04-26 flat, 04-27 L, 04-28 flat, 04-29 L → not 7-in-a-row (cap 7)
+- Daily realized: **0.00%** today 2026-05-04 (cap 5%) — no trades today
+- Daily realized + unrealized: **0.00%** today (cap 5%) — well within
+- Consecutive losing trading days: 04-24 L, 04-25 L, 04-26 flat, 04-27 L, 04-28 flat, 04-29 L, 04-30 flat, 05-01 flat, 05-02 flat, 05-03 flat, 05-04 flat-so-far → not 7-in-a-row (cap 7)
 - Max drawdown: 3.14% (cap 25%, warn 12.5%) — clear
 - Equity floor: $9,712.70 > $7,500 floor — OK
 - **All clear. Trading authorized.**
