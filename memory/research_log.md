@@ -255,3 +255,4 @@ Cluster state after entry: 1/2 in BTC-correlated cluster {BTC,ETH,SOL,TAO,AVAX,S
 ### Telegram
 
 ENTRY DIGEST required per template (new OPEN occurred). Message will be sent after commit.
+| 2026-05-04T19:14:56Z | offline-audit | system | User offline 2026-04-29 20:07Z to 2026-05-04 today; cron silent during gap (Claude Code Desktop was closed). Zero routine wakes, zero trades during 5-day window. Strategy v0.2 untested in production since W19 application. CODEX competitor data files stale at $10K baselines (no refresh observed). OPERATING.md created documenting cron-Claude-Code dependency and CODEX sync gap. | OPERATING.md added; no manual routine catch-up triggered (per recommendation 'let cron resume naturally'); next scheduled wake bull-02-midday at 2026-05-04T20:05Z |
