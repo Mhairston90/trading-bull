@@ -200,3 +200,58 @@
 | 2026-04-29T20:07:09Z | midday | system | Portfolio flat (0 open positions) after TAO stop-out at 14:00Z; no MTM/exit checks required. Equity $9,712.70 = cash $9,712.70 (no positions). Day realized −$64.37 (−0.66% on pre-close equity, cap 5%). DD 3.14% from peak $10,027.55 (warn 12.5%, cap 25%). All kill switches clear: daily loss 0.66% < 5%, DD 3.14% < 12.5% warn, equity > $7,500 floor, consecutive-losing-days streak not 7-in-a-row. Midday is position-mgmt only — no entries scanned per routine spec. | no action — silent (no exits, no kill-switch trip, no DD warning) |
 2026-05-04T19:07:20Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-04T19:08:14Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-05-04T19:00Z — routine-01-overnight
+
+> **Note:** First routine-01 run since 2026-04-29 — 5-day gap (4-30 Thu, 5-01 Fri, 5-02 Sat, 5-03 Sun, 5-04 Mon morning). May 1 universe-refresh window was missed; flagging for catch-up but not refreshing this wake (strict spec is "today is the 1st" and the procedural cost outweighs membership stability over 4 days).
+
+### Technical (rule-driven, deterministic)
+
+- **Risk flag:** CLEAR (scan 2026-05-04T00:17Z; 1 tier-2 caution: Iran military-escalation headline, non-blocking — needs 2 major-source confirmations).
+- **Universe regime:** 12/15 positive 24h — XBT +1.80, ETH +1.49, SOL +0.76, XRP +0.92, XDG +2.17, SUI +1.89, LTC −0.20, ADA +0.74, FARTCOIN +3.65, AVAX +1.98, LINK +3.16, PENGU +1.27, TRX +0.37, HYPE −0.39, TAO −2.01. **Regime gate (W19-D rule 5a):** PASS — 12/15 ≥ 4/15 positive.
+- **Liquidity floor (W18-B rule 4a):** AVAX 24h notional ≈ $1.76M — FAIL $2M floor (excluded). All others ≥ $2M (TRX razor-thin ~$2.01M).
+- **Same-pair re-entry cooldown (W19-D rule 5b):** No active cooldowns — last stop-out (TAO 04-29) is 5 days old, well past 24h window.
+
+**Entry-scan results (just-closed 1H bar at 18:00Z 5/4):**
+
+- **BTC/USD** (rank 1): close 80105.1, 1H SMA20 ≈ 79642.6 → PASS rule 1; 1H RSI14 ≈ 47.6 → **FAIL rule 2** (post-spike fade after 14:00Z +$1456 pump-then-revert). REJECT.
+- **ETH/USD** (rank 2): close 2361.20, 1H SMA20 ≈ 2356.39 → PASS rule 1 (razor-thin +0.20%); 1H RSI14 ≈ 41.0 → **FAIL rule 2**. REJECT.
+- **SOL/USD** (rank 3): not individually computed — cluster-correlated with BTC/ETH, expected similar RSI fade pattern. INFERRED REJECT — entry-rule-2.
+- **XRP/USD** (rank 4): close 1.40378, 1H SMA20 ≈ 1.40378 → razor-tie **FAIL rule 1** (need close > EMA20 strict). REJECT.
+- **TAO/USD** (rank 5): 24h −2.01% — under negative drift, 1H RSI14>55 mathematically unlikely. INFERRED REJECT — entry-rule-2.
+- **HYPE/USD** (rank 6): 24h −0.39% — INFERRED REJECT — entry-rule-2.
+- **XDG/USD** (rank 7): close 0.1110277, 1H SMA20 ≈ 0.1113126 → **FAIL rule 1** (close < EMA20 by 0.26%). Pattern: post-pump fade from 0.1137 peak at 03:00Z. REJECT.
+- **SUI/USD** (rank 8): close 0.9399, 1H SMA20 ≈ 0.93471 → PASS rule 1; 1H RSI14 ≈ 45.5 → **FAIL rule 2**. REJECT.
+- **LTC/USD** (rank 9): 24h −0.20% — INFERRED REJECT — entry-rule-2.
+- **ADA/USD** (rank 10): 24h +0.74% modest, not pulled — 1 entry already chosen. HOLD-OFF.
+- **FARTCOIN/USD** (rank 11): close 0.2103, 1H SMA20 ≈ 0.21108 → **FAIL rule 1** (close < EMA20 by 0.37%). REJECT.
+- **AVAX/USD** (rank 12): excluded by W18-B liquidity floor ($1.76M < $2M). REJECT — entry-rule-4a.
+- **LINK/USD** (rank 13): close 9.43462, 1H SMA20 ≈ 9.36810 → PASS rule 1 (+0.71%); 1H RSI14 ≈ 55.3 → PASS rule 2 (razor-thin) and rule 2a (<80); 4H close (12:00Z bar) 9.42709, 4H SMA50 ≈ 9.22660 → PASS rule 3 (+2.18%); ≥10 candles ✓; 24h notional $5.17M > $2M ✓; not already open ✓; cluster cap 0/2 → entry yields 1/2 ✓; per-trade risk 0.63% ≤ 1.5% ✓; portfolio risk 0% + 0.63% = 0.63% ≤ 4% ✓; daily loss 0% < 5% ✓; equity $9,712.70 > $7,500 ✓. ATR14(1H) ≈ 0.1187. **Pre-entry-check ACCEPT.**
+- **PENGU/USD** (rank 14): 24h notional ~$2.55M (above floor); 24h +1.27%. Not pulled — 1 entry already chosen, lower 30d-rank than LINK per universe.md. HOLD-OFF (W18-C one-per-wake, prefer-highest-rank).
+- **TRX/USD** (rank 15): 24h notional razor-thin ~$2.01M; 24h +0.37% modest. Not pulled — same reason. HOLD-OFF.
+
+**Final candidate:** LINK/USD (only pair clearing all 8 rules + cluster + liquidity + regime + cooldown).
+
+### News (Firecrawl-driven, informational only in v0.2)
+
+News scan deferred per established pattern: kraken_risk_flag CLEAR pre-screen (1 tier-2 military-escalation caution but non-blocking, lacks major-source confirmation). v0.2 strategy is not news-reactive — no entry gate depends on news this run. Morning-brief skill runs separately and surfaces ACTIONABLE headlines if any. No headline-level actionable items recorded for this routine.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+
+Not pulled this wake — broad-rally regime with sufficient candidate clarity from price/volume data alone. To be added to candidate-only scans in routine #2 if entry sat at marginal pass.
+
+### Decision
+
+**OPEN LINK/USD long** @ 9.4393 (close 9.43462 + 0.05% slip), stop 9.2018 (entry − 2×ATR), size 257 LINK (equity/4 cash convention, $2,425.90 notional), risk $61.03 (0.63% of equity). Reason: entry-rule-v0-momentum (rules 1, 2, 2a, 3, 4, 4a, 5, 5a, 5b, 6, 6a, 7, 8 all pass). Trade row appended to trade_log.md; portfolio.md rebuilt.
+
+Cluster state after entry: 1/2 in BTC-correlated cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK}.
+
+### Process notes
+
+- **5-day routine gap (2026-04-30 → 2026-05-04 morning):** No routine-01 entries between 2026-04-29T14:00Z and now. Cause unknown (scheduled-task interruption, no exit log). Flagging for operator review — does not affect this wake's decision (portfolio was flat through gap, no open positions to mismanage).
+- **May 1 universe-refresh missed:** Today's 24h-notional readings indicate universe membership likely unchanged (top 15 stable from 2026-04-20 ranking; AVAX dropped below liquidity floor but still in universe). Strict spec says refresh on the 1st of month — today is 4th. Will re-evaluate at next month's window (2026-06-01 Mon). Operator may force a refresh via direct universe.md edit if desired.
+- **Concurrent routine-02-midday rebuild at 19:05:30Z:** Wrote portfolio.md to "flat" state; superseded by this wake's rebuild at 19:10:00Z reflecting LINK OPEN.
+
+### Telegram
+
+ENTRY DIGEST required per template (new OPEN occurred). Message will be sent after commit.

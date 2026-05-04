@@ -31,3 +31,4 @@
 | 2026-04-27T05:00:00Z | CLOSE | TAO/USD | long | 9.6 | 251.004 | — | — | -1.03 | -56.38 | exit-stop-hit |
 | 2026-04-28T17:00:00Z | OPEN | TAO/USD | long | 9.4 | 260.12 | 254.74 | — | — | — | entry-rule-v0-momentum |
 | 2026-04-29T14:00:00Z | CLOSE | TAO/USD | long | 9.4 | 254.61 | — | — | -1.02 | -64.37 | exit-stop-hit |
+| 2026-05-04T19:00:00Z | OPEN | LINK/USD | long | 257 | 9.4393 | 9.2018 | — | — | — | entry-rule-v0-momentum |
