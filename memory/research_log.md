@@ -199,3 +199,4 @@
 2026-04-29T17:40:38Z | allocation | day-gate | not Sunday, skipping | no action
 | 2026-04-29T20:07:09Z | midday | system | Portfolio flat (0 open positions) after TAO stop-out at 14:00Z; no MTM/exit checks required. Equity $9,712.70 = cash $9,712.70 (no positions). Day realized −$64.37 (−0.66% on pre-close equity, cap 5%). DD 3.14% from peak $10,027.55 (warn 12.5%, cap 25%). All kill switches clear: daily loss 0.66% < 5%, DD 3.14% < 12.5% warn, equity > $7,500 floor, consecutive-losing-days streak not 7-in-a-row. Midday is position-mgmt only — no entries scanned per routine spec. | no action — silent (no exits, no kill-switch trip, no DD warning) |
 2026-05-04T19:07:20Z | harness | day-gate | not Saturday, skipping | no action
+2026-05-04T19:08:14Z | allocation | day-gate | not Sunday, skipping | no action
