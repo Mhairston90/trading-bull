@@ -439,3 +439,4 @@ XRP is the first **non-cluster** entry of this position cohort — diversifies t
 - **Telegram:** ENTRY DIGEST required (new OPEN occurred). Message sent after commit.
 
 2026-05-05T18:04:30Z | harness | day-gate | not Saturday (Tue), skipping | no action
+2026-05-05T18:05:42Z | allocation | day-gate | not Sunday, skipping | no action
