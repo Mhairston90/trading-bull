@@ -437,3 +437,5 @@ XRP is the first **non-cluster** entry of this position cohort — diversifies t
 - **Cluster cap state:** unchanged 2/2. Going forward this wake, no cluster pair can be added.
 - **Stop-out cooldown (W19-D 5b):** ETH/SOL/TAO/AVAX last stops were 2026-04-27 / 04-29 — well outside the 24h window. Not blocking, but cluster cap is the binding constraint anyway.
 - **Telegram:** ENTRY DIGEST required (new OPEN occurred). Message sent after commit.
+
+2026-05-05T18:04:30Z | harness | day-gate | not Saturday (Tue), skipping | no action
