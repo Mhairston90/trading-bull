@@ -353,3 +353,87 @@ Cluster state after entry: **2/2** in BTC-correlated cluster {BTC, ETH, SOL, TAO
 ### Telegram
 
 ENTRY DIGEST required per template (new OPEN occurred). Message will be sent after commit.
+
+---
+
+## 2026-05-05T17:55:51Z — routine-01-overnight (5/5 wake)
+
+### Universe price snapshot (kraken_multi_ticker)
+
+| Pair | Last | 24h % | 24h notional est | rule-4a ($2M floor) |
+|------|------|-------|------------------|---------------------|
+| BTC/USD | 81287.0 | +1.81 | $180M | OK |
+| ETH/USD | 2363.12 | +0.68 | $38.7M | OK (cluster) |
+| SOL/USD | 85.46 | +1.62 | $12.2M | OK (cluster) |
+| XRP/USD | 1.40915 | +1.26 | $10.1M | OK |
+| TAO/USD | 282.514 | -0.84 | $7.39M | OK (cluster, only neg) |
+| HYPE/USD | 44.32 | +6.03 | $6.91M | OK |
+| XDG/USD | 0.1138691 | +3.40 | $7.07M | OK |
+| SUI/USD | 0.959 | +3.17 | $3.02M | OK (cluster) |
+| LTC/USD | 55.63 | +1.18 | $3.58M | OK |
+| ADA/USD | 0.2584 | +3.38 | $4.93M | OK |
+| FARTCOIN/USD | 0.2203 | +7.67 | $2.16M | OK (just above floor) |
+| AVAX/USD | 9.37 | +2.07 | $1.44M | FAIL (cluster + below floor) |
+| LINK/USD | 9.69517 | +3.52 | $3.67M | OK (open) |
+| PENGU/USD | 0.011474 | +13.63 | $6.49M | OK |
+| TRX/USD | 0.34422 | +1.06 | $1.40M | FAIL |
+
+Regime gate (W19-D 5a): **14/15 positive** >= 4 -> PASS, new entries allowed (only TAO -0.84%).
+Risk flag: **CLEAR** (1 tier-2 caution: Iran/Hormuz military, non-blocking, lacks major-source confirmation).
+
+### Position check on open positions
+
+- **LINK/USD** (long 257 @ 9.4393, stop 9.2018): last 9.69517, 24h low 9.32 — well above stop. MTM **+$59.45** (+0.97R). Hold. No 1H close < EMA20 trigger detected.
+- **BTC/USD** (long 0.0299 @ 80961.16, stop 80124.19): last 81287.0, 24h low 79743.1 occurred at 23:00Z 5/4 (BEFORE 05:00Z 5/5 entry). Post-entry 1H bars (05:00-17:00Z 5/5): minimum low = 80520.0 (09:00Z) — well above stop. MTM **+$3.45**. Hold.
+
+No exits this wake.
+
+### Entry-scan candidates (rule 8 prefer highest 30d notional rank)
+
+Cluster state: 2/2 (LINK + BTC) at W18-A cap -> BTC, ETH, SOL, TAO, AVAX, SUI, LINK all blocked from new cluster entries this wake.
+
+Non-cluster eligible candidates (rank order):
+
+- **XRP/USD** (rank 4): 1H last-closed bar (5/5 16:00Z) close 1.40787, 1H 20-EMA approx 1.40671 -> PASS rule 1; 1H RSI14 approx **60.5** (avg gain 0.001544 / avg loss 0.001006, RS 1.535) -> PASS rules 2 + 2a (>55, <=80); 4H last-closed (5/5 12:00Z) close 1.41175, 4H 50-EMA approx 1.39496 -> PASS rule 3; >=10 candles OK; 24h notional approx $10M > $2M OK; not currently open OK (no XRP stop history); regime 14/15 positive >= 4 OK; positions 2<4 OK; non-cluster — rule 6a not engaged OK; per-trade risk 0.245% <= 1.5% OK; portfolio risk 0.881% + 0.245% = 1.13% <= 4% OK; rank 4 (highest non-blocked rank). **Pre-entry-check ACCEPT.**
+
+  - ATR14(1H) over bars 5/5 03:00-16:00Z = sum TR 0.09725 / 14 = **0.006946** -> 2xATR = 0.013893
+  - Fill = 1.40787 x 1.0005 = **1.40857** (close + 0.05% slip)
+  - Stop = 1.40857 - 0.013893 = **1.39468**
+  - Sizing (equity/4 cash convention per W18-aligned practice; risk-based 10510 XRP would consume notional $14.8K > available cash $4853) -> notional cap $9,712.74/4 approx $2,428. Size = floor(2427/1.40857) = **1723 XRP**. Notional 1723 x 1.40857 = $2,426.97. Entry comm 0.26% x 2426.97 = $6.31. Total cost $2,433.28. Cash after: $2,420.18.
+  - Risk: 1723 x 0.013893 = $23.93 = **0.245%** of equity. Well within 1.5% per-trade cap.
+
+- **HYPE/USD** (rank 6): not pulled in detail — HOLD-OFF (W18-C, 1 entry/wake; XRP wins by rank). 24h +6.03% suggests possible RSI extension; if scanned next wake, rule 2a (RSI <= 80) check needed.
+- **XDG/USD** (rank 7): not pulled in detail — HOLD-OFF (rank lower than XRP).
+- **LTC/USD** (rank 9): not pulled in detail — HOLD-OFF.
+- **ADA/USD** (rank 10): not pulled in detail — HOLD-OFF.
+- **FARTCOIN/USD** (rank 11): just above $2M floor at $2.16M — borderline. HOLD-OFF (rank lower than XRP, 1/wake limit). 24h +7.67% — RSI-cap concern next wake.
+- **PENGU/USD** (rank 14): 24h +13.63% — extremely climactic, rule 2a (RSI <= 80) almost certainly bites. HOLD-OFF + INFERRED REJECT — entry-rule-2a likely.
+- **TRX/USD** (rank 15): excluded by W18-B liquidity floor ($1.40M < $2M). REJECT — entry-rule-4a.
+- **ETH/USD, SOL/USD, TAO/USD, SUI/USD, AVAX/USD** (cluster): blocked by W18-A cluster cap (2/2). REJECT — entry-rule-6a (regardless of other-rule status).
+  - AVAX additionally rejected by W18-B (24h notional $1.44M < $2M).
+  - TAO additionally has 24h -0.84% (only negative pair) and would also fail rule 2 likely.
+- **LINK/USD** (rank 13): already open. REJECT — entry-rule-5.
+
+**Final candidate:** XRP/USD (highest-rank non-cluster pair clearing all rules).
+
+### News (lightweight scan)
+
+Today's `kraken_risk_flag` (scanned 2026-05-05T17:55:51Z) reads **CLEAR**. Tier-2 caution (Iran/Strait of Hormuz military escalation, France 24 sole source) is non-blocking and lacks major-source confirmation per the classifier. Markets calm; no tier-1 triggers; no market-stress signals. No fresh Firecrawl pull this wake (token budget; risk-flag classifier covers same headline corpus). No ACTIONABLE items per skills/research.md classification (no universe-pair-specific hack/listing/regulatory item).
+
+### Sentiment (passive)
+
+Broad continuation rally. 14/15 universe pairs positive on 24h, only TAO modestly red. PENGU +13.63% and FARTCOIN +7.67% are meme-leg outliers — not entered (rank-priority + RSI-cap risk). HYPE +6.03% is the strongest non-cluster outlier; could be a candidate next wake if it doesn't run too far. BTC at $81.3K is approx 1.8% above prior wake's entry (80961) — momentum thesis confirmed for now.
+
+### Decision
+
+**OPEN XRP/USD long** @ 1.40857 (close 1.40787 + 0.05% slip), stop 1.39468 (entry - 2xATR), size 1723 XRP ($2,426.97 notional), risk $23.93 (0.245% of equity). Reason: entry-rule-v0-momentum (rules 1, 2, 2a, 3, 4, 4a, 5, 5a, 5b, 6, 6a, 7, 8 all pass). Trade row appended to trade_log.md; portfolio.md rebuilt.
+
+XRP is the first **non-cluster** entry of this position cohort — diversifies the open book away from the BTC-correlated cluster (LINK + BTC) currently at the 2/2 cap.
+
+### Process notes
+
+- **First-of-month universe refresh:** today is 2026-05-05 (Tue, 5th of month) -> not first of month and not first weekday of month (5/1 was Friday, already past) -> no refresh.
+- **Sizing convention:** continuing the equity/4 cash cap precedent set on prior BTC wake. Strategy.md's risk-based formula (1.5% / stop_dist) would generate 10,510 XRP @ $14.8K notional — far exceeds available cash $4,853 — so cash convention prevails. **Flag for routine-04 review:** strategy.md sizing rule and cash availability are inconsistent under multi-position cohort; routine-04 should propose either (a) explicit notional cap in strategy.md or (b) revert to literal risk-based sizing with smaller position count.
+- **Cluster cap state:** unchanged 2/2. Going forward this wake, no cluster pair can be added.
+- **Stop-out cooldown (W19-D 5b):** ETH/SOL/TAO/AVAX last stops were 2026-04-27 / 04-29 — well outside the 24h window. Not blocking, but cluster cap is the binding constraint anyway.
+- **Telegram:** ENTRY DIGEST required (new OPEN occurred). Message sent after commit.
