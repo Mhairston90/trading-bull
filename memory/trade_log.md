@@ -35,3 +35,5 @@
 | 2026-05-05T05:00:00Z | OPEN | BTC/USD | long | 0.0299 | 80961.16 | 80124.19 | — | — | — | entry-rule-v0-momentum |
 | 2026-05-05T17:00:00Z | OPEN | XRP/USD | long | 1723 | 1.40857 | 1.39468 | — | — | — | entry-rule-v0-momentum |
 | 2026-05-06T04:00:00Z | OPEN | HYPE/USD | long | 54 | 44.18 | 43.35 | — | — | — | entry-rule-v0-momentum |
+| 2026-05-06T15:00:00Z | CLOSE | HYPE/USD | long | 54 | 43.33 | — | — | -1.02 | -58.18 | exit-stop-hit |
+| 2026-05-06T15:00:00Z | OPEN | LTC/USD | long | 41 | 57.14 | 56.28 | — | — | — | entry-rule-v0-momentum |

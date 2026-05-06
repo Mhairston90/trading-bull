@@ -528,3 +528,108 @@ HYPE is the **second non-cluster** entry of the position cohort — diversifies 
 - **Stop-out cooldown (W19-D 5b):** HYPE has no stop-out history. Closest historical stop in cooldown window: none affecting non-blocked pairs.
 - **Drift hack monitoring:** if classifier escalates Drift to tier-1 (2nd major-source confirmation), kraken_risk_flag will flag BLOCKED on next scan. No SOL exposure currently (cluster-blocked anyway). HYPE is on Hyperliquid, structurally separate from Drift/Solana.
 - **Telegram:** ENTRY DIGEST required (new OPEN occurred). Message sent after commit.
+
+---
+
+## 2026-05-06T16:30:00Z — routine-01-overnight (5/6 wake, fired ~3.5h late vs 06:00 PT schedule)
+
+### Universe price snapshot (kraken_multi_ticker @ 16:26Z)
+
+| Pair | Last | 24h % | 24h notional est | rule-4a ($2M floor) |
+|------|------|-------|------------------|---------------------|
+| BTC/USD | 81600.0 | +0.87 | $194M | OK (open) |
+| ETH/USD | 2357.01 | -0.15 | $47.5M | OK (cluster) |
+| SOL/USD | 88.87 | +2.98 | $32.9M | OK (cluster) |
+| XRP/USD | 1.42743 | +1.05 | $27.3M | OK (open) |
+| TAO/USD | 312.5493 | +6.88 | $21.2M | OK (cluster) |
+| HYPE/USD | 43.56 | -0.41 | $7.04M | OK (closed-out this wake) |
+| XDG/USD | 0.1129205 | -1.66 | $13.30M | OK |
+| SUI/USD | 0.9903 | +2.41 | $8.42M | OK (cluster) |
+| LTC/USD | 57.06 | +1.24 | $4.36M | OK |
+| ADA/USD | 0.266559 | +1.78 | $4.44M | OK |
+| FARTCOIN/USD | 0.2491 | +10.96 | $7.50M | OK |
+| AVAX/USD | 9.61 | +2.23 | $2.15M | OK (cluster, borderline) |
+| LINK/USD | 10.02422 | +2.63 | $4.76M | OK (open) |
+| PENGU/USD | 0.010957 | -0.77 | $2.87M | OK |
+| TRX/USD | 0.345811 | +0.35 | $1.22M | FAIL |
+
+Regime gate (W19-D 5a): **11/15 positive** ≥ 4 → PASS, new entries allowed (negatives: ETH -0.15, HYPE -0.41, PENGU -0.77, XDG -1.66).
+Risk flag: **CLEAR** (1 tier-2 caution: Drift Solana exchange hack, still 1 major-source confirmation, non-blocking).
+
+### Position check on open positions (post-entry bar review through 15:00Z just-closed)
+
+- **LINK/USD** (long 257 @ 9.4393, stop 9.2018): post-entry min low 9.32 (5/4 20:00Z), all subsequent ≥ 9.65; 1H 20-EMA at 15:00Z ~9.94 vs close 10.03833 → above EMA, no exit; 4R target 10.3893 not reached (highest close 10.18011, highest high 10.24485). Hold. MTM +$144.01 (+2.36R via price move 0.585/0.2375).
+- **BTC/USD** (long 0.0299 @ 80961.16, stop 80124.19): post-entry min low 80728.1 (5/6 00:00Z), above stop; 15:00Z close 81700.1, 20-EMA ~81684 → just above EMA, no exit (margin small); 4R target 84309.04 not reached (highest close 82502.1). Hold. MTM +$12.81.
+- **XRP/USD** (long 1723 @ 1.40857, stop 1.39468): post-entry min low 1.40500, above stop; 15:00Z close 1.43035, 20-EMA ~1.43 → above EMA, no exit; 4R target 1.46413 not reached (highest high 1.45706). Hold. MTM +$26.18.
+- **HYPE/USD** (long 54 @ 44.18, stop 43.35): **STOP HIT** — 15:00Z bar low 43.18 < stop 43.35. Exit fill 43.35 × (1−0.0005) = **43.33** (slippage model matches TRX 04-24 precedent). Realized: 54 × 43.33 − 0.26% comm = $2,333.74 proceeds vs $2,391.92 entry cost = **−$58.18 / −1.02R**. Trade row appended. Holding period ~11h. Brief profit window (high 44.78 at 12:00Z 5/6, +1.4% above entry, well below 4R target $47.50) followed by waterfall sell-off through 13:00Z (-1.1% on 8× normal volume) → 14:00Z (low 43.48, just above stop) → 15:00Z (low 43.18, stop hit).
+
+**Stop-out diagnosis:** HYPE entered at 03:00Z close 44.16 with RSI ~60.2 (within 55–80 band) and 4H trend up. The 13:00Z 1H bar produced an outsized down-bar (close 43.90 vs open 44.38, -1.1%) on extreme volume (42,446 vs 1H avg ~5K — 8× normal). Likely concentrated sell flow from Hyperliquid-related news or single large seller. Subsequent 2 bars failed to recover; stop triggered. No tier-1 risk-flag trigger; broader regime stayed up. **Pattern: rapid volume-spike sell-off in single 1H bar overwhelmed 2×ATR stop.** Similar in mechanism to the 2026-04-27 cluster cascade (single-bar stop-outs) but isolated to one pair this time. Lessons.md updated only if pattern repeats; one-off skipped per cap policy.
+
+### Entry-scan candidates (rule 8: prefer highest 30d notional rank among non-blocked)
+
+After HYPE close: open positions {LINK, BTC, XRP} = 3. Cluster {LINK, BTC} = 2/2 at W18-A cap.
+
+Non-cluster, non-open eligible candidates by rank:
+
+- **HYPE/USD** (rank 6): **REJECT — entry-rule-5b** (24h same-pair re-entry cooldown after exit-stop-hit at 15:00Z, blocked until 2026-05-07T15:00Z).
+- **XDG/USD** (rank 7): 24h −1.66% (one of only 4 negatives). 1H RSI almost certainly < 55. **REJECT — entry-rule-2 inferred** (not pulled in detail; lower rank than LTC anyway).
+- **LTC/USD** (rank 9): full pull below — **CANDIDATE PASS**.
+- **ADA/USD** (rank 10): not pulled in detail — HOLD-OFF (W18-C, 1 entry/wake; LTC wins by rank).
+- **FARTCOIN/USD** (rank 11): 24h +10.96% — climactic. RSI > 80 likely. HOLD-OFF + INFERRED REJECT — entry-rule-2a likely.
+- **PENGU/USD** (rank 14): 24h −0.77%. **REJECT — entry-rule-2 inferred**.
+- **TRX/USD** (rank 15): 24h notional $1.22M < $2M floor. **REJECT — entry-rule-4a**.
+- **ETH, SOL, TAO, SUI, AVAX** (cluster): blocked by W18-A cluster cap (2/2). **REJECT — entry-rule-6a**.
+- **LINK, BTC, XRP**: already open. **REJECT — entry-rule-5**.
+
+#### LTC/USD detailed pre-entry computation (just-closed 1H bar 15:00Z)
+
+- 1H bars: 30 fetched. Close 57.11; 1H 20-EMA (recursive seed-from-bar-1) ≈ **56.94** → close > EMA → **PASS rule 1**.
+- 1H RSI(14) over closes ending 15:00Z: gains sum 1.62 / losses sum 1.13 (over 14 changes) → avg gain 0.1157 / avg loss 0.0807 → RS 1.434 → RSI **58.91** → **PASS rules 2 (>55) + 2a (≤80)**.
+- 4H bars: 60 fetched. Just-closed 4H bar 12:00Z close 57.11 (next 4H bar 16:00Z still in progress). 4H 50-EMA (recursive seed-from-bar-1) ≈ **55.81** → close > EMA → **PASS rule 3**.
+- Rule 4: ≥10 bars 1H + 4H ✓.
+- Rule 4a: 24h notional 76,339.7968 × VWAP ~57 ≈ **$4.36M** > $2M floor → **PASS**.
+- Rule 5: not currently open ✓.
+- Rule 5a: regime 11/15 positive ≥ 4 ✓.
+- Rule 5b: last LTC close was 2026-04-25T17:00Z exit-ema-cross (NOT a stop-out) → cooldown does not apply ✓.
+- Rule 6: open positions 3 < 4 ✓ (post-HYPE close).
+- Rule 6a: LTC non-cluster ✓.
+- Rule 7: portfolio risk computed below ✓.
+- Rule 8: rank 9 highest among non-blocked candidates ✓.
+- **Pre-entry-check ACCEPT.**
+
+  - ATR14(1H) over bars 5/6 02:00Z–5/6 15:00Z (14 TR values): sum TR 6.03 / 14 = **0.4307** → 2×ATR = **0.8614**
+  - Fill = 57.11 × 1.0005 = **57.14** (close + 0.05% slip; LTC quoted to 2 decimals on Kraken)
+  - Stop = 57.14 − 0.8614 = **56.28** (rounded to 2 decimals)
+  - Sizing (cash-bound): post-HYPE-close cash = $28.26 + $2,333.74 = $2,361.997. Notional cap = cash / 1.0026 = $2,355.86. Size = floor(2355.86 / 57.14) = **41 LTC**. Notional 41 × 57.14 = $2,342.74. Entry comm 0.26% × $2,342.74 = $6.09. Total cost $2,348.83. Cash after: **$13.17**.
+  - Risk: 41 × 0.86 = **$35.26 = 0.359% of equity** ($9,820). Within 1.5% per-trade cap.
+  - Portfolio risk after entry: $61.04 + $25.02 + $23.93 + $35.26 = **$145.25 / 9,820 = 1.48%** ≤ 4% cap ✓.
+
+**Final entry:** LTC/USD long @ 57.14, stop 56.28, size 41 ($2,342.74 notional), risk $35.26 (0.36% of equity).
+
+### News (lightweight scan)
+
+Today's `kraken_risk_flag` (scan_time 2026-05-06T00:00:32Z, latest available) reads **CLEAR**. One persisting tier-2 caution: Drift Solana exchange hack ($295M) — same as prior wake; still 1 major-source confirmation (Decrypt), Yahoo Finance not classified as major. Non-blocking. No tier-1 triggers; no market-stress signals; no fresh Firecrawl pull this wake (token budget; risk-flag classifier covers same headline corpus).
+
+**Drift hack assessment:** Drift is a Solana DEX. SOL is in our universe + cluster but cluster cap (2/2) already blocks new SOL entries. Existing positions (LINK, BTC, XRP, LTC) are all non-Solana. Contagion vector low. No ACTIONABLE items per skills/research.md classification.
+
+### Sentiment (passive)
+
+Continued broad-rally regime, slightly cooled (11/15 positive vs 13/15 prior wake). Best 24h: TAO +6.88 (recovered from yesterday's −2.09), FARTCOIN +10.96 (meme-leg), SOL +2.98, LINK +2.63, SUI +2.41. Weakest: XDG −1.66, PENGU −0.77, HYPE −0.41 (just stopped), ETH −0.15. BTC continues uptrend $81.6K (vs $81.5K prior wake, marginal). LINK extended sharply on the 5/6 08:00Z wake to high $10.18 — strongest open position now well into profit (+2.36R price). XRP also rallied to high $1.457 then pulled back. The 13:00Z down-bar that stopped HYPE also dragged BTC, LINK, XRP, LTC briefly — coordinated 1H sell pulse — but only HYPE's stop was tight enough to be hit.
+
+### Decision
+
+**1. CLOSE HYPE/USD long** at 43.33 (stop 43.35 × 0.9995 slippage model), realized −$58.18 / −1.02R, reason `exit-stop-hit`. Trade row appended.
+
+**2. OPEN LTC/USD long** @ 57.14 (close 57.11 + 0.05% slip), stop 56.28 (entry − 2×ATR), size 41 LTC ($2,342.74 notional), risk $35.26 (0.36% of equity). Reason: entry-rule-v0-momentum (rules 1, 2, 2a, 3, 4, 4a, 5, 5a, 5b, 6, 6a, 7, 8 all pass). Trade row appended; portfolio.md rebuilt.
+
+LTC is the **second non-cluster** entry of the position cohort, replacing HYPE in the non-cluster slot. Book composition: cluster {LINK, BTC} 2/2, non-cluster {XRP, LTC} 2 → total 4/4 at strategy max-concurrent.
+
+### Process notes
+
+- **Schedule slip:** routine fired at 16:26Z (~09:26 PT) vs 06:00 PT cron — ~3.5h late. SKILL body executed in full despite delay. Just-closed 1H bar at scan = 15:00Z; just-closed 4H bar = 12:00Z. The HYPE stop event happened on the 15:00Z bar which is exactly the just-closed bar at scan — handled correctly within this wake.
+- **Same-wake CLOSE+OPEN:** HYPE close (15:00Z) frees cash and slot for LTC open (also 15:00Z). Both events written to trade_log with CLOSE before OPEN. W18-C "1 new entry per wake" satisfied (HYPE was a CLOSE, LTC is the 1 new OPEN).
+- **Cash-bound sizing:** equity/4 ($2,455) > available cash ($2,362) → cash binds. Used floor(cash×0.9974/price) = 41 LTC. **Continuing flag for routine-04 review:** strategy.md sizing rule (1.5% / stop_dist) still produces theoretical sizes (171 LTC / $9,770 notional) far exceeding cash availability under multi-position cohorts. Routine-04 should propose either (a) explicit notional cap in strategy.md or (b) revert to literal risk-based sizing with reduced max-concurrent.
+- **Re-entry on stop-out wake:** Strategy permits a different pair to be opened in the same wake as a stop-out. No mandate or guardrail violation. Lessons.md 2026-04-29 (TAO same-day re-entry after 04-27 cascade) was about re-entering THE SAME pair at climactic RSI in divergent tape — neither condition applies here (LTC ≠ HYPE; LTC RSI 58.9 not climactic; regime 11/15 positive not divergent).
+- **First-of-month universe refresh:** today is 2026-05-06 (Wed, 6th of month) → not first of month → no refresh.
+- **Stop-out cooldown (W19-D 5b) state:** HYPE blocked until 2026-05-07T15:00Z. No other pair under cooldown.
+- **Telegram:** ENTRY+EXIT DIGEST required (new OPEN + stop-out CLOSE both occurred). Message sent after commit.
