@@ -633,3 +633,5 @@ LTC is the **second non-cluster** entry of the position cohort, replacing HYPE i
 - **First-of-month universe refresh:** today is 2026-05-06 (Wed, 6th of month) → not first of month → no refresh.
 - **Stop-out cooldown (W19-D 5b) state:** HYPE blocked until 2026-05-07T15:00Z. No other pair under cooldown.
 - **Telegram:** ENTRY+EXIT DIGEST required (new OPEN + stop-out CLOSE both occurred). Message sent after commit.
+
+2026-05-06T17:07Z | harness | day-gate | not Saturday, skipping | no action
