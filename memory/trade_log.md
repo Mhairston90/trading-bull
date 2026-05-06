@@ -34,3 +34,4 @@
 | 2026-05-04T19:00:00Z | OPEN | LINK/USD | long | 257 | 9.4393 | 9.2018 | — | — | — | entry-rule-v0-momentum |
 | 2026-05-05T05:00:00Z | OPEN | BTC/USD | long | 0.0299 | 80961.16 | 80124.19 | — | — | — | entry-rule-v0-momentum |
 | 2026-05-05T17:00:00Z | OPEN | XRP/USD | long | 1723 | 1.40857 | 1.39468 | — | — | — | entry-rule-v0-momentum |
+| 2026-05-06T04:00:00Z | OPEN | HYPE/USD | long | 54 | 44.18 | 43.35 | — | — | — | entry-rule-v0-momentum |
