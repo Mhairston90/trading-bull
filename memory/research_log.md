@@ -635,3 +635,5 @@ LTC is the **second non-cluster** entry of the position cohort, replacing HYPE i
 - **Telegram:** ENTRY+EXIT DIGEST required (new OPEN + stop-out CLOSE both occurred). Message sent after commit.
 
 2026-05-06T17:07Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-05-06T17:40Z | allocation | day-gate | not Sunday, skipping | no action
