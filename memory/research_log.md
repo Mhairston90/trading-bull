@@ -637,3 +637,4 @@ LTC is the **second non-cluster** entry of the position cohort, replacing HYPE i
 2026-05-06T17:07Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-05-06T17:40Z | allocation | day-gate | not Sunday, skipping | no action
+2026-05-06T19:47:13Z | idea-scan | day-gate | not Friday, skipping | no action
