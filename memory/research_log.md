@@ -764,3 +764,5 @@ Broader regime remains negative across 13/15 pairs but 24h % moves are smaller i
 - **Kill-switch state:** all clear; daily realized -0.39%, drawdown 3.41%, equity $9,685.86 (well above $7.5K floor), 2 consecutive losing days (cap 7).
 - **Telegram:** STOP-OUT DIGEST required (CLOSE event occurred). Message sent after commit.
 
+
+2026-05-07T18:22:50Z | harness | day-gate | not Saturday, skipping | no action
