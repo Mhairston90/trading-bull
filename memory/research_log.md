@@ -767,3 +767,44 @@ Broader regime remains negative across 13/15 pairs but 24h % moves are smaller i
 
 2026-05-07T18:22:50Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-07T18:23:47Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-05-07T20:00Z — routine-02-midday
+
+### Technical (rule-driven, deterministic)
+
+**LINK/USD (open position) exit evaluation at 19:00Z 1H close:**
+- 1H close 9.8954 (just-closed 19:00Z bar, routine fires at 20:00 UTC)
+- 1H 20-EMA at 19:00Z ≈ 9.948 (computed from 60-bar series, SMA seed bars 1-20 = 9.73657, EMA recursion to bar 59)
+- EMA-cross condition: close (9.8954) < EMA20 (9.948) → **TRUE → exit triggers**
+- Static 2×ATR stop: 9.2018 — 24h low 9.80093, no intrabar pierce → not triggered
+- Take profit 4R: unrealized at 19:00Z close ≈ +1.92R, below 4R → not triggered
+- Routine fired at 20:00 UTC = exactly at 19:00Z candle close → within "10 min of candle close" window per task body → execute immediately
+
+**Other open positions:** none. No further exit evaluations.
+
+### News
+Skipped (no entry scan in routine-02, position management only).
+
+### Sentiment
+Skipped.
+
+### Decision
+
+**1. CLOSE LINK/USD long** at 19:00Z candle close 9.8954 with 0.05% slippage → fill 9.890452, realized **+$103.03 / +1.69R**, reason `exit-ema-cross`. Trade row appended.
+- Sale gross: 257 × 9.890452 = $2,541.85
+- Commission (0.26%): $6.61
+- Sale net: $2,535.24
+- Cost basis: $2,432.21
+- Realized PnL: +$103.03
+
+**2. NO ENTRIES.** Per task body: midday routine is position management only, no new entries.
+
+### Process notes
+
+- **EMA-cross capture confirmed:** routine-02's design is to catch EMA-cross exits that routine-01 defers. Worked as architected this wake — LINK's 19:00Z signal caught at 20:00 UTC fire time, ~0 min latency. Contrast with the XRP case study (5/6 20:00Z signal missed) which prompted routine-04 flagging.
+- **Portfolio impact:** Cash $7,137.46 → $9,672.70. Now flat (0/8 positions). Realized all-time: −$430.28 → −$327.25.
+- **Daily P&L 5/7:** XRP −$37.68 + LINK +$103.03 = **+$65.35 (+0.67%)** on day-start equity ~$9,704.39. First green day in the recent run.
+- **Kill-switch state:** all clear; drawdown 3.54% (vs prior wake 3.41%, slightly worse despite green day because peak is fixed at $10,027.55 and equity dipped before the LINK exit was booked); equity $9,672.70; consecutive-losing-day counter resets (5/7 net positive).
+- **Cluster/concentration:** flat → trivially clear. Next overnight wake (routine-01) will run a full entry scan; regime-gate (need ≥4/15 positive 24h%) and BTC-corr cluster cap (≤2 of {BTC,ETH,SOL,TAO,AVAX,SUI,LINK}) apply normally.
+- **Telegram:** EXIT notification required (CLOSE event occurred).
+

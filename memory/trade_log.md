@@ -40,3 +40,4 @@
 | 2026-05-06T19:00:00Z | CLOSE | BTC/USD | long | 0.0299 | 81430.76 | — | — | +0.06 | +1.42 | exit-ema-cross |
 | 2026-05-07T01:00:00Z | CLOSE | LTC/USD | long | 41 | 56.25 | — | — | -1.03 | -48.58 | exit-stop-hit |
 | 2026-05-07T14:00:00Z | CLOSE | XRP/USD | long | 1723 | 1.39398 | — | — | -1.05 | -37.68 | exit-stop-hit |
+| 2026-05-07T20:00:00Z | CLOSE | LINK/USD | long | 257 | 9.890452 | — | — | +1.69 | +103.03 | exit-ema-cross |
