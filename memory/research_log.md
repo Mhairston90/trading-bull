@@ -766,3 +766,4 @@ Broader regime remains negative across 13/15 pairs but 24h % moves are smaller i
 
 
 2026-05-07T18:22:50Z | harness | day-gate | not Saturday, skipping | no action
+2026-05-07T18:23:47Z | allocation | day-gate | not Sunday, skipping | no action
