@@ -39,3 +39,4 @@
 | 2026-05-06T15:00:00Z | OPEN | LTC/USD | long | 41 | 57.14 | 56.28 | — | — | — | entry-rule-v0-momentum |
 | 2026-05-06T19:00:00Z | CLOSE | BTC/USD | long | 0.0299 | 81430.76 | — | — | +0.06 | +1.42 | exit-ema-cross |
 | 2026-05-07T01:00:00Z | CLOSE | LTC/USD | long | 41 | 56.25 | — | — | -1.03 | -48.58 | exit-stop-hit |
+| 2026-05-07T14:00:00Z | CLOSE | XRP/USD | long | 1723 | 1.39398 | — | — | -1.05 | -37.68 | exit-stop-hit |

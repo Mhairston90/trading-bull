@@ -702,3 +702,65 @@ No tier-1 triggers. No ACTIONABLE items per skills/research.md classification. T
 - **First-of-month universe refresh:** today is 2026-05-06 → not first of month → no refresh.
 - **Telegram:** STOP-OUT DIGEST required (CLOSE event occurred). Message sent after commit.
 
+
+## routine-01-overnight 2026-05-07 PT (scanned 2026-05-07T18:30:00Z)
+
+> Wake fired late morning PT (~11:30 PT 5/7 = 18:30Z 5/7). Just-closed 1H bar at scan: 17:00Z 5/7. Just-closed 4H bar: 16:00Z 5/7. Per task body, this routine closes only stop-outs; EMA-cross exits deferred to next routine-02 midday wake.
+
+### Open-position stop check
+
+- **LINK/USD** (long 257 @ 9.4393, stop 9.2018): post-overnight 1H lows minimum $9.80093 (15:00Z 5/7 bar low). Far above stop ($9.2018). **Hold (no stop).** EMA-cross condition has held for many bars (10+); 17:00Z close 9.9169 vs 1H 20-EMA ~9.95 (recursive seed-from-bar-1 over 30-bar series, gap ~0.03 = 0.3%). MTM +$116.19 vs prior wake +$108.05 — slight recovery.
+- **XRP/USD** (long 1723 @ 1.40857, stop 1.39468): **STOP HIT** at 2026-05-07T14:00Z bar (low 1.39121 < stop 1.39468). Exit fill 1.39468 × (1−0.0005) = **1.39398** (slippage model matches LTC 5/7, HYPE 5/6, TRX 4/24 precedents). Realized: 1723 × (1.39398 − 1.40857) = −$25.13 gross price + comm 2-side ($6.31 entry + $6.24 exit = $12.55) = **−$37.68 / −1.05R**. Trade row appended. Holding period ~45h. Stop was triggered by a 13:00Z down-bar (close 1.40148 vs open 1.41459, −0.93%) followed by sustained sell pressure into 14:00Z (low 1.39121, then 15:00Z low 1.38449). Note 14:00Z bar volume 1,099,388 — ~3× prior bars, indicating concentrated sell flow.
+
+**Stop-out diagnosis (XRP):** Position entered 5/5 17:00Z @ 1.40857 with valid v0.2 momentum signal. Held above stop through 13/15 prior wake (regime favorable) but EMA-cross condition triggered at 5/6 20:00Z and was deferred per routine architecture. Over the 18 hours since, price drifted lower from 1.4245 down to 1.405 (5/7 03:00Z) — but stayed above stop. The 5/7 13:00Z+ leg was driven by broader BTC weakness ($82.5K → $80.2K) and triggered the stop. **Pattern: same regime-flip vector that stopped LTC overnight extended to non-cluster XRP today.** The EMA-cross was a forward-looking warning the deferred-exit architecture missed; had routine-01 closed on EMA-cross at 5/6 20:00Z, this would have closed near 1.4245 = +$11 instead of −$38. Trade-off: the architecture explicitly trades exit fidelity for token budget. Not a strategy violation; consider routine-04 review of the deferral cost vs token savings.
+
+### Entry-scan: ALL REJECTED via regime-confirmation gate
+
+Multi-ticker pull (Kraken) on full 15-pair universe shows **2/15 positive 24h**:
+
+| Pair | 24h % | Gate result |
+|------|-------|-------------|
+| BTC | -1.54 | neg |
+| ETH | -2.13 | neg |
+| SOL | -0.31 | neg |
+| XRP | -2.08 | neg (just-closed) |
+| TAO | +0.21 | **pos** |
+| HYPE | -1.39 | neg |
+| XDG | -3.65 | neg |
+| SUI | -1.95 | neg |
+| LTC | -0.09 | neg |
+| ADA | -1.32 | neg |
+| FARTCOIN | -1.43 | neg |
+| AVAX | -1.04 | neg |
+| LINK | -0.86 | neg (open) |
+| PENGU | -2.97 | neg |
+| TRX | +0.92 | **pos** |
+
+**2/15 < 4/15 threshold → entry-rule-5a (W19-D regime-confirmation gate) BLOCKS all new entries this wake.** Per-pair detail computation skipped (gate is universally violated). Tape continues to soften from prior wake (0/15 at 5/6 PT-EOD → 2/15 now — marginal recovery, still well below threshold). Best 24h: TRX +0.92, TAO +0.21. Worst: XDG −3.65, PENGU −2.97.
+
+### News (lightweight scan)
+
+`kraken_risk_flag` (scan_time 2026-05-07T18:17:12Z) reads **CLEAR**. tier1_triggers: 0; tier2_triggers: 0; market_stress_signals: empty; news_summary: "Headlines contain historical hack analysis, general sanctions commentary, and routine military operation updates with no new major risk events detected." 4 headlines scanned. No tier-1/tier-2 active. No ACTIONABLE items per skills/research.md classification. The Drift Solana hack tier-2 flagged in prior 2 wakes has rolled off the active list — confirms 24h news-window cycling. No fresh Firecrawl pull this wake (token budget; risk-flag classifier covers same headline corpus).
+
+### Sentiment (passive)
+
+Broader regime remains negative across 13/15 pairs but 24h % moves are smaller in magnitude than prior wake (e.g., BTC -1.54% vs -0.77% prior, but PENGU -2.97% vs -3.49% prior). XRP and LTC stop-outs in the past 18h; HYPE earlier 5/6. Cluster pairs all negative 24h: BTC -1.54, ETH -2.13, SOL -0.31, TAO +0.21, AVAX -1.04, SUI -1.95, LINK -0.86. LINK held remarkably well through the leg-down — only -0.86% 24h vs cluster average ~-1.3% — possibly reflecting strength of the open position's underlying setup. BTC at $80.2K (vs $80.8K prior), continued slow grind lower.
+
+### Decision
+
+**1. CLOSE XRP/USD long** at 1.39398 (stop 1.39468 × 0.9995 slippage), realized −$37.68 / −1.05R, reason `exit-stop-hit`. Trade row appended. Cash: $4,741.87 + $2,395.59 = $7,137.46.
+
+**2. NO ENTRIES this wake.** Regime-confirmation gate (entry-rule-5a) rejects all 15 universe pairs with only 2/15 positive 24h. Below 4/15 threshold.
+
+**3. HOLD LINK.** EMA-cross condition still active (close 9.92 vs EMA ~9.95) but per routine-01 task body, only stop-outs close. Will be re-evaluated by next routine-02 midday wake. Stop 9.2018 well below current; no imminent stop risk barring cascade.
+
+### Process notes
+
+- **Schedule slip:** routine fired ~11:30 PT vs 06:00 PT cron — ~5.5h late. SKILL body executed in full despite delay. Just-closed 1H bar at scan = 17:00Z. The XRP stop event happened on the 14:00Z bar — captured correctly within this wake using the candle-close timestamp (per skills/log-trade.md "If routine ran late and real-world candle close preceded, use candle-close timestamp").
+- **EMA-cross deferral cost (XRP case study):** EMA-cross was triggered for XRP at 2026-05-06T20:00Z bar (close 1.42448 < EMA 1.42714). Had routine-01 closed on that signal, exit ~1.4245 → realized ~+$11. Instead, routine-02 deferred and routine-01 PT-EOD also deferred (per task body, EMA-cross is routine-02's domain, not routine-01's). The bar was missed by both routine-02 (5/6 midday at 16:26Z, before the 20:00Z trigger) and the next routine-02 midday hadn't yet fired. Result: −$37.68 stop-out vs hypothetical +$11 EMA-exit — a ~$48 deferral cost on this one trade. Continuing flag for routine-04: the routine-01-only-stop-outs rule causes systematic late exits.
+- **Cluster cap state post-XRP-close:** LINK (cluster) only = 1 cluster, 0 non-cluster. Plenty of room for new entries, but regime gate blocks anyway.
+- **Same-pair re-entry cooldown (W19-D 5b):** XRP stop-out at 14:00Z 5/7 → blocked from re-entry until 2026-05-08T14:00Z. LTC blocked until 2026-05-08T01:00Z (24h post-stopout 5/7 01:00Z). HYPE cooldown ended 2026-05-07T15:00Z. No other pair under cooldown.
+- **First-of-month universe refresh:** today is 2026-05-07 → not first of month → no refresh.
+- **Kill-switch state:** all clear; daily realized -0.39%, drawdown 3.41%, equity $9,685.86 (well above $7.5K floor), 2 consecutive losing days (cap 7).
+- **Telegram:** STOP-OUT DIGEST required (CLOSE event occurred). Message sent after commit.
+
