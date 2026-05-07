@@ -639,3 +639,66 @@ LTC is the **second non-cluster** entry of the position cohort, replacing HYPE i
 
 2026-05-06T17:40Z | allocation | day-gate | not Sunday, skipping | no action
 2026-05-06T19:47:13Z | idea-scan | day-gate | not Friday, skipping | no action
+
+
+## routine-01-overnight 2026-05-06 PT (scanned 2026-05-07T04:30:00Z)
+
+> Wake fired late evening PT (~21:00 PT 5/6 = 04:30Z 5/7). Just-closed 1H bar at scan: 03:00Z 5/7. Just-closed 4H bar: 00:00Z 5/7. Per task body, this routine closes only stop-outs; EMA-cross exits deferred to next routine-02 midday wake.
+
+### Open-position stop check
+
+- **LINK/USD** (long 257 @ 9.4393, stop 9.2018): post-midday lows 9.85–9.92 across 12 1H bars; lowest 9.854 (02:00Z 5/7). Far above stop. **Hold (no stop).** EMA-cross condition triggered at 00:00Z 5/7 bar (close 9.93977 < 1H 20-EMA 9.973 — computed from 60-bar series, SMA(20) seed at bar 20 = 9.50876, then EMA recursion). Condition has held for 4 subsequent bars (00:00–03:00Z all closes below EMA 9.97 → 9.95). MTM +$108.05 vs midday +$147.98 — gave back ~$40 on retracement.
+- **XRP/USD** (long 1723 @ 1.40857, stop 1.39468): post-midday lows 1.40389 (03:00Z 5/7). Above stop by 0.92¢. **Hold (no stop).** EMA-cross condition first triggered at 20:00Z 5/6 bar (close 1.42448 < 1H 20-EMA 1.42714) and has held for 8 consecutive bars; current close 1.405 vs EMA 1.42171 (gap ~1.2%). MTM −$11.02 vs midday +$26.92 — full retracement plus.
+- **LTC/USD** (long 41 @ 57.14, stop 56.28, entered 15:00Z 5/6): position survived 9 bars then **STOP HIT** at 01:00Z 5/7 bar (low 56.22 < stop 56.28). Exit fill 56.28 × (1−0.0005) = 56.252 → **56.25** (slippage model matches HYPE 5/6 and TRX 4/24 precedents). Realized: 41 × 56.25 − 0.26% comm = $2,300.25 proceeds vs $2,348.83 entry cost = **−$48.58 / −1.03R**. Trade row appended. Holding period ~10h. Brief 30-min drawdown to 56.41 at 23:00Z then recovery to 56.50, but the 01:00Z bar punched lower (low 56.22) and triggered. Stop was tight (0.86 = ~1.5% below entry); this pair has been tracking sideways in $56–57 range and the entry caught the upper end.
+
+**Stop-out diagnosis (LTC):** Entered on a 1H momentum signal (RSI 58.9, EMA cross-up) but the broader regime was already softening — prior wake captured 11/15 universe positive 24h, dropped to 0/15 by next wake (12-hour regime flip). The 13:00Z 5/6 cross-asset down-bar that stopped HYPE first started this leg of weakness; LTC extended sideways for ~10 hours then succumbed to broader BTC weakness ($82.5K → $80.8K, −2%). The entry was technically valid per v0.2 rules at the time but the regime confirmation gate (≥4/15 positive) was retroactively borderline — at midday 11/15 was strong but the gate doesn't forecast deterioration. **Pattern: small-cluster-cohort pairs (non-LINK/BTC majors) face higher stop risk when the BTC-cluster turns, since their 1H ATR is dominated by BTC beta.** Single occurrence; not a lessons.md candidate yet (pattern needs ≥2 instances to merit capture per cap policy).
+
+### Entry-scan: ALL REJECTED via regime-confirmation gate
+
+Multi-ticker pull (Kraken) on full 15-pair universe shows **0/15 positive 24h**:
+
+| Pair | 24h % | Gate result |
+|------|-------|-------------|
+| BTC | -0.77 | neg |
+| ETH | -1.40 | neg |
+| SOL | -1.49 | neg |
+| XRP | -1.30 | neg (open) |
+| TAO | -0.35 | neg |
+| HYPE | -1.60 | neg |
+| DOGE | -2.02 | neg |
+| SUI | -2.40 | neg |
+| LTC | -0.95 | neg (just closed) |
+| ADA | -1.22 | neg |
+| FARTCOIN | -2.66 | neg |
+| AVAX | -1.66 | neg |
+| LINK | -1.30 | neg (open) |
+| PENGU | -3.49 | neg |
+| TRX | -0.38 | neg |
+
+**0/15 < 4/15 threshold → entry-rule-5a (W19-D regime-confirmation gate) BLOCKS all new entries this wake.** Universal rejection — no per-pair detail computation needed. This is a 15-pair clean rejection, the strongest possible blanket regime-veto. Tape inverted from yesterday wake (13/15 positive at routine-01 5/6, 11/15 positive at routine-02 5/6, 0/15 now).
+
+### News (lightweight scan)
+
+`kraken_risk_flag` (scan_time 2026-05-07T00:00:33Z) reads **CLEAR**. Two persisting tier-2 cautions:
+- Drift Solana DEX hack ($295M) — 1 major-source confirmation (Decrypt). Solana cluster blocked from new entries via cluster cap anyway; not a new development since prior wake.
+- Iran/Hormuz military escalation (Euronews) — no major-source confirmation, no market-stress signals.
+
+No tier-1 triggers. No ACTIONABLE items per skills/research.md classification. The Drift hack thesis remains: SOL is universe + cluster, but cluster cap (1/2 used by LINK) and 0/15 regime gate already block entries anyway. Non-binding.
+
+### Decision
+
+**1. CLOSE LTC/USD long** at 56.25 (stop 56.28 × 0.9995 slippage), realized −$48.58 / −1.03R, reason `exit-stop-hit`. Trade row appended. Cash +$2,300.25 → $4,741.87.
+
+**2. NO ENTRIES this wake.** Regime-confirmation gate (entry-rule-5a) rejects all 15 universe pairs with 0/15 positive 24h. Even before per-pair computation, the gate is universally violated.
+
+**3. HOLD LINK and XRP.** Both have triggered exit-ema-cross condition (LINK at 00:00Z 5/7, XRP at 20:00Z 5/6) but per routine-01 task body, only stop-outs close in this routine. These will be picked up by the next routine-02 midday wake unless price reverses (LINK could plausibly reclaim EMA on a bounce — close 9.868 vs EMA 9.951 gap is small; XRP gap is wider — close 1.405 vs EMA 1.422). Stops well below current prices for both; no imminent stop risk overnight unless a cascade event.
+
+### Process notes
+
+- **Schedule slip awareness:** task is named bull-03-eod but body is routine-01-overnight content. Cron `0 6 * * 1-5` PT but actual fire time 04:30Z 5/7 (~21:30 PT 5/6). Treating this as the routine-01 PT-EOD wake. Date attribution: 2026-05-06 (PT date) since fire time is 21:30 PT 5/6.
+- **EMA-cross deferral architecture:** strategy.md says "exits checked at close of each 1H candle". Routine-01 task body restricts to stop-outs only. The mismatch is by design — routine-02 midday cleans up missed EMA-cross signals. Worst case: an EMA-cross fires shortly after midday wake and isn't caught until next midday (~24h delay). Trade-off: token budget vs intraday fidelity.
+- **Cluster cap state post-LTC-close:** LINK (cluster) + XRP (non-cluster) = 1 cluster, 1 non-cluster. Plenty of room for new entries, but regime gate blocks anyway.
+- **Same-pair re-entry cooldown (W19-D 5b):** LTC stop-out at 01:00Z 5/7 → blocked from re-entry until 2026-05-08T01:00Z. HYPE cooldown (from 5/6 15:00Z stop-out) ended 2026-05-07T15:00Z. No other pair under cooldown.
+- **First-of-month universe refresh:** today is 2026-05-06 → not first of month → no refresh.
+- **Telegram:** STOP-OUT DIGEST required (CLOSE event occurred). Message sent after commit.
+
