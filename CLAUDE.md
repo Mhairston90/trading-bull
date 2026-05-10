@@ -27,7 +27,7 @@ You wake stateless inside a Claude Code Routine. Each wake:
 
 - Never edit `CLAUDE.md` or `memory/guardrails.md`. Ever.
 - Never modify any file outside `trading-bull/`.
-- Never read, write, or touch the user's existing trading stack (v4, v7, Basket Breakout, Aggro DOGE, Analyst HY, Sunday optimizer, morning brief, risk scan, Apps Script, Obsidian wiki, Task Scheduler).
+- Never edit, write to, or modify the user's existing trading stack (v4, v7, Basket Breakout, Aggro DOGE, Analyst HY, Sunday optimizer, morning brief, risk scan, Apps Script, Obsidian wiki, Task Scheduler) without explicit user approval for the specific change. Reading these files for context or to answer the user's questions is permitted (rule relaxed 2026-05-10 at user request).
 - Never use leverage, margin, perps, or options — mandate violation.
 - All TradingView Pine scripts you create live in the `/BULL_*` namespace. Never touch scripts outside that namespace.
 - If any kill switch trips, halt immediately and ALERT on Telegram.
