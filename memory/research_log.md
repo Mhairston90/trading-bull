@@ -814,3 +814,32 @@ Skipped.
 2026-05-10T20:00:00Z | allocation | cron-fire | Scheduled routine-05 cron fired (Sun 10:00 PT = ~17:00Z; this entry written ~20:00Z to reflect actual harness wake). Allocation analysis was already completed in 2026-05-10T18:35Z catch-up entry above; nothing to recompute. No pending strategy edit to apply (W19 memo: "Proposal — none"). Mandatory Sunday Telegram digest sent this wake (catch-up entry did not include Telegram step). Data discrepancy noted (informational, no edit): W19 memo headline says "Currently flat (0/4 positions)" but trade_log + portfolio.md show SOL/USD long open since 2026-05-08T17:00Z (cost basis $8,971.40, equity $9,657.61, DD 3.69%); catch-up was written from a stale 5/7-EOD snapshot. Future routine-01/02 wakes will reconcile. | no allocation change; Telegram digest sent
 2026-05-10T17:06:43Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-10T17:41:09Z | allocation | dedup-skip | Same-day re-fire of routine-05 cron (~10:40 PT, after the 06:19 PT cron-fire follow-up commit c968c48 which already appended the allocation section to W19 memo and sent the mandatory Sunday Telegram digest). Day-gate passes (Sunday) but the routine's work is already complete for W19: (a) W19 memo allocation section present with bucket/PnL/vs-BTC tables and "Proposal: none"; (b) no pending strategy edit to apply (W18 + W19-D off-cycle approved 2026-04-28/29; no W20 proposal exists); (c) Telegram digest sent at 06:19 PT cron-fire. Re-running would duplicate the digest and rewrite an already-finalized memo. Skipping to avoid duplicate notification. Next #5 wake: 2026-05-17 (Sun) for W20. | no action
+
+## 2026-05-10T20:00Z — routine-02-midday
+
+### Technical (rule-driven, deterministic)
+
+**Open position health check — SOL/USD (long 97.86 @ 91.6758, stop 90.1932):**
+- Spot ticker: last 96.44, bid 96.43, ask 96.45, 24h range 92.59–96.85, 24h change +3.57%, vol 268,679 SOL.
+- Last closed 1H bar (2026-05-10 19:00 UTC): close 96.46.
+- 1H 20-EMA at 19:00Z close: ≈94.40 (computed: SMA20 init 93.3575 over bars 5/9 15:00–5/10 10:00, propagated forward through 19:00; α=2/21).
+- EMA-cross exit (rule 1): close 96.46 > EMA20 94.40 → **NO EXIT**.
+- Static stop exit (rule 2): stop 90.1932; intraday 24h low 92.59 → **NOT PIERCED**.
+- 4R take-profit (rule 3): target = 91.6758 + 4×1.4826 = 97.6062; current 96.44 → **NOT HIT** ($1.17 below target).
+
+**Drawdown / equity:**
+- Cash $677.98 + SOL MTM 97.86×96.44 = $9,437.62 → equity **$10,115.60**.
+- Prior peak $10,027.55 (2026-04-24); current = new peak. DD 0.00%.
+- Unrealized: +$466.22 gross / +$441.68 net of est. exit commission / +3.21R.
+- BTC reference: 81,411.5 (+0.92% 24h) — context only, no veto.
+
+**Entry scan:** SKIPPED per routine-02 rule (midday is position management only — entries belong to #1 overnight and #3 EOD).
+
+### News
+Skipped (no entry-candidates this wake; midday is mgmt-only).
+
+### Sentiment
+Skipped (no entry-candidates).
+
+### Decision
+HOLD SOL position. No exits triggered. No entries scanned. New equity peak booked. All kill switches clear. No Telegram (no exit, no kill-switch trip, DD well below 12.5% warn).
