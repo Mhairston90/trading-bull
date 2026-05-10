@@ -24,12 +24,16 @@ Routine #7 daily wake updates a `Competition net %` column below for each tracke
 
 ## Active rack
 
+> **Last refresh:** 2026-05-10 (routine-04+05 catch-up; cron paused 2026-05-08 → 2026-05-10). Variant trade_logs unchanged (routine #7 cron also paused — no synthetic trades 5/8–5/10).
+
 | Rank | Strategy | Status | Spin-up | Days live | Trades | Win % | Avg R | Net % | Max DD % | Competition net % (since 2026-04-29) | Notes |
 |------|----------|--------|---------|-----------|--------|-------|-------|-------|----------|-------------------------------------|-------|
-| 1    | v0.2 (main)             | MAIN | 2026-04-20 | 9 | 9 | 11.1% | -0.83 | -2.87 | 3.14 | 0.00 | live trading; W18 + W19 amendments applied |
-| 2    | v0.3-vol-compression    | LAB  | 2026-04-29 | 0 | 0 | —     | —     | —     | —    | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: IDEA-04 (vol-compression entry gate, threshold 0.5×) |
-| 3    | v0.4-mean-reversion-sleeve | LAB  | 2026-04-29 | 0 | 0 | —  | —     | —     | —    | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — concept-bucket diversification (mean-reversion 100% in this variant). Tests RSI<25 oversold-bounce in 4H uptrends. |
-| 4    | v0.5-cluster-cap-tight  | LAB  | 2026-04-29 | 0 | 0 | —     | —     | —     | —    | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — direct response to lesson 2026-04-27 cascade. Cluster cap tightened from 2 to 1. |
+| 1    | v0.2 (main)             | MAIN | 2026-04-20 | 20 | 15 | 13.3% | -0.37 | -3.27 | 3.54 | -0.41 | live trading; W18 + W19 amendments applied; W19 5 closes (40% WR, -0.27R avg) |
+| 2    | v0.3-vol-compression    | LAB  | 2026-04-29 | 11 | 0 | —     | —     | —     | —    | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: IDEA-04 (vol-compression entry gate, threshold 0.5×). #7 cron paused 5/8-5/10 → no synthetic trades yet |
+| 3    | v0.4-mean-reversion-sleeve | LAB  | 2026-04-29 | 11 | 0 | —  | —     | —     | —    | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — concept-bucket diversification (mean-reversion 100% in this variant). Tests RSI<25 oversold-bounce in 4H uptrends |
+| 4    | v0.5-cluster-cap-tight  | LAB  | 2026-04-29 | 11 | 0 | —     | —     | —     | —    | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — direct response to lesson 2026-04-27 cascade. Cluster cap tightened from 2 to 1 |
+| —    | Codex v0 (competitor)   | EXTERNAL | 2026-04-29 | 11 | 0 closed (4 open) | — | — | +1.04 | 0.00 | **+1.04** | read-only. Multi-sleeve: trend (BTC/ETH/SOL longs) + relative_strength (ETH long). Equity $10,104.03 |
+| —    | Codex Aggro v0 (comp.)  | EXTERNAL | 2026-04-29 | 11 | 1 closed | — | -0.33 | -0.33 | 0.33 | **-0.33** | read-only. 1 closed trade -$33.21. Equity $9,966.79 |
 
 Ranking is by 30-day rolling net return once variants pass 30-day live threshold. Pre-30d variants sort below main regardless of synthetic stats.
 
@@ -43,7 +47,7 @@ For the **competition** column: net % since 2026-04-29 baseline. This is the met
 
 ## Promotion candidates (current)
 
-(none — v0.3 is too young. Earliest promotion-eligible date 2026-05-29.)
+(none — all 3 variants 11/30 days into eligibility window. Earliest promotion-eligible date 2026-05-29. Note: zero synthetic trades to date due to routine #7 cron pause during user offline window 2026-05-08 → 2026-05-10; eligibility timer measures wall-clock days since spin-up, not synthetic-bar count, so the 2026-05-29 milestone is unaffected.)
 
 ## Recently retired
 

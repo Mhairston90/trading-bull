@@ -45,8 +45,8 @@ Each lesson is a section:
 
 ### 2026-04-24 — Commission drag dominates short-lived EMA-cross exits (BTC)
 
-**Observation:** BTC/USD entered 2026-04-22T04:05Z @ 77600.4, exited 2026-04-24T04:00Z @ 77720.72 on EMA cross. Gross PnL = +$5.39 (price moved +$120 in our favor) but two-side commission (~$13.01 at 0.26% per side) flipped it to net −$9.14.
-**Evidence:** trade_log.md rows OPEN BTC/USD 2026-04-22T04:05:00Z and CLOSE BTC/USD 2026-04-24T04:00:00Z (R +0.10 gross, −0.21R net after commissions). Trade lifetime ~48h.
+**Observation:** BTC/USD entered 2026-04-22T04:05Z @ 77600.4, exited 2026-04-24T04:00Z @ 77720.72 on EMA cross. Gross PnL = +$5.39 (price moved +$120 in our favor) but two-side commission (~$13.01 at 0.26% per side) flipped it to net −$9.14. **Recurrence W19:** BTC/USD entered 2026-05-05T05:00Z @ 80961.16, exited 2026-05-06T19:00Z @ 81430.76 on EMA cross. Gross +$14.04, net +$1.42 (+0.06R) after exit slippage and commissions. Same failure mode, different week.
+**Evidence:** trade_log.md rows OPEN BTC/USD 2026-04-22T04:05:00Z + CLOSE BTC/USD 2026-04-24T04:00:00Z (R +0.10 gross, −0.21R net after commissions); OPEN BTC/USD 2026-05-05T05:00:00Z + CLOSE BTC/USD 2026-05-06T19:00:00Z (+0.06R net). Two BTC instances; both EMA-cross exits within 48h of entry.
 **Implication:** v0 EMA-cross exit can fire on small mean reversions where the price barely retraced past the EMA. Net-of-commission breakeven on a $2,500 BTC notional requires ~$13 / 0.0322 = $404 of price movement (~0.52%). Routine #4 should consider (a) requiring an exit-confirmation bar (e.g., 2 closes below EMA), (b) replacing 1-EMA exit with a slower trailing stop, or (c) raising the entry RSI threshold so we only enter trades with stronger expected runs.
-**Score:** _(routine #4 will assign)_
+**Score:** **7** (assigned routine #4 catch-up 2026-05-10 — recurring; cost ≈ −$8 to +$2 per occurrence; addressable via deterministic exit-confirmation rule; backtest-needed before drafting Ring-2 proposal)
 **Status:** active
