@@ -843,3 +843,69 @@ Skipped (no entry-candidates).
 
 ### Decision
 HOLD SOL position. No exits triggered. No entries scanned. New equity peak booked. All kill switches clear. No Telegram (no exit, no kill-switch trip, DD well below 12.5% warn).
+
+## 2026-05-11T13:00Z — routine-01-overnight
+
+### Universe price pull (24h % via Kraken kraken_multi_ticker)
+Universe is **broadly red**. Of 15 pairs, **0/15 are positive** on 24h:
+- BTC -1.78 (80,713) | ETH -1.76 (2,329.28) | SOL -1.43 (95.09) | XRP -1.81 (1.44683) | TAO -0.69 (318.63)
+- HYPE -2.79 (41.84) | DOGE/XDG -2.69 (0.10930) | SUI -3.94 (1.2805) | LTC -2.58 (58.84) | ADA -1.67 (0.27772)
+- FARTCOIN -4.10 (0.2549) | AVAX -1.37 (10.08) | LINK -2.01 (10.526) | PENGU -3.50 (0.010275) | TRX -0.20 (0.34980)
+- 24h leaders/losers: TRX shallowest pull, FARTCOIN deepest. SUI session range 1.0967->1.6799 (intraday +25% spike then mean-revert; final settle 1.2805).
+- Liquidity floor (W18-B, $2M/24h notional) check at entry-scan time:
+  - Above floor: BTC (~$156M), ETH (~$67M), SOL (~$40M), XRP (~$37.6M), TAO (~$21.4M), HYPE (~$3.0M), XDG (~$14.5M), SUI (~$59.4M), LTC (~$5.3M), ADA (~$5.8M), FARTCOIN (~$3.5M), AVAX (~$2.8M), LINK (~$6.1M).
+  - **Below floor: PENGU (~$1.73M), TRX (~$0.77M)** -> blocked for new entries.
+
+### Open-position overnight stop check
+**SOL/USD long 97.86 @ 91.6758, static stop 90.1932:**
+- 1H bars 2026-05-10 21:00Z -> 2026-05-11 08:00Z (overnight window for 06:00 PT routine).
+- Lowest overnight low: **94.38** (2026-05-11 03:00Z bar). Stop 90.1932 not pierced — gap of $4.18 (~4.4%).
+- No stop-out. No exit logged. Position held.
+- Note: EMA-cross and 4R checks are deferred to routine-02 midday / routine-03 EOD per architecture (routine-01 only closes on stop hits).
+
+### Entry scan — full-universe REJECT
+W19-D rule 5a regime-confirmation gate: requires >=4/15 universe pairs positive 24h. Today: **0/15 positive -> regime gate FAILS** -> all new entries rejected this wake, no per-pair indicator computation performed. Reject reasons logged below for the universe as a class:
+
+| Pair | Reject reason |
+|------|---------------|
+| BTC/USD | regime-gate-fail (0/15 positive 24h, need >=4) |
+| ETH/USD | regime-gate-fail |
+| XRP/USD | regime-gate-fail |
+| TAO/USD | regime-gate-fail |
+| HYPE/USD | regime-gate-fail |
+| XDG/USD | regime-gate-fail |
+| SUI/USD | regime-gate-fail (also: intraday spike+mean-revert; not a clean momentum setup) |
+| LTC/USD | regime-gate-fail |
+| ADA/USD | regime-gate-fail |
+| FARTCOIN/USD | regime-gate-fail |
+| AVAX/USD | regime-gate-fail |
+| LINK/USD | regime-gate-fail |
+| PENGU/USD | regime-gate-fail; also liquidity-floor-fail ($1.73M < $2M) |
+| TRX/USD | regime-gate-fail; also liquidity-floor-fail ($0.77M < $2M) |
+| SOL/USD | already open (rule 5) |
+
+Clean broad-tape pullback wake — exactly the scenario W19-D regime gate was added to filter. No per-pair work needed.
+
+### News scan (Firecrawl: CoinDesk + The Block, last 24h)
+Headlines scanned: ~15 from CoinDesk front page + ~10 from The Block front page. Universe-pair coverage:
+
+| Time (UTC ~) | Source | Headline | Asset | Category | Classification |
+|---|---|---|---|---|---|
+| 2026-05-11 05:07 | coindesk.com | "XRP spikes 2.5%, beating bitcoin and ether, in breakout above $1.45" | XRP | momentum | INFORMATIONAL (rear-view; no v0 news rule) |
+| 2026-05-10 22:59 | theblock.co | "Bitcoin briefly tops $82,000 on improving macro conditions; Sui jumps 25%" | BTC, SUI | momentum/macro | INFORMATIONAL (already mean-reverted; tape now red) |
+| 2026-05-11 06:01 | coindesk.com | "Bitcoin mining pools with 75% of BTC hashrate join Stratum V2" | BTC | protocol/infra | INFORMATIONAL (long-term positive; no immediate price impact) |
+| 2026-05-11 04:06 | coindesk.com | "Bitcoin whale that went silent in 2013 moves $40M in BTC" | BTC | onchain | NEUTRAL (single-whale; small relative size) |
+| 2026-05-11 03:54 | theblock.co | "French BTC treasury firm Capital B raises $18M from Adam Back, others" | BTC | treasury/institutional | NEUTRAL (small ticket) |
+| 2026-05-11 02:07 | theblock.co | "Saylor: Strategy would buy '10 to 20' BTC for every one it sells" | BTC | commentary | NEUTRAL (commentary, no action) |
+| 2026-05-09 15:14 | coindesk.com | "CME to launch bitcoin volatility futures June 1 (pending approval)" | BTC | derivatives/structure | INFORMATIONAL (positive long-term; not 24h news) |
+| 2026-05-09 15:56 | coindesk.com | "Senate Clarity Act markup date set" | regulatory | regulation | INFORMATIONAL (positive setup; not a 24h price catalyst) |
+| 2026-05-09 13:53 | coindesk.com | "LayerZero says it 'made a mistake' in $292M Kelp exploit" | (off-universe protocol) | hack/postmortem | NOT-UNIVERSE (no exposure) |
+| 2026-05-09 15:28 | coindesk.com | "Swiss central bank bitcoin reserve push fails over signature shortfall" | BTC | regulatory/EU | NEUTRAL (failed initiative; no price action) |
+
+**ACTIONABLE flagged: 0** items. No hacks/delistings/regulatory shocks on universe-pair base assets in the 24h window. Closest to actionable was the SUI +25% intraday spike (theblock), but it fully mean-reverted to 1.28; not a clean entry candidate and regime gate would block regardless. v0 has no news rule — informational items captured for routine #4 pattern-detection only.
+
+### First-of-month universe refresh check
+2026-05-11 is not the first-of-month nor first-weekday-of-month (May 1 was Friday and is past). **No refresh.**
+
+### Decision
+HOLD SOL position (stop intact, +2.31R unrealized at 95.10 mark). No new entries (regime gate). No ACTIONABLE news. Telegram **SILENT** per routine-01 NOTIFY spec (no kill-switch, no open/close, no actionable news, no universe refresh).

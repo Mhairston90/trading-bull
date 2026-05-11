@@ -41,3 +41,4 @@
 | 2026-05-07T01:00:00Z | CLOSE | LTC/USD | long | 41 | 56.25 | — | — | -1.03 | -48.58 | exit-stop-hit |
 | 2026-05-07T14:00:00Z | CLOSE | XRP/USD | long | 1723 | 1.39398 | — | — | -1.05 | -37.68 | exit-stop-hit |
 | 2026-05-07T20:00:00Z | CLOSE | LINK/USD | long | 257 | 9.890452 | — | — | +1.69 | +103.03 | exit-ema-cross |
+| 2026-05-08T17:00:00Z | OPEN | SOL/USD | long | 97.86 | 91.6758 | 90.1932 | — | — | — | entry-rule-v0-momentum |
