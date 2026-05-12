@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-12T13:07Z (routine-01-overnight — portfolio flat since SOL +4R close 2026-05-11T19:00Z; no trades, no MTM; regime gate 5a blocked all entries 0/15 positive).
+> **Last rebuild:** 2026-05-12T20:07Z (routine-02-midday — portfolio flat since SOL +4R close 2026-05-11T19:00Z; no MTM needed, no exits possible; midday entries forbidden by routine spec; all kill switches clear).
 
 ## Account
 
@@ -44,7 +44,7 @@ Open positions: **0 / 8** (strategy v0.2 max-concurrent 4 → 0/4 used; cluster 
 - Consecutive losing trading days: ... 05-06 L, 05-07 W, 05-11 W, 05-12 flat → streak 0 (cap 7)
 - Max drawdown: 0.00% (cap 25%, warn 12.5%) — clear at equity peak $10,258.06
 - Equity floor: $10,258.06 > $7,500 floor — OK
-- **All clear. Trading authorized.** (No entries this wake — W19-D rule 5a regime-confirmation gate fails: 0/15 universe pairs positive 24h, threshold ≥4/15.)
+- **All clear. Trading authorized.** (Midday routine: position management only — entries forbidden by routine-02 spec regardless of regime gate. Portfolio flat, no exit checks needed.)
 
 ## Pending exit triggers
 
