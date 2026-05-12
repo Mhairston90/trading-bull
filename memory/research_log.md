@@ -914,3 +914,105 @@ HOLD SOL position (stop intact, +2.31R unrealized at 95.10 mark). No new entries
 2026-05-11T17:06:29Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-11T17:39:55Z | allocation | day-gate | not Sunday, skipping | no action
 | 2026-05-11T20:00:00Z | midday | kraken | SOL/USD 4R take-profit FIRED at 19:00Z 1H candle close. 19:00 bar close 98.20 >= 4R target 97.6062 (entry 91.6758 + 4 x R-stop 1.4826). Exit rule 3 from strategy v0.2. Fill 98.1509 (close x 0.9995 slippage); size 97.86; gross proceeds 9605.05, exit commission 24.97, net 9580.08; realized PnL +585.35 (+4.03R) vs cost basis 8971.40 + entry comm 23.33. Computed 1H 20-EMA at 19:00 close ~96.01 (seeded SMA20 over 2026-05-10 05:00->2026-05-11 00:00 = 94.685; iterated alpha=2/21 through bar 39) — price well above EMA, no EMA-cross-down exit; static stop 90.1932 not breached (1H low 94.28 at 14:00Z). Strategy exits checked at 1H close per v0.2 — 19:00 close was the trigger bar; routine-02 executes the close at the candle close timestamp despite firing at 20:00Z. 20:00Z in-progress bar (98.16-98.32) confirms the breakout sustained. Post-exit: portfolio flat, cash $10,258.06, equity $10,258.06, NEW PEAK (prior $10,115.60), DD 0.00%, realized PnL all-time +258.10 (turned positive after first 4R win). Kill-switch state: daily realized +5.71% gain (loss-side cap 5% N/A on gains) — clear; DD 0.00% (cap 25%, warn 12.5%) — clear; equity > $7,500 floor — clear; consecutive losing-day streak reset to 0. Midday is position-mgmt only — no entries scanned. Telegram NOTIFY per routine-02 spec (exit happened). | CLOSE SOL exit-4R-target, no entries
+
+## 2026-05-12T05:56Z — routine-01-overnight (EOD-slot re-fire, fresh-state scan)
+
+### Context
+
+Scheduled task `bull-03-eod` fired at ~21:00 PT 2026-05-11 (UTC 05:56 2026-05-12), but the SKILL.md body it carries is routine-01-overnight content (cron `0 6 * * 1-5` PT). Today (2026-05-11 PT) already had two routine-01 fires (commits 4c20fd1, 1a6bf52) and one routine-02 midday fire (39eda5e, SOL 4R take-profit closed). Portfolio state changed between this morning's routine-01 (SOL held) and this fire (flat post-SOL-exit), so this is *not* a pure dedup-skip — running a fresh scan against current state. Marked "routine-01-overnight" per the content executed, not per the cron name.
+
+### Technical (rule-driven, deterministic)
+
+**Universe price pull (Kraken `kraken_multi_ticker`, 24h % change):**
+
+| Pair | Last | 24h % | 24h notional ≈ | Liquidity floor (≥$2M) |
+|------|-----:|------:|---------------:|:---|
+| BTC/USD | 81,208.90 | -0.64 | $161.4M | ✓ |
+| ETH/USD | 2,311.25 | -1.20 | $22.7M | ✓ |
+| SOL/USD | 96.61 | -0.77 | $36.6M | ✓ |
+| XRP/USD | 1.4621 | -1.03 | $21.4M | ✓ |
+| TAO/USD | 322.75 | **+0.64** | $12.8M | ✓ |
+| HYPE/USD | 41.29 | -1.71 | $4.15M | ✓ |
+| XDG/USD | 0.11037 | -0.82 | $5.91M | ✓ |
+| SUI/USD | 1.2843 | -0.42 | $18.9M | ✓ |
+| LTC/USD | 58.30 | -0.36 | $1.98M | **✗ below** |
+| ADA/USD | 0.27772 | -0.90 | $8.19M | ✓ |
+| FARTCOIN/USD | 0.2521 | -2.02 | $1.73M | **✗ below** |
+| AVAX/USD | 10.05 | -0.79 | $1.82M | **✗ below** |
+| LINK/USD | 10.495 | -0.92 | $2.40M | ✓ |
+| PENGU/USD | 0.010148 | -0.75 | $0.77M | **✗ below** |
+| TRX/USD | 0.348668 | -0.70 | $5.02M | ✓ |
+
+- Regime breadth: **1/15 positive** (TAO only). W19-D rule 5a requires ≥4/15 → **regime gate FAILS**.
+- Below-liquidity-floor (W18-B): AVAX, FARTCOIN, LTC, PENGU (would be rejected even if regime passed).
+- SOL post-exit drift: closed 98.1509 at 19:00Z → currently 96.61 (~−1.57% in 11h). Stop-target capture vindicated; price has not extended.
+
+**Open-position overnight stop check:** No open positions (flat since SOL 4R close at 2026-05-11T19:00Z). No stops to evaluate.
+
+**Entry scan — full-universe REJECT:**
+
+| Pair | Reject reason |
+|------|---------------|
+| BTC/USD | regime-gate-fail (1/15 positive, need ≥4) |
+| ETH/USD | regime-gate-fail |
+| SOL/USD | regime-gate-fail |
+| XRP/USD | regime-gate-fail |
+| TAO/USD | regime-gate-fail (only positive pair; gate is breadth, not single-name) |
+| HYPE/USD | regime-gate-fail |
+| XDG/USD | regime-gate-fail |
+| SUI/USD | regime-gate-fail |
+| LTC/USD | regime-gate-fail; also liquidity-floor-fail ($1.98M < $2M, marginal) |
+| ADA/USD | regime-gate-fail |
+| FARTCOIN/USD | regime-gate-fail; also liquidity-floor-fail ($1.73M) |
+| AVAX/USD | regime-gate-fail; also liquidity-floor-fail ($1.82M) |
+| LINK/USD | regime-gate-fail |
+| PENGU/USD | regime-gate-fail; also liquidity-floor-fail ($0.77M) |
+| TRX/USD | regime-gate-fail |
+
+No per-pair RSI/EMA/ATR computation performed — regime gate short-circuits the scan. Clean broad-tape pullback; W19-D gate behaving as designed.
+
+**SOL re-entry cooldown (rule 5b) check:** SOL exited 2026-05-11T19:00Z on `exit-4R-target` (not `exit-stop-hit`). Rule 5b literally guards against post-stop-out re-entry only — so cooldown does NOT apply. Academic this wake (regime gate blocks anyway), but worth flagging for next wake when regime may flip: if SOL re-qualifies, no cooldown veto.
+
+### News (Firecrawl: CoinDesk + The Block, last 24h)
+
+| Time (UTC ~) | Source | Headline | Asset(s) | Category | Classification |
+|---|---|---|---|---|---|
+| 2026-05-11 ~20:21 | coindesk.com | "'A big nothing burger': Saylor on selling bitcoin for dividends, retiring debt with STRC proceeds" | BTC | commentary | INFORMATIONAL (no action; mixed sentiment) |
+| 2026-05-11 ~19:51 | coindesk.com | "Circle bets on new $3B Arc blockchain as Wall Street rail" | (off-universe) | infra/stablecoin | NOT-UNIVERSE |
+| 2026-05-11 ~18:42 | coindesk.com | "Kraken parent Payward seeks fresh funding at $20B valuation ahead of IPO" | (off-universe) | corporate | NOT-UNIVERSE |
+| 2026-05-11 ~14:43 | coindesk.com | "Banking groups escalate fight over stablecoin yield ahead of Senate vote" | regulatory | policy | INFORMATIONAL |
+| 2026-05-11 ~14:18 | coindesk.com | "Solana Alpenglow consensus overhaul officially live for testing" | SOL | protocol | INFORMATIONAL (testnet only; positive long-term, no immediate price catalyst) |
+| 2026-05-11 ~13:47 | coindesk.com | "Ripple raises $200M from Neuberger Berman to expand Ripple Prime" | XRP | institutional/capital | INFORMATIONAL (positive XRP; intraday already had +2.5% breakout earlier per AM scan; tape has since reversed) |
+| 2026-05-11 ~13:17 | coindesk.com | "CoinDesk 20: SUI surges 25% over weekend; CRO +9.7%" | SUI | momentum (rear-view) | INFORMATIONAL (already mean-reverted; SUI 24h −0.42% now) |
+| 2026-05-11 ~12:56 | coindesk.com | "Tom Lee's Bitmine slows ether purchases after 1M tokens bought YTD" | ETH | flows | INFORMATIONAL (slight negative ETH demand) |
+| 2026-05-12 ~04:59 | theblock.co | "Updated Senate Banking Committee bill on stablecoin rewards/DeFi (sidesteps Trump conflicts)" | regulatory | policy | INFORMATIONAL |
+| 2026-05-12 ~04:05 | theblock.co | "Ord.io (Bitcoin Ordinals explorer) to shut down alongside Zap" | BTC | infra/adjacent | NEUTRAL (minor; Ordinals ecosystem only) |
+| 2026-05-11 ~21:26 | theblock.co | "Ethereum Foundation names three new co-leads to Protocol cluster" | ETH | governance | INFORMATIONAL |
+| 2026-05-11 ~21:14 | theblock.co | "MARA Q1 revenue drops 18%; bitcoin mining remains 'operational foundation'" | BTC | mining/earnings | INFORMATIONAL |
+| 2026-05-11 ~21:05 | theblock.co | "CleanSpark Q2 losses swell after $224M BTC holdings markdown" | BTC | mining/earnings | INFORMATIONAL (already priced in BTC drift) |
+| 2026-05-11 ~19:39 | theblock.co | "Crypto bill vote shifts to full Senate; TD Cowen flags 'major obstacles'" | regulatory | policy | INFORMATIONAL |
+| 2026-05-11 ~19:30 | theblock.co | "Binance: AI security systems prevented $10.5B in user losses" | (off-universe) | security | NOT-UNIVERSE |
+
+**ACTIONABLE flagged: 0** items. No hacks/delistings/regulatory shocks on universe-pair base assets. v0 has no news rule — informational only. Note vs. AM scan: Ripple $200M raise + SOL Alpenglow testnet launch are mildly positive structural items but did not produce intraday breakouts (XRP −1.03%, SOL −0.77%). Pattern-detect for routine #4: stablecoin/policy headlines dominate the 24h window (4+ items) — no universe-pair trade implication but worth tracking for emergent macro-policy news rule.
+
+### Sentiment
+
+Skipped — no entry candidates (regime gate blocks all). No `kraken_spread`/`kraken_depth` calls this wake.
+
+### First-of-month universe refresh
+
+2026-05-11 is not the 1st or first-weekday-of-month (May 1 = Friday, past). No refresh.
+
+### Decision
+
+- **NO ENTRIES** — W19-D regime gate fails (1/15 positive 24h, need ≥4). All 15 universe pairs rejected.
+- **NO EXITS** — portfolio flat (SOL closed midday at +4.03R / +$585.35).
+- **NO LESSONS APPENDED** — no anomaly/news cluster triggered an entry.
+- **Kill-switch state:** all clear (daily +5.71% gain; DD 0.00%; equity $10,258.06 > $7,500 floor; losing-day streak 0).
+- **Telegram:** **SILENT** per routine-01 NOTIFY spec (no kill-switch trip, no new OPEN, no stop-out CLOSE, no ACTIONABLE news, no universe refresh).
+
+### Process notes
+
+- Cron/content mismatch persists: `bull-03-eod` SKILL.md still contains routine-01 body. Flagging here so it can be corrected by user — not editing outside `trading-bull/`. The actual EOD routine #3 (daily card, archive sweep on last trading day) has not been run today via this slot.
+- This is the 3rd routine-01 fire today (06:00 PT cron-fire, 10:30 PT re-fire/dedup, ~22:00 PT this fire) — fresh scan justified by post-SOL-exit state change, but if `bull-03-eod` continues to misfire with routine-01 content the harness should be reconciled rather than absorbing duplicate scans.
+- TAO is the lone green pair (+0.64%). If regime breadth recovers (≥4/15) by tomorrow's overnight, TAO may re-emerge as a candidate — but note lesson 2026-04-29 (TAO @ RSI 86.1 climactic stopped −1.02R). Will recompute RSI fresh if regime passes.
