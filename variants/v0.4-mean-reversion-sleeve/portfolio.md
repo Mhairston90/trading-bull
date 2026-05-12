@@ -1,7 +1,7 @@
 # Variant v0.4-mean-reversion-sleeve — Synthetic Portfolio
 
 > **Paper-paper account.** Synthetic $10K starting equity.
-> **Last rebuild:** 2026-04-29T22:00:00Z (initial spin-up — no trades yet)
+> **Last rebuild:** 2026-05-13T05:00:00Z (routine-07 wake 2026-05-12 22:00 PT — no trades; see notes)
 
 ## Account
 
@@ -40,9 +40,13 @@ Open positions: **0 / 2** (variant max-concurrent 2 — mean-reversion sized sma
 ## Days live
 
 - Spin-up: 2026-04-29
-- As of last rebuild: **0 days**
+- As of last rebuild: **13 days**
 - Promotion-eligible date: 2026-05-29
 
 ## Notes
 
 Tests whether BULL's mandate-allowed-but-unused mean-reversion bucket adds edge uncorrelated to momentum. Looks for oversold bounces (RSI < 25) in pairs whose 4H trend is structurally bullish. Variant-internal bucket allocation is `mean-reversion: 100%`; main BULL bucket allocation in `memory/strategy.md` is unchanged at `momentum: 100%`.
+
+### Routine #7 wake log
+
+- **2026-05-12 22:00 PT (this wake)** — past-24h replay window = 2026-05-11 16:00 UTC → 2026-05-12 16:00 UTC. EOD-prior (04:00 UTC) lowest 1H RSI was TRX/USD 33.0 — no pair hit M2 RSI<25. OVERNIGHT (13:00 UTC) FARTCOIN/USD reached 20.9 RSI but failed M1 (insufficient 4H history for 200-EMA on a meme listing); other low-RSI pairs (PENGU 25.4, ETH 26.0) above the <25 threshold. Result: 0 entries, 0 open positions. All kill switches clear at $10,000 equity.

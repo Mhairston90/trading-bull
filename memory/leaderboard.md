@@ -24,16 +24,16 @@ Routine #7 daily wake updates a `Competition net %` column below for each tracke
 
 ## Active rack
 
-> **Last refresh:** 2026-05-10 (routine-04+05 catch-up; cron paused 2026-05-08 → 2026-05-10). Variant trade_logs unchanged (routine #7 cron also paused — no synthetic trades 5/8–5/10).
+> **Last refresh:** 2026-05-12 22:00 PT (routine-07 wake — 3 variants simulated, 0 hypothetical trades across the past-24h window). Competition column for Codex rows is **not refreshed this wake** — those are external read-only and were not re-queried; numbers carry forward from 2026-05-10.
 
 | Rank | Strategy | Status | Spin-up | Days live | Trades | Win % | Avg R | Net % | Max DD % | Competition net % (since 2026-04-29) | Notes |
 |------|----------|--------|---------|-----------|--------|-------|-------|-------|----------|-------------------------------------|-------|
-| 1    | v0.2 (main)             | MAIN | 2026-04-20 | 20 | 15 | 13.3% | -0.37 | -3.27 | 3.54 | -0.41 | live trading; W18 + W19 amendments applied; W19 5 closes (40% WR, -0.27R avg) |
-| 2    | v0.3-vol-compression    | LAB  | 2026-04-29 | 11 | 0 | —     | —     | —     | —    | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: IDEA-04 (vol-compression entry gate, threshold 0.5×). #7 cron paused 5/8-5/10 → no synthetic trades yet |
-| 3    | v0.4-mean-reversion-sleeve | LAB  | 2026-04-29 | 11 | 0 | —  | —     | —     | —    | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — concept-bucket diversification (mean-reversion 100% in this variant). Tests RSI<25 oversold-bounce in 4H uptrends |
-| 4    | v0.5-cluster-cap-tight  | LAB  | 2026-04-29 | 11 | 0 | —     | —     | —     | —    | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — direct response to lesson 2026-04-27 cascade. Cluster cap tightened from 2 to 1 |
-| —    | Codex v0 (competitor)   | EXTERNAL | 2026-04-29 | 11 | 0 closed (4 open) | — | — | +1.04 | 0.00 | **+1.04** | read-only. Multi-sleeve: trend (BTC/ETH/SOL longs) + relative_strength (ETH long). Equity $10,104.03 |
-| —    | Codex Aggro v0 (comp.)  | EXTERNAL | 2026-04-29 | 11 | 1 closed | — | -0.33 | -0.33 | 0.33 | **-0.33** | read-only. 1 closed trade -$33.21. Equity $9,966.79 |
+| 1    | v0.2 (main)             | MAIN | 2026-04-20 | 22 | 16 | 25.0% | -0.23 | +2.58 | 3.54 | +5.62 | live trading; SOL +4.03R take-profit 2026-05-11T19:00Z brought equity to new peak $10,258.06; flat since |
+| 2    | v0.3-vol-compression    | LAB  | 2026-04-29 | 13 | 0 | —     | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: IDEA-04 (vol-compression entry gate, threshold 0.5×). 2026-05-12 wake: OVERNIGHT regime gate 0/15 → no entries; EOD-prior 6/15 positive but no pair passed rules 1+2+3; MIDDAY default-skip |
+| 3    | v0.4-mean-reversion-sleeve | LAB  | 2026-04-29 | 13 | 0 | —  | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — concept-bucket diversification (mean-reversion 100%). 2026-05-12 wake: lowest 1H RSI at EOD-prior was TRX 33.0; at OVERNIGHT only FARTCOIN 20.9 hit <25 but failed M1 (insufficient 4H history for 200-EMA) |
+| 4    | v0.5-cluster-cap-tight  | LAB  | 2026-04-29 | 13 | 0 | —     | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — response to lesson 2026-04-27 cascade. 2026-05-12 wake: same entry-eval as v0.3 minus vol-comp gate → identical 0-trade outcome; MIDDAY had 6 momentum candidates {BTC,SOL,XRP,DOGE,SUI,FARTCOIN} but variant defaults to no-midday-entries |
+| —    | Codex v0 (competitor)   | EXTERNAL | 2026-04-29 | 13 | 0 closed (4 open) | — | — | +1.04 | 0.00 | **+1.04** | read-only. As of last poll 2026-05-10. Multi-sleeve: trend (BTC/ETH/SOL longs) + relative_strength (ETH long). Equity $10,104.03 |
+| —    | Codex Aggro v0 (comp.)  | EXTERNAL | 2026-04-29 | 13 | 1 closed | — | -0.33 | -0.33 | 0.33 | **-0.33** | read-only. As of last poll 2026-05-10. 1 closed trade -$33.21. Equity $9,966.79 |
 
 Ranking is by 30-day rolling net return once variants pass 30-day live threshold. Pre-30d variants sort below main regardless of synthetic stats.
 
@@ -47,7 +47,11 @@ For the **competition** column: net % since 2026-04-29 baseline. This is the met
 
 ## Promotion candidates (current)
 
-(none — all 3 variants 11/30 days into eligibility window. Earliest promotion-eligible date 2026-05-29. Note: zero synthetic trades to date due to routine #7 cron pause during user offline window 2026-05-08 → 2026-05-10; eligibility timer measures wall-clock days since spin-up, not synthetic-bar count, so the 2026-05-29 milestone is unaffected.)
+(none — all 3 variants 13/30 days into eligibility window. Earliest promotion-eligible date 2026-05-29. Synthetic-trade count remains 0 across all variants — entry gates have not fired in the available wake windows since spin-up. Eligibility timer measures wall-clock days since spin-up, not synthetic-bar count, so 2026-05-29 milestone is unaffected.)
+
+### Last simulator wake
+
+- **2026-05-12 22:00 PT** — Kraken MCP OK, 15/15 pairs fetched. Past-24h replay window 2026-05-11 16:00 UTC → 2026-05-12 16:00 UTC (Kraken's latest closed 1H bar; midday 2026-05-12 20:00 UTC bar not yet closed in Kraken's stream at routine fire time). Wakes evaluated: MIDDAY 2026-05-11 20:00 UTC (default-skip for all variants), EOD-prior 2026-05-12 04:00 UTC, OVERNIGHT 2026-05-12 13:00 UTC. **0 hypothetical trades** across all 3 variants. Open positions: 0/0/0 → exit replay no-op. Kill switches: all clear. Auto-retirement check: no triggers. Auto-spin-up check: idea_bank has IDEA-20260512-01 (ETF-flow 30d-MA sign-flip, score 12, raw) eligible by score, **but active rack at 3/3 capacity** — routine #7 step 8 requires count < 3 to auto-spin-up, so no spin-up this wake. Flagged for routine #4 Saturday: with a score-12 raw row queued, the cap-of-3 rotation rule in `variants/README.md` says the worst-performing 30d variant should be displaced — re-evaluate once any variant has ≥30d evidence.
 
 ## Recently retired
 
