@@ -29,9 +29,12 @@ Routine #7 daily wake updates a `Competition net %` column below for each tracke
 | Rank | Strategy | Status | Spin-up | Days live | Trades | Win % | Avg R | Net % | Max DD % | Competition net % (since 2026-04-29) | Notes |
 |------|----------|--------|---------|-----------|--------|-------|-------|-------|----------|-------------------------------------|-------|
 | 1    | v0.2 (main)             | MAIN | 2026-04-20 | 22 | 16 | 25.0% | -0.23 | +2.58 | 3.54 | +5.62 | live trading; SOL +4.03R take-profit 2026-05-11T19:00Z brought equity to new peak $10,258.06; flat since |
-| 2    | v0.3-vol-compression    | LAB  | 2026-04-29 | 13 | 0 | —     | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: IDEA-04 (vol-compression entry gate, threshold 0.5×). 2026-05-12 wake: OVERNIGHT regime gate 0/15 → no entries; EOD-prior 6/15 positive but no pair passed rules 1+2+3; MIDDAY default-skip |
-| 3    | v0.4-mean-reversion-sleeve | LAB  | 2026-04-29 | 13 | 0 | —  | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — concept-bucket diversification (mean-reversion 100%). 2026-05-12 wake: lowest 1H RSI at EOD-prior was TRX 33.0; at OVERNIGHT only FARTCOIN 20.9 hit <25 but failed M1 (insufficient 4H history for 200-EMA) |
-| 4    | v0.5-cluster-cap-tight  | LAB  | 2026-04-29 | 13 | 0 | —     | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — response to lesson 2026-04-27 cascade. 2026-05-12 wake: same entry-eval as v0.3 minus vol-comp gate → identical 0-trade outcome; MIDDAY had 6 momentum candidates {BTC,SOL,XRP,DOGE,SUI,FARTCOIN} but variant defaults to no-midday-entries |
+| 2    | v0.3-vol-compression    | LAB  | 2026-04-29 | 13 | 0 | —     | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: IDEA-04 (vol-compression entry gate, threshold 0.5×). Has 2 sweep children: v0.6 (0.3), v0.7 (0.7) |
+| 3    | v0.4-mean-reversion-sleeve | LAB  | 2026-04-29 | 13 | 0 | —  | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — concept-bucket diversification. Has 1 sweep child: v0.8 (RSI 30) |
+| 4    | v0.5-cluster-cap-tight  | LAB  | 2026-04-29 | 13 | 0 | —     | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — response to lesson 2026-04-27 cascade |
+| 5    | v0.6-vol-comp-aggressive | LAB-SWEEP | 2026-05-12 | 0 | 0 | — | — | 0.00 | 0.00 | 0.00 | **Phase 1 autoloop spawn 2026-05-12.** Parameter sweep of v0.3: threshold 0.5 → 0.3 (more aggressive). 30d-eligible 2026-06-11 |
+| 6    | v0.7-vol-comp-defensive | LAB-SWEEP | 2026-05-12 | 0 | 0 | — | — | 0.00 | 0.00 | 0.00 | **Phase 1 autoloop spawn 2026-05-12.** Parameter sweep of v0.3: threshold 0.5 → 0.7 (more defensive). 30d-eligible 2026-06-11 |
+| 7    | v0.8-mean-rev-relaxed   | LAB-SWEEP | 2026-05-12 | 0 | 0 | — | — | 0.00 | 0.00 | 0.00 | **Phase 1 autoloop spawn 2026-05-12.** Parameter sweep of v0.4: RSI floor 25 → 30 (more relaxed). 30d-eligible 2026-06-11 |
 | —    | Codex v0 (competitor)   | EXTERNAL | 2026-04-29 | 13 | 0 closed (4 open) | — | — | +1.04 | 0.00 | **+1.04** | read-only. As of last poll 2026-05-10. Multi-sleeve: trend (BTC/ETH/SOL longs) + relative_strength (ETH long). Equity $10,104.03 |
 | —    | Codex Aggro v0 (comp.)  | EXTERNAL | 2026-04-29 | 13 | 1 closed | — | -0.33 | -0.33 | 0.33 | **-0.33** | read-only. As of last poll 2026-05-10. 1 closed trade -$33.21. Equity $9,966.79 |
 
@@ -41,9 +44,11 @@ For the **competition** column: net % since 2026-04-29 baseline. This is the met
 
 ## Cap & rotation
 
-- **Concurrent variants cap:** 3
-- **Currently active:** 3 of 3 — **rack at capacity**
-- Future idea_bank rows scoring ≥ 11 will trigger auto-displacement of the worst-performing variant by 30-day net return at routine #7 wake (per `variants/README.md` cap rule).
+- **Concurrent variants cap:** **10** (raised from 3 on 2026-05-12 per user grant for Phase 1 autoloop)
+- **Currently active:** 6 of 10 — 4 slots open
+- **Categories:** 3 hypothesis variants (v0.3, v0.4, v0.5) + 3 parameter-sweep variants (v0.6, v0.7, v0.8)
+- Future qualifying idea_bank rows OR autoloop parameter sweeps will fill remaining 4 slots
+- When 11th variant qualifies: retire worst by 30d net return (parameter-sweep variants retired first; hypothesis variants protected)
 
 ## Promotion candidates (current)
 

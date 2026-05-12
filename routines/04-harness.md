@@ -56,6 +56,17 @@ If either fails: skip harness, write skip reason to research_log, Telegram ALERT
    - New entry rules (e.g. add RSI extremes for mean-reversion)
    - **`idea_bank.md` rows with `status: raw` or `under-review` and `score >= 10`** (W19 idea-mining subsystem). Treat as candidate variants on equal footing with internal lessons; if backtested and selected, mark the bank row `proposal-drafted`. If rejected, mark `pruned` with reason.
    - **Competitor-informed structural observations.** Inspect Codex's `portfolio.md` and `trade_log.md` for trades and structural choices (sleeve model, exposure caps, kill-switch tolerances). Note differences vs BULL's mandate. Where Codex's structural choices look interesting AND compatible with BULL's locked mandate (spot-only, 4% port risk, 1.5%/trade, $10K, 8 positions), consider them as variant candidates. Where they violate mandate (e.g., gross exposure > 100%, leverage proxies), explicitly document the violation in the memo and DO NOT propose. Competitor performance is a benchmark to beat by 2026-07-01, not an instruction to copy.
+
+2a. **Parameter-sweep autoloop (Phase 1, 2026-05-12).** For each active hypothesis variant (not parameter-sweep — to avoid recursion) with ≥ 14 days live AND a declared `## Tuneable parameters` block in its README:
+   - Read the parent variant's current parameter value(s)
+   - Identify which parameter is highest-leverage (single most-impactful on the variant's outcomes; usually the rule's threshold)
+   - Pick 1-2 perturbation values around it (one higher, one lower; respect any mandate caps on the parameter)
+   - For each perturbation NOT already being tested in another active variant, AND if rack has slots (< 10 active):
+     - Spin up a new sweep variant via `skills/variant-spinup.md` parameter-sweep mode
+     - Set `parent`, `parameter perturbed`, `direction`, and `siblings` in the README's `## Lineage` block
+     - Append to `memory/leaderboard.md` Active rack with `status: LAB-SWEEP`
+   - If rack is full (10 active), retire the worst-performing parameter-sweep variant (by 30d net return) before spawning the new one — hypothesis variants are protected from sweep-displacement
+   - If parent has accumulated ≥ 1 closed trade in last 30d AND the sweep variant is hypothesized to underperform, still spawn — the explicit goal is to map the parameter landscape, including the losing side
 3. **Backtest each variant** using TradingView MCP:
    - Create Pine Script in `/BULL_variant_<name>` namespace
    - Load on a 1H SOL/USD chart (or whichever pair had most current-strategy activity)

@@ -35,9 +35,32 @@ A variant that proposes rules violating any of these gets status `REJECTED` on t
 
 ## Concurrent variants cap
 
-**Maximum 3 active variants at any time.** When a 4th idea qualifies for spin-up, the worst-performing active variant by 30-day net return is retired (its files archived to `variants/archive/`).
+**Maximum 10 active variants at any time** (raised from 3 on 2026-05-12 per user grant — parameter-sweep autoloop spawns multiple variants per cycle). When an 11th idea qualifies for spin-up, the worst-performing active variant by 30-day net return is retired (files archived to `variants/archive/`).
 
 If two variants are tied for worst, the older one (by spin-up date) is retired.
+
+## Variant categories
+
+Variants fall into two categories tracked separately for retirement priority:
+
+1. **Hypothesis variants** — test a new rule/concept (e.g., v0.3 vol-compression gate, v0.4 mean-reversion sleeve, v0.5 cluster-cap-tight). Each represents an independent thesis.
+2. **Parameter-sweep variants** — perturb a single parameter on an existing variant to find local optima (e.g., v0.6/v0.7 are sweeps of v0.3's threshold). Each declares a `parent` in its README.
+
+Retirement priority: parameter-sweep variants are retired before hypothesis variants when displacement is forced. A sweep variant losing to its parent on rolling 14d net return is auto-flagged for retirement at the next routine #4 wake.
+
+## Parameter-sweep spawning (Phase 1 autoloop — 2026-05-12)
+
+Routine #4 Saturday now spawns parameter-sweep variants automatically:
+
+- For each active hypothesis variant with ≥ 14 days live AND a declared tuneable parameter in its README, route #4 spawns 1-2 perturbation variants (one higher, one lower) provided:
+  - Rack has slots open (< 10 active)
+  - Same parameter value hasn't already been tested in another active variant
+  - Parent variant has accumulated ≥ 1 trade OR is being kept alive specifically for sweep purposes
+- Sweep variants inherit ALL parent rules; only the named parameter differs
+- Sweep variant README cites parent + perturbation direction + sibling variants
+- Sweep variants follow normal mandate-compliance check (inherited from parent → guaranteed pass)
+
+This is **Phase 1** of the autoloop. Phases 2-4 (cross-variant crossover, bandit retirement, auto-memo-draft) are deferred until Phase 1 produces measurable signal.
 
 ## Daily simulation cadence
 

@@ -34,6 +34,15 @@ Standard from `variants/README.md`:
 
 Earliest promotion-eligible date: **2026-05-29** (30 days after spin-up).
 
+## Tuneable parameters (Phase 1 autoloop)
+
+| Parameter | Current value | Sweep range | Notes |
+|-----------|--------------:|-------------|-------|
+| `vol_compression_threshold` | 0.5 | 0.3 – 0.8 | Rule 5c — `current_ATR / mean_ATR < threshold` → reject. Lower = fewer blocks (more aggressive); higher = more blocks (more defensive) |
+| `lookback_bars` | 720 (~30d) | 360 – 1440 | Mean ATR window length |
+
+**Sweep variants spawned 2026-05-12:** v0.6 (threshold 0.3), v0.7 (threshold 0.7).
+
 ## Threshold rationale
 
 The Glassnode source claim was "RV/IV gap < 2%". BULL has no implied-volatility data on Kraken spot — so v0.3 substitutes an RV-only proxy: current 1H ATR vs. its trailing 30-day mean.

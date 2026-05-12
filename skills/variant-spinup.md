@@ -9,12 +9,40 @@ Spin up a new variant when ANY of these is true:
 2. Routine #4 backtest harness shows a parameter tweak that beats main on profit factor by ≥10% over 180 days
 3. User explicitly requests one
 4. A retired variant has 30+ days of new evidence justifying a re-spin
+5. **Parameter-sweep spawn (Phase 1 autoloop, 2026-05-12):** routine #4 Saturday spawns sweep variants from active hypothesis variants with declared tuneable parameters. Each spawned variant perturbs one parameter while inheriting all other rules verbatim.
 
 Do NOT spin up if:
-- Concurrent variants would exceed 3 (instead, retire the worst before spinning the new one)
+- Concurrent variants would exceed 10 (instead, retire the worst before spinning the new one)
 - The proposed rules violate any item in `memory/guardrails.md` (mandate floor)
 - An identical or near-identical variant has been retired in the past 30 days (avoid churn)
 - The idea is methodology-only with no concrete testable rule
+- The same parameter value is already being tested in an active variant (no duplicate sweeps)
+
+## Parameter-sweep mode (Phase 1 autoloop)
+
+When spawning from a parameter sweep, the variant README MUST include a `## Lineage` section:
+
+```markdown
+## Lineage
+
+- **Parent variant:** v0.X-<parent-name>
+- **Parameter perturbed:** <parameter-name> (parent value <X>, this variant <Y>)
+- **Perturbation direction:** higher / lower / categorical-alternative
+- **Sibling variants:** v0.Y-<sibling-name> (parent's other sweeps; cross-reference for comparison)
+- **Hypothesis:** does perturbing <parameter> from <X> to <Y> on this parent improve any of {net return, profit factor, drawdown, trade count}?
+```
+
+The strategy.md file copies the parent's rules verbatim, except the perturbed parameter line gets a `(v0.Y sweep)` marker showing the new value.
+
+Sweep variants follow the standard mandate-compliance checklist; since they inherit all rules from a mandate-passing parent and only change one parameter, the check is normally a quick re-confirmation rather than a full audit.
+
+## Tuneable parameters per variant
+
+Each hypothesis variant declares its tuneable parameters in the README under a `## Tuneable parameters` block (for routine #4 to find them). Examples:
+
+- **v0.3-vol-compression:** `vol_compression_threshold` (current 0.5×; reasonable sweep range 0.3-0.8)
+- **v0.4-mean-reversion-sleeve:** `rsi_oversold_threshold` (current 25; reasonable sweep range 20-35)
+- **v0.5-cluster-cap-tight:** `cluster_cap` (current 1; reasonable sweep range 0-2; bounded by mandate which caps total positions at 8)
 
 ## Mandate-compliance checklist (run BEFORE creating files)
 

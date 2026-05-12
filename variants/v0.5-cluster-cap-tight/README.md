@@ -24,6 +24,14 @@ All checks pass.
 
 Standard from `variants/README.md`. Earliest promotion-eligible: **2026-05-29**.
 
+## Tuneable parameters (Phase 1 autoloop)
+
+| Parameter | Current value | Sweep range | Notes |
+|-----------|--------------:|-------------|-------|
+| `cluster_cap` | 1 | 0 – 2 | Rule 6a — max concurrent positions in BTC-correlated cluster. Bounded by mandate (total positions ≤ 8) and main strategy currently at 2. v0.5 is cap=1; further down is cap=0 (no concurrent cluster trades — extreme defensive). |
+
+**Sweep variants spawned 2026-05-12:** none yet (cap=0 is the only further perturbation available; will spawn at next routine #4 wake if rack has slots).
+
 ## Threshold rationale
 
 The cascade event of 2026-04-27T05:00Z stopped 4 simultaneous cluster positions in one 1H bar. W18-A applied cluster cap = 2 to prevent that exact failure. But:

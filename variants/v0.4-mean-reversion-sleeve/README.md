@@ -39,6 +39,16 @@ All checks pass.
 
 Standard from `variants/README.md`. Earliest promotion-eligible: **2026-05-29**.
 
+## Tuneable parameters (Phase 1 autoloop)
+
+| Parameter | Current value | Sweep range | Notes |
+|-----------|--------------:|-------------|-------|
+| `rsi_oversold_threshold` | 25 | 20 – 35 | Rule M2 — entry requires `RSI(14) < threshold`. Lower = fewer entries higher conviction; higher = more entries lower conviction |
+| `stop_atr_multiplier` | 1.5 | 1.0 – 2.5 | Stop distance in ATR units |
+| `time_stop_bars` | 24 (~24h) | 12 – 72 | Hard exit if position still open after N bars |
+
+**Sweep variants spawned 2026-05-12:** v0.8 (RSI threshold 30 — more relaxed entry).
+
 ## Threshold rationale
 
 - **RSI 25 floor:** stronger than the conventional 30. Picks high-conviction oversold only, accepting fewer signals for higher per-trade expectancy.
