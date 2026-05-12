@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-11T20:00:00Z (routine-02-midday — SOL/USD 4R take-profit closed at 19:00Z 1H candle close, fill 98.1509, +4.03R, +$585.35 realized; portfolio flat).
+> **Last rebuild:** 2026-05-12T13:07Z (routine-01-overnight — portfolio flat since SOL +4R close 2026-05-11T19:00Z; no trades, no MTM; regime gate 5a blocked all entries 0/15 positive).
 
 ## Account
 
@@ -40,11 +40,11 @@ Open positions: **0 / 8** (strategy v0.2 max-concurrent 4 → 0/4 used; cluster 
 
 ## Active kill-switch state
 
-- Daily realized: **+$585.35 (+5.86% of pre-trade equity $9,672.71 since 4/21 start; +5.71% of fresh equity $10,258.06)** today 2026-05-11 PT — a gain, well within the 5% LOSS cap (kill switch is loss-side only)
-- Consecutive losing trading days: ... 05-06 L, 05-07 W, 05-11 W → streak reset to 0 (cap 7)
-- Max drawdown: 0.00% (cap 25%, warn 12.5%) — clear, new peak set
+- Daily realized: **0.00%** today 2026-05-12 PT (no trades; portfolio flat) — well within 5% LOSS cap
+- Consecutive losing trading days: ... 05-06 L, 05-07 W, 05-11 W, 05-12 flat → streak 0 (cap 7)
+- Max drawdown: 0.00% (cap 25%, warn 12.5%) — clear at equity peak $10,258.06
 - Equity floor: $10,258.06 > $7,500 floor — OK
-- **All clear. Trading authorized.** (No entries this wake — midday is position-management only per routine-02 mandate.)
+- **All clear. Trading authorized.** (No entries this wake — W19-D rule 5a regime-confirmation gate fails: 0/15 universe pairs positive 24h, threshold ≥4/15.)
 
 ## Pending exit triggers
 

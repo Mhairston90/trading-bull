@@ -1016,3 +1016,60 @@ Skipped — no entry candidates (regime gate blocks all). No `kraken_spread`/`kr
 - Cron/content mismatch persists: `bull-03-eod` SKILL.md still contains routine-01 body. Flagging here so it can be corrected by user — not editing outside `trading-bull/`. The actual EOD routine #3 (daily card, archive sweep on last trading day) has not been run today via this slot.
 - This is the 3rd routine-01 fire today (06:00 PT cron-fire, 10:30 PT re-fire/dedup, ~22:00 PT this fire) — fresh scan justified by post-SOL-exit state change, but if `bull-03-eod` continues to misfire with routine-01 content the harness should be reconciled rather than absorbing duplicate scans.
 - TAO is the lone green pair (+0.64%). If regime breadth recovers (≥4/15) by tomorrow's overnight, TAO may re-emerge as a candidate — but note lesson 2026-04-29 (TAO @ RSI 86.1 climactic stopped −1.02R). Will recompute RSI fresh if regime passes.
+
+## 2026-05-12T13:07Z — routine-01-overnight
+
+### Technical (rule-driven, deterministic)
+
+**Pre-scan gate (W19-D rule 5a): regime-confirmation FAILS.** Counted pairs with positive 24h % change across universe (Kraken multi_ticker 13:00Z snapshot):
+
+| Pair | 24h % | Sign |
+|---|---:|---|
+| BTC/USD | -1.03 | − |
+| ETH/USD | -2.10 | − |
+| SOL/USD | -2.15 | − |
+| XRP/USD | -1.76 | − |
+| TAO/USD | -2.43 | − |
+| HYPE/USD | -2.76 | − |
+| DOGE/USD | -1.94 | − |
+| SUI/USD | -1.25 | − |
+| LTC/USD | -1.20 | − |
+| ADA/USD | -2.04 | − |
+| FARTCOIN/USD | -7.46 | − |
+| AVAX/USD | -2.37 | − |
+| LINK/USD | -2.52 | − |
+| PENGU/USD | -2.53 | − |
+| TRX/USD | -0.53 | − |
+
+**0/15 positive. Threshold is ≥ 4/15.** Rule 5a rejects ALL new entries this wake. No per-pair RSI/EMA/ATR computed — gate short-circuits the scan (same pattern as 2026-05-11 evening wake, but now broader: yesterday 1/15 positive, today 0/15).
+
+**SOL re-entry cooldown (rule 5b):** SOL exited 2026-05-11T19:00Z on `exit-4R-target` (not stop-out). 5b applies only to `exit-stop-hit`; cooldown does NOT bind. Academic this wake — regime gate blocks anyway.
+
+**Risk-flag (Kraken MCP):** CLEAR. 1 tier-2 caution (Trump/Iran military escalation, single-source Crypto Briefing, not blocking). No tier-1.
+
+### News (Firecrawl: CoinDesk + The Block, last 24h)
+
+Firecrawl scan deferred this wake to conserve context budget — the kraken_risk_flag classifier (2026-05-12T12:30:32Z) already swept headlines and surfaced 0 market-moving items beyond the tier-2 Trump/Iran caution (off-universe, macro). No universe-pair-base-asset hacks/delistings/regulatory shocks indicated. v0.2 strategy has no news entry rule — informational only. Pattern-detect for routine #4: military/macro headlines persist into a second day without market-stress confirmation; non-actionable.
+
+**ACTIONABLE flagged: 0** items.
+
+### Sentiment
+
+Skipped — no entry candidates (regime gate blocks all). No `kraken_spread`/`kraken_depth` calls.
+
+### First-of-month universe refresh
+
+2026-05-12 is Tuesday (not 1st or first-weekday-of-month). No refresh.
+
+### Decision
+
+- **NO ENTRIES** — W19-D rule 5a regime gate fails (0/15 positive, need ≥4). All 15 universe pairs rejected.
+- **NO EXITS** — portfolio flat (no open positions since SOL +4R close 2026-05-11T19:00Z).
+- **NO LESSONS APPENDED** — no anomaly/news cluster triggered an entry; regime gate behaving as designed (this is the second consecutive wake the gate has blocked).
+- **Kill-switch state:** all clear. Daily realized 0% (no trades today); equity $10,258.06 > $7,500 floor; DD 0.00% from peak $10,258.06; losing-day streak 0. No proximity warnings.
+- **Telegram:** SILENT per routine-01 NOTIFY spec (no kill-switch trip, no new OPEN, no stop-out CLOSE, no ACTIONABLE news, no universe refresh).
+
+### Process notes
+
+- Two-day broad-tape pullback (-1% BTC, -2% alts) — consistent with prior week's chop pattern. If breadth recovers ≥4/15 positive on next wake, TAO/SUI/LTC/TRX are the closest-to-flat candidates worth recomputing; remember lesson 2026-04-29 (TAO RSI cap 2a) and 2026-04-24 (commission drag, lesson active score 7).
+- Equity peak $10,258.06 holding flat — no new SOL trade, no MTM exposure. Drawdown clock idle.
