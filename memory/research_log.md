@@ -1081,3 +1081,4 @@ Skipped — no entry candidates (regime gate blocks all). No `kraken_spread`/`kr
 2026-05-12T17:40:23Z | allocation | day-gate | not Sunday, skipping | no action
 
 2026-05-12T20:07:01Z | routine-02-midday | system | **Heartbeat — portfolio flat.** No open positions since SOL +4R close 2026-05-11T19:00Z. MTM skipped (no positions → equity = cash = $10,258.06, DD 0% from peak, no exit checks possible). Kill switches all clear: daily realized 0%, DD 0% (cap 25%, warn 12.5%), equity floor $10,258.06 > $7,500, losing-day streak 0/7. Midday routine forbids new entries by spec — entry responsibility belongs to routines #1 (overnight) and #3 (EOD). Telegram SILENT (no exits, no kill-switch trip, no DD warn crossing). | no action
+2026-05-13T22:21:02Z | allocation | day-gate | not Sunday, skipping | no action
