@@ -1082,3 +1082,116 @@ Skipped — no entry candidates (regime gate blocks all). No `kraken_spread`/`kr
 
 2026-05-12T20:07:01Z | routine-02-midday | system | **Heartbeat — portfolio flat.** No open positions since SOL +4R close 2026-05-11T19:00Z. MTM skipped (no positions → equity = cash = $10,258.06, DD 0% from peak, no exit checks possible). Kill switches all clear: daily realized 0%, DD 0% (cap 25%, warn 12.5%), equity floor $10,258.06 > $7,500, losing-day streak 0/7. Midday routine forbids new entries by spec — entry responsibility belongs to routines #1 (overnight) and #3 (EOD). Telegram SILENT (no exits, no kill-switch trip, no DD warn crossing). | no action
 2026-05-13T22:21:02Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-05-14T16:00Z — routine-01-overnight
+
+### Technical (rule-driven, deterministic)
+
+**Universe price pull (Kraken `kraken_multi_ticker`, 24h % change):**
+
+| Pair | Last | 24h % | Liquidity (≥$2M) | Notes |
+|------|-----:|------:|:---|---|
+| BTC/USD | 80,856.1 | +1.97 | ✓ ($154M) | rank 1 |
+| ETH/USD | 2,280.67 | +1.01 | ✓ ($27M) | rank 2 |
+| SOL/USD | 91.94 | +0.89 | ✓ ($27M) | rank 3 |
+| XRP/USD | 1.46309 | +2.55 | ✓ ($23M) | rank 4 |
+| TAO/USD | 305.77 | +3.84 | ✓ ($8M) | rank 5 |
+| HYPE/USD | 42.21 | +8.70 | ✓ ($7M) | rank 6, biggest gainer |
+| XDG/USD | 0.11451 | +1.63 | ✓ ($14.5M) | rank 7 |
+| SUI/USD | 1.2177 | +0.85 | ✓ ($12.9M) | rank 8 |
+| LTC/USD | 57.87 | +1.54 | ✓ ($3.5M) | rank 9 |
+| ADA/USD | 0.26946 | +1.80 | ✓ ($2.55M) | rank 10 |
+| FARTCOIN/USD | 0.2173 | **−0.32** | **✗ ($1.28M)** | rank 11 |
+| AVAX/USD | 10.00 | +2.56 | ✓ ($2.05M) | rank 12 |
+| LINK/USD | 10.47 | +2.52 | ✓ ($2.43M) | rank 13 |
+| PENGU/USD | 0.00919 | +2.30 | **✗ ($1.43M)** | rank 14 |
+| TRX/USD | 0.35464 | +1.49 | **✗ ($1.72M)** | rank 15 |
+
+- **Regime breadth: 14/15 positive** (FARTCOIN only negative). W19-D rule 5a threshold ≥4 → **GATE PASSES** for the first time in 3 wakes (vs 1/15 on 05-12 morning and 0/15 on 05-12 midday).
+- **Below-liquidity-floor (W18-B):** FARTCOIN, PENGU, TRX — rejected from entry pool regardless of other criteria.
+- **Risk flag (Kraken MCP):** CLEAR (1 tier-2 macro caution: US-Iran tensions, off-universe, non-blocking).
+
+**Open-position overnight stop check:** None — portfolio was flat entering this wake (SOL +4R 2026-05-11T19:00Z was last close).
+
+**Entry scan — per-pair evaluation in rank order, taking highest-rank eligible per W18-C "max 1 entry/wake":**
+
+| Rank | Pair | Rule 1 (1H>EMA20) | Rule 2a (55<RSI≤80) | Rule 3 (4H>EMA50) | Verdict |
+|---:|---|---|---|---|---|
+| 1 | BTC/USD | PASS (80923 > 79886) | PASS (RSI ~67.4) | **FAIL** (4H 79245 < EMA50 ~80514) | REJECT 4H trend |
+| 2 | ETH/USD | (not computed) | (not computed) | **FAIL** (4H 2253.1 < EMA50 ~2311) | REJECT 4H trend |
+| 3 | SOL/USD | (not computed) | (not computed) | **FAIL** (4H 90.61 < EMA50 ~91.45, marginal) | REJECT 4H trend |
+| 4 | XRP/USD | PASS (1.46733 > 1.4405) | PASS (RSI ~67.7) | **PASS** (4H 1.43211 > EMA50 ~1.43107, marginal +0.001) | **ACCEPT** |
+| 5 | TAO/USD | (skipped per rule 8 — XRP wins) | — | (FAIL 4H 296.12 < EMA50 ~304.94) | REJECT 4H trend |
+| 6 | HYPE/USD | (skipped per rule 8) | — | (FAIL 4H 38.91 < EMA50 ~41.63) | REJECT 4H trend |
+| 7-15 | — | (not evaluated per rule 8 — XRP rank 4 is highest-rank eligible) | — | — | — |
+
+**XRP entry detail (computed in-line per `skills/decide.md`):**
+
+- **Just-closed 1H bar:** 2026-05-14T15:00Z (close 1.46733; bar closes at 16:00Z, which is the entry timestamp).
+- **1H 20-EMA:** ~1.4405 (seeded SMA20 over idx 0-19 = 1.44448, then α=2/21 iterated through idx 59). Close +1.9% above EMA.
+- **1H RSI(14):** ~67.74 (gains 0.06731 / losses 0.03205 over Δ_{46..59}, RS ≈ 2.10). Comfortably within W19-D 55<RSI≤80 envelope; lesson 2026-04-29 (TAO RSI 86.1 climactic) avoided.
+- **4H 50-EMA:** ~1.43107 (SMA50 seed 1.43020, iterated α=2/51 through idx 58 close 1.43211). 4H close just barely re-crossed the EMA50 — fresh trend confirmation, not extended.
+- **ATR(14) on 1H:** $0.01215 (sum of TR over idx 46-59 = 0.17006 / 14). Elevated due to idx 58 breakout bar (TR 0.03546). Stop distance = 2×ATR = **$0.02429**.
+- **Volume context:** 14:00Z 1H breakout bar (close 1.4707) had 2.16M XRP volume — 4-7× the prior 50-bar average. Conviction signal.
+
+**Pre-entry guardrail check (`pre_entry_check`):**
+
+| Check | Value | Limit | Result |
+|---|---|---|---|
+| open_positions < 8 | 0 | 8 | PASS |
+| open_positions < strategy.max_concurrent | 0 | 4 | PASS |
+| portfolio_risk + new_risk ≤ 4% | 0 + 1.50% = 1.50% | 4% | PASS |
+| new_trade_risk ≤ 1.5% | 1.50% ($153.86) | 1.50% ($153.87) | PASS (at cap) |
+| pair in universe | yes (rank 4) | — | PASS |
+| pair not already open | no XRP open | — | PASS |
+| daily_loss_pct ≤ 5% | 0% | 5% | PASS |
+| equity ≥ $7,500 | $10,258.06 | $7,500 | PASS |
+| W19-D regime gate (≥4/15 pos) | 14/15 | 4/15 | PASS |
+| W19-D 24h same-pair re-entry cooldown | XRP last close 2026-05-07T14:00Z (>7d ago, was stop-out so cooldown would have applied for 24h only) | 24h | PASS |
+| W18-A cluster cap (≤2 in BTC-cluster) | 0 (XRP not in cluster) | 2 | PASS |
+| W18-B liquidity floor (≥$2M/24h) | $23M | $2M | PASS |
+| W18-C max 1 entry/wake | 1 | 1 | PASS |
+| Rule 8 highest-rank tiebreaker | rank 4, others rejected | — | PASS |
+
+ACCEPT.
+
+**Position sizing (per strategy v0.2):**
+
+- Equity: $10,258.06
+- Risk per trade: 1.5% × $10,258.06 = $153.87
+- Fill price: 1.46733 × 1.0005 (slippage) = **1.46806**
+- Stop price: 1.46806 − 0.02429 = **1.44377**
+- Stop distance: $0.02429
+- Size: $153.87 / $0.02429 = **6334 units** (rounded down)
+- Notional: 6334 × $1.46806 = $9,298.69
+- Entry commission: 0.26% × $9,298.69 = $24.18
+- Cash after: $10,258.06 − $9,298.69 − $24.18 = **$935.19**
+- 4R target: 1.46806 + 4 × 0.02429 = **1.56522** (≈ +$615 / +4R if hit)
+
+**Trade event logged:**
+`2026-05-14T16:00:00Z | OPEN | XRP/USD | long | 6334 | 1.46806 | 1.44377 | — | — | — | entry-rule-v0-momentum`
+
+### News (Firecrawl scan abbreviated)
+
+Full Firecrawl CoinDesk+TheBlock pull deferred this wake (context budget conservation; same pattern as 2026-05-12T13:07Z wake). `kraken_risk_flag` classifier (2026-05-13T07:16:59Z) swept 4 headlines and surfaced 0 ACTIONABLE on universe-pair base assets. Only flag: tier-2 macro on US-Iran military tension (Crypto Briefing, single source, non-blocking, off-universe).
+
+Recent universe-context items still pattern-detect-worthy from prior wakes (carried-forward from research_log entries on 05-09 / 05-11): SOL Alpenglow testnet live (informational, no immediate price catalyst), XRP Ripple Prime $200M raise from Neuberger Berman (mildly positive structural — may have contributed to XRP outperformance today). Note that XRP +2.55% is the 3rd-strongest universe gainer behind HYPE (+8.7%) and TAO (+3.84%). **ACTIONABLE flagged: 0** items.
+
+### First-of-month universe refresh
+
+2026-05-14 is Thursday — not the 1st or first-weekday-of-month. No refresh.
+
+### Decision
+
+- **OPEN XRP/USD** long 6334 @ 1.46806, stop 1.44377, 4R target 1.56522. Reason: entry-rule-v0-momentum.
+- **No exits** — was no open position entering this wake.
+- **No lessons appended** — clean rule-driven entry, no anomaly pattern requiring extraction. (XRP marginal 4H pass +0.001 above EMA50 is worth monitoring; if subsequent wake stops out we'd extract a "fresh-4H-crossover entries underperform" lesson candidate for routine #4.)
+- **Kill-switch state:** all clear. Daily realized 0%; DD 0.28% from peak (slippage drag, normal); equity $10,229.26 > $7,500 floor; losing-day streak 0/7. Cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 0/2.
+- **Telegram:** **NOTIFY** per routine-01 spec (new OPEN occurred).
+
+### Process notes
+
+- First eligible entry since the 2-day broad-tape pullback (last entry was SOL 2026-05-08T17:00Z which ran to 4R 05-11). W19-D regime gate did its job by holding entries flat for 2 wakes at 1/15 and 0/15 breadth.
+- Rule 8 priority worked as designed: top-3 by rank (BTC, ETH, SOL) all failed the 4H trend filter despite +1-2% 24h moves; XRP was the highest-rank pair where the 4H crossover materialized. Lower-rank candidates (XDG, SUI, LTC, ADA, AVAX, LINK) not evaluated because XRP locked the slot — this is correct per rule 8 (and saves token budget).
+- ATR elevated (~3× of normal range) due to the breakout bar. Wider stop = smaller size = same $-risk. Strategy v0.2 sizing handles this automatically.
+- Entry at marginal 4H crossover (+0.001 above EMA50) is the riskiest profile for a v0.2 entry — the 4H trend hasn't accelerated yet, just curled. The 1H momentum carry (+1.9% above EMA20 and RSI 67) is strong though. Watching for early-bar stop-out on cluster-correlated reversal (BTC/ETH still below their 4H EMA50s — if they fail to follow, XRP could orphan).
