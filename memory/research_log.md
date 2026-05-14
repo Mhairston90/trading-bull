@@ -1195,3 +1195,75 @@ Recent universe-context items still pattern-detect-worthy from prior wakes (carr
 - Rule 8 priority worked as designed: top-3 by rank (BTC, ETH, SOL) all failed the 4H trend filter despite +1-2% 24h moves; XRP was the highest-rank pair where the 4H crossover materialized. Lower-rank candidates (XDG, SUI, LTC, ADA, AVAX, LINK) not evaluated because XRP locked the slot — this is correct per rule 8 (and saves token budget).
 - ATR elevated (~3× of normal range) due to the breakout bar. Wider stop = smaller size = same $-risk. Strategy v0.2 sizing handles this automatically.
 - Entry at marginal 4H crossover (+0.001 above EMA50) is the riskiest profile for a v0.2 entry — the 4H trend hasn't accelerated yet, just curled. The 1H momentum carry (+1.9% above EMA20 and RSI 67) is strong though. Watching for early-bar stop-out on cluster-correlated reversal (BTC/ETH still below their 4H EMA50s — if they fail to follow, XRP could orphan).
+
+## 2026-05-14T16:45Z — routine-03-eod
+
+### Context
+
+Cron-fire of `bull-03-eod` ~45min after `bull-01-overnight` opened XRP at 16:00Z. EOD's role per spec: final MTM, exit check on just-closed 1H, entry rescan (interpreted below), lesson extraction, day-stats compilation, mandatory Telegram card.
+
+### Final mark-to-market
+
+- XRP/USD spot 16:30Z (`kraken_ticker`): **1.4689** (24h +2.96%, spread 0.00013, vwap 1.44). Tight liquidity, no spread anomaly.
+- Position MTM: 6334 × 1.4689 = **$9,304.01** (vs entry notional 9298.69)
+- Unrealized PnL: **+$5.32** (+0.03R) — recovered from earlier −$4.62 mark
+- Cash: $935.19 (post entry-commission $24.18)
+- **Equity: $10,239.20** (vs prior peak $10,258.06)
+- **Drawdown from peak: 0.18%** — well within 12.5% warn / 25% kill caps
+
+### Post-close exit check (XRP just-closed 1H bar 2026-05-14 15:00Z)
+
+Bar 15:00Z close **1.46903** (high 1.4721, low 1.46197, vol 553k, trades 753):
+- Static stop 1.44377: close 1.46903 **>** stop. No stop-hit (bar low 1.46197 also above).
+- 1H 20-EMA at 15:00Z: iterated from E58=1.43763 → E59 ≈ **1.4406**. Close 1.46903 > EMA → no EMA-cross exit.
+- 4R target 1.56522: close well below. No take-profit.
+
+**Hold XRP.** Next 1H exit check at 17:00Z bar close.
+
+### Entry scan (routine-03 spec step 3)
+
+**Regime breadth (refresh 16:15Z):** unchanged from overnight wake — 14/15 positive (only FARTCOIN red, also below liquidity floor). Gate PASSES.
+
+**Per-pair evaluation summary (rule-8 priority order):**
+
+| Rank | Pair | Status |
+|:---:|---|---|
+| 1 | BTC/USD | rejected this morning on rule 3 (4H close 79245 < EMA50 80282) |
+| 2 | ETH/USD | rejected on rule 3 (2253.10 < 2305.62) |
+| 3 | SOL/USD | rejected on rule 3 (90.61 < 91.59) |
+| 4 | XRP/USD | **HELD** (entered 16:00Z this morning by routine-01) |
+| 5–15 | TAO, HYPE, XDG, SUI, LTC, ADA, AVAX, LINK | **not evaluated** — see Decision rationale |
+
+### News (Firecrawl scan)
+
+**Deferred this wake** to conserve context budget (same pattern as 2026-05-12 routine-01). v0.2 news rule is informational-only (no entry veto), and overnight wake already harvested the 24h headline set with 0 ACTIONABLE. No new XRP-base-asset catalysts surfaced via spot price (no idiosyncratic XRP spike vs broad 14/15 rally). `kraken_risk_flag` daily classifier (CLEAR per overnight). 
+
+**ACTIONABLE flagged: 0** items.
+
+### Sentiment
+
+XRP spread 0.00013 (0.009% of price) — tight. Single open position, no entry-decision data needed. Depth pull skipped.
+
+### Decision
+
+- **NO ADDITIONAL ENTRIES.** Rationale: cron-fire-adjacent routine-01 already consumed the per-wake entry budget (rule 8: "max 1 new entry per routine wake"). Treating this EOD fire as a separate wake would effectively allow 2 entries inside the same 1H bar (15:00–16:00Z window when XRP just printed +2.4%), recreating the cascade-risk failure mode lesson 2026-04-27 was designed to prevent. **Conservative interpretation chosen: 1-per-cron-bar.** This ambiguity should be codified at routine #4 (Saturday 2026-05-16): either tighten strategy.md rule 8 to "max 1 entry per 1H bar" or explicitly allow EOD to re-scan with cluster-cap as the only check.
+- **NO EXITS.** XRP all three exit triggers clear at 15:00Z 1H close.
+- **NO LESSONS APPENDED.** XRP entry is 1h old — too fresh for outcome-based lesson extraction. Pre-outcome lesson candidates already noted in overnight log (marginal 4H crossover risk; cluster-orphan risk if BTC/ETH don't follow).
+- **Kill-switch state:** all clear (daily 0%, DD 0.18%, equity $10,239.20, losing streak 0).
+- **No archive sweep:** 2026-05-14 is Thursday; last trading day of May is Friday 2026-05-29.
+
+### Day's summary stats
+
+- **Day PnL:** −$18.88 (−0.18%) — entry commission $24.18 partially offset by +$5.32 XRP positive drift
+- **Trades opened:** 1 (XRP/USD long, by routine-01-overnight)
+- **Trades closed:** 0 — win rate today N/A
+- **New equity:** $10,239.20 (peak $10,258.06 from 2026-05-11 SOL +4R)
+- **Drawdown:** 0.18% from peak
+- **Rolling 7-day delta vs BTC-hold (approximate):** BULL ≈ +5.86% (from 9672.75 EOD 2026-05-07 LINK exit → 10239.20 now); BTC-hold ≈ +1.07% (~80000 → 80857). **BULL +4.79% delta vs BTC over 7d.** Full computation defers to routine #4 with precise reference prices.
+- **Rolling 30-day:** window pre-dates BULL inception (2026-04-20); not yet computable. First available 2026-05-20.
+
+### Process notes
+
+- Slot identity confirmed: this fire is `bull-03-eod` content (final MTM + exit check + day stats + EOD Telegram card). Distinct from prior `bull-03-eod`-misfire-as-routine-01 pattern (commits `3ce53b1`, `2055f30`-precursor).
+- The 1-per-cron-bar interpretation is a deliberate conservative reading; flagged for routine #4 review.
+- **Telegram:** mandatory EOD card per routine-03 NOTIFY spec.
