@@ -1268,3 +1268,4 @@ XRP spread 0.00013 (0.009% of price) — tight. Single open position, no entry-d
 - The 1-per-cron-bar interpretation is a deliberate conservative reading; flagged for routine #4 review.
 - **Telegram:** mandatory EOD card per routine-03 NOTIFY spec.
 2026-05-15T06:21:04Z | harness | day-gate | not Saturday, skipping | no action
+2026-05-15T06:22:33Z | allocation | day-gate | not Sunday, skipping | no action
