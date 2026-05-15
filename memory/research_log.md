@@ -1267,3 +1267,4 @@ XRP spread 0.00013 (0.009% of price) — tight. Single open position, no entry-d
 - Slot identity confirmed: this fire is `bull-03-eod` content (final MTM + exit check + day stats + EOD Telegram card). Distinct from prior `bull-03-eod`-misfire-as-routine-01 pattern (commits `3ce53b1`, `2055f30`-precursor).
 - The 1-per-cron-bar interpretation is a deliberate conservative reading; flagged for routine #4 review.
 - **Telegram:** mandatory EOD card per routine-03 NOTIFY spec.
+2026-05-15T06:21:04Z | harness | day-gate | not Saturday, skipping | no action
