@@ -1269,3 +1269,4 @@ XRP spread 0.00013 (0.009% of price) — tight. Single open position, no entry-d
 - **Telegram:** mandatory EOD card per routine-03 NOTIFY spec.
 2026-05-15T06:21:04Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-15T06:22:33Z | allocation | day-gate | not Sunday, skipping | no action
+2026-05-16T20:00:00Z | midday | exit | XRP/USD stop 1.44377 pierced intrabar on 2026-05-15T13:00Z 1H bar (low 1.4292); missed by intervening routines (last MTM EOD 2026-05-14; 05-15 overnight/EOD did not run/commit). Closed @ 1.44305 (stop +0.05% adverse slip), realized −$206.37 / −1.03R. Now flat. DD 2.01% (warn 12.5%, cap 25%). Equity $10,051.73 > $7,500 floor. Daily loss for 05-15 ≈ −2.01% < 5% cap. Streak 1 losing day (cap 7). No kill switch. Risk scan CLEAR (1 caution: unconfirmed US/Iran headline). No new entries (midday = position mgmt only). Telegram sent (exit event).
