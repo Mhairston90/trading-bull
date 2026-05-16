@@ -28,7 +28,7 @@ Routine #7 daily wake updates a `Competition net %` column below for each tracke
 
 | Rank | Strategy | Status | Spin-up | Days live | Trades | Win % | Avg R | Net % | Max DD % | Competition net % (since 2026-04-29) | Notes |
 |------|----------|--------|---------|-----------|--------|-------|-------|-------|----------|-------------------------------------|-------|
-| 1    | v0.2 (main)             | MAIN | 2026-04-20 | 22 | 16 | 25.0% | -0.23 | +2.58 | 3.54 | +5.62 | live trading; SOL +4.03R take-profit 2026-05-11T19:00Z brought equity to new peak $10,258.06; flat since |
+| 1    | v0.2 (main)             | MAIN | 2026-04-20 | 26 | 17 | 23.5% | -0.21 | +0.52 | 3.54 | +3.49 | live trading; SOL +4.03R/+$585.35 take-profit 2026-05-11; XRP −1.03R/−$206.37 stop-out 2026-05-15 (large notional, friction-amplified). Equity $10,051.73, flat. Peak $10,258.06 (05-11), DD-from-peak 2.01% |
 | 2    | v0.3-vol-compression    | LAB  | 2026-04-29 | 13 | 0 | —     | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: IDEA-04 (vol-compression entry gate, threshold 0.5×). Has 2 sweep children: v0.6 (0.3), v0.7 (0.7) |
 | 3    | v0.4-mean-reversion-sleeve | LAB  | 2026-04-29 | 13 | 0 | —  | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — concept-bucket diversification. Has 1 sweep child: v0.8 (RSI 30) |
 | 4    | v0.5-cluster-cap-tight  | LAB  | 2026-04-29 | 13 | 0 | —     | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — response to lesson 2026-04-27 cascade |

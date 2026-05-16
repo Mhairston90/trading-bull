@@ -1271,3 +1271,52 @@ XRP spread 0.00013 (0.009% of price) — tight. Single open position, no entry-d
 2026-05-15T06:22:33Z | allocation | day-gate | not Sunday, skipping | no action
 2026-05-16T20:00:00Z | midday | exit | XRP/USD stop 1.44377 pierced intrabar on 2026-05-15T13:00Z 1H bar (low 1.4292); missed by intervening routines (last MTM EOD 2026-05-14; 05-15 overnight/EOD did not run/commit). Closed @ 1.44305 (stop +0.05% adverse slip), realized −$206.37 / −1.03R. Now flat. DD 2.01% (warn 12.5%, cap 25%). Equity $10,051.73 > $7,500 floor. Daily loss for 05-15 ≈ −2.01% < 5% cap. Streak 1 losing day (cap 7). No kill switch. Risk scan CLEAR (1 caution: unconfirmed US/Iran headline). No new entries (midday = position mgmt only). Telegram sent (exit event).
 2026-05-16T10:27:19Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-05-16 — routine-03-eod
+
+### Context
+
+Scheduled `bull-03-eod` fire (note: 2026-05-16 is Saturday; EOD cron is Mon–Fri but the task dispatched it, so reconciliation proceeds). Slot identity confirmed: routine-03 content (final MTM + exit check + day stats + mandatory EOD card). No routine-03-eod ran for 2026-05-15 (only harness/allocation day-gate skips logged). The XRP position opened 2026-05-14T16:00Z was still marked "open" entering this wake.
+
+### Trade-log correction — XRP exit reconciliation (PRIMARY ACTION THIS WAKE)
+
+A concurrent `routine-02-midday` instance (research_log line `2026-05-16T20:00:00Z | midday | exit`) closed XRP as `exit-stop-hit` @ 1.44305, −$206.37 / −1.03R, timestamp 2026-05-15T13:00Z, and **sent a Telegram exit alert with that −$206.37 figure**. It also rebuilt portfolio.md to equity $10,051.73.
+
+That exit is **superseded** by this routine. Per `strategy.md` Exits: "Exit when ANY of the following is true … checked at the close of each 1H candle. No intra-bar exits." The binding exit is the *first* condition true at a 1H close. Replaying XRP 1H closes from the 2026-05-14T16:00Z entry (Kraken `kraken_ohlcv` XXRPZUSD 1h, 80 bars):
+
+- **20-EMA computation:** seed = SMA of 1H closes 2026-05-13 03:00→22:00Z = 28.78338/20 = 1.439169; iterate α=2/21=0.0952381 forward 30 bars. Spot-check vs prior EOD's independent estimate (≈1.4406 @ 2026-05-14 15:00Z) — consistent (this run: 1.44118 @ same bar). EMA path post-entry: 05-14 16:00Z 1.4448 → 17:00Z 1.4491 → 18:00Z 1.4573 → 19:00Z 1.4628 → 20:00Z 1.4670 → 21:00Z 1.4699 → 22:00Z 1.4727 → 23:00Z 1.4738 → 05-15 00:00Z 1.4757 → 01:00Z 1.4765 → 02:00Z 1.4777 → 03:00Z 1.47863 → **04:00Z 1.47800**.
+- **Exit rule 1 (close < 20-EMA):** closes 05-14 16:00Z→05-15 03:00Z (1.479, 1.492, 1.536, 1.516, 1.508, 1.498, 1.501, 1.485, 1.495, 1.485, 1.490, 1.489) all > EMA. **05-15 04:00Z close 1.47298 < EMA 1.47800 → FIRST exit trigger, exit-ema-cross.**
+- **Exit rule 2 (static stop 1.44377):** first 1H close ≤ stop not until 05-15 13:00Z (close 1.43187). Intra-bar lows from 05-14 16:00Z→05-15 04:00Z all ≥ 1.47298 — stop untouched before the EMA-cross even ignoring the no-intra-bar rule.
+- **Exit rule 3 (4R = 1.56522):** never reached (peak 1H close 1.53618 @ 05-14 18:00Z; bar high 1.54488).
+
+The EMA-cross at 05-15 04:00Z closes the position ~9h before any stop interaction → the 13:00Z stop-out is impossible. Correction row appended to `trade_log.md` (reason `correction-previous-row`, candle-close timestamp 2026-05-15T04:00:00Z) per `skills/log-trade.md` append-only rule. Fill 1.47224 = close 1.47298 × (1−0.0005) adverse slip. Net realized **−$21.92 (−0.14R)** after 0.26%/side commission. Cash $935.19 + ($9,325.19 − $24.25) = **$10,236.14**. Equity $10,236.14 (vs routine-02's erroneous $10,051.73 — a $184.45 overstated loss).
+
+### Post-close exit / entry scan
+
+- **Open positions entering wake:** XRP (now correctly closed 05-15 04:00Z). Account flat.
+- **Entry scan:** W19-D regime-confirmation gate (rule 5a) — universe 24h breadth via `kraken_multi_ticker`: **0 / 15 positive** (ADA −3.19, AVAX −3.36, ETH −2.46, FARTCOIN −4.84, HYPE −8.27, LINK −4.22, LTC −3.17, PENGU −4.88, SOL −3.87, SUI −4.95, TAO −5.42, TRX −0.20, BTC −1.57, XDG −4.21, XRP −2.46). 0 < 4 required → **regime gate FAILS, reject all new entries this wake.** Broad risk-off tape; no per-pair evaluation needed. (Also Saturday — outside Mon–Fri entry cadence regardless.)
+- **News / sentiment:** `kraken_risk_flag` CLEAR (1 non-blocking tier-2: unconfirmed US/Iran military headline, single non-major source). No entries to vet; informational only under v0.2.
+
+### Lessons
+
+1 lesson appended (round-trip give-back; XRP). See `lessons.md` 2026-05-15 entry.
+
+### Day's summary stats
+
+- **Realized this reconciliation:** XRP −$21.92 (−0.14R), candle-date 2026-05-15.
+- **Equity:** $10,236.14 (vs prior EOD 2026-05-14 $10,239.20). Net change since last EOD **−$3.06 (−0.03%)** — spans the missed 05-15 EOD; the −$21.92 realized largely replaced the +$5.32 unrealized mark carried at last EOD.
+- **Since start:** +$236.18 (+2.36%) on $10,000.
+- **Trades opened:** 0. **Trades closed:** 1 (XRP, corrected). Win rate today: 0/1.
+- **Drawdown:** 0.21% from peak $10,258.06.
+- **Rolling 7d (approx):** BULL ≈ +5.8% (from ~$9,672.75 EOD 2026-05-07); BTC-hold ≈ −3 to −4% (BTC ~80,800 → 77,819). BULL ≈ **+9% delta vs BTC over 7d (approx)**. Precise computation deferred to routine #4.
+- **Rolling 30d:** pre-inception; first computable 2026-05-20.
+- **No archive sweep:** last trading day of May is Fri 2026-05-29.
+
+### Kill-switch state
+
+All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.21% (cap 25%); equity $10,236.14 > $7,500 floor.
+
+### Process notes
+
+- Concurrent-routine write race observed: routine-02-midday and routine-03-eod both acted on the same open XRP position within the same clock window, producing a duplicate/contradictory CLOSE. Root cause: 05-15 routines did not run, leaving an unprocessed position that two later fires raced to reconcile, using different exit interpretations (intra-bar stop vs close-based rule ordering). **Escalated to routine #4 (today, Saturday 2026-05-16):** (a) late/concurrent fires must replay ALL unprocessed 1H closes and apply the earliest trigger; (b) single-writer lock or idempotent CLOSE keyed on open-position id; (c) reconcile "no intra-bar exits" wording vs intra-bar stop usage.
+- **Telegram:** mandatory EOD card sent, explicitly correcting the earlier routine-02 −$206.37 alert to the true −$21.92.

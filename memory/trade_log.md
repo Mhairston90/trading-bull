@@ -45,3 +45,4 @@
 | 2026-05-11T19:00:00Z | CLOSE | SOL/USD | long | 97.86 | 98.1509 | — | 97.6062 | +4.03 | +585.35 | exit-4R-target |
 | 2026-05-14T16:00:00Z | OPEN | XRP/USD | long | 6334 | 1.46806 | 1.44377 | — | — | — | entry-rule-v0-momentum |
 | 2026-05-15T13:00:00Z | CLOSE | XRP/USD | long | 6334 | 1.44305 | — | — | -1.03 | -206.37 | exit-stop-hit |
+| 2026-05-15T04:00:00Z | CLOSE | XRP/USD | long | 6334 | 1.47224 | — | — | -0.14 | -21.92 | correction-previous-row |
