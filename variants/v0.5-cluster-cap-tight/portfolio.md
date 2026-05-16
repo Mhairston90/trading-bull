@@ -1,7 +1,7 @@
 # Variant v0.5-cluster-cap-tight — Synthetic Portfolio
 
 > **Paper-paper account.** Synthetic $10K starting equity.
-> **Last rebuild:** 2026-05-13T05:00:00Z (routine-07 wake 2026-05-12 22:00 PT — no trades; see notes)
+> **Last rebuild:** 2026-05-17T05:00:00Z (routine-07 wake 2026-05-16 22:00 PT — no trades; see notes)
 
 ## Account
 
@@ -40,7 +40,7 @@ Open positions: **0 / 8** (variant max-concurrent 4 → 0/4 used; cluster cap 0/
 ## Days live
 
 - Spin-up: 2026-04-29
-- As of last rebuild: **13 days**
+- As of last rebuild: **17 days**
 - Promotion-eligible date: 2026-05-29
 
 ## Notes
@@ -49,4 +49,5 @@ Tests whether tightening cluster cap from 2 to 1 (rule 6a) reduces cascade-event
 
 ### Routine #7 wake log
 
-- **2026-05-12 22:00 PT (this wake)** — past-24h replay window = 2026-05-11 16:00 UTC → 2026-05-12 16:00 UTC. Same entry-eval as v0.3 minus the vol-compression gate. At EOD-prior (positive 6/15) no pair passed rules 1+2+3 jointly. At OVERNIGHT positive 0/15 → 5a rejected all entries. MIDDAY had 6 candidates {BTC, SOL, XRP, DOGE, SUI, FARTCOIN} but variants honor main's no-midday-entry default. Result: 0 entries, 0 open positions. All kill switches clear at $10,000 equity.
+- **2026-05-12 22:00 PT** — past-24h replay window = 2026-05-11 16:00 UTC → 2026-05-12 16:00 UTC. Same entry-eval as v0.3 minus the vol-compression gate. At EOD-prior (positive 6/15) no pair passed rules 1+2+3 jointly. At OVERNIGHT positive 0/15 → 5a rejected all entries. MIDDAY had 6 candidates {BTC, SOL, XRP, DOGE, SUI, FARTCOIN} but variants honor main's no-midday-entry default. Result: 0 entries, 0 open positions. All kill switches clear at $10,000 equity.
+- **2026-05-16 22:00 PT (this wake)** — past-24h replay window = 2026-05-15 10:00 UTC → 2026-05-16 10:00 UTC. Wakes evaluated: OVERNIGHT (2026-05-15 13:00 UTC), MIDDAY (2026-05-15 20:00 UTC, default-skip), EOD (2026-05-16 04:00 UTC). Broadly-red tape — all 15 pairs negative 24h; 05-15 13:00Z synchronized crash bar. Rule 5a (≥4/15 positive) rejected all entries at both eligible wakes (0/15 at EOD); cluster-cap 6a never reached. Result: 0 entries, 0 open positions. All kill switches clear at $10,000 equity.

@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB-SWEEP (parameter sweep of v0.4, RSI threshold 25 → 30)
-> **Last rebuild:** 2026-05-12T22:00:00Z (initial spin-up)
+> **Last rebuild:** 2026-05-17T05:00:00Z (routine-07 wake 2026-05-16 22:00 PT — first simulation wake; no trades, see notes)
 
 ## Account
 
@@ -39,3 +39,7 @@ All clear at $10,000 equity.
 ## Notes
 
 Parameter sweep — RSI oversold threshold 30 (vs v0.4's 25). Tests whether v0.4 is over-filtering oversold candidates. Today's 2026-05-12 OVERNIGHT wake noted PENGU/USD hit RSI 25.4 — just above v0.4's threshold. v0.8 would have considered PENGU that wake (but other rules including M1 4H>200-EMA still apply).
+
+### Routine #7 wake log
+
+- **2026-05-16 22:00 PT (first sim wake since 05-12 spin-up)** — past-24h replay window = 2026-05-15 10:00 UTC → 2026-05-16 10:00 UTC. Wakes: OVERNIGHT (05-15 13:00Z), MIDDAY (05-15 20:00Z, default-skip), EOD (05-16 04:00Z). Inherits v0.4 rules. M3 (reversal candle: 1H close > open) failed for all 15 universe pairs at BOTH eligible wakes — synchronized red crash bar 05-15 13:00Z, red universe-wide again at 05-16 04:00Z. M3 blocks before the relaxed RSI<30 floor (M2) is evaluated. 0 entries, 0 open positions. All kill switches clear at $10,000 equity.

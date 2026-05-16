@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity. Does NOT affect main BULL portfolio or any real broker.
 > **Rebuilt each routine #7 wake** from this variant's `trade_log.md`.
-> **Last rebuild:** 2026-05-13T05:00:00Z (routine-07 wake 2026-05-12 22:00 PT — no trades; see notes)
+> **Last rebuild:** 2026-05-17T05:00:00Z (routine-07 wake 2026-05-16 22:00 PT — no trades; see notes)
 
 ## Account
 
@@ -44,7 +44,7 @@ Open positions: **0 / 8** (variant max-concurrent 4 → 0/4 used; cluster cap 0/
 ## Days live
 
 - Spin-up: 2026-04-29
-- As of last rebuild: **13 days**
+- As of last rebuild: **17 days**
 - Promotion-eligible date: 2026-05-29 (30 days from spin-up)
 
 ## Notes
@@ -55,4 +55,5 @@ The variant runs entirely paper-paper. Its trades have NO effect on the real BUL
 
 ### Routine #7 wake log
 
-- **2026-05-12 22:00 PT (this wake)** — past-24h replay window = 2026-05-11 16:00 UTC → 2026-05-12 16:00 UTC. Wakes evaluated: MIDDAY (2026-05-11 20:00 UTC, default-skip), EOD-prior (2026-05-12 04:00 UTC), OVERNIGHT (2026-05-12 13:00 UTC). At EOD-prior: positive-24h count 6/15 (regime 5a OK) but no pair passed rules 1+2+3 jointly. At OVERNIGHT: positive-24h count **0/15** → rule 5a rejected all entries. Result: 0 entries, 0 open positions to evaluate exits. All kill switches clear at $10,000 equity.
+- **2026-05-12 22:00 PT** — past-24h replay window = 2026-05-11 16:00 UTC → 2026-05-12 16:00 UTC. Wakes evaluated: MIDDAY (2026-05-11 20:00 UTC, default-skip), EOD-prior (2026-05-12 04:00 UTC), OVERNIGHT (2026-05-12 13:00 UTC). At EOD-prior: positive-24h count 6/15 (regime 5a OK) but no pair passed rules 1+2+3 jointly. At OVERNIGHT: positive-24h count **0/15** → rule 5a rejected all entries. Result: 0 entries, 0 open positions to evaluate exits. All kill switches clear at $10,000 equity.
+- **2026-05-16 22:00 PT (this wake)** — past-24h replay window = 2026-05-15 10:00 UTC → 2026-05-16 10:00 UTC (Kraken's latest closed 1H bar 05-16 10:00Z; routine #7 last ran 05-12, but routine spec scopes replay to trailing 24h). Wakes evaluated: OVERNIGHT (2026-05-15 13:00 UTC), MIDDAY (2026-05-15 20:00 UTC, default-skip), EOD (2026-05-16 04:00 UTC). Broadly-red tape: all 15 universe pairs negative on 24h change; the 05-15 13:00Z bar was a synchronized crash bar across the universe. Rule 5a (≥4/15 positive) **rejected all entries at both eligible wakes** (positive-24h count well below 4; 0/15 at EOD). Vol-compression gate 5c not reached. Result: 0 entries, 0 open positions to evaluate exits. All kill switches clear at $10,000 equity.

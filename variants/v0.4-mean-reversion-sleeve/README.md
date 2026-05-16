@@ -48,6 +48,7 @@ Standard from `variants/README.md`. Earliest promotion-eligible: **2026-05-29**.
 | `time_stop_bars` | 24 (~24h) | 12 – 72 | Hard exit if position still open after N bars |
 
 **Sweep variants spawned 2026-05-12:** v0.8 (RSI threshold 30 — more relaxed entry).
+**Sweep variants spawned 2026-05-16:** v0.9 (RSI threshold 20 — stricter/deeper-capitulation entry). v0.8 + v0.9 now bracket the parent (20/25/30) for an expectancy curve. `stop_atr_multiplier` and `time_stop_bars` remain unswept — deferred to future autoloop rounds.
 
 ## Threshold rationale
 

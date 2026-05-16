@@ -1,7 +1,7 @@
 # Variant v0.4-mean-reversion-sleeve — Synthetic Portfolio
 
 > **Paper-paper account.** Synthetic $10K starting equity.
-> **Last rebuild:** 2026-05-13T05:00:00Z (routine-07 wake 2026-05-12 22:00 PT — no trades; see notes)
+> **Last rebuild:** 2026-05-17T05:00:00Z (routine-07 wake 2026-05-16 22:00 PT — no trades; see notes)
 
 ## Account
 
@@ -40,7 +40,7 @@ Open positions: **0 / 2** (variant max-concurrent 2 — mean-reversion sized sma
 ## Days live
 
 - Spin-up: 2026-04-29
-- As of last rebuild: **13 days**
+- As of last rebuild: **17 days**
 - Promotion-eligible date: 2026-05-29
 
 ## Notes
@@ -49,4 +49,5 @@ Tests whether BULL's mandate-allowed-but-unused mean-reversion bucket adds edge 
 
 ### Routine #7 wake log
 
-- **2026-05-12 22:00 PT (this wake)** — past-24h replay window = 2026-05-11 16:00 UTC → 2026-05-12 16:00 UTC. EOD-prior (04:00 UTC) lowest 1H RSI was TRX/USD 33.0 — no pair hit M2 RSI<25. OVERNIGHT (13:00 UTC) FARTCOIN/USD reached 20.9 RSI but failed M1 (insufficient 4H history for 200-EMA on a meme listing); other low-RSI pairs (PENGU 25.4, ETH 26.0) above the <25 threshold. Result: 0 entries, 0 open positions. All kill switches clear at $10,000 equity.
+- **2026-05-12 22:00 PT** — past-24h replay window = 2026-05-11 16:00 UTC → 2026-05-12 16:00 UTC. EOD-prior (04:00 UTC) lowest 1H RSI was TRX/USD 33.0 — no pair hit M2 RSI<25. OVERNIGHT (13:00 UTC) FARTCOIN/USD reached 20.9 RSI but failed M1 (insufficient 4H history for 200-EMA on a meme listing); other low-RSI pairs (PENGU 25.4, ETH 26.0) above the <25 threshold. Result: 0 entries, 0 open positions. All kill switches clear at $10,000 equity.
+- **2026-05-16 22:00 PT (this wake)** — past-24h replay window = 2026-05-15 10:00 UTC → 2026-05-16 10:00 UTC. Wakes evaluated: OVERNIGHT (2026-05-15 13:00 UTC), MIDDAY (2026-05-15 20:00 UTC, default-skip), EOD (2026-05-16 04:00 UTC). M3 (reversal candle: 1H close > open) **failed for all 15 universe pairs at BOTH eligible wakes** — the 05-15 13:00Z bar was a synchronized red crash bar (HYPE flat, rest red) and the 05-16 04:00Z bar was red universe-wide in the continued risk-off tape. M3 blocks before M2 RSI-floor is reached, so the variant took 0 entries regardless of RSI. 0 open positions to exit. All kill switches clear at $10,000 equity.
