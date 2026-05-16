@@ -1330,3 +1330,30 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 | 2026-05-16T18:30Z | harness | Competition (vs Codex, 2026-07-01): BULL +5.39% LEADS Codex v0 −0.20% / Codex Aggro −0.43% (reversal from W19 −1.45 trail). Codex Aggro now 200% gross short — mandate-incompatible, not copied. | report |
 | 2026-05-16T18:30Z | harness | ACK concurrent-write-race escalation (routine #3 EOD note, XRP mislog root cause). Strategy memo cannot fix infra; logged here as an operational item requiring an OPERATING.md / routine-architecture change (single-writer lock or idempotent CLOSE keyed on open-position id; late fires replay all unprocessed 1H closes earliest-trigger-first). NOT a Ring-2 strategy edit — flagged for user as a v2 routine-infra task; added to W20 memo open questions. | escalate |
 
+
+## 2026-05-16T13:00Z — routine-01-overnight
+
+### Technical (rule-driven, deterministic)
+
+- Account flat (0 open positions per portfolio.md, last rebuild 2026-05-16 routine-03-eod). No position/stop/exit checks required this wake.
+- Overnight Kraken `kraken_multi_ticker` (15 universe pairs), 24h % change:
+  BTC −1.43, ETH −2.24, SOL −3.40, XRP −1.71, TAO −4.53, HYPE −7.04, DOGE −4.37, SUI −4.89, LTC −2.44, ADA −2.68, FARTCOIN −3.79, AVAX −2.83, LINK −4.25, PENGU −4.32, TRX −0.25.
+- **Positive-24h count: 0 / 15.** Broad single-direction red tape; HYPE worst (−7.04%), TRX shallowest (−0.25%).
+- **Entry rule 5a (W19-D regime-confirmation gate) FAILS at wake level:** requires ≥ 4/15 universe pairs positive 24h; observed 0/15. Per rule 5a this rejects ALL new entries this wake. Per-pair 1H/4H OHLCV + indicator computation intentionally skipped (context-budget; 5a is a wake-level gate that pre-empts per-pair evaluation — same inferred-reject pattern as 2026-04-21 runs). Under uniformly negative drift, 1H RSI14 > 55 is also mathematically implausible across the board (rule 2 would compound the reject).
+- Final candidate list: **empty** — all 15 rejected by entry-rule-5a (regime-confirmation gate, 0/15 positive).
+
+### News (Firecrawl-driven, informational only in v0.2)
+
+- News scan deferred to the separate morning-brief skill (established v0.2 practice — cf. 2026-04-21 overnight rows). v0.2 is not news-reactive: no entry gate depends on news, and no entries are possible this wake regardless (5a gate). Daily risk scan (`kraken_risk_flag` 2026-05-16T12:30Z): **CLEAR**, "markets calm", 0 tier-1/tier-2 triggers — the broad −2 to −7% move did not trip the external risk classifier. No ACTIONABLE item recorded.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+
+- No entry candidates → no per-candidate spread/depth pull required this wake. Volume sanity from multi-ticker: high-liquidity names (BTC, ETH, SOL, XRP, DOGE, PENGU) trading actively; AVAX 24h base volume thin (~216k), consistent with its standing W18-B sub-$2M caveat.
+
+### Decision
+
+- **Action: SKIP — no entries, no exits.** Driver: entry-rule-5a regime-confirmation gate (0/15 universe pairs positive, threshold ≥4/15). Account remains flat. Kill-switch state unchanged from routine-03-eod: daily realized −0.21% (cap 5%), losing-day streak 1 (cap 7), DD 0.21% (cap 25%), equity $10,236.14 > $7,500 floor — all clear, no Ring 3 tripped.
+- Universe refresh: skipped, today is 2026-05-16 (not 1st of month; next refresh 2026-06-01).
+- No lesson appended: no entry taken, no single-pair price anomaly drove an action, no news cluster. Broad beta drawdown with risk-flag CLEAR is regime, not a strategy-actionable anomaly under v0.2.
+
+| 2026-05-16T13:00Z | overnight | kraken | 15-pair overnight pull: 0/15 positive 24h (BTC −1.43 … HYPE −7.04). Flat account. Entry-rule-5a regime gate fails wake-level (0/15 < 4/15) → all entries rejected. Risk flag CLEAR. No positions to manage. | SKIP — no trades; research_log only |
