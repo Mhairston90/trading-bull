@@ -1360,3 +1360,32 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 | 2026-05-16T13:00Z | overnight | kraken | 15-pair overnight pull: 0/15 positive 24h (BTC −1.43 … HYPE −7.04). Flat account. Entry-rule-5a regime gate fails wake-level (0/15 < 4/15) → all entries rejected. Risk flag CLEAR. No positions to manage. | SKIP — no trades; research_log only |
 | 2026-05-16T17:07Z | harness | dedup | DUPLICATE same-week fire — W20 harness already completed and committed today (cab62cc; memo weekly_memos/2026-W20.md written, lessons scored, variants v0.9/v0.10/v0.11 spawned, Telegram retention digest sent). Idempotent skip: did NOT rewrite memo, re-spawn variants, re-score/prune lessons, or re-send Telegram (would duplicate the digest + recreate the concurrent-write hazard escalated in W20 memo Open Q4 / the XRP −$206.37 mislog). No second run per Saturday. | SKIP — no action; research_log only |
 | 2026-05-16T17:40Z | allocation | day-gate | not Sunday (Saturday PT), skipping | no action |
+
+## 2026-05-17T13:00Z — routine-01-overnight (MCP-failure SKIP)
+
+### VERIFY / data-source state
+
+- **Kraken MCP: UNAVAILABLE.** Server is configured in `.mcp.json` (`kraken` stdio → `kraken_mcp.py`) but exposed zero tools this wake — not in the live tool list, not resolvable via ToolSearch (`mcp__kraken__kraken_multi_ticker` / `kraken_ticker` / `kraken_ohlcv` / `kraken_risk_flag` all "No matching deferred tools"), and not in the session's connecting-servers list (only `ableton` was connecting). Server failed to start/register.
+- **TradingView MCP fallback: UNAVAILABLE.** `tv_health_check` → `CDP connection failed after 5 attempts: fetch failed`. Consistent with W20 harness note (2026-05-16, cab62cc): TradingView Desktop not installed, no binary found. 3rd consecutive routine blocked from TV.
+- Both the primary data source (Kraken MCP) and the documented indicator fallback (TradingView MCP, per `skills/decide.md`) are down. Steps 1–5 of the routine (overnight price pull, position/stop check, entry scan, news/risk pull, entry placement) all require live price data and cannot be executed.
+
+### Guardrail applied
+
+- `memory/guardrails.md` Ring 3: *"Kraken MCP / TradingView MCP / Telegram MCP failure → SKIP this routine run, append error to research_log.md, retry next routine."* Action taken accordingly: SKIP, log, retry next routine. This is the prescribed log-and-retry path (not a HALT+ALERT kill switch — those four are equity/daily-loss/drawdown/losing-streak triggers, none of which are evaluable or tripped this wake).
+
+### Position / risk state (carried, unverified — no live data)
+
+- Account **flat** per `portfolio.md` (last rebuild 2026-05-16 routine-03-eod): 0 open positions, equity $10,236.14, cash $10,236.14, DD 0.21% from peak $10,258.06, losing-day streak 1. No open positions ⇒ no stop/exit management was required this wake regardless of data availability; SKIP introduces no unmanaged-position risk.
+- Kill-switch state unchanged from routine-03-eod (cannot recompute without prices; no trades): all clear, no Ring 3 equity/loss/dd/streak trigger.
+
+### Other steps
+
+- Universe refresh: not due (today 2026-05-17, not 1st of month; next 2026-06-01).
+- News/Firecrawl scan: skipped — no entries possible this wake regardless of news (no price data); v0.2 is not news-reactive.
+- Note: 2026-05-17 is a Sunday; routine-01 cron is Mon–Fri (`0 6 * * 1-5`). Task dispatched it anyway; processed as a normal wake. Outcome (SKIP) is independent of the weekday question.
+
+### Decision
+
+- **Action: SKIP — no price pull, no position checks, no entries, no exits, no Telegram.** Driver: Kraken MCP + TradingView MCP both unavailable (Ring 3 MCP-failure → log-and-retry). Account remains flat. Retry next routine.
+
+| 2026-05-17T13:00Z | overnight | mcp-failure | Kraken MCP exposed 0 tools (server failed to load); TradingView fallback CDP-fail (TV Desktop not installed, 3rd consecutive). Both data sources down. Ring 3 MCP-failure guardrail → SKIP + log + retry next routine. Account flat (0 positions) per portfolio.md — no unmanaged risk. No notify (not a HALT kill switch). | SKIP — no trades; research_log only |
