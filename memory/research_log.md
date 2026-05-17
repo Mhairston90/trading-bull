@@ -1390,3 +1390,15 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 | 2026-05-17T13:00Z | overnight | mcp-failure | Kraken MCP exposed 0 tools (server failed to load); TradingView fallback CDP-fail (TV Desktop not installed, 3rd consecutive). Both data sources down. Ring 3 MCP-failure guardrail → SKIP + log + retry next routine. Account flat (0 positions) per portfolio.md — no unmanaged risk. No notify (not a HALT kill switch). | SKIP — no trades; research_log only |
 | 2026-05-17T17:34Z | harness | day-gate | not Saturday (Sunday PT), skipping | no action |
+
+### routine-05-allocation 2026-05-17 — SKIP (Ring 3 MCP-failure)
+
+- DAY GATE passed: today is Sunday 2026-05-17 (PT 10:34, UTC 17:34) — full routine attempted.
+- VERIFY failed: Kraken MCP exposed 0 tools (server in .mcp.json failed to load); TradingView MCP CDP connection failed (TV Desktop not running, 4th consecutive harness/routine block). Both required data sources down — same condition routine-01-overnight handled this same day at 13:00Z.
+- Ring 3 guardrail (Kraken/TV/Telegram MCP failure) → SKIP this routine run, append error to research_log, retry next routine.
+- Account flat per portfolio.md (last rebuild 2026-05-16 routine-03-eod): 0 open positions, equity $10,236.14, DD 0.21%, losing-day streak 1, all kill switches clear. SKIP introduces no unmanaged-position risk.
+- Core allocation analysis (concept-bucket R, vs-BTC-hold) needs live BTC price for the rolling-window comparison; the bucket-PnL portion is derivable from trade_log but the guardrail prescribes a clean SKIP rather than a partial run when the required MCP is down.
+- No pending W18/W19/W20 strategy proposal awaiting a `Y` reply (W20 memo: "Proposal — none"); nothing to apply this routine regardless.
+- No notify: Ring 3 MCP-failure is a log-and-retry condition, not a HALT kill switch (consistent with routine-01-overnight 2026-05-17 decision). Avoids double-notifying the same infra outage. Next routine #5 fires Sun 2026-05-24.
+
+| 2026-05-17T17:34Z | allocation | mcp-failure | Kraken MCP 0 tools (server load fail) + TradingView CDP-fail (TV Desktop down); both data sources unavailable. Ring 3 MCP-failure → SKIP + log + retry next routine. Account flat per portfolio.md, no unmanaged risk. No pending strategy proposal to apply. No notify (not a HALT kill switch). | SKIP — no allocation analysis; research_log only |
