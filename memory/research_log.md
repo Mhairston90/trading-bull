@@ -1389,3 +1389,4 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **Action: SKIP — no price pull, no position checks, no entries, no exits, no Telegram.** Driver: Kraken MCP + TradingView MCP both unavailable (Ring 3 MCP-failure → log-and-retry). Account remains flat. Retry next routine.
 
 | 2026-05-17T13:00Z | overnight | mcp-failure | Kraken MCP exposed 0 tools (server failed to load); TradingView fallback CDP-fail (TV Desktop not installed, 3rd consecutive). Both data sources down. Ring 3 MCP-failure guardrail → SKIP + log + retry next routine. Account flat (0 positions) per portfolio.md — no unmanaged risk. No notify (not a HALT kill switch). | SKIP — no trades; research_log only |
+| 2026-05-17T17:34Z | harness | day-gate | not Saturday (Sunday PT), skipping | no action |
