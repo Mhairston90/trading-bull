@@ -1402,3 +1402,13 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - No notify: Ring 3 MCP-failure is a log-and-retry condition, not a HALT kill switch (consistent with routine-01-overnight 2026-05-17 decision). Avoids double-notifying the same infra outage. Next routine #5 fires Sun 2026-05-24.
 
 | 2026-05-17T17:34Z | allocation | mcp-failure | Kraken MCP 0 tools (server load fail) + TradingView CDP-fail (TV Desktop down); both data sources unavailable. Ring 3 MCP-failure → SKIP + log + retry next routine. Account flat per portfolio.md, no unmanaged risk. No pending strategy proposal to apply. No notify (not a HALT kill switch). | SKIP — no allocation analysis; research_log only |
+
+### routine-02-midday 2026-05-17 — SKIP (Ring 3 MCP-failure)
+
+- VERIFY failed: Kraken MCP exposed 0 tools (server in .mcp.json failed to load); TradingView MCP unavailable as fallback (TV Desktop down — consistent with routine-01/05 today). The midday routine's DO step 1 (`kraken_multi_ticker` mark-to-market) and VERIFY (kill-switch recheck on latest Kraken prices) both require the Kraken MCP.
+- Ring 3 guardrail (Kraken/TV/Telegram MCP failure) → SKIP this routine run, append error to research_log, retry next routine.
+- Account flat per portfolio.md (last rebuild 2026-05-16 routine-03-eod): 0 open positions, equity $10,236.14, DD 0.21% from peak $10,258.06, losing-day streak 1/7, equity floor clear. With no open positions there is no mark-to-market, no exit check, and no entries (midday is management-only) — the SKIP introduces zero unmanaged-position risk.
+- Kill-switch state unchanged from last EOD rebuild (price-independent while flat): all clear, trading authorized.
+- No notify: Ring 3 MCP-failure is a log-and-retry condition, not a HALT kill switch (consistent with routine-01-overnight / routine-05-allocation 2026-05-17 decisions). Avoids double-notifying the same ongoing infra outage. Next routine-02-midday fires next weekday 13:00 PT.
+
+| 2026-05-17T20:00Z | midday | mcp-failure | Kraken MCP 0 tools (server load fail) + TradingView fallback down; mark-to-market/kill-switch recheck data sources unavailable. Ring 3 MCP-failure → SKIP + log + retry next routine. Account flat per portfolio.md (0 positions, eq $10,236.14, DD 0.21%) — no unmanaged risk; midday is management-only so no missed entries. No notify (not a HALT kill switch). | SKIP — no trades; research_log only |
