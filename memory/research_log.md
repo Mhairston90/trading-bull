@@ -1413,3 +1413,4 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 | 2026-05-17T20:00Z | midday | mcp-failure | Kraken MCP 0 tools (server load fail) + TradingView fallback down; mark-to-market/kill-switch recheck data sources unavailable. Ring 3 MCP-failure → SKIP + log + retry next routine. Account flat per portfolio.md (0 positions, eq $10,236.14, DD 0.21%) — no unmanaged risk; midday is management-only so no missed entries. No notify (not a HALT kill switch). | SKIP — no trades; research_log only |
 2026-05-18T18:51:27Z | allocation | day-gate | not Sunday, skipping | no action
+2026-05-18T18:51:32Z | harness | day-gate | not Saturday, skipping | no action
