@@ -2,7 +2,7 @@
   "mcpServers": {
     "kraken": {
       "type": "stdio",
-      "command": "python",
+      "command": "C:/Users/Mhair/AppData/Local/Programs/Python/Python311/python.exe",
       "args": [
         "C:/Users/Mhair/OneDrive/Desktop/claude/Trading Strategy/kraken_mcp.py"
       ],
@@ -13,6 +13,17 @@
       "command": "node",
       "args": [
         "C:/Users/Mhair/tradingview-mcp-jackson/src/server.js"
+      ],
+      "env": {}
+    },
+    "ableton": {
+      "type": "stdio",
+      "command": "C:/Users/Mhair/.local/bin/uv.exe",
+      "args": [
+        "run",
+        "--directory",
+        "C:/Users/Mhair/OneDrive/Documents/New project/tools/ableton-mcp",
+        "ableton-mcp"
       ],
       "env": {}
     }
