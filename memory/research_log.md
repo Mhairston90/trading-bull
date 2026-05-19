@@ -1415,3 +1415,27 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 2026-05-18T18:51:27Z | allocation | day-gate | not Sunday, skipping | no action
 2026-05-18T18:51:32Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-18T20:00Z | midday | mcp-failure | Kraken MCP 0 tools available (only ableton connecting; no kraken/tradingview servers present) — mark-to-market/kill-switch-recheck data sources unavailable. Ring 3 MCP-failure → SKIP + log + retry next routine. Account flat per portfolio.md (0 positions, eq $10,236.14, DD 0.21% from peak $10,258.06, loss-day streak 1/7, equity floor clear). With 0 open positions: no MTM, no exit check, no entries (midday is management-only) — SKIP introduces zero unmanaged-position risk. Kill-switch state price-independent while flat: all clear, trading authorized. No notify (Ring 3 MCP-failure is log-and-retry, not a HALT kill switch). | SKIP — no trades; research_log only
+
+## 2026-05-19T13:00Z — routine-01-overnight
+
+### Technical (rule-driven, deterministic)
+- Kraken MCP healthy (kraken_multi_ticker returned all 15 pairs; risk_flag scan 2026-05-19T12:30:31Z = CLEAR, "Markets calm", 0 tier1/tier2).
+- 24h % change, 15 universe pairs: BTC -0.26, ETH -0.74, SOL -0.88, XRP -1.07, TAO -0.68, HYPE -0.48, DOGE/XDG -0.82, SUI -0.12, LTC -0.44, ADA -0.79, FARTCOIN -1.45, AVAX -1.19, LINK -0.72, PENGU -0.38, TRX +0.03.
+- **Entry rule 5a (regime-confirmation gate): FAIL.** Positive 24h movers = 1/15 (TRX +0.03% only). Threshold is >= 4/15. Per strategy.md v0.2 rule 5a, this is a wake-level hard reject: ALL new entries rejected this wake. Per-pair RSI/EMA/ATR computation skipped — 5a gates before per-pair eval and no pair can pass once 5a fails.
+- Final candidate list: **none** (regime gate reject-all).
+
+### Position check
+- 0 open positions (account flat per portfolio.md, last rebuild routine-03-eod 2026-05-16). No stops to evaluate, no exits. This routine's only close-path (overnight stop-out) is N/A.
+
+### News (Firecrawl-driven, informational only in v0.2)
+- Sources fetched: coindesk.com front page + theblock.co/latest (Firecrawl CLI 1.3.1, both 200 OK).
+- Dominant theme — broad BTC-led risk-off (bearish, macro): "Bitcoin has shed $5,000 within days... selloff could worsen" (BTC ~-6% over several days to ~$76.8k, near pivotal monthly close); "Spot bitcoin ETFs log $649M net outflows, largest since January"; CoinShares: "XRP and Solana funds attract inflows as bitcoin outflows hit ~$1B" (rotation BTC/ETH out, XRP/SOL in).
+- Pair-specific notes (informational, no veto in v0.2): HYPE — Hyperliquid USDC revenue-share deal "could supercharge HYPE" (supportive); DOGE — Revolut physical Dogecoin debit card (supportive); ETH — onchain conviction grows, staked ETH rises despite price underperformance (neutral/mild support).
+- Hack: Echo Protocol $76M eBTC mint exploit on Monad — non-universe protocol/chain, BTCFi-adjacent, indirect; recorded, no universe-pair impact.
+- Classification: macro-bearish backdrop corroborates the technical regime-off reading. No single universe pair has 3+ ACTIONABLE items this week -> no news-cluster lesson triggered. Not a discrete shock; daily risk scan independently CLEAR.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+- Not sampled: 0 entry candidates survived rule 5a, so no per-candidate spread/depth pull warranted.
+
+### Decision
+- **SKIP all entries** — driven by strategy.md v0.2 rule 5a (regime-confirmation gate, 1/15 positive < 4/15 threshold). 0 trades. No exits (flat). Not first-of-month -> no universe refresh. portfolio.md kill-switch state refreshed in place (flat, no state delta; routine-03-eod trade-log-correction note preserved). No Telegram: no kill switch, no OPEN/CLOSE, news is orderly known macro pullback with CLEAR risk scan and zero portfolio exposure (absence of message = all clear).

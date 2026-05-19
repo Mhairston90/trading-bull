@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-16 (routine-03-eod). XRP/USD closed on the 1H 20-EMA cross-down at **2026-05-15T04:00Z** — the binding first exit. A concurrently-written routine-02-midday rebuild booked an `exit-stop-hit` at 2026-05-15T13:00Z (−$206.37); that is **superseded** here — see "Trade-log correction" below. Account is flat.
+> **Last rebuild:** 2026-05-19 (routine-01-overnight) — no-op rebuild: 0 new trades since 2026-05-16, account still flat, equity unchanged $10,236.14. Kill-switch state re-verified against live Kraken data (risk_flag CLEAR). Prior binding event retained below for audit. Originally: 2026-05-16 (routine-03-eod) — XRP/USD closed on the 1H 20-EMA cross-down at **2026-05-15T04:00Z** (the binding first exit); a concurrently-written routine-02-midday rebuild booked an `exit-stop-hit` at 2026-05-15T13:00Z (−$206.37), **superseded** — see "Trade-log correction" below. Account is flat.
 
 ## Account
 
@@ -64,7 +64,8 @@ Flagged for routine #4 (Sat 2026-05-16): (a) codify that any late/concurrent rou
 - Consecutive losing trading days: 05-07 W, 05-11 W, 05-12 flat, 05-13 flat, 05-14 flat (open only), **05-15 L** (XRP −0.14R) → streak **1** (cap 7)
 - Max drawdown: 0.21% from peak $10,258.06 (cap 25%, warn 12.5%) — clear
 - Equity floor: $10,236.14 > $7,500 floor — OK
-- **All clear. Trading authorized.** No open positions. XRP last px 1.39819 — well below the 04:00Z exit; trend continued down, exit was favorable vs holding.
+- **All clear. Trading authorized.** No open positions.
+- **2026-05-19 routine-01 regime note:** entry rule 5a (regime-confirmation gate) FAILED this wake — only 1/15 universe pairs positive on 24h (TRX +0.03%), threshold >= 4/15. All new entries rejected by strategy v0.2 rule 5a; not a kill switch. Broad BTC-led risk-off in news (BTC ~-6% over several days, largest BTC-ETF outflows since Jan); daily risk_flag independently CLEAR. Zero portfolio exposure to the pullback (flat). XRP last px 1.37446.
 
 ## Pending exit triggers
 
