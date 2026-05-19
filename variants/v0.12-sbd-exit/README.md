@@ -38,6 +38,22 @@ All 8 checks pass. Strictly risk-reducing vs v0.2 — it can only flatten a long
 
 Standard from `variants/README.md`: 30+ days live, beats main on net return + profit factor, DD increase ≤ 25%, ≥ 10 trades in rolling 30d. Earliest promotion-eligible: **2026-06-18**. Note: since main is already v0.3 (= these rules), "promotion" here means the autoloop may instead sweep `sbd_*` params and propose a *tuned* SBD config via the normal Ring-2 channel.
 
+## Leaderboard data hygiene (LOCKED rule)
+
+The external Strategy Leaderboard sources this variant's `portfolio.md` +
+`trade_log.md` (registry `BULL v0.12-SBD (twin)`). **Backtest, reconstructed,
+or hypothetical-historical results must NEVER be written into those two files
+or otherwise surfaced on the leaderboard.** Backtesting the SBD rules for
+validation is permitted, but its output goes ONLY to `backtest_notes.md`
+(this directory; NOT referenced by `registry.js`). Three layers enforce this:
+1. `registry.js` sets `live_start_iso: 2026-05-19` → adapter `filterTripsByLiveStart`
+   drops any trade entered before spin-up.
+2. `trade_log.md` / `portfolio.md` headers carry an explicit forward-only banner.
+3. `backtest_notes.md` is the only place backtest P&L may live and is not a
+   registry source.
+This mirrors the codebase's own honesty convention (cf. `registry.js` stock-MR
+`live_start_iso` notes — pre-creation P&L is backtest and must not be claimed).
+
 ## Honest caveats
 
 - No backtest (TradingView harness unavailable per recent routine #4 logs) — this variant IS the evidence-gathering mechanism for the SBD change that was adopted live on thin (1-trade) evidence.

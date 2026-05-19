@@ -3,6 +3,11 @@
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis / instrumented twin (SBD classifier + 9-EMA defensive exit vs v0.2 baseline)
 > **Last rebuild:** 2026-05-19T00:00:00Z (initial spin-up)
+>
+> **LEADERBOARD-SOURCED — FORWARD PAPER-PAPER ONLY.** Rebuilt only from this
+> variant's forward `trade_log.md`. Never reflect backtest/reconstructed P&L
+> here — backtest findings live in `backtest_notes.md`, which the leaderboard
+> does not read. Equity stays $10,000.00 until the first forward routine-#7 trade.
 
 ## Account
 
