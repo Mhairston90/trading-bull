@@ -1441,3 +1441,4 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **SKIP all entries** — driven by strategy.md v0.2 rule 5a (regime-confirmation gate, 1/15 positive < 4/15 threshold). 0 trades. No exits (flat). Not first-of-month -> no universe refresh. portfolio.md kill-switch state refreshed in place (flat, no state delta; routine-03-eod trade-log-correction note preserved). No Telegram: no kill switch, no OPEN/CLOSE, news is orderly known macro pullback with CLEAR risk scan and zero portfolio exposure (absence of message = all clear).
 
 2026-05-19T17:06:30Z | harness | day-gate | not Saturday, skipping | no action
+2026-05-19T17:39:55Z | allocation | day-gate | not Sunday, skipping | no action
