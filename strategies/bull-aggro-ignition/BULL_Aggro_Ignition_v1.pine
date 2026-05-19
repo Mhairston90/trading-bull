@@ -1,0 +1,108 @@
+//@version=6
+// BULL_Aggro_Ignition_v1 — RESEARCH PROBE (brainstorming validation, not productionized)
+// Convex momentum-ignition: enter on a range+volume ignition bar with ROC-zscore
+// confirmation; long thrust-up / short thrust-down; ATR chandelier trail. 1x, no leverage.
+strategy("BULL_Aggro_Ignition_v1",
+     overlay=true,
+     initial_capital=10000,
+     default_qty_type=strategy.cash,
+     default_qty_value=10000,
+     currency=currency.USD,
+     pyramiding=0,
+     commission_type=strategy.commission.percent,
+     commission_value=0.26,
+     slippage=2,
+     process_orders_on_close=true,
+     calc_on_every_tick=false)
+
+// === INPUTS ===
+lookback   = input.int(50,  "Ignition lookback (bars)", minval=10)
+rangeMult  = input.float(2.2,"Range vs avg multiple",   step=0.1, minval=1.0)
+volMult    = input.float(2.0,"Volume vs avg multiple",  step=0.1, minval=1.0)
+closePos   = input.float(0.60,"Strong-close fraction",  step=0.05, minval=0.5, maxval=1.0)
+rocLen     = input.int(10,  "ROC length",               minval=2)
+rocZLen    = input.int(50,  "ROC z-score window",       minval=10)
+rocZMin    = input.float(1.0,"Min |ROC z| for confirm", step=0.1, minval=0.0)
+atrLen     = input.int(14,  "ATR length",               minval=2)
+stopMult   = input.float(2.0,"Initial stop ATR mult",   step=0.1, minval=0.5)
+chandMult  = input.float(3.0,"Chandelier trail ATR mult",step=0.1, minval=0.5)
+maxBars    = input.int(48,  "Time stop (bars)",         minval=4)
+allowLong  = input.bool(true, "Allow longs")
+allowShort = input.bool(true, "Allow shorts")
+
+// === CORE SIGNALS ===
+atr      = ta.atr(atrLen)
+rng      = high - low
+rngAvg   = ta.sma(rng, lookback)
+volAvg   = ta.sma(volume, lookback)
+rngRatio = rngAvg > 0 ? rng / rngAvg : 0.0
+volRatio = volAvg > 0 ? volume / volAvg : 0.0
+cPos     = rng > 0 ? (close - low) / rng : 0.5
+
+roc      = ta.roc(close, rocLen)
+rocMean  = ta.sma(roc, rocZLen)
+rocSd    = ta.stdev(roc, rocZLen)
+rocZ     = rocSd > 0 ? (roc - rocMean) / rocSd : 0.0
+
+ignition = rngRatio >= rangeMult and volRatio >= volMult
+bullIgnite = ignition and close > open and cPos >= closePos and rocZ >=  rocZMin
+bearIgnite = ignition and close < open and cPos <= (1.0 - closePos) and rocZ <= -rocZMin
+
+// === STATE ===
+var float entryPx  = na
+var float initStop = na
+var float trailStop = na
+var float hiSince  = na
+var float loSince  = na
+var int   barsHeld = 0
+
+flat   = strategy.position_size == 0
+longP  = strategy.position_size > 0
+shortP = strategy.position_size < 0
+
+// === ENTRIES ===
+if flat and allowLong and bullIgnite
+    qtyL = strategy.equity / close
+    strategy.entry("L", strategy.long, qty=qtyL)
+    entryPx := close
+    initStop := close - atr * stopMult
+    trailStop := initStop
+    hiSince := high
+    barsHeld := 0
+
+if flat and allowShort and bearIgnite
+    qtyS = strategy.equity / close
+    strategy.entry("S", strategy.short, qty=qtyS)
+    entryPx := close
+    initStop := close + atr * stopMult
+    trailStop := initStop
+    loSince := low
+    barsHeld := 0
+
+// === MANAGEMENT ===
+if longP
+    barsHeld += 1
+    hiSince := math.max(nz(hiSince, high), high)
+    chand = hiSince - atr * chandMult
+    trailStop := math.max(nz(trailStop, initStop), chand)
+    stopLvl = math.max(trailStop, initStop)
+    strategy.exit("Lx", "L", stop=stopLvl)
+    if barsHeld >= maxBars
+        strategy.close("L", comment="time")
+
+if shortP
+    barsHeld += 1
+    loSince := math.min(nz(loSince, low), low)
+    chand = loSince + atr * chandMult
+    trailStop := math.min(nz(trailStop, initStop), chand)
+    stopLvl = math.min(trailStop, initStop)
+    strategy.exit("Sx", "S", stop=stopLvl)
+    if barsHeld >= maxBars
+        strategy.close("S", comment="time")
+
+if flat
+    barsHeld := 0
+
+plot(strategy.position_size != 0 ? trailStop : na, "Trail", color=color.red, style=plot.style_linebr)
+plotshape(flat and bullIgnite, "BullIgnite", shape.triangleup, location.belowbar, color=color.lime, size=size.tiny)
+plotshape(flat and bearIgnite, "BearIgnite", shape.triangledown, location.abovebar, color=color.red, size=size.tiny)
