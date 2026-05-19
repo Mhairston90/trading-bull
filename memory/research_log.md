@@ -1443,3 +1443,17 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 2026-05-19T17:06:30Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-19T17:39:55Z | allocation | day-gate | not Sunday, skipping | no action
 2026-05-19T20:00:00Z | midday | health-check | flat (0 positions), equity $10,236.14, DD 0.21% from peak $10,258.06, risk_flag CLEAR, all kill switches clear, 0 exits (no open positions), no entries (midday position-mgmt only); regime 2/15 positive (HYPE +1.38%, TRX +0.03%) — entry-irrelevant midday | no action
+
+## 2026-05-19 — interactive session: Ring-2 W21-F adopted (strategy v0.2 → v0.3)
+
+- **Type:** Ring-2 strategy edit, off-cycle, user-approved in interactive chat (scope: "Live v0.2 + spin variant"). Not a routine wake.
+- **Origin:** Fragility audit of the BULL-vs-Codex contest stable (this session). Finding: the only contest edge that paid was positioning for the 2026-05-12→05-17 synchronized breakdown; BULL is long-only by mandate (cannot take the offensive short side) but the defensive half (flatten open longs faster) was uncaptured. User reframed concentrated momentum P&L as designed behavior, not fragility — wanted to learn from it (memory `feedback-perf-analysis-framing`).
+- **Applied:**
+  - `memory/strategy.md` → **v0.3**: added entry rule **5a-SBD** (regime=SYNCHRONIZED_BREAKDOWN when ≤1/15 pairs positive 24h AND median universe 24h % ≤ −1.0%; strict subset of a 5a fail) and **Exit rule 1-SBD** (trend exit tightens 20-EMA → 9-EMA while SBD active; reverts on clear). Static 2×ATR stop + 4R TP unchanged. Header/version/changelog updated; next review routine #4 2026-05-23.
+  - Spun `variants/v0.12-sbd-exit/` (README+strategy+portfolio+trade_log, $10k synthetic) — instrumented twin isolating the SBD change vs the v0.2 baseline + avoided-give-back telemetry. Rack now 10/10 (full).
+  - `lessons.md`: added 2026-05-19 lesson "synchronized-breakdown defensive asymmetry" (status: addressed).
+  - `leaderboard.md`: MAIN row v0.2→v0.3, v0.12 row added, cap/categories updated.
+  - `weekly_memos/2026-W21-proposal.md`: status → APPROVED & APPLIED.
+- **Mandate compliance:** spot-only/long-only preserved (no shorting, no leverage); change is strictly risk-reducing (can only flatten earlier). `guardrails.md` untouched. No retroactive effect — SBD applies to new entry-scans/exits only; account is flat so no open positions affected.
+- **Honest caveat carried forward:** adopted on thin evidence (1 BULL trade + cross-strategy + structural reasoning, no backtest). v0.12 twin + routine #4 TV harness (when available) are the validation path; autoloop may sweep sbd_* params → Ring-2 for a tuned config.
+- No Telegram sent (interactive approval already obtained; absence of routine-driven alert is correct — no kill switch, no trade).

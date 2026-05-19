@@ -25,10 +25,11 @@ Routine #7 daily wake updates a `Competition net %` column below for each tracke
 ## Active rack
 
 > **Last refresh:** 2026-05-16 22:00 PT (routine-07 wake — 8 variants simulated, 0 hypothetical trades across the past-24h window). Codex competition rows are external read-only and were not re-queried by routine #7; they carry forward from routine #4's 2026-05-16 poll.
+> **2026-05-19 (off-cycle, interactive):** main strategy upgraded **v0.2 → v0.3** via Ring-2 2026-W21-F (user `[Y B]` + variant — synchronized-breakdown classifier 5a-SBD + defensive 9-EMA exit 1-SBD). Instrumented twin **v0.12-sbd-exit** spun up (rack now 10/10, full). Synthetic stats for v0.12 begin accruing next routine #7 wake. NOTE: MAIN row strategy version is now "v0.3"; the unrelated LAB variant *named* "v0.3-vol-compression" is a separate namespace — do not conflate.
 
 | Rank | Strategy | Status | Spin-up | Days live | Trades | Win % | Avg R | Net % | Max DD % | Competition net % (since 2026-04-29) | Notes |
 |------|----------|--------|---------|-----------|--------|-------|-------|-------|----------|-------------------------------------|-------|
-| 1    | v0.2 (main)             | MAIN | 2026-04-20 | 26 | 17 | 23.5% | -0.27 | +2.36 | 3.54 | +5.39 | live trading; SOL +4.03R/+$585.35 take-profit 2026-05-11; XRP exit-ema-cross −0.14R/−$21.92 2026-05-15 (corrected — supersedes mislogged 13:00Z stop row; XRP ran ~+2.8R then round-tripped). Equity $10,236.18, flat. Peak $10,258.06 (05-11), DD-from-peak 0.21% |
+| 1    | v0.3 (main)             | MAIN | 2026-04-20 | 29 | 17 | 23.5% | -0.27 | +2.36 | 3.54 | +5.39 | live trading; **upgraded v0.2→v0.3 2026-05-19 (Ring-2 W21-F: 5a-SBD synchronized-breakdown classifier + Exit 1-SBD 9-EMA defensive exit; user `[Y B]`+variant)**. SOL +4.03R/+$585.35 take-profit 2026-05-11; XRP exit-ema-cross −0.14R/−$21.92 2026-05-15 (corrected — supersedes mislogged 13:00Z stop row; XRP ran ~+2.8R then round-tripped — the SBD lesson archetype). Equity $10,236.14, flat. Peak $10,258.06 (05-11), DD-from-peak 0.21%. SBD rules apply to new entry-scans/exits only; no retroactive effect |
 | 2    | v0.3-vol-compression    | LAB  | 2026-04-29 | 17 | 0 | —     | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: IDEA-04 (vol-compression entry gate, threshold 0.5×). Has 2 sweep children: v0.6 (0.3), v0.7 (0.7) |
 | 3    | v0.4-mean-reversion-sleeve | LAB  | 2026-04-29 | 17 | 0 | —  | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — concept-bucket diversification. Sweep children: v0.8 (RSI 30), v0.9 (RSI 20) — brackets parent |
 | 4    | v0.5-cluster-cap-tight  | LAB  | 2026-04-29 | 17 | 0 | —     | —     | 0.00  | 0.00 | 0.00 | paper-paper. 30d-eligible 2026-05-29. Source: internal — lesson 2026-04-27 cascade. **No sweep child spawned 2026-05-16**: only further perturbation is cluster_cap=0, which v0.5's own README documents as "TOO tight to be useful" — autoloop respects parent's documented rationale, no churn |
@@ -38,6 +39,7 @@ Routine #7 daily wake updates a `Competition net %` column below for each tracke
 | 8    | v0.9-mean-rev-tight     | LAB-SWEEP | 2026-05-16 | 0 | 0 | — | — | 0.00 | 0.00 | 0.00 | **Phase 1 autoloop spawn 2026-05-16 (routine #4).** Parameter sweep of v0.4: RSI floor 25 → 20 (stricter). Brackets parent with v0.8 (20/25/30 expectancy curve). 30d-eligible 2026-06-15 |
 | 9    | v0.10-exit-confirm      | LAB  | 2026-05-16 | 0 | 0 | — | — | 0.00 | 0.00 | 0.00 | **Hypothesis variant, routine #4 2026-05-16.** Source: commission-drag lesson (score 8). Exit rule 1 → 2 consecutive 1H closes < 20-EMA (vs main's 1). Converts the TV-blocked Ring-2 proposal into a paper-paper evidence track. 30d-eligible 2026-06-15 |
 | 10   | v0.11-breakeven-2R      | LAB  | 2026-05-16 | 0 | 0 | — | — | 0.00 | 0.00 | 0.00 | **Hypothesis variant, routine #4 2026-05-16.** Source: profit-give-back lesson 2026-05-15 (score 9 — highest open exit-logic gap). Stop ratchets to breakeven once unrealized ≥2R. Strictly risk-reducing vs v0.2. Sibling of v0.10; together = combined exit-logic evidence track. 30d-eligible 2026-06-15 |
+| 11   | v0.12-sbd-exit          | LAB  | 2026-05-19 | 0 | 0 | — | — | 0.00 | 0.00 | 0.00 | **Hypothesis / instrumented twin, interactive 2026-05-19 (Ring-2 W21-F).** Source: contest fragility audit + lesson 2026-05-19 (synchronized-breakdown defensive asymmetry). v0.2 + 5a-SBD + Exit 1-SBD == live v0.3 ruleset; isolates SBD change vs v0.2 baseline + logs avoided-give-back telemetry. Strictly risk-reducing vs v0.2. Tuneable: sbd_breadth_max(1), sbd_median_max(−1.0), sbd_exit_ema(9). 30d-eligible 2026-06-18 |
 | —    | Codex v0 (competitor)   | EXTERNAL | 2026-04-29 | 17 | 1 closed (4 open) | — | +1.91 | -0.20 | 0.20 | **-0.20** | read-only. Poll 2026-05-16 (routine #4). 1 closed SOL +$112.92 (target-hit 05-12); 4 open (BTC/ETH×2/SOL) unrealized −$132.82. Equity $9,980.10 — dropped from +1.04 (05-10) as open ETH/SOL bled |
 | —    | Codex Aggro v0 (comp.)  | EXTERNAL | 2026-04-29 | 17 | 1 closed (6 open) | — | -0.33 | -0.43 | 0.43 | **-0.43** | read-only. Poll 2026-05-16. Now SHORT 6 pairs, gross exposure 200.29% (margin — mandate-incompatible, do NOT copy). Cash −$9,967. Equity $9,957.13 |
 
@@ -48,10 +50,9 @@ For the **competition** column: net % since 2026-04-29 baseline. This is the met
 ## Cap & rotation
 
 - **Concurrent variants cap:** **10** (raised from 3 on 2026-05-12 per user grant for Phase 1 autoloop)
-- **Currently active:** 9 of 10 — 1 slot open (v0.9 sweep + v0.10/v0.11 hypotheses added 2026-05-16 routine #4)
-- **Categories:** 5 hypothesis variants (v0.3, v0.4, v0.5, v0.10, v0.11) + 4 parameter-sweep variants (v0.6, v0.7, v0.8, v0.9)
-- Future qualifying idea_bank rows OR autoloop parameter sweeps will fill the remaining 1 slot
-- When 11th variant qualifies: retire worst by 30d net return (parameter-sweep variants retired first; hypothesis variants protected)
+- **Currently active:** 10 of 10 — **rack full** (v0.12-sbd-exit added 2026-05-19 interactive, Ring-2 W21-F)
+- **Categories:** 6 hypothesis variants (v0.3-vol-compression, v0.4, v0.5, v0.10, v0.11, v0.12) + 4 parameter-sweep variants (v0.6, v0.7, v0.8, v0.9)
+- Rack is at cap. When an 11th variant qualifies: retire worst by 30d net return (parameter-sweep variants retired first; hypothesis variants protected)
 
 ## Promotion candidates (current)
 

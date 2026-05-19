@@ -1,12 +1,13 @@
-# BULL Strategy — v0.2 (W19 amended 2026-04-29)
+# BULL Strategy — v0.3 (W21 amended 2026-05-19)
 
 > **Gated file.** BULL may propose edits only via weekly memo → Telegram `[Y/N]`. Never edit autonomously.
-> **Version:** v0.2
-> **Last approved:** 2026-04-29 (off-cycle W19 proposal — D: RSI cap + regime gate + re-entry cooldown)
+> **Version:** v0.3
+> **Last approved:** 2026-05-19 (off-cycle W21 proposal — F: synchronized-breakdown classifier + defensive exit-tightening; user `[Y B]` + variant, interactive session)
 > **Prior versions:**
+>   - v0.2 (2026-04-29 W19 — D: RSI cap + regime gate + re-entry cooldown)
 >   - v0.1 (2026-04-28 W18 — A: cluster cap, B: liquidity floor, C: one-per-wake)
 >   - v0-seed (2026-04-20 standup)
-> **Next review:** routine #4, Saturday 2026-05-02
+> **Next review:** routine #4, Saturday 2026-05-23
 
 ## Philosophy
 
@@ -28,6 +29,7 @@ Enter LONG when **all** of the following are true on a just-closed 1H candle:
 4a. **(W18-B)** Pair has 24h notional volume >= **$2.0M USD** at time of entry-scan, measured from Kraken MCP `kraken_ticker`. Filters out thin-liquidity pairs whose 1H bars wick beyond 2×ATR stops (lesson 2026-04-24 TRX). Pairs currently affected: FARTCOIN, AVAX, LINK, PENGU, TRX (re-evaluated each entry-scan, not statically blocked).
 5. No existing open position in this pair
 5a. **(W19-D)** Regime-confirmation gate: at entry-scan time, count universe pairs with positive 24h % change. If **< 4 of 15** are positive, reject all new entries this wake. Lesson 2026-04-29: TAO entered when only 2/15 pairs were positive (TAO + XDG); divergent tape indicated non-confirmed regime, position reversed and stopped.
+5a-SBD. **(W21-F)** Synchronized-breakdown sub-state: at entry-scan time, classify regime = **SYNCHRONIZED_BREAKDOWN** when **both** (i) **<= 1 of 15** universe pairs positive on 24h % change, **and** (ii) **median 24h % change across the 15 universe pairs <= −1.0%**. SBD is a strict subset of a 5a failure — the reject-all-new-entries behavior of 5a still applies unchanged. SBD **additionally** triggers the defensive trend exit (Exit rule 1-SBD). SBD is re-evaluated every wake and clears automatically when (i) or (ii) is no longer true. Origin: fragility audit 2026-05-19 — the contest's only paid edge was positioning for the 2026-05-12→05-17 synchronized breakdown; BULL is long-only by mandate and cannot take the offensive (short) side, but 5a-SBD captures the mandate-legal defensive half (stop bleeding open longs faster). Every wake SBD is active, `research_log.md` records the classification and an estimated avoided-give-back (open-position unrealized R at the 9-EMA exit vs. modeled 20-EMA exit) so the gate's defensive value is measured.
 5b. **(W19-D)** Same-pair re-entry cooldown: do not open a new position in a pair within **24h** of a stop-out (`exit-stop-hit`) on that pair. Forward-looking guard against same-day re-entry chop.
 6. Current open positions < 4 (v0 deliberately uses half the 8-position cap)
 6a. **(W18-A)** Concurrent positions in the BTC-correlated cluster `{BTC, ETH, SOL, TAO, AVAX, SUI, LINK}` <= **2**. Empirically these pairs move together on 1H (cascade event 2026-04-27T05:00Z stopped 4/4 cluster positions in a single bar). Cap limits worst-case correlated tail loss to ~2R.
@@ -45,8 +47,9 @@ Enter LONG when **all** of the following are true on a just-closed 1H candle:
 Exit the position when **any** of the following is true:
 
 1. 1H close < 1H 20-EMA
-2. Price hits the 2 × ATR(14) stop (set at entry, static)
-3. Unrealized PnL >= 4R (take profit)
+1-SBD. **(W21-F)** While regime = SYNCHRONIZED_BREAKDOWN (per rule 5a-SBD), Exit rule 1 tightens to: **1H close < 1H 9-EMA**. Faster trend exit reduces give-back of unrealized R through a multi-day synchronized decline (XRP 2026-05-14 archetype: ran ~+2.8R, round-tripped to −0.14R). Reverts to the 20-EMA exit automatically when SBD clears. Strictly risk-reducing — it can only flatten earlier, never add or extend exposure.
+2. Price hits the 2 × ATR(14) stop (set at entry, static) — **unchanged by SBD**
+3. Unrealized PnL >= 4R (take profit) — **unchanged by SBD**
 
 Exits are checked at the close of each 1H candle. No intra-bar exits.
 
