@@ -1442,3 +1442,4 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 2026-05-19T17:06:30Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-19T17:39:55Z | allocation | day-gate | not Sunday, skipping | no action
+2026-05-19T20:00:00Z | midday | health-check | flat (0 positions), equity $10,236.14, DD 0.21% from peak $10,258.06, risk_flag CLEAR, all kill switches clear, 0 exits (no open positions), no entries (midday position-mgmt only); regime 2/15 positive (HYPE +1.38%, TRX +0.03%) — entry-irrelevant midday | no action

@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-19 (routine-01-overnight) — no-op rebuild: 0 new trades since 2026-05-16, account still flat, equity unchanged $10,236.14. Kill-switch state re-verified against live Kraken data (risk_flag CLEAR). Prior binding event retained below for audit. Originally: 2026-05-16 (routine-03-eod) — XRP/USD closed on the 1H 20-EMA cross-down at **2026-05-15T04:00Z** (the binding first exit); a concurrently-written routine-02-midday rebuild booked an `exit-stop-hit` at 2026-05-15T13:00Z (−$206.37), **superseded** — see "Trade-log correction" below. Account is flat.
+> **Last rebuild:** 2026-05-19 (routine-02-midday) — no-op rebuild: account flat, 0 open positions, 0 exits (nothing to manage), no entries (midday is position-mgmt only). Equity unchanged $10,236.14, DD 0.21%. Kill-switch state re-verified against live Kraken data (risk_flag CLEAR, scan 2026-05-19T12:30:31Z). Prior rebuild: 2026-05-19 (routine-01-overnight) — no-op, 0 new trades since 2026-05-16. Prior binding event retained below for audit. Originally: 2026-05-16 (routine-03-eod) — XRP/USD closed on the 1H 20-EMA cross-down at **2026-05-15T04:00Z** (the binding first exit); a concurrently-written routine-02-midday rebuild booked an `exit-stop-hit` at 2026-05-15T13:00Z (−$206.37), **superseded** — see "Trade-log correction" below. Account is flat.
 
 ## Account
 
