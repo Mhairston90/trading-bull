@@ -277,3 +277,77 @@ T2 may proceed when:
 **Leaderboard hygiene reaffirmed:** all results in this file remain off-leaderboard.
 No `portfolio.md` or `trade_log.md` exists in this folder; none will be created
 until T6's PASS branch.
+
+---
+
+## 2026-05-20 — T1 v1.2 fresh combined-side baseline (DOM-scraped)
+
+Symbol: KRAKEN:SOLUSD, Timeframe: 60m, Window: Dec 31 2023 — May 20 2026.
+Source: DOM scrape of strategy tester bottom-widgetbar (per Q2 canonical workaround).
+Pine source verified on chart matches on-disk `BULL_Aggro_Ignition_v1.pine`
+(`default_qty_type=strategy.percent_of_equity`, `default_qty_value=100`,
+both sides allowed, no explicit `qty=` override).
+
+### Metrics
+
+| Metric | All | Long | Short |
+|---|---:|---:|---:|
+| Total trades | **825** | — | — |
+| Profitable trades | **14.06%** (116/825) | — | — |
+| Net P&L | **−$9,218.41 / −92.18%** | −$3,040.16 / −30.40% | −$6,178.25 / −61.78% |
+| Gross profit | $14,236.71 | $7,673.50 | $6,563.21 |
+| Gross loss | $23,455.12 | $10,713.65 | $12,741.46 |
+| Profit factor | **0.607** | 0.716 | 0.515 |
+| Commission paid | $7,235.02 | $3,507.61 | $3,727.41 |
+| Expected payoff | **−$11.17/trade** | −$15.83 | −$9.76 |
+| Sharpe / Sortino | −0.757 / −0.637 | — | — |
+| Max DD (intrabar) | **92.47%** | — | — |
+| **Margin calls** | **423** | — | — |
+| Buy & hold | −16.79% | — | — |
+| Strategy outperformance | −$7,539.66 (worse than B&H) | — | — |
+
+### T1 closeout gate
+
+(a) `long.totalTrades > 0 AND short.totalTrades > 0` — **PASS**. Both sides fire
+under v1.2 defaults; the diagnosis's signal-asymmetry finding is now superseded
+by direct combined-side evidence.
+(b) controller acknowledgement — pending.
+
+### Reading the result
+
+The strategy is **not** a tuning problem — it is a **sizing-architecture problem**.
+
+- 825 trades over ~870 days = ~0.95 trades/day. Signal fires frequently on SOL 60m.
+- 423 margin calls on 825 trades = **51% of trades hit a margin call before exit.**
+  Full-equity sizing (`percent_of_equity=100`) + 2×ATR initial stop + chandelier
+  trail produces a position whose required margin exceeds available equity
+  whenever 2+ losers stack — which on a 14% win-rate signal is nearly continuous.
+- Long PF 0.716 is materially better than short PF 0.515. The bull side is
+  closer to viable, but both are negative-expectancy at this sizing.
+- Commission ($7,235) is **78% of net loss** — a significant chunk of the
+  bleed is friction, not bad signal direction.
+
+### Recommendation to controller
+
+**HOLD T2 parameter sweep.** Lowering `rocZMin` or `stopMult` will not fix a
+structural sizing defect; it will just produce a less-bad version of the same
+broken architecture. Before T2 begins, propose v1.3 with **risk-based sizing**:
+
+- `qty = (equity * 0.015) / (atr * stopMult)` — 1.5% per-trade risk, matched
+  to BULL's main strategy mandate (`memory/strategy.md` §Position sizing).
+- This makes margin calls structurally impossible (worst-case loss per trade
+  capped at 1.5% of equity, well below any margin threshold).
+- Then re-baseline on SOL 60m, then T2 parameter sweep can produce signal
+  that is actually informative.
+
+Filing this as a v1.3 design conversation, not a T2 sweep input. T2 is
+**blocked pending v1.3 sizing redesign**.
+
+### Lesson for the productionized stack
+
+The v0.3 main strategy already uses the correct sizing formula
+(`size = (equity * 0.015) / stop_dist`). Aggro-Ignition v1/v1.1/v1.2 has
+copied the wrong sizing pattern from Pine's strategy defaults. The fix
+in v1.3 is to align Aggro-Ignition's sizing with the mandate's per-trade
+1.5% risk floor — same as main.
+
