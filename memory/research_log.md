@@ -1494,3 +1494,4 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **Action: SKIP — no price pull, no position checks, no entries, no exits, no Telegram.** Driver: Kraken MCP unavailable (Ring 3 MCP-failure → log-and-retry). Account remains flat. Retry next routine.
 
 | 2026-05-20T13:00Z | overnight | mcp-failure | Kraken MCP 0 tools (server failed to register this session; TV up but is indicator-fallback per skills/decide.md, not the 15-pair multi-ticker source). Live strategy v0.3 post-W21-F (still needs 15-pair 24h vector for 5a/5a-SBD). Ring 3 MCP-failure guardrail → SKIP + log + retry next routine. Account flat per portfolio.md (0 positions, eq $10,236.14, DD 0.21%) — no unmanaged risk. No Telegram (not a HALT kill switch). | SKIP — no trades; research_log only |
+2026-05-20T17:06:41Z | harness | day-gate | not Saturday, skipping | no action
