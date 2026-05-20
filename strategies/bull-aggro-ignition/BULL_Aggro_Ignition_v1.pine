@@ -5,9 +5,8 @@
 strategy("BULL_Aggro_Ignition_v1",
      overlay=true,
      initial_capital=10000,
-     default_qty_type=strategy.cash,
-     default_qty_value=10000,
-     currency=currency.USD,
+     default_qty_type=strategy.percent_of_equity,
+     default_qty_value=100,
      pyramiding=0,
      commission_type=strategy.commission.percent,
      commission_value=0.26,
@@ -62,8 +61,7 @@ shortP = strategy.position_size < 0
 
 // === ENTRIES ===
 if flat and allowLong and bullIgnite
-    qtyL = strategy.equity / close
-    strategy.entry("L", strategy.long, qty=qtyL)
+    strategy.entry("L", strategy.long)
     entryPx := close
     initStop := close - atr * stopMult
     trailStop := initStop
@@ -71,8 +69,7 @@ if flat and allowLong and bullIgnite
     barsHeld := 0
 
 if flat and allowShort and bearIgnite
-    qtyS = strategy.equity / close
-    strategy.entry("S", strategy.short, qty=qtyS)
+    strategy.entry("S", strategy.short)
     entryPx := close
     initStop := close + atr * stopMult
     trailStop := initStop
