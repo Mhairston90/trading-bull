@@ -1,9 +1,10 @@
-# BULL Strategy — v0.3 (W21 amended 2026-05-19)
+# BULL Strategy — v0.4 (W22 amended 2026-05-20)
 
 > **Gated file.** BULL may propose edits only via weekly memo → Telegram `[Y/N]`. Never edit autonomously.
-> **Version:** v0.3
-> **Last approved:** 2026-05-19 (off-cycle W21 proposal — F: synchronized-breakdown classifier + defensive exit-tightening; user `[Y B]` + variant, interactive session)
+> **Version:** v0.4
+> **Last approved:** 2026-05-20 (off-cycle W22 proposal — G+H-partial: two-bar EMA exit confirmation + breakeven stop ratchet at +2R; user delegated choice via interactive chat "do whatever you suggest"; agent selected Option C: G + breakeven half of H, **4R take-profit retained per `feedback-perf-analysis-framing` memory**)
 > **Prior versions:**
+>   - v0.3 (2026-05-19 W21 — F: synchronized-breakdown classifier + Exit 1-SBD)
 >   - v0.2 (2026-04-29 W19 — D: RSI cap + regime gate + re-entry cooldown)
 >   - v0.1 (2026-04-28 W18 — A: cluster cap, B: liquidity floor, C: one-per-wake)
 >   - v0-seed (2026-04-20 standup)
@@ -42,14 +43,23 @@ Enter LONG when **all** of the following are true on a just-closed 1H candle:
 - Stop distance: 2 × ATR(14) on 1H
 - Size = (equity × 0.015) / stop distance, rounded down to Kraken minimum lot
 
+## Stop management (W22-H-partial, added 2026-05-20)
+
+- At the close of each 1H candle, compute unrealized R = `(close - entry) / (entry - initial_stop)`.
+- **Once unrealized R ≥ 2.0 at any 1H close, move the active stop from the original 2×ATR level UP TO THE ENTRY PRICE (breakeven).**
+- The stop ratchets **up only** — once moved, it stays at breakeven for the life of the trade. This rule does not trail further beyond breakeven (a fuller trailing mechanism is a separate future change).
+- Effect: a trade that has reached +2R unrealized can no longer become a realized loser (modulo round-trip friction; net result is a near-scratch close, not a stop-out at −1R).
+- **Strictly risk-reducing** — only moves the stop closer to current price, never further away.
+- Lesson source: `lessons.md` 2026-05-15 profit-give-back (score 9, XRP 2026-05-14 archetype: ran ~+2.8R, round-tripped to −0.14R). Paper-paper evidence track: `variants/v0.11-breakeven-2R/` (now subsumed by this main change).
+
 ## Exits
 
 Exit the position when **any** of the following is true:
 
-1. 1H close < 1H 20-EMA
-1-SBD. **(W21-F)** While regime = SYNCHRONIZED_BREAKDOWN (per rule 5a-SBD), Exit rule 1 tightens to: **1H close < 1H 9-EMA**. Faster trend exit reduces give-back of unrealized R through a multi-day synchronized decline (XRP 2026-05-14 archetype: ran ~+2.8R, round-tripped to −0.14R). Reverts to the 20-EMA exit automatically when SBD clears. Strictly risk-reducing — it can only flatten earlier, never add or extend exposure.
-2. Price hits the 2 × ATR(14) stop (set at entry, static) — **unchanged by SBD**
-3. Unrealized PnL >= 4R (take profit) — **unchanged by SBD**
+1. **(W22-G, modified 2026-05-20)** **Two consecutive 1H closes < 1H 20-EMA.** The exit fires on the close of the second below-EMA bar. A single-bar EMA tag-and-recover (`close[1] < EMA` AND `close[0] ≥ EMA`) does **not** trigger this exit. Lesson source: `lessons.md` 2026-04-24 commission-drag (score 8, 3 instances: BTC 2026-04-22, BTC 2026-05-05, XRP 2026-05-14 — each a small favorable move flipped to a small net loss by friction on a single-bar EMA cross). Paper-paper evidence track: `variants/v0.10-exit-confirm/` (now subsumed by this main change).
+1-SBD. **(W21-F, W22-G amended)** While regime = SYNCHRONIZED_BREAKDOWN (per rule 5a-SBD), Exit rule 1 tightens to: **two consecutive 1H closes < 1H 9-EMA**. The same two-bar confirmation applies during SBD (SBD already implies multi-day persistence — one bar of additional patience adds modest adverse-motion budget without undermining SBD's defensive intent). Reverts to the 20-EMA two-bar exit automatically when SBD clears.
+2. Price hits the active stop (initial 2×ATR level at entry, or entry price once breakeven ratchet has fired per the Stop management rule) — **unchanged by SBD**
+3. Unrealized PnL ≥ 4R (take profit) — **unchanged by SBD, unchanged by W22.** Per `feedback-perf-analysis-framing` memory, the 4R tail is the designed payoff for a momentum strategy; the W22 proposal explicitly considered lowering to 3R (option D) and rejected that path. The 4R target stays.
 
 Exits are checked at the close of each 1H candle. No intra-bar exits.
 
