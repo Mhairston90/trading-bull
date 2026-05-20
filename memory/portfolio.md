@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-19 (routine-02-midday) — no-op rebuild: account flat, 0 open positions, 0 exits (nothing to manage), no entries (midday is position-mgmt only). Equity unchanged $10,236.14, DD 0.21%. Kill-switch state re-verified against live Kraken data (risk_flag CLEAR, scan 2026-05-19T12:30:31Z). Prior rebuild: 2026-05-19 (routine-01-overnight) — no-op, 0 new trades since 2026-05-16. Prior binding event retained below for audit. Originally: 2026-05-16 (routine-03-eod) — XRP/USD closed on the 1H 20-EMA cross-down at **2026-05-15T04:00Z** (the binding first exit); a concurrently-written routine-02-midday rebuild booked an `exit-stop-hit` at 2026-05-15T13:00Z (−$206.37), **superseded** — see "Trade-log correction" below. Account is flat.
+> **Last rebuild:** 2026-05-20 (routine-01-overnight) — no-op rebuild: Kraken MCP UNAVAILABLE this wake (Ring 3 MCP-failure SKIP, see research_log 2026-05-20T13:00Z). TV MCP up but is the indicator-fallback per skills/decide.md, not a 15-pair multi-ticker source. Account flat, 0 open positions, 0 trades since 2026-05-15. Equity unchanged $10,236.14, DD 0.21%. Kill-switch state carried forward (price-independent while flat: streak 1/7, DD 0.21%/25%, equity floor clear, daily realized within 5% cap). Prior rebuild: 2026-05-19 (routine-02-midday) — no-op, account flat, kill-switch state re-verified against live Kraken (risk_flag CLEAR). Prior binding event retained below for audit: 2026-05-16 (routine-03-eod) — XRP/USD closed on the 1H 20-EMA cross-down at **2026-05-15T04:00Z** (the binding first exit); a concurrently-written routine-02-midday rebuild booked an `exit-stop-hit` at 2026-05-15T13:00Z (−$206.37), **superseded** — see "Trade-log correction" below. Account is flat.
 
 ## Account
 
@@ -66,6 +66,7 @@ Flagged for routine #4 (Sat 2026-05-16): (a) codify that any late/concurrent rou
 - Equity floor: $10,236.14 > $7,500 floor — OK
 - **All clear. Trading authorized.** No open positions.
 - **2026-05-19 routine-01 regime note:** entry rule 5a (regime-confirmation gate) FAILED this wake — only 1/15 universe pairs positive on 24h (TRX +0.03%), threshold >= 4/15. All new entries rejected by strategy v0.2 rule 5a; not a kill switch. Broad BTC-led risk-off in news (BTC ~-6% over several days, largest BTC-ETF outflows since Jan); daily risk_flag independently CLEAR. Zero portfolio exposure to the pullback (flat). XRP last px 1.37446.
+- **2026-05-20 routine-01 MCP-failure note:** Kraken MCP exposed 0 tools this wake (server failed to register; ToolSearch returned no matches for `kraken`). TradingView MCP up (tv_health_check `cdp_connected: true`, chart KRAKEN:SOLUSD 60m) but used as indicator fallback per skills/decide.md, not the routine-01 multi-pair price source. Ring 3 MCP-failure guardrail → SKIP this routine + log + retry next routine. Not a HALT kill switch. Account flat, no unmanaged-position risk. Kill-switch state price-independent: all clear.
 
 ## Pending exit triggers
 

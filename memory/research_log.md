@@ -1457,3 +1457,40 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **Mandate compliance:** spot-only/long-only preserved (no shorting, no leverage); change is strictly risk-reducing (can only flatten earlier). `guardrails.md` untouched. No retroactive effect — SBD applies to new entry-scans/exits only; account is flat so no open positions affected.
 - **Honest caveat carried forward:** adopted on thin evidence (1 BULL trade + cross-strategy + structural reasoning, no backtest). v0.12 twin + routine #4 TV harness (when available) are the validation path; autoloop may sweep sbd_* params → Ring-2 for a tuned config.
 - No Telegram sent (interactive approval already obtained; absence of routine-driven alert is correct — no kill switch, no trade).
+
+## 2026-05-20T13:00Z — routine-01-overnight (MCP-failure SKIP, Kraken-only outage)
+
+### VERIFY / data-source state
+
+- **Kraken MCP: UNAVAILABLE.** Server is configured in `.mcp.json` (`kraken` stdio → `kraken_mcp.py`) but exposed zero tools this wake. ToolSearch on `kraken` and `multi_ticker risk_flag pairs` returned no matches. Session-start "connecting servers" list named `kraken` but it did not register tools before this wake processed. Routine step 1 (`kraken_multi_ticker` for all 15 universe pairs) and the per-pair OHLCV pulls cannot be executed against the primary data source.
+- **TradingView MCP: UP this wake** — `tv_health_check` returned `cdp_connected: true`, `api_available: true`, chart on `KRAKEN:SOLUSD` 60m. First time since 2026-05-16 that TV is healthy. However TV is documented in `skills/decide.md` as an indicator-values fallback (`data_get_study_values` on a BULL-namespaced chart), not as a 15-pair multi-ticker source. Pulling 15 pairs' 24h % via chart-symbol switching (`chart_set_symbol` × 15 + `quote_get`) is outside the routine spec, ~15× the API surface, and not the established workflow — particularly when the live strategy is now v0.3 and would require an additional SBD regime classification (median 24h % across 15 pairs) on top of the 5a count, both needing the same multi-ticker data.
+
+### Strategy version note (post-rebase)
+
+- Live strategy is **v0.3** as of 2026-05-19 (Ring-2 W21-F adoption — SBD-aware regime + tightened exit). SKIP rationale unchanged: v0.3 still needs the 15-pair 24h % vector for entry rule 5/5a/5a-SBD evaluation, which is the same Kraken-MCP-dependent data the v0.2 routine needed. Outcome of the wake (no entries, no exits, account flat) is identical under v0.2 or v0.3.
+
+### Guardrail applied
+
+- `memory/guardrails.md` Ring 3: *"Kraken MCP / TradingView MCP / Telegram MCP failure → SKIP this routine run, append error to research_log.md, retry next routine."* Literal reading: any one of the three failing triggers SKIP. Kraken MCP is the routine's primary price source and is down → SKIP per the prescribed log-and-retry path. Not a HALT+ALERT kill switch (those four are equity / daily-loss / drawdown / losing-streak triggers, none of which can be tripped while flat and none re-evaluable without price data).
+- Consistent with 2026-05-17 routine-01 SKIP precedent (Kraken+TV both down) and 2026-05-17/18 midday SKIPs (Kraken down). Differs from 2026-05-19 (Kraken healthy, ran fully).
+
+### Position / risk state (carried, unverified — no live data)
+
+- Account **flat** per `portfolio.md` (last rebuild 2026-05-19 routine-02-midday): 0 open positions, cash $10,236.14, equity $10,236.14, DD 0.21% from peak $10,258.06, losing-day streak 1/7. No open positions ⇒ no stop/exit management was required this wake regardless of data availability; SKIP introduces no unmanaged-position risk.
+- Kill-switch state unchanged from prior rebuild (price-independent while flat): daily realized within 5% cap, streak 1/7, DD 0.21%/25%, equity $10,236.14 > $7,500 floor — all clear, trading authorized (no Ring 3 equity/loss/dd/streak trigger).
+
+### News / sentiment
+
+- Skipped — established precedent on data-source-outage SKIPs (cf. 2026-05-17): no entries possible regardless of news (no price data + 5a gate would gate anyway), v0.3 is still not news-reactive in the entry path. News scan deferred to next routine #1 wake when Kraken MCP recovers.
+
+### Other steps
+
+- Universe refresh: not due (today 2026-05-20 Wednesday, not 1st of month; next 2026-06-01).
+- No lesson appended: data-outage SKIP does not produce strategy-actionable observations (the outage itself is documented in research_log and the Kraken MCP fix log d1198cd/0aa5e4a area).
+- No Telegram notify: Ring 3 MCP-failure is a log-and-retry condition, not a HALT kill switch. Avoids double-notifying repeated infra issues (no OPEN/CLOSE this wake, no Ring-3 equity trigger, no ACTIONABLE news).
+
+### Decision
+
+- **Action: SKIP — no price pull, no position checks, no entries, no exits, no Telegram.** Driver: Kraken MCP unavailable (Ring 3 MCP-failure → log-and-retry). Account remains flat. Retry next routine.
+
+| 2026-05-20T13:00Z | overnight | mcp-failure | Kraken MCP 0 tools (server failed to register this session; TV up but is indicator-fallback per skills/decide.md, not the 15-pair multi-ticker source). Live strategy v0.3 post-W21-F (still needs 15-pair 24h vector for 5a/5a-SBD). Ring 3 MCP-failure guardrail → SKIP + log + retry next routine. Account flat per portfolio.md (0 positions, eq $10,236.14, DD 0.21%) — no unmanaged risk. No Telegram (not a HALT kill switch). | SKIP — no trades; research_log only |
