@@ -1509,3 +1509,5 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **Honest caveats carried forward:** W22-G adopted on 3 trade-log instances; W22-H-breakeven adopted on 1 archetype (XRP) + 16-trade empirical 4R-hit-rate. No TV backtest. v0.13-trend-confirm and v0.12-sbd-exit continue accruing paper-paper evidence as forward-looking validators of the entry-quality and SBD axes respectively.
 - **No Telegram sent.** Interactive session, account flat, no kill switch, no trade.
 - 2026-05-21T19:28:41Z | allocation | day-gate | not Sunday, skipping | no action
+
+2026-05-21T19:28Z | harness | day-gate | not Saturday, skipping | no action
