@@ -1594,3 +1594,32 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 2026-05-25T17:07:01Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-25T10:40:18Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-05-25T20:00Z — routine-02-midday
+
+### Technical (rule-driven, deterministic)
+
+- **Open positions checked: 1 (BTC/USD long).** Entry 77678.12, stop 77122.02, 4R target 79902.52, ATR14(1h) 278.05.
+- **Kraken last px (XXBTZUSD):** 77370.3; bid 77370.2 / ask 77370.3; 24h range 76020.5–77809.9; 24h chg +0.51%.
+- **Latest closed 1H bar:** 2026-05-25 19:00Z close 77384.6 (high 77482.9, low 77300.0).
+- **20-EMA on 1H, BTC/USD:** seed SMA of bars 2026-05-23 09:00→2026-05-24 04:00 = 75884.445; iterate α=2/21 → EMA at 19:00Z close = **77290.75**. Close 77384.6 > EMA → **rule 1 (W22-G two-bar EMA-confirm exit): 0/2 confirmation bars.**
+- **Static stop check (rule 2):** lowest 1H low since entry 15:00Z window = 77300.0 (19:00Z); 20:00Z partial-bar low 77361.2. Stop 77122.02 **not pierced intra-bar.** Per routine #2 mandate "if price has pierced 2×ATR stop intrabar, close at stop price" → no action.
+- **4R target check (rule 3):** target 79902.52, last 77370.3 → not reached.
+- **Breakeven ratchet:** unrealized R = (77370.3 − 77678.12)/(77678.12 − 77122.02) = −307.82/556.10 = **−0.554R** → well below +2R trigger; stop remains at initial 77122.02.
+- **EMA-tag-and-recover guard (single-bar):** N/A (close is above EMA, not below).
+
+### News (Firecrawl-driven, informational only in v0.2)
+
+- Skipped — routine #2 budget-lean by spec (does not read research_log/lessons/universe and does not run news scan; news is overnight/EOD scope).
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+
+- BTC/USD spread 0.1 (bid 77370.2 / ask 77370.3) ≈ **0.013 bps** — tight, no caveat.
+
+### Decision
+
+- **Action: HOLD BTC/USD long.** No exit triggers fired (EMA-confirm 0/2; stop unhit; 4R untouched; breakeven not yet armed). **No new entries this wake** (routine #2 is position-management only — entries belong to overnight/EOD per amended routine spec).
+- **Kraken risk_flag:** re-checked CLEAR (cached daily scan 2026-05-25T13:53:49Z "Markets calm").
+- **Kill switches:** day PnL −$17.23 / **−0.16%** vs day-open equity $10,504.48 (cap 5%); DD 2.25% from peak $10,728.95 (warn 12.5%, cap 25%); equity $10,487.25 > $7,500 floor; losing-day streak 1/7. **All clear.**
+- **Telegram:** silent (no kill switch, no exit, no drawdown warning).
+- **Next decision point:** 2026-05-25T21:00Z 1H close → re-evaluate EMA-confirm + stop + 4R + breakeven against fresh closed bar.
