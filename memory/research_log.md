@@ -1623,3 +1623,9 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **Kill switches:** day PnL −$17.23 / **−0.16%** vs day-open equity $10,504.48 (cap 5%); DD 2.25% from peak $10,728.95 (warn 12.5%, cap 25%); equity $10,487.25 > $7,500 floor; losing-day streak 1/7. **All clear.**
 - **Telegram:** silent (no kill switch, no exit, no drawdown warning).
 - **Next decision point:** 2026-05-25T21:00Z 1H close → re-evaluate EMA-confirm + stop + 4R + breakeven against fresh closed bar.
+
+## 2026-05-25T23:41Z — operator reconciliation
+
+- **BTC/USD stop exit processed.** Kraken 1H replay after the midday wake showed the first binding stop trigger on the 2026-05-25T22:00Z closed candle: close 77041.4 <= fixed stop 77122.02; bar low 76975.1 confirmed the level was crossed. Rule 2 fired before any two-bar EMA exit.
+- **Fill model:** exit-stop-hit uses the established stop model from prior stop rows: 77122.02 × 0.9995 adverse slippage = **77083.46**. Size 0.0338 BTC; gross price PnL −$20.10; entry commission $6.83 and exit commission $6.77; net realized **−$33.70 / −1.07R**.
+- **State after close:** BULL flat; cash/equity **$10,470.78**; realized PnL all-time **+$470.78**; DD **2.41%** from $10,728.95 peak; day realized **−0.32%** vs $10,504.48 day-open equity. Kill switches clear. Same-pair stop-out cooldown blocks fresh BTC entries until **2026-05-26T22:00Z**.
