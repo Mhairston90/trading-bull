@@ -1591,3 +1591,5 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **Portfolio rebuild:** Account flat, cash/equity $10,504.48, all-time realized PnL +$504.48, replay delta +$268.34, equity peak $10,728.95, drawdown 2.09%, open positions 0, kill switches clear.
 - **Leaderboard:** `strategy-leaderboard` now folds `data/bull/scheduler_replay_trade_log.md` into the live BULL v0 row as an auditable `missed_scheduler_replay` overlay and removes the separate `BULL v0 Scheduler Replay` research row. If these appended rows are later published to GitHub raw, remove the local overlay from the leaderboard registry to avoid double-counting.
 2026-05-25T15:18:51Z | allocation | day-gate | not Sunday, skipping | no action
+
+2026-05-25T17:07:01Z | harness | day-gate | not Saturday, skipping | no action
