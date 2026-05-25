@@ -36,6 +36,34 @@
 
 ---
 
+## 2026-05-25T15:00Z — routine-01-overnight
+
+### Technical (rule-driven, deterministic)
+- Universe regime: 15/15 pairs positive on 24h (ADA +1.66, AVAX +2.93, ETH +1.49, FARTCOIN +2.78, HYPE +0.51, LINK +1.99, LTC +0.28, PENGU +1.56, SOL +1.24, SUI +2.20, TAO +1.63, TRX +2.02, BTC +0.92, XDG +0.86, XRP +0.82); median +1.56%. Rule 5a PASS (≥4/15). Not SBD (5a-SBD requires ≤1/15 positive AND median ≤ −1.0% — both fail). Kraken risk_flag CLEAR "Markets calm" scan_time 2026-05-25T13:53:49Z.
+- Liquidity floor (rule 4a, 24h notional ≥ $2M): PASS — BTC $79M, ETH $58M, HYPE $23M, SOL $12M, XRP $8M, SUI $7M, TAO $5M. FAIL — XDG $1.33M, LTC $1.03M, ADA $1.22M, FARTCOIN $0.65M, AVAX $0.79M, LINK $1.02M, PENGU $0.72M, TRX $1.44M.
+- Per rule 8 (one entry per wake, prefer highest 30d notional rank), evaluation order among liquidity-passing pairs: BTC → ETH → SOL → XRP → TAO → HYPE → SUI.
+- **BTC/USD entry scan** (just-closed 1H bar 2026-05-25T14:00→15:00Z, close 77639.3): 1H 20-EMA ≈ 77156.92 (PASS rule 1, +0.62%); 1H RSI14 ≈ 67.1 (PASS rule 2 >55, PASS rule 2a ≤80); just-closed 4H bar 2026-05-25T08:00→12:00Z close 77278.6 > 4H 50-EMA ≈ 77114.25 (PASS rule 3, +0.21% margin — thin); >> 10 candles history (PASS 4); 24h notional ~$79M (PASS 4a); no existing BTC position (PASS 5); regime gate PASS (5a); not SBD; no BTC stop-out in last 24h, last stop 2026-04-27 (PASS 5b); 0 open positions <4 (PASS 6); 0/2 cluster (PASS 6a); portfolio risk 0% + 0.18% = 0.18% ≤ 4% (PASS 7); rank-1 candidate this wake (PASS 8). ATR14(1h) ≈ 278.05. All entry rules PASS.
+- **ETH/USD**: HOLD-OFF — rule 8 (BTC fills this wake's single slot; ETH is rank 2). Indicator scan deferred (would otherwise also evaluate, but cannot open this wake).
+- **SOL/USD**: HOLD-OFF — rule 8 (rank 3).
+- **XRP/USD**: HOLD-OFF — rule 8 (rank 4).
+- **TAO/USD**: HOLD-OFF — rule 8 (rank 5).
+- **HYPE/USD**: HOLD-OFF — rule 8 (rank 6).
+- **SUI/USD**: HOLD-OFF — rule 8 (rank 8).
+- **XDG, LTC, ADA, FARTCOIN, AVAX, LINK, PENGU, TRX**: REJECT — entry-rule-4a (24h notional < $2M, see liquidity numbers above).
+
+### News (Firecrawl-driven, informational only in v0.2)
+- Skipped this wake — kraken_risk_flag CLEAR "Markets calm" with 0 headlines scanned acts as the v0 macro pre-screen; v0.2 strategy is not news-reactive (informational only). Pattern consistent with prior overnight wakes; morning-brief routine surfaces ACTIONABLE headlines separately. Context-budget conservation.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+- BTC/USD: bid 77661.5, ask 77661.6, spread 0.1 (~0.013 bps; multiple recent quotes 0.1–1.3). Excellent top-of-book liquidity, no sentiment caveat.
+
+### Decision
+- **OPEN BTC/USD long** @ 77678.12 (1H close 77639.3 + 0.05% slippage), size 0.0338 BTC (cash-capped to equity/4 ≈ $2,626), stop 77122.02 (2×ATR = 556.10 below entry), 4R target 79902.52, risk $18.80 (0.179% of equity). Entry comm $6.83. Cash post-entry $7,872.13. Driven by entry-rule-v0-momentum (rules 1, 2, 2a, 3, 4, 4a, 5, 5a, 5b, 6, 6a, 7, 8 all PASS).
+- Universe refresh skipped: today is 2026-05-25 (not 1st of month). Next refresh 2026-06-01.
+
+---
+
+2026-05-24T07:31:30Z | ops-audit | codex | Scheduler audit found BULL flat/authorized and Claude Desktop running, but Claude Desktop config had `ccdScheduledTasksEnabled=false`; restored to `true`. `bull-01-overnight` scheduled-task prompt converted to source-of-truth wrapper. Read-only Kraken public OHLC diagnostic on closed 06:00Z candles found regime gate PASS (15/15 positive, median +2.74%); TAO/USD and HYPE/USD cleared technical/liquidity filters by BULL v0.4 rules. No trade was booked from this Codex diagnostic session. Claude CLI CronList verification was blocked by local "Credit balance is too low"; next confirmation should use Claude Desktop's scheduled-task list or observe the next routine-01 log/commit. | no trade action
 2026-05-20T20:00:00Z | midday | system | Portfolio flat (0 open positions, confirmed vs portfolio.md); no MTM/exit required. Kraken MCP RESTORED (`kraken_risk_flag` CLEAR at 13:58:34Z scan, 0 tier1/tier2, "Markets calm") — recovery from routine-01-overnight 2026-05-20T13:00Z Ring 3 MCP-failure SKIP. Equity unchanged $10,236.14, DD 0.21% from peak $10,258.06. Kill-switch proximity (price-independent while flat): daily realized 0% (cap 5%), streak 1 / cap 7 (last L 2026-05-15), DD 0.21% (warn 12.5%, cap 25%), equity > $7,500 floor — all clear. Midday is position-mgmt only — no entries scanned. No Telegram (no kill switch, no exit, no DD warning). | no action
 2026-04-25T17:40:11Z | allocation | day-gate | not Sunday, skipping | no action
 2026-04-26T20:00:00Z | midday | system | Portfolio flat (0 open positions); no MTM required. Equity $9,930.76, DD 0.97% from peak $10,027.55. All kill switches clear (daily loss 0%, equity > $7,500 floor, DD < 12.5% warn). Midday is position-mgmt only — no entries scanned. | no action
@@ -1513,3 +1541,12 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 2026-05-21T19:28Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-05-22T20:52:13Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-05-25 — interactive session: missed-scheduler replay integrated into main BULL v0
+
+- **Type:** Interactive user-directed catch-up, not an autonomous routine wake. User requested that the previously computed missed-scheduler replay be folded into BULL v0 rather than tracked as a separate leaderboard row.
+- **Cause:** Claude scheduled-task runner had been disabled/stalled after 2026-05-19, so routine-01/routine-03 entry windows and routine-02/routine-03 exit checks were missed while the account was flat and trading authorized.
+- **Replay scope:** Weekday BULL v0.4 rules over missed windows 2026-05-20 through 2026-05-22. Weekend routine-01 slots excluded. Kraken public 1H/4H OHLC replay; same one-entry-per-wake, cash/position, cluster, liquidity, 24h regime, stop, 4R target, breakeven, and two-bar EMA-confirm logic as the diagnostic replay.
+- **Rows appended to `memory/trade_log.md`:** HYPE open 2026-05-20T13:00Z; TAO open 2026-05-21T04:00Z; HYPE close +$413.62 at 2026-05-21T08:00Z; HYPE open 2026-05-21T13:00Z; TAO close -$29.84 at 2026-05-22T01:00Z; HYPE close -$33.98 at 2026-05-22T02:00Z; AVAX open 2026-05-22T04:00Z; SOL open 2026-05-22T13:00Z; SOL close -$45.64 at 2026-05-22T15:00Z; AVAX close -$35.83 at 2026-05-22T16:00Z.
+- **Portfolio rebuild:** Account flat, cash/equity $10,504.48, all-time realized PnL +$504.48, replay delta +$268.34, equity peak $10,728.95, drawdown 2.09%, open positions 0, kill switches clear.
+- **Leaderboard:** `strategy-leaderboard` now folds `data/bull/scheduler_replay_trade_log.md` into the live BULL v0 row as an auditable `missed_scheduler_replay` overlay and removes the separate `BULL v0 Scheduler Replay` research row. If these appended rows are later published to GitHub raw, remove the local overlay from the leaderboard registry to avoid double-counting.

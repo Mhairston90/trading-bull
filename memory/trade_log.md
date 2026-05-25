@@ -46,3 +46,14 @@
 | 2026-05-14T16:00:00Z | OPEN | XRP/USD | long | 6334 | 1.46806 | 1.44377 | — | — | — | entry-rule-v0-momentum |
 | 2026-05-15T13:00:00Z | CLOSE | XRP/USD | long | 6334 | 1.44305 | — | — | -1.03 | -206.37 | exit-stop-hit |
 | 2026-05-15T04:00:00Z | CLOSE | XRP/USD | long | 6334 | 1.47224 | — | — | -0.14 | -21.92 | correction-previous-row |
+| 2026-05-20T13:00:00Z | OPEN | HYPE/USD | long | 51.165356 | 50.01499 | 48.01639 | 58.00942 | — | — | routine-01-overnight-missed-scheduler-entry |
+| 2026-05-21T04:00:00Z | OPEN | TAO/USD | long | 9.515117 | 277.83675 | 271.62362 | 302.68925 | — | — | routine-03-eod-missed-scheduler-entry |
+| 2026-05-21T08:00:00Z | CLOSE | HYPE/USD | long | 51.165356 | 58.38080 | — | — | +4.04 | +413.62 | exit-4R-target-missed-scheduler-replay |
+| 2026-05-21T13:00:00Z | OPEN | HYPE/USD | long | 46.123284 | 57.74886 | 55.19075 | 67.98128 | — | — | routine-01-overnight-missed-scheduler-entry |
+| 2026-05-22T01:00:00Z | CLOSE | TAO/USD | long | 9.515117 | 276.14136 | — | — | -0.50 | -29.84 | exit-ema20-confirm-missed-scheduler-replay |
+| 2026-05-22T02:00:00Z | CLOSE | HYPE/USD | long | 46.123284 | 57.31133 | — | — | -0.29 | -33.98 | exit-ema20-confirm-missed-scheduler-replay |
+| 2026-05-22T04:00:00Z | OPEN | AVAX/USD | long | 278.438254 | 9.50475 | 9.36712 | 10.05526 | — | — | routine-03-eod-missed-scheduler-entry |
+| 2026-05-22T13:00:00Z | OPEN | SOL/USD | long | 30.207436 | 87.70383 | 86.64637 | 91.93366 | — | — | routine-01-overnight-missed-scheduler-entry |
+| 2026-05-22T15:00:00Z | CLOSE | SOL/USD | long | 30.207436 | 86.64637 | — | — | -1.43 | -45.64 | exit-stop-hit-missed-scheduler-replay |
+| 2026-05-22T16:00:00Z | CLOSE | AVAX/USD | long | 278.438254 | 9.42529 | — | — | -0.94 | -35.83 | exit-ema20-confirm-missed-scheduler-replay |
+| 2026-05-25T15:00:00Z | OPEN | BTC/USD | long | 0.0338 | 77678.12 | 77122.02 | 79902.52 | — | — | entry-rule-v0-momentum |
