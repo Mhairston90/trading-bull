@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-25 routine-01-overnight — opened BTC/USD long @ 77678.12 (0.0338 BTC, stop 77122.02, 4R target 79902.52, risk $18.80 / 0.18%). Account previously flat after 2026-05-22 missed-scheduler replay closes. Regime 15/15 positive, median +1.56%, not SBD; risk flag CLEAR. Kill switches all clear: daily realized 0%, DD 2.09% from peak $10,728.95, equity $10,504.48 (MTM tracks last px 77687.6 → marginal +0.01R unrealized at entry instant). Prior binding correction retained below: XRP/USD true exit was the 2026-05-15T04:00Z 1H 20-EMA cross; the 2026-05-15T13:00Z stop row is superseded by `correction-previous-row`.
+> **Last rebuild:** 2026-05-25 routine-03-eod — same-day successor to routine-01-overnight which opened the BTC/USD long earlier in this UTC window (entry 77678.12, 0.0338 BTC, stop 77122.02, 4R target 79902.52, risk $18.80 / 0.18%, ATR14(1h) 278.05). EOD re-mark against Kraken last 77670.1 → BTC MTM $2,625.25, unrealized −$0.27 gross (−0.01R). Day PnL −$7.10 (entry comm $6.83 + 0.05% slippage; no realized closes this trading day). Equity $10,497.38, DD 2.16% from peak $10,728.95. No exit rule fired this wake — routine-01 used the just-closed 14:00→15:00Z 1H bar to enter; no new 1H bar has closed between the two firings, so exit re-evaluation has no fresh candle. No second entry this wake either (rule 8 same-bar guard: routine-01 already consumed the 14:00Z close; opening a second pair on the identical bar would defeat rule 8's stated purpose "prevent same-bar cluster fills"). Kill switches all clear. Routine-01 rebuild marker (last px 77687.6, equity $10,497.97) retained for audit in the prior version of this file via git history. Prior binding correction retained below: XRP/USD true exit was the 2026-05-15T04:00Z 1H 20-EMA cross; the 2026-05-15T13:00Z stop row is superseded by `correction-previous-row`.
 
 ## Account
 
@@ -31,9 +31,9 @@
   - HYPE −$33.98 (missed-scheduler replay exit-ema20-confirm 2026-05-22T02:00Z, −0.29R)
   - SOL −$45.64 (missed-scheduler replay exit-stop-hit 2026-05-22T15:00Z, −1.43R)
   - AVAX −$35.83 (missed-scheduler replay exit-ema20-confirm 2026-05-22T16:00Z, −0.94R)
-- Unrealized PnL: **+$0.32** (BTC @ last 77687.6 vs entry 77678.12: 0.0338 × 9.48 = +$0.32, +0.02R; pre-MTM commission of $6.83 already deducted from cash)
-- Position values (MTM): **$2,625.84** (0.0338 × 77687.6)
-- Current equity (cash + positions MTM): **$10,497.97**
+- Unrealized PnL: **−$0.27** (BTC @ last 77670.1 vs entry 77678.12: 0.0338 × −8.02 = −$0.27, −0.01R; entry comm $6.83 already deducted from cash, close-side comm ~$6.83 not yet booked)
+- Position values (MTM): **$2,625.25** (0.0338 × 77670.1)
+- Current equity (cash + positions MTM): **$10,497.38**
 - Equity peak: **$10,728.95** (set 2026-05-21 during missed-scheduler HYPE 4R take-profit replay)
 - Drawdown from peak: **2.16%**
 
@@ -41,7 +41,7 @@
 
 | Pair | Side | Size | Entry | Stop | Stop dist | R-risk | Last px | Unreal PnL | Unreal R |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| BTC/USD | long | 0.0338 | 77678.12 | 77122.02 | 556.10 | $18.80 (0.18%) | 77687.6 | +$0.32 | +0.02 |
+| BTC/USD | long | 0.0338 | 77678.12 | 77122.02 | 556.10 | $18.80 (0.18%) | 77670.1 | −$0.27 | −0.01 |
 
 Portfolio risk-at-moment: **0.18%** of equity (cap 4%).
 Open positions: **1 / 8** (strategy v0.4 max-concurrent 4 → 1/4 used; cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 1/2).
@@ -63,12 +63,13 @@ Flagged for routine #4 (Sat 2026-05-16): (a) codify that any late/concurrent rou
 
 ## Active kill-switch state
 
-- Daily realized: $0 today, prior active day 2026-05-22 realized −$145.29 ≈ **−1.36%** — within 5% LOSS cap
-- Consecutive losing trading days: 05-21 W, 05-22 L → streak **1** (cap 7); no trading days 05-23/05-24 (weekend) or 05-25 prior to this entry
+- Daily realized: $0 today (no closes); day PnL incl. unrealized −$7.10 ≈ **−0.07%** — within 5% LOSS cap. Prior active day 2026-05-22 realized −$145.29 (−1.36%).
+- Consecutive losing trading days: 05-21 W, 05-22 L → streak **1** (cap 7); no trading days 05-23/05-24 (weekend); 05-25 has 1 open / 0 closed so streak unchanged.
 - Max drawdown: 2.16% from peak $10,728.95 (cap 25%, warn 12.5%) — clear
-- Equity floor: $10,497.97 > $7,500 floor — OK
+- Equity floor: $10,497.38 > $7,500 floor — OK
 - **All clear. Trading authorized.** 1 open position (BTC long).
 - **2026-05-25 routine-01 regime note:** entry rule 5a regime gate PASS — 15/15 universe pairs positive on 24h (ADA +1.66, AVAX +2.93, ETH +1.49, FARTCOIN +2.78, HYPE +0.51, LINK +1.99, LTC +0.28, PENGU +1.56, SOL +1.24, SUI +2.20, TAO +1.63, TRX +2.02, BTC +0.92, XDG +0.86, XRP +0.82); median +1.56%. Not synchronized breakdown (need ≤1/15 positive AND median ≤ −1.0%). Kraken risk_flag CLEAR "Markets calm" 2026-05-25T13:53:49Z. Liquidity floor (24h notional ≥ $2M) screened universe to 7 pairs: BTC ($79M), ETH ($58M), HYPE ($23M), SOL ($12M), XRP ($8M), SUI ($7M), TAO ($5M). Per rule 8 single-entry-per-wake, BTC (rank 1) took the slot; ETH/SOL/XRP/TAO/HYPE/SUI logged HOLD-OFF.
+- **2026-05-25 routine-03-eod note:** Fired in same UTC window as routine-01 (scheduled-task runner catching up after multi-day stall). EOD MTM-only against BTC last 77670.1 → unrealized −$0.27 (effectively scratch). No exit checks meaningful — same just-closed 1H bar as entry. No second entry taken (rule 8 same-bar guard; next 1H close 16:00Z will permit fresh evaluation). Kill switches independently rechecked: daily PnL −0.07%, DD 2.16%, equity floor clear, streak 1/7. All clear.
 
 ## Pending exit triggers
 

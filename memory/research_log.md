@@ -63,6 +63,46 @@
 
 ---
 
+## 2026-05-25T15:30Z — routine-03-eod
+
+### Position check (BTC/USD long, opened earlier this wake by routine-01)
+- Entry 77678.12 (0.0338 BTC, 15:00Z = close of 14:00→15:00Z 1H bar), stop 77122.02, 4R target 79902.52, R-risk $18.80 (0.18% of $10,504.48 opening equity).
+- Mark-to-market against Kraken last 77670.1 → MTM $2,625.25, unrealized −$0.27 gross (−0.01R; close-side commission ~$6.83 not yet booked).
+- No exit triggers: the just-closed 1H bar at this routine-03 wake is the SAME 14:00→15:00Z bar used at entry. Exit rules (W22-G two-bar 20-EMA cross, static stop, 4R take-profit, W22-H-partial breakeven ratchet at unrealized R ≥ 2.0) cannot newly fire on the entry bar — they require a subsequent 1H close. Next exit re-evaluation at 16:00Z (close of 2026-05-25T15:00→16:00Z 1H bar; also a 4H boundary).
+- Re-mark vs routine-01 instant: routine-01 marked at last 77687.6 (+$0.32 unrealized); current EOD mark at last 77670.1 (−$0.27). Move = $17.50 / $0.59 in MTM dollars — within noise.
+
+### Technical entry scan (W19-E)
+- Regime / liquidity unchanged from routine-01 block above (same data window). 15/15 positive, median +1.56%, not SBD, risk_flag CLEAR. Liquidity-passing pairs (24h notional ≥ $2M): BTC (now held), ETH, SOL, XRP, TAO, HYPE, SUI.
+- **No second entry this wake.** Per strategy v0.4 rule 8 ("Max 1 new entry per routine wake … intended to prevent same-bar cluster fills"), routine-01 already consumed the 2026-05-25T14:00→15:00Z 1H close for the BTC entry. Routine-03 fired in the same UTC window with no new 1H bar closing in between; opening a second pair on the identical bar would defeat rule 8's stated purpose. Literal reading of rule 8 ("per routine wake") would permit it; the spirit-vs-letter conflict resolves to spirit (no same-bar cluster). Rank-2..6 candidates (ETH/SOL/XRP/TAO/HYPE/SUI) defer to next routine wake operating on a fresh 1H close; if they remain technically eligible they'll be re-scored then.
+
+### News (Firecrawl-driven, informational only in v0.2/v0.3/v0.4)
+- Skipped this wake — same justification as routine-01 block above (risk_flag CLEAR "Markets calm", 0 headlines flagged; v0 strategy not news-reactive on entry path; morning-brief surfaces ACTIONABLE separately). Context-budget conservation across two adjacent routine wakes.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+- Not re-sampled for held BTC (routine-01 logged bid/ask 77661.5/77661.6, spread 0.1 ≈ 0.013 bps — excellent). No fresh sample warranted for the same 1H window.
+
+### EOD summary stats
+- **Day PnL:** −$7.10 / **−0.07%** (entry commission $6.83 + 0.05% slippage on BTC OPEN; no realized closes today)
+- **Trades today:** 1 opened (BTC/USD long), 0 closed; win rate today N/A
+- **Equity:** $10,497.38 (opened day at $10,504.48 after 2026-05-22 missed-scheduler replay catch-up)
+- **Equity peak:** $10,728.95 (2026-05-21, unchanged)
+- **Drawdown from peak:** 2.16%
+- **Open positions:** 1 / 8 (1 / 4 strategy cap; cluster 1 / 2)
+- **Portfolio risk-at-moment:** 0.179% of equity (cap 4%)
+- **vs BTC-hold rolling 30d:** still pre-inception window for clean 30d (BULL inception 2026-04-20); 7d approx BULL +5.6% vs BTC-hold ≈ −3 to −4% → ≈ +9% delta (deferred to routine #4 for precise compute)
+- **Kill switches:** all clear (daily PnL −0.07% / cap 5%; streak 1 / cap 7; DD 2.16% / cap 25%; equity floor $10,497.38 / floor $7,500)
+
+### Lessons
+- No new lesson appended this wake. Today's only event is a fresh BTC long at favorable technical context (15/15 regime, low ATR ≈ 0.36%, RSI 67); no exit yet, no failed entry, no kill-switch proximity event. Standing W22-G/W22-H-partial telemetry (two-bar EMA confirm + breakeven ratchet) is awaiting its first BTC test on this position.
+
+### Monthly archive
+- Not the last trading day of May 2026 (last weekday = Fri 2026-05-29) — no archive sweep this wake.
+
+### Decision
+- **HOLD BTC/USD** (just-opened; no exit triggers possible on entry bar). **No new entries.** Send mandatory EOD Telegram card. Commit + push portfolio.md + research_log.md updates.
+
+---
+
 2026-05-24T07:31:30Z | ops-audit | codex | Scheduler audit found BULL flat/authorized and Claude Desktop running, but Claude Desktop config had `ccdScheduledTasksEnabled=false`; restored to `true`. `bull-01-overnight` scheduled-task prompt converted to source-of-truth wrapper. Read-only Kraken public OHLC diagnostic on closed 06:00Z candles found regime gate PASS (15/15 positive, median +2.74%); TAO/USD and HYPE/USD cleared technical/liquidity filters by BULL v0.4 rules. No trade was booked from this Codex diagnostic session. Claude CLI CronList verification was blocked by local "Credit balance is too low"; next confirmation should use Claude Desktop's scheduled-task list or observe the next routine-01 log/commit. | no trade action
 2026-05-20T20:00:00Z | midday | system | Portfolio flat (0 open positions, confirmed vs portfolio.md); no MTM/exit required. Kraken MCP RESTORED (`kraken_risk_flag` CLEAR at 13:58:34Z scan, 0 tier1/tier2, "Markets calm") — recovery from routine-01-overnight 2026-05-20T13:00Z Ring 3 MCP-failure SKIP. Equity unchanged $10,236.14, DD 0.21% from peak $10,258.06. Kill-switch proximity (price-independent while flat): daily realized 0% (cap 5%), streak 1 / cap 7 (last L 2026-05-15), DD 0.21% (warn 12.5%, cap 25%), equity > $7,500 floor — all clear. Midday is position-mgmt only — no entries scanned. No Telegram (no kill switch, no exit, no DD warning). | no action
 2026-04-25T17:40:11Z | allocation | day-gate | not Sunday, skipping | no action
