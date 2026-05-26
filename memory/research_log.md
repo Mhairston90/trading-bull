@@ -1668,3 +1668,24 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 2026-05-26T17:06:54Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-26T17:40:33Z | allocation | day-gate | not Sunday, skipping | no action
+
+
+## 2026-05-26T20:00Z — routine-02-midday
+
+- **Wake context:** 1 open position (TAO/USD long, entered routine-01 at 12:00Z @ 286.40410, size 15.273800, stop 276.12100). Cash $6,084.36, day-open equity $10,470.78. Kill switches were clear at entry.
+- **Kraken live (TAO @ wake 20:00Z):** last 281.6879, bid 281.5196 / ask 281.6382, 24h +0.87%, high 291.2208, low 273.548, vol 31,743 TAO. Active 1H bar (20:00Z forming) — low so far 281.0, well above stop 276.12.
+- **Exit-rule scan against most recent CLOSED 1H bar (19:00Z, close 280.9819) + prior bars:**
+  - Computed 1H 20-EMA series (α = 2/21) from 30 bars seeded at SMA(20).
+  - Bar 17:00Z close **281.2922** vs 20-EMA ≈ **283.44** → BELOW (confirm-bar 1).
+  - Bar 18:00Z close **280.5426** vs 20-EMA ≈ **283.19** → BELOW (confirm-bar 2). **Exit rule 1 (W22-G two-bar EMA20 confirm) FIRES at 18:00Z close.**
+  - Bar 19:00Z close 280.9819 < 20-EMA ≈ 283.00 still — confirms continued weakness post-trigger.
+  - Stop 276.12100: lowest low across bars 13:00Z–20:00Z was 278.5885 (19:00Z) — stop NOT pierced; exit-stop-hit did NOT fire (EMA rule fired first).
+  - 4R target 327.53650: highest high since entry was 291.2208 (14:00Z) — not approached.
+  - Breakeven ratchet: max favorable 1H close was 16:00Z 289.163 → unrealized R = (289.163 − 286.40410) / 10.28310 = +0.27R — never reached +2R arming threshold; original 2×ATR stop remained active for the life of the trade.
+  - Regime check: SBD remained inactive at entry (14/15 positive at 12:00Z scan); regime through trade window not re-verified intraday — irrelevant since 20-EMA rule applies absent SBD, and the rule already fired.
+- **Exit replay (missed-scheduler):** routine #2 wakes at 20:00Z, two bars after the confirming bar closed. Per established missed-scheduler-replay precedent (2026-05-22 TAO/HYPE/SOL/AVAX cluster), close is processed at the bar that fired the rule using the conservative-slippage close model. Sell fill = 280.5426 × (1 − 0.0005) = **280.40233**. Sale proceeds 280.40233 × 15.273800 = $4,282.81; sell commission 0.26% = $11.135; net cash received **$4,271.67**. Realized PnL using cash-flow basis (cash credit minus prior cash debit of $4,374.05 notional + $11.37 entry commission) = **−$114.75**. R = (280.40233 − 286.40410) / (286.40410 − 276.12100) = **−0.58R**. Reason tag `exit-ema20-confirm-missed-scheduler-replay`.
+- **Account state after close:** cash = equity = **$10,356.03**; realized PnL all-time **+$356.03**; DD from $10,728.95 peak = **3.48%** (warn 12.5%, cap 25%); day realized **−1.10%** vs day-open $10,470.78 (cap 5%); equity floor $10,356.03 ≫ $7,500. Losing-day streak now 3 (05-22, 05-25, 05-26; cap 7). Kill switches **all clear**.
+- **Action: CLOSE TAO/USD long (replay at 18:00Z, logged at wake).** No new entries (routine #2 is position-management only per spec). No new same-pair cooldown for TAO (5b applies only to stop-outs, not EMA-confirm exits); BTC cooldown remains in effect until 2026-05-26T22:00Z.
+- **Kill switches:** day PnL −1.10% (cap 5%); DD 3.48% (warn 12.5%); equity > floor; streak 3/7. **All clear.**
+- **Telegram:** will send midday alert per routine #2 NOTIFY rules (an exit happened). DD has not crossed the 12.5% warn threshold, no kill switch tripped — exit-only notification.
+- **Next decision point:** routine-03-eod (later today) — fresh entry scan against the just-closed 13:00Z and following 1H candles + 12:00Z 4H regime; flat book = full risk budget available.
