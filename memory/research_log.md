@@ -1667,3 +1667,4 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **Telegram:** will send brief "OPEN TAO" summary per routine #1 NOTIFY rules (new OPEN this wake).
 
 2026-05-26T17:06:54Z | harness | day-gate | not Saturday, skipping | no action
+2026-05-26T17:40:33Z | allocation | day-gate | not Sunday, skipping | no action
