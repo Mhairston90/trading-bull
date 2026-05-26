@@ -58,3 +58,4 @@
 | 2026-05-22T16:00:00Z | CLOSE | AVAX/USD | long | 278.438254 | 9.42529 | — | — | -0.94 | -35.83 | exit-ema20-confirm-missed-scheduler-replay |
 | 2026-05-25T15:00:00Z | OPEN | BTC/USD | long | 0.0338 | 77678.12 | 77122.02 | 79902.52 | — | — | entry-rule-v0-momentum |
 | 2026-05-25T22:00:00Z | CLOSE | BTC/USD | long | 0.0338 | 77083.46 | — | — | -1.07 | -33.70 | exit-stop-hit |
+| 2026-05-26T12:00:00Z | OPEN | TAO/USD | long | 15.273800 | 286.40410 | 276.12100 | 327.53650 | — | — | entry-rule-v0-momentum |

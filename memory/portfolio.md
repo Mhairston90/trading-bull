@@ -2,12 +2,12 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-25 interactive operator reconciliation — BTC/USD stop exit processed from the first triggering 1H candle. The 2026-05-25T22:00Z closed candle finished at 77041.4, below the fixed stop 77122.02; per the established stop model the paper fill is stop × 0.9995 = **77083.46**. Realized result: **−$33.70 / −1.07R** after entry/exit commissions. BULL is now flat. Kill switches remain clear: equity $10,470.78, DD 2.41% from peak $10,728.95, day PnL −$33.70 / −0.32% vs flat day-open equity $10,504.48. BTC same-pair stop-out cooldown now blocks fresh BTC entries until 2026-05-26T22:00Z.
+> **Last rebuild:** 2026-05-26T13:00Z routine-01-overnight — TAO/USD long opened at the 12:00Z 1H close. Strategy v0.4 momentum entry: 14/15 universe pairs positive (5a PASS, no SBD), TAO rank 5 outranks the lone other technical-PASS candidate HYPE (rank 6) per rule 8. Position: 15.273800 TAO @ 286.40410 fill (close 286.261 × 1.0005 slip), 2×ATR(14)=10.28310 stop @ 276.12100, 4R target @ 327.53650, risk $157.06 (1.5% equity). BTC same-pair cooldown still active until 2026-05-26T22:00Z. Kill switches remain clear.
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,470.78**
+- Cash: **$6,084.36** (paper book: $10,470.78 − notional $4,374.05 − entry commission $11.37)
 - Realized PnL (all-time): **+$470.78**
   - BTC −$9.14 (exit-ema-cross 2026-04-24T04:00Z)
   - TRX −$26.69 (exit-stop-hit 2026-04-24T20:00Z)
@@ -32,52 +32,38 @@
   - SOL −$45.64 (missed-scheduler replay exit-stop-hit 2026-05-22T15:00Z, −1.43R)
   - AVAX −$35.83 (missed-scheduler replay exit-ema20-confirm 2026-05-22T16:00Z, −0.94R)
   - BTC −$33.70 (exit-stop-hit 2026-05-25T22:00Z, −1.07R)
-- Unrealized PnL: **$0.00** (flat)
-- Position values (MTM): **$0.00**
-- Current equity (cash + positions MTM): **$10,470.78**
+- Unrealized PnL (open positions, MTM at last 286.261 close): **−$2.10** = (286.261 − 286.40410) × 15.273800 = −$2.18 (rounded −$2.10)
+- Position values (MTM): **$4,372.00** (15.273800 × 286.261)
+- Current equity (cash + positions MTM): **$10,456.36**
 - Equity peak: **$10,728.95** (set 2026-05-21 during missed-scheduler HYPE 4R take-profit replay)
-- Drawdown from peak: **2.41%**
+- Drawdown from peak: **2.54%**
 
 ## Open positions
 
-No open positions.
+| Pair | Side | Size | Entry | Stop | 4R target | Initial Risk | Unrealized R |
+|------|------|------|-------|------|-----------|--------------|--------------|
+| TAO/USD | long | 15.273800 | 286.40410 | 276.12100 | 327.53650 | $157.06 (1.5%) | −0.014R |
 
-Portfolio risk-at-moment: **0.00%** of equity (cap 4%).
-Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 0/2).
-
-## Trade-log correction (2026-05-16, routine-03-eod)
-
-During this EOD wake a concurrent `routine-02-midday` instance wrote:
-`2026-05-15T13:00:00Z | CLOSE | XRP/USD | long | 6334 | 1.44305 | — | — | -1.03 | -206.37 | exit-stop-hit`
-and rebuilt portfolio.md to equity $10,051.73.
-
-That exit is **superseded**. Per `strategy.md` Exits — "Exit when ANY of the following is true … checked at the close of each 1H candle. No intra-bar exits" — the binding exit is the *first* condition true at a 1H close. Replaying XRP 1H closes from the 2026-05-14T16:00Z entry:
-
-- **Exit rule 1 (1H close < 1H 20-EMA): first true at 2026-05-15T04:00:00Z** — close 1.47298 vs 20-EMA ≈ 1.4780. EMA seeded as SMA of 1H closes 2026-05-13 03:00→22:00Z (= 1.439169), iterated 30 bars; cross-checked vs prior EOD's independent EMA ≈ 1.4406 @ 2026-05-14 15:00Z. Bars 05-14 16:00Z→05-15 03:00Z all closed *above* the rising EMA (closes 1.479–1.536 vs EMA 1.444–1.479); 05-15 04:00Z (close 1.47298 < EMA 1.4780) is the first close below.
-- Exit rule 2 (static stop 1.44377): first 1H close ≤ stop not until 2026-05-15T13:00Z (close 1.43187); intra-bar lows 05-14 16:00Z→05-15 04:00Z all ≥ 1.47298 — stop untouched before the EMA-cross even ignoring "no intra-bar exits".
-
-The EMA-cross at 04:00Z closes the position ~9h before any stop interaction, so the 13:00Z stop-out cannot occur. Correction row appended to `trade_log.md` at the true candle-close timestamp `2026-05-15T04:00:00Z`, reason `correction-previous-row`, per `skills/log-trade.md` ("never rewrite past rows; append a correction row"). Net realized **−$21.92 (−0.14R)** after 0.26%/side commissions and 0.05% exit slippage (fill 1.47224 = 1.47298 × 0.9995). Cash = $935.19 + ($9,325.19 − $24.25 comm) = **$10,236.14**.
-
-Flagged for routine #4 (Sat 2026-05-16): (a) codify that any late/concurrent routine fire must replay *all* unprocessed 1H closes and apply the earliest exit trigger, not just the latest bar; (b) resolve the duplicate-CLOSE race when multiple routine instances act on the same open position; (c) reconcile the "no intra-bar exits" rule vs the intra-bar stop interpretation used by routine-02.
+Portfolio risk-at-moment: **1.50%** of equity (cap 4%).
+Open positions: **1 / 8** (strategy v0.4 max-concurrent 4 → 1/4 used; cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 1/2 — TAO).
 
 ## Active kill-switch state
 
-- Daily realized: −$33.70 today = **−0.32%** vs day-open equity $10,504.48 — within 5% LOSS cap. Prior active day 2026-05-22 realized −$145.29 (−1.36%).
+- Daily realized: $0.00 today = **0.00%** vs day-open equity $10,470.78 — within 5% LOSS cap. Prior active day 2026-05-25 realized −$33.70 (−0.32%).
 - Consecutive losing trading days: 05-21 W, 05-22 L, 05-25 L → streak **2** (cap 7); no trading days 05-23/05-24 (weekend).
-- Max drawdown: 2.41% from peak $10,728.95 (cap 25%, warn 12.5%) — clear, well below warn
-- Equity floor: $10,470.78 > $7,500 floor — OK
-- **All clear. Trading authorized.** Flat, with BTC same-pair stop-out cooldown active until 2026-05-26T22:00Z.
-- **2026-05-25 operator reconciliation note:** BTC/USD long from 15:00Z closed at the 22:00Z stop trigger. 22:00Z 1H close 77041.4 was below fixed stop 77122.02; modeled fill 77083.46 = stop × 0.9995 adverse slippage. Gross price loss −$20.10; entry commission $6.83 and exit commission $6.77 bring net realized PnL to **−$33.70**. Two-bar EMA exit was not the binding rule; stop fired first. No entries were scanned or opened.
+- Max drawdown: 2.54% from peak $10,728.95 (cap 25%, warn 12.5%) — clear, well below warn
+- Equity floor: $10,456.36 > $7,500 floor — OK
+- **All clear. Trading authorized.** TAO long open; BTC same-pair stop-out cooldown still active until 2026-05-26T22:00Z.
 
 ## Pending exit triggers
 
-- No open positions.
+- **TAO/USD long**: ATR(14)=5.142, initial stop 276.12100 (2×ATR), breakeven ratchet armed at unrealized R ≥ 2.0 → would move stop to 286.40410 entry (Stop-management rule). 4R target 327.53650. Exit rule 1 (W22-G): two consecutive 1H closes < 1H 20-EMA fires exit on 2nd bar; current 1H 20-EMA ≈ 282.48, close 286.26 above EMA → 0/2 confirmation bars. Not in SBD regime so 20-EMA exit applies (not 9-EMA).
 
 ## Rolling performance
 
 | Window | BULL return | BTC-hold return | Delta | Result |
 |--------|-------------|-----------------|-------|--------|
-| 7d | ≈ +5.3% (approx) | ≈ −3 to −4% (approx) | ≈ +8% to +9% (approx) | BULL ahead (approx) |
+| 7d | ≈ +4.6% (approx) | ≈ −2 to −3% (approx) | ≈ +7% (approx) | BULL ahead (approx) |
 | 30d | — | — | — | — |
 | 90d | — | — | — | — |
 

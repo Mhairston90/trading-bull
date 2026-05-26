@@ -1629,3 +1629,39 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **BTC/USD stop exit processed.** Kraken 1H replay after the midday wake showed the first binding stop trigger on the 2026-05-25T22:00Z closed candle: close 77041.4 <= fixed stop 77122.02; bar low 76975.1 confirmed the level was crossed. Rule 2 fired before any two-bar EMA exit.
 - **Fill model:** exit-stop-hit uses the established stop model from prior stop rows: 77122.02 × 0.9995 adverse slippage = **77083.46**. Size 0.0338 BTC; gross price PnL −$20.10; entry commission $6.83 and exit commission $6.77; net realized **−$33.70 / −1.07R**.
 - **State after close:** BULL flat; cash/equity **$10,470.78**; realized PnL all-time **+$470.78**; DD **2.41%** from $10,728.95 peak; day realized **−0.32%** vs $10,504.48 day-open equity. Kill switches clear. Same-pair stop-out cooldown blocks fresh BTC entries until **2026-05-26T22:00Z**.
+
+
+## 2026-05-26T13:00Z — routine-01-overnight
+
+### Technical (rule-driven, deterministic)
+
+- **Wake context:** flat after BTC stop-out on 2026-05-25T22:00Z (−$33.70 / −1.07R). Cash $10,470.78, eq $10,470.78, DD 2.41% from peak $10,728.95. BTC same-pair cooldown blocks fresh BTC entries until 2026-05-26T22:00Z. Live strategy v0.4 (W22-C: G + breakeven half of H, 4R retained).
+- **Kraken risk_flag:** CLEAR (2026-05-26T12:30:32Z scan, "Markets calm").
+- **24h regime (Kraken multi_ticker @ wake):** **14/15 universe pairs positive.** Pos: ADA +0.56, AVAX +0.97, ETH +0.48, FARTCOIN +0.11, HYPE +1.62, LINK +0.97, LTC +0.08, PENGU +0.18, SOL +0.24, SUI +0.20, TAO +2.30, TRX +1.21, DOGE +0.68, XRP +0.32; only BTC −0.37. Median 24h % ≈ +0.48%. **Rule 5a PASS** (14/15 ≥ 4/15). **Rule 5a-SBD: not active** (>1 positive, median > −1.0%).
+- **Rule 4a liquidity floor (≥$2M 24h notional):** PASS — BTC $78.1M, ETH $18.6M, HYPE $16.4M, SOL $9.69M, XRP $8.70M, TAO $8.28M, SUI $6.28M, TRX $2.497M. FAIL — DOGE $1.39M, ADA $1.61M, FARTCOIN $0.50M, AVAX $0.82M, LINK $1.38M, PENGU $1.57M, LTC $1.15M.
+- **Per-pair entry-rule scan (just-closed 1H 12:00Z; just-closed 4H 08:00Z):**
+  - **BTC/USD:** REJECT — rule 5b (same-pair stop-out cooldown active to 2026-05-26T22:00Z; last exit 2026-05-25T22:00Z).
+  - **ETH/USD:** 1H close 2123.50 > 20-EMA ≈ 2107.43 (R1 ✓). 4H close 2118.65 vs 50-EMA ≈ 2126.50 → 4H close BELOW EMA50 (R3 ✗). **REJECT rule 3.**
+  - **SOL/USD:** 1H close 85.22 > 20-EMA ≈ 84.90 (R1 ✓). 4H close 85.14 < 50-EMA ≈ 85.97 (R3 ✗). **REJECT rule 3.**
+  - **XRP/USD:** 1H close 1.35379 > 20-EMA ≈ 1.34874 (R1 ✓). 4H close 1.35058 < 50-EMA ≈ 1.36865 (R3 ✗). **REJECT rule 3.**
+  - **TAO/USD:** 1H close 286.261 > 20-EMA ≈ 282.48 (R1 ✓). RSI14 ≈ 58.8 (R2 ✓, R2a ✓ ≤ 80). 4H close 286.6906 > 50-EMA ≈ 277.02 (R3 ✓). 4a $8.28M ✓. R4 history ✓. R5 flat ✓. R5b last TAO stop-out 2026-05-22T01:00Z, >24h ago ✓. R6 0/4 ✓. R6a cluster 0/2 — TAO is cluster member, opening → 1/2 ✓. R7 1.5% trade + 0% portfolio ≤ 4% ✓. **PASS all rules.**
+  - **HYPE/USD:** 1H close 62.15 > 20-EMA ≈ 60.92 (R1 ✓). RSI14 ≈ 55.5 (R2 ✓ marginal). 4H close 61.16 > 50-EMA ≈ 55.61 (R3 ✓). All other rules ✓. **PASS all rules.**
+  - **DOGE/USD, ADA/USD, FARTCOIN/USD, AVAX/USD, LINK/USD, PENGU/USD, LTC/USD:** REJECT rule 4a (24h notional < $2M).
+  - **SUI/USD, TRX/USD:** PASS rule 4a; technical evaluation deferred — rule 8 (one entry per wake, highest 30d notional rank wins) makes the question moot once a higher-ranked pair has passed. SUI rank 8 / TRX rank 15, both below TAO rank 5.
+- **Rule 8 (one-entry tiebreaker):** TAO and HYPE both PASS. TAO ranks 5 in universe vs HYPE rank 6 → **TAO wins.** HYPE eligibility re-evaluated next wake (if still passing; may drop).
+
+### News (Firecrawl-driven, informational only in v0.2)
+
+- Not invoked this wake (budget-conservative). News is informational only in v0.2 and does not veto entries. Per skills/research.md, the missing news context does not change the technical entry decision. Resumes next routine #1.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+
+- **TAO/USD spread (entry candidate):** bid 285.11 / ask 285.32, spread ~0.21 ≈ **7.4 bps**. Acceptable for spot momentum; recorded but no veto (sentiment is informational in v0.2).
+- HYPE spread (would-be alternate, rule 8 superseded): bid 61.96 / ask 61.97–61.99, ~2 bps. Tight, no caveat.
+
+### Decision
+
+- **Action: OPEN TAO/USD long.** Entry rules 1, 2, 2a, 3, 4, 4a, 5, 5a, 5b, 6, 6a, 7, 8 all PASS. Rule 8 selects TAO over HYPE (rank 5 vs 6). Fill 286.40410 (12:00Z 1H close 286.261 × 1.0005 adverse slip), size 15.273800 TAO, 2×ATR(14)=10.28310 stop @ 276.12100, 4R target @ 327.53650, risk $157.06 = 1.5% of $10,470.78 equity. Cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} now 1/2.
+- **No exits processed** (account was flat going in).
+- **Universe refresh:** not due (2026-05-26 is not the 1st of month; next 2026-06-01).
+- **Telegram:** will send brief "OPEN TAO" summary per routine #1 NOTIFY rules (new OPEN this wake).
