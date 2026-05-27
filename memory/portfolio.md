@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-26T20:00Z routine-02-midday — TAO/USD long closed as missed-scheduler replay. Strategy v0.4 W22-G exit rule 1 fired at the 2026-05-26T18:00Z 1H close (close 280.5426 < 20-EMA ≈ 283.19, confirming the prior 17:00Z close 281.2922 < 20-EMA ≈ 283.44 → two consecutive below-EMA closes). Routine #2 wakes at 20:00Z, after the confirming bar already closed; replay applies the conservative-slippage close model at the 18:00Z fill (280.5426 × 0.9995 = 280.40233), realized −$114.75 (−0.58R). Cash credited at the 18:00Z timestamp. Regime not in SBD (rule 5a-SBD inactive at the entry wake and through the trade window per routine-01 scan), so the 20-EMA exit applied (not the SBD-tightened 9-EMA variant). No breakeven ratchet fired (max favorable close was 16:00Z 289.163 → +0.27R, well below the +2R arming threshold). Account now flat; kill switches remain clear.
+> **Last rebuild:** 2026-05-27T~15:30Z routine-03-eod (late-firing; cron-target 04:00Z = 21:00 PT 2026-05-26). No trades this wake (account flat going in; entry scan SKIP — all 8 liquidity-passing pairs failed rule 1 or rule 2 at just-closed 14:00Z 1H bar). No state delta vs routine-02-midday rebuild: cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26). BTC same-pair cooldown expired 22:00Z 05-26; no current cooldowns active. Kill switches all clear.
 
 ## Account
 
@@ -48,11 +48,11 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 
 ## Active kill-switch state
 
-- Daily realized: −$114.75 today = **−1.10%** vs day-open equity $10,470.78 — within 5% LOSS cap.
+- Daily realized: −$114.75 on 2026-05-26 PT trading day = **−1.10%** vs day-open equity $10,470.78 — within 5% LOSS cap. No additional realized PnL since (no trades 2026-05-27).
 - Consecutive losing trading days: 05-21 W, 05-22 L, 05-25 L, 05-26 L → streak **3** (cap 7); weekend 05-23/05-24 no trading days.
 - Max drawdown: 3.48% from peak $10,728.95 (cap 25%, warn 12.5%) — clear, well below warn.
 - Equity floor: $10,356.03 > $7,500 floor — OK.
-- **All clear. Trading authorized.** Account flat. Same-pair cooldowns: BTC stop-out 05-25T22:00Z → blocks BTC entries until 2026-05-26T22:00Z; TAO exit 05-26T18:00Z was an EMA-confirm exit (not a stop-out) → no 5b cooldown applies, but per the spirit of W19-D and a 3-day-loss streak, fresh entries deserve the next overnight routine's full regime scan rather than midday opportunism (routine #2 is position-management only by spec).
+- **All clear. Trading authorized.** Account flat. BTC same-pair cooldown expired 2026-05-26T22:00Z; no active 5b cooldowns. routine-03-eod 2026-05-27 entry scan SKIP — every liquidity-passing pair (BTC, ETH, SOL, XRP, TAO, HYPE, XDG, SUI) failed rule 1 or rule 2 at the just-closed 14:00Z 1H bar (broad late-session pullback dragged most closes back below their 1H 20-EMAs). Next entry-scan opportunity: routine-01-overnight tomorrow.
 
 ## Pending exit triggers
 
