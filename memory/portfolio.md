@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-27T~15:30Z routine-03-eod (late-firing; cron-target 04:00Z = 21:00 PT 2026-05-26). No trades this wake (account flat going in; entry scan SKIP — all 8 liquidity-passing pairs failed rule 1 or rule 2 at just-closed 14:00Z 1H bar). No state delta vs routine-02-midday rebuild: cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26). BTC same-pair cooldown expired 22:00Z 05-26; no current cooldowns active. Kill switches all clear.
+> **Last rebuild:** 2026-05-27T20:07Z routine-02-midday. Account flat at wake; no MTM delta. Cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26). No active cooldowns (BTC 5b cooldown expired 22:00Z 05-26). Kill switches all clear. Midday spot tape read: BTC 75086.6 (−0.98% 24h, −1.00% intraday since 15:30Z overnight wake) — soft continuation, no impact on flat book.
 
 ## Account
 
@@ -52,7 +52,7 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 - Consecutive losing trading days: 05-21 W, 05-22 L, 05-25 L, 05-26 L → streak **3** (cap 7); weekend 05-23/05-24 no trading days.
 - Max drawdown: 3.48% from peak $10,728.95 (cap 25%, warn 12.5%) — clear, well below warn.
 - Equity floor: $10,356.03 > $7,500 floor — OK.
-- **All clear. Trading authorized.** Account flat. BTC same-pair cooldown expired 2026-05-26T22:00Z; no active 5b cooldowns. routine-03-eod 2026-05-27 entry scan SKIP — every liquidity-passing pair (BTC, ETH, SOL, XRP, TAO, HYPE, XDG, SUI) failed rule 1 or rule 2 at the just-closed 14:00Z 1H bar (broad late-session pullback dragged most closes back below their 1H 20-EMAs). Next entry-scan opportunity: routine-01-overnight tomorrow.
+- **All clear. Trading authorized.** Account flat. BTC same-pair cooldown expired 2026-05-26T22:00Z; no active 5b cooldowns. routine-01-overnight 2026-05-27 (late-fired 15:30Z) entry scan SKIP — every liquidity-passing pair (BTC, ETH, SOL, XRP, TAO, HYPE, XDG, SUI) failed rule 1 at the just-closed 14:00Z 1H bar after a broad correlated risk-off bar at 13:00Z pulled all 8 R4a-PASS candidates below their 1H 20-EMAs. routine-02-midday 2026-05-27 no-op by spec (flat book, no MTM/exits). Tape has softened further intraday (BTC −1.00% since 15:30Z), so subsequent rule-1 recovery looks unlikely. Next entry-scan opportunity: routine-03-eod 2026-05-27 ~04:00Z+1.
 
 ## Pending exit triggers
 

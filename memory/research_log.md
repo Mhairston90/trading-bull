@@ -1777,3 +1777,25 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 2026-05-27T17:06:49Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-27T17:40:19Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-05-27T20:07Z — routine-02-midday
+
+### Technical (rule-driven, deterministic)
+
+- **Wake context:** account flat (0/8 positions, 0/4 strategy max). Cash $10,356.03, equity $10,356.03 (no MTM delta — flat). DD 3.48% from peak $10,728.95. Losing-day streak 3/7.
+- **Mark-to-market:** N/A (zero open positions).
+- **Exit check:** N/A (zero open positions).
+- **Spot quote (BTC reference, for benchmark / tape read only):** XBTUSD last 75086.6, 24h change −0.98% (open_24h 75827.7, high 76061.8, low 74528.9, vwap 75406.76, spread 0.1bps). Tape continued softening since 15:30Z overnight wake (BTC was 75847 then; now 75086 = −1.00% intraday). Confirms the routine-01-overnight read: pairs that failed rule 1 at 14:00Z are unlikely to have recovered above their 20-EMAs at the 19:00Z 1H close (next routine-03-eod scan will quantify).
+- **Entry scan:** SKIPPED per routine-02 spec — midday is position-management only; entry responsibility belongs to routines #1 and #3.
+
+### News / Sentiment
+
+- Not invoked (routine #2 is mark-to-market + exits only).
+
+### Decision
+
+- **Action: NO-OP** (flat book, no exits to fire, no entries by spec).
+- **Kill switches:** day realized $0.00 (cap 5%, clear); DD 3.48% from peak (warn 12.5%, cap 25%, clear); equity $10,356.03 > $7,500 floor (clear); losing-day streak 3/7 (no trade today → unchanged). **All clear.**
+- **Drawdown trajectory:** 3.48% is well below the 12.5% warning threshold — no escalation needed.
+- **Telegram:** silent (no kill switch, no exit, DD below 12.5% warn).
+- **Next decision point:** routine-03-eod 21:00 PT / 04:00Z+1 — will re-scan entries against the just-closed 19:00Z (then 23:00Z) 1H bar.
