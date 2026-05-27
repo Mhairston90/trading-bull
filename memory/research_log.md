@@ -1735,3 +1735,42 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 ### Lessons extraction
 - One light observation (below 2-lesson cap, not appended as a new lesson yet — needs more samples). Two-day pattern: BTC entered 2026-05-25T15:00Z when 15/15 positive (peak universe regime) → stopped 7h later for −1.07R. TAO entered 2026-05-26T12:00Z when 14/15 positive → EMA-confirm exit 6h later for −0.58R. Both opened *at* the peak of broad-universe risk-on regime and reversed within a single day. Could indicate the rule 5a regime gate's 4/15-positive floor passes too freely when 14–15/15 are positive (peak-regime entry timing risk). Not actionable yet — only 2 samples, both in a broader 5-day BTC-led down-leg. **Filed as W19-E observation only; will revisit at routine #4 2026-05-30 with a wider sample of 14-15/15-positive entries.**
+
+
+## 2026-05-27T15:30Z — routine-01-overnight (late-fire / missed-scheduler)
+
+### Technical (rule-driven, deterministic)
+
+- **Wake context:** flat after TAO EMA-confirm exit on 2026-05-26T18:00Z (−$114.75 / −0.58R). Cash $10,356.03, equity $10,356.03, DD 3.48% from peak $10,728.95. BTC same-pair cooldown (last stop-out 05-25T22:00Z) expired at 05-26T22:00Z. No TAO 5b cooldown (last TAO exit was EMA-confirm, not stop-out). Live strategy v0.4 (W22-C: G + breakeven half of H, 4R retained). Losing-day streak 3/7.
+- **Wake timing:** scheduler ran ~2h late vs nominal 13:00Z slot — wake data fetched ~15:30Z. Last-closed 1H bar = 14:00Z (15:00Z bar still active, low volume). Last-closed 4H bar = 08:00Z (12:00Z bar still active).
+- **Kraken risk_flag:** CLEAR (2026-05-27T00:00:32Z scan, "Markets calm").
+- **24h regime (Kraken multi_ticker @ wake):** **12/15 universe pairs positive.** Pos: ADA +0.94, AVAX +1.42, ETH +0.06, FARTCOIN +1.15, HYPE +1.71, LINK +0.66, LTC +1.62, PENGU +0.24, SOL +1.14, SUI +0.93, DOGE +1.83, XRP +0.80. Neg: TAO −0.07, BTC −0.69, TRX −1.13. Median 24h % ≈ +0.93%. **Rule 5a PASS** (12/15 ≥ 4/15). **Rule 5a-SBD: not active** (>1 positive, median > −1.0%).
+- **Rule 4a liquidity floor (≥$2M 24h notional, price×volume):** PASS — BTC $141.8M, ETH $23.67M, HYPE $28.77M, SOL $10.47M, SUI $9.37M, TAO $7.84M, XRP $13.52M, DOGE $2.40M (8 pairs). FAIL — ADA $1.45M, AVAX $0.82M, FARTCOIN $1.11M, LINK $1.79M, LTC $1.35M, PENGU $0.60M, TRX $1.14M (7 pairs).
+- **Per-pair entry-rule scan against last-closed 1H bar (14:00Z) + last-closed 4H (08:00Z):** 1H 20-EMA computed via SMA(20) seed of bars 5/26 05:00→5/27 00:00 + iterative EMA (α=2/21) through 14:00Z. Recent 13:00Z 1H bar saw broad correlated risk-off (BTC −$700 in one hour) pulling all 8 R4a-PASS pairs below their 1H 20-EMA.
+  - **BTC/USD:** 14:00Z close 74900.7 vs 20-EMA ≈ 75736 → close BELOW EMA. **REJECT rule 1.** (5b cooldown expired at 22:00Z prior day — would have been the second blocker if rule 1 had passed.)
+  - **ETH/USD:** 14:00Z close 2058.98 vs 20-EMA ≈ 2077.47 → BELOW. **REJECT rule 1.**
+  - **SOL/USD:** 14:00Z close 83.79 vs 20-EMA ≈ 83.891 → BELOW (narrow miss, ~0.12%). **REJECT rule 1.**
+  - **XRP/USD:** 14:00Z close 1.32802 vs 20-EMA ≈ 1.33215 → BELOW. **REJECT rule 1.**
+  - **TAO/USD:** 14:00Z close 274.4325 vs 20-EMA ≈ 277.72 → BELOW. **REJECT rule 1.** (Note: prior wake's TAO long was exited 18:00Z by W22-G EMA-confirm; 14:00Z scan confirms continuation of weakness.)
+  - **HYPE/USD:** 14:00Z close 60.03 vs 20-EMA ≈ 61.367 → BELOW. **REJECT rule 1.**
+  - **DOGE/USD (XDG):** 14:00Z close 0.1013616 vs 20-EMA ≈ 0.101557 → BELOW (narrow miss, ~0.19%). **REJECT rule 1.**
+  - **SUI/USD:** 14:00Z close 0.9968 vs 20-EMA ≈ 1.00491 → BELOW. **REJECT rule 1.**
+  - **ADA/USD, AVAX/USD, FARTCOIN/USD, LINK/USD, LTC/USD, PENGU/USD, TRX/USD:** REJECT rule 4a (24h notional < $2M).
+- **Rule 8 (one-entry tiebreaker):** N/A — zero pairs PASS rule 1.
+
+### News (Firecrawl-driven, informational only in v0.2)
+
+- Not invoked this wake — no technical-PASS candidates to vet (news is informational only in v0.2 and skipped when no candidates exist per routine spec).
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+
+- Not invoked this wake — no technical-PASS candidates.
+
+### Decision
+
+- **Action: NO new entries.** All 8 R4a-PASS pairs fail rule 1 on the just-closed 1H bar (14:00Z). The 13:00Z 1H candle was a broad correlated risk-off bar (BTC −0.86% in one hour, all 8 candidates wicking through their respective 20-EMAs) that pulled the entire R4a-PASS cohort below trend. Regime 5a still passes on the 24h frame because morning levels are still net-positive vs yesterday, but the freshly-closed 1H frame is uniformly bearish — exactly the chop-into-divergent-tape pattern that 5a was designed to catch on the broader frame and rule 1 catches at single-pair granularity.
+- **No exits processed** (account was flat going in).
+- **Universe refresh:** not due (2026-05-27 is not the 1st of month; next 2026-06-01).
+- **Kill switches:** day realized $0.00 (cap 5%); DD 3.48% from peak (warn 12.5%, cap 25%); equity $10,356.03 > $7,500 floor; losing-day streak 3/7 (no trade today → streak count unchanged from yesterday; will reset on next winner). **All clear.**
+- **Telegram:** silent (no kill switch, no OPEN, no CLOSE, no actionable news, no universe refresh).
+- **Next decision point:** routine-02-midday (later today) — position-management only by spec; with flat book and no entries from routine #1, routine #2 will be a no-op unless a new entry signal manifests outside spec (it won't, since routine #2 doesn't open). Real next decision = routine-03-eod.
