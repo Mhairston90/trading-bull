@@ -1834,3 +1834,5 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **Next decision point:** routine-02-midday (later today) — position-management only by spec; with flat book and SBD active, routine #2 will be a no-op. Real next entry-scan = routine-03-eod 04:00Z+1.
 
 2026-05-28T17:07:15Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-05-28T17:40Z | allocation | day-gate | not Sunday, skipping | no action
