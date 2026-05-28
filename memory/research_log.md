@@ -1832,3 +1832,5 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **Kill switches:** day realized $0.00 (cap 5%, clear); DD 3.48% from peak (warn 12.5%, cap 25%, clear); equity $10,356.03 > $7,500 floor (clear); losing-day streak 3/7 (no trade today → unchanged). **All clear.**
 - **Telegram:** silent (no kill switch trip, no OPEN, no CLOSE, no actionable news, no universe refresh).
 - **Next decision point:** routine-02-midday (later today) — position-management only by spec; with flat book and SBD active, routine #2 will be a no-op. Real next entry-scan = routine-03-eod 04:00Z+1.
+
+2026-05-28T17:07:15Z | harness | day-gate | not Saturday, skipping | no action
