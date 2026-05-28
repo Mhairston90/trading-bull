@@ -3,6 +3,8 @@
 > **Append-only.** News and external research notes per routine run.
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
+
+2026-05-28T01:03:01Z | idea-scan | day-gate | not Friday, skipping | no action
 > ## Schema (W19-E, effective 2026-04-29)
 >
 > Routine #1 (overnight) and Routine #2 (midday) entry-scan blocks should use the analyst-role split below. Legacy single-line rows above the marker remain as-is.
