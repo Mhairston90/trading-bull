@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-28T13:00Z routine-01-overnight. Account flat at wake; no MTM delta. Cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26; 05-27 no trades). No active cooldowns. Kill switches all clear. **Regime: SYNCHRONIZED_BREAKDOWN active** (0/15 universe pairs positive, median 24h −2.35%) — rule 5a vetoes all entries; rule 5a-SBD defensive exit (9-EMA two-bar) would apply if any longs were open. BTC 73276 (−1.43% 24h), broad sell-off through overnight 03:00Z cascade.
+> **Last rebuild:** 2026-05-28T20:00Z routine-02-midday. Account flat; no MTM delta. Cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26; 05-27 no trades; 05-28 no trades). No active cooldowns. Kill switches all clear. **Regime: 5a-veto active but SBD CLEARED** — 2/15 universe pairs positive (HYPE +4.61, XRP +0.37) on 24h, median 24h −1.44%. SBD requires ≤1/15 positive AND median ≤−1.0% — first condition now fails (2 > 1), so SBD's 9-EMA defensive exit reverts to baseline 20-EMA two-bar exit (moot — account flat). Rule 5a still vetoes new entries (2 < 4 needed). BTC 73220.6 (−1.50% 24h); HYPE bid notable as the lone strong-positive.
 
 ## Account
 
@@ -48,11 +48,11 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 
 ## Active kill-switch state
 
-- Daily realized: −$114.75 on 2026-05-26 PT trading day = **−1.10%** vs day-open equity $10,470.78 — within 5% LOSS cap. No additional realized PnL since (no trades 2026-05-27).
-- Consecutive losing trading days: 05-21 W, 05-22 L, 05-25 L, 05-26 L → streak **3** (cap 7); weekend 05-23/05-24 no trading days.
+- Daily realized: $0 on 2026-05-28 PT trading day (no trades) — within 5% LOSS cap.
+- Consecutive losing trading days: 05-21 W, 05-22 L, 05-25 L, 05-26 L → streak **3** (cap 7); 05-27 and 05-28 no trades (streak neither extended nor broken).
 - Max drawdown: 3.48% from peak $10,728.95 (cap 25%, warn 12.5%) — clear, well below warn.
 - Equity floor: $10,356.03 > $7,500 floor — OK.
-- **All clear. Trading authorized — but regime gate vetoes entries.** Account flat. No active 5b cooldowns. routine-01-overnight 2026-05-28T13:00Z entry scan SKIP — **rule 5a fail (0/15 universe pairs positive on 24h)**, **rule 5a-SBD active** (median 24h −2.35%, ≤ −1.0% threshold). Tape: BTC 73276 −1.43%, broad −1.5% to −5% across universe with overnight 03:00Z cascade (BTC −1000 in one hour). SBD defensive exit (rule 1-SBD: two consecutive 1H closes < 1H 9-EMA) has zero positions to apply to. Next entry-scan opportunity: routine-03-eod 2026-05-28 ~04:00Z+1; SBD will be re-evaluated each wake.
+- **All clear. Trading authorized — but regime gate (rule 5a) still vetoes entries; midday routine is position-management only anyway.** Account flat. No active 5b cooldowns. routine-02-midday 2026-05-28T20:00Z: nothing to MTM, no exits possible. SBD CLEARED this wake (2/15 positive > 1 threshold) — defensive 9-EMA exit reverts to baseline 20-EMA two-bar exit; moot while flat. Next entry-scan opportunity: routine-03-eod 2026-05-29 ~04:00Z.
 
 ## Pending exit triggers
 

@@ -1836,3 +1836,4 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 2026-05-28T17:07:15Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-05-28T17:40Z | allocation | day-gate | not Sunday, skipping | no action
+2026-05-28T20:00Z | routine-02-midday | flat, no positions to MTM, no exits possible. Equity $10,356.03 unchanged, DD 3.48% (cap 25%, warn 12.5%) — clear. Daily realized $0, losing-day streak 3. Regime: 2/15 universe positive (HYPE +4.61%, XRP +0.37%), median 24h −1.44%. SBD CLEARED this wake (≤1 positive condition fails: 2 > 1) — defensive 9-EMA exit reverts to baseline 20-EMA two-bar; moot while flat. Rule 5a still vetoes entries (2 < 4 needed). BTC 73220.6 −1.50%. No-op routine.
