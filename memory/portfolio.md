@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-27T20:07Z routine-02-midday. Account flat at wake; no MTM delta. Cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26). No active cooldowns (BTC 5b cooldown expired 22:00Z 05-26). Kill switches all clear. Midday spot tape read: BTC 75086.6 (−0.98% 24h, −1.00% intraday since 15:30Z overnight wake) — soft continuation, no impact on flat book.
+> **Last rebuild:** 2026-05-28T13:00Z routine-01-overnight. Account flat at wake; no MTM delta. Cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26; 05-27 no trades). No active cooldowns. Kill switches all clear. **Regime: SYNCHRONIZED_BREAKDOWN active** (0/15 universe pairs positive, median 24h −2.35%) — rule 5a vetoes all entries; rule 5a-SBD defensive exit (9-EMA two-bar) would apply if any longs were open. BTC 73276 (−1.43% 24h), broad sell-off through overnight 03:00Z cascade.
 
 ## Account
 
@@ -52,7 +52,7 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 - Consecutive losing trading days: 05-21 W, 05-22 L, 05-25 L, 05-26 L → streak **3** (cap 7); weekend 05-23/05-24 no trading days.
 - Max drawdown: 3.48% from peak $10,728.95 (cap 25%, warn 12.5%) — clear, well below warn.
 - Equity floor: $10,356.03 > $7,500 floor — OK.
-- **All clear. Trading authorized.** Account flat. BTC same-pair cooldown expired 2026-05-26T22:00Z; no active 5b cooldowns. routine-01-overnight 2026-05-27 (late-fired 15:30Z) entry scan SKIP — every liquidity-passing pair (BTC, ETH, SOL, XRP, TAO, HYPE, XDG, SUI) failed rule 1 at the just-closed 14:00Z 1H bar after a broad correlated risk-off bar at 13:00Z pulled all 8 R4a-PASS candidates below their 1H 20-EMAs. routine-02-midday 2026-05-27 no-op by spec (flat book, no MTM/exits). Tape has softened further intraday (BTC −1.00% since 15:30Z), so subsequent rule-1 recovery looks unlikely. Next entry-scan opportunity: routine-03-eod 2026-05-27 ~04:00Z+1.
+- **All clear. Trading authorized — but regime gate vetoes entries.** Account flat. No active 5b cooldowns. routine-01-overnight 2026-05-28T13:00Z entry scan SKIP — **rule 5a fail (0/15 universe pairs positive on 24h)**, **rule 5a-SBD active** (median 24h −2.35%, ≤ −1.0% threshold). Tape: BTC 73276 −1.43%, broad −1.5% to −5% across universe with overnight 03:00Z cascade (BTC −1000 in one hour). SBD defensive exit (rule 1-SBD: two consecutive 1H closes < 1H 9-EMA) has zero positions to apply to. Next entry-scan opportunity: routine-03-eod 2026-05-28 ~04:00Z+1; SBD will be re-evaluated each wake.
 
 ## Pending exit triggers
 

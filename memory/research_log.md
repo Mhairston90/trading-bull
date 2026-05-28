@@ -1801,3 +1801,34 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - **Drawdown trajectory:** 3.48% is well below the 12.5% warning threshold — no escalation needed.
 - **Telegram:** silent (no kill switch, no exit, DD below 12.5% warn).
 - **Next decision point:** routine-03-eod 21:00 PT / 04:00Z+1 — will re-scan entries against the just-closed 19:00Z (then 23:00Z) 1H bar.
+
+
+## 2026-05-28T13:00Z — routine-01-overnight
+
+### Technical (rule-driven, deterministic)
+
+- **Wake context:** account flat (0/8 positions, 0/4 strategy max). Cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26; 05-27 no trades). Strategy v0.4 (W22-C). No active 5b cooldowns (BTC last stop-out 05-25T22:00Z → expired 05-26T22:00Z; TAO 05-26T18:00Z was EMA-confirm not stop-hit).
+- **Kraken risk_flag:** CLEAR (scan 2026-05-28T12:30:32Z, "Markets calm").
+- **24h regime (kraken_multi_ticker @ wake 13:00Z):** **0/15 universe pairs positive.** All negative: TRX −5.15, FARTCOIN −4.41, SUI −4.28, PENGU −3.72, TAO −2.67, LINK −2.56, XDG −2.40, ADA −2.35, AVAX −2.10, LTC −2.02, ETH −1.86, SOL −1.75, HYPE −1.51, BTC −1.43, XRP −0.90. **Median 24h % = −2.35%.**
+- **Rule 5a (regime gate):** FAIL — 0/15 positive < 4/15 floor. **REJECT all new entries this wake.**
+- **Rule 5a-SBD (synchronized breakdown):** **ACTIVE** — both conditions met: (i) 0/15 positive ≤ 1, and (ii) median −2.35% ≤ −1.0%. This is the textbook SBD case the W21-F gate was designed for. Defensive trend exit (Exit rule 1-SBD: two consecutive 1H closes < 1H 9-EMA) would apply to any open positions — but **book is flat, so SBD has zero defensive value to capture this wake**. Estimated avoided-give-back vs. 20-EMA exit: **$0** (no open longs).
+- **Rule 4a liquidity floor (≥$2M 24h notional):** computed but moot given rule 5a fail. PASS — BTC ~$183M, ETH ~$43.9M, HYPE ~$21.9M, SOL ~$15.6M, XRP ~$22.3M, TAO ~$6.15M, XDG ~$3.33M, SUI ~$10.5M, ADA ~$2.79M, LINK ~$2.76M, TRX ~$3.25M (11 pairs). FAIL — LTC ~$1.71M, FARTCOIN ~$0.87M, AVAX ~$1.55M, PENGU ~$0.65M (4 pairs).
+- **Per-pair entry-rule scan: SKIPPED.** Rule 5a is a hard universe-level gate; per-pair indicator computation is unnecessary when the regime gate vetoes all entries. Spot-check: BTC SMA20(1H) on bars 17:00Z 05-27 → 12:00Z 05-28 = 73879.1; 12:00Z close 73397.8 → BELOW EMA by 0.65%. Rule 1 would also fail for BTC; broad sell-off (BTC −1000 on the 13:00Z 05-27 bar continued into 03:00Z 05-28 cascade −1000 in one hour) suggests the entire R4a-PASS cohort sits below their 20-EMAs.
+- **Rule 8 (one-entry tiebreaker):** N/A — zero candidates.
+
+### News (Firecrawl-driven, informational only in v0.2)
+
+- Not invoked — zero technical-PASS candidates to vet. Per routine spec, news pass is per-candidate, not standalone macro scan.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+
+- Not invoked — zero technical-PASS candidates.
+
+### Decision
+
+- **Action: NO new entries.** Rule 5a regime gate vetoes all 15 pairs (0/15 positive). SBD active per rule 5a-SBD; flat book means defensive exit rule 1-SBD has nothing to apply to.
+- **No exits processed** (account was flat going in).
+- **Universe refresh:** not due (2026-05-28 is not 1st of month; next 2026-06-01).
+- **Kill switches:** day realized $0.00 (cap 5%, clear); DD 3.48% from peak (warn 12.5%, cap 25%, clear); equity $10,356.03 > $7,500 floor (clear); losing-day streak 3/7 (no trade today → unchanged). **All clear.**
+- **Telegram:** silent (no kill switch trip, no OPEN, no CLOSE, no actionable news, no universe refresh).
+- **Next decision point:** routine-02-midday (later today) — position-management only by spec; with flat book and SBD active, routine #2 will be a no-op. Real next entry-scan = routine-03-eod 04:00Z+1.
