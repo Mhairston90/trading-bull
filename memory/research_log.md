@@ -1919,3 +1919,5 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 ### Observation (no lesson appended, just a marker)
 - SBD has now been active for **3 consecutive evaluations** spanning ~24h (05-28 13:00Z overnight, 05-29 13:00Z late-fire EOD, 05-29 13:30Z overnight). The market is deepening the drift, not pausing. Cumulative SBD-active wakes since rule 5a-SBD introduction (W21, 2026-05-19): wake-counter incrementing; book-with-longs counter still at 0. Defensive value to date: $0. Not flagged as a lesson — this is still the designed behavior of a long-only strategy in a breakdown regime (sit out, preserve capital). Will be relevant input to routine #4 SBD value-add scoring once we have at least one wake where SBD fires with open longs.
+
+2026-05-29T17:06:54Z | harness | day-gate | not Saturday, skipping | no action
