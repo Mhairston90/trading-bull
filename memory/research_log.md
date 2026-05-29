@@ -1838,3 +1838,50 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 2026-05-28T17:40Z | allocation | day-gate | not Sunday, skipping | no action
 2026-05-28T20:00Z | routine-02-midday | flat, no positions to MTM, no exits possible. Equity $10,356.03 unchanged, DD 3.48% (cap 25%, warn 12.5%) — clear. Daily realized $0, losing-day streak 3. Regime: 2/15 universe positive (HYPE +4.61%, XRP +0.37%), median 24h −1.44%. SBD CLEARED this wake (≤1 positive condition fails: 2 > 1) — defensive 9-EMA exit reverts to baseline 20-EMA two-bar; moot while flat. Rule 5a still vetoes entries (2 < 4 needed). BTC 73220.6 −1.50%. No-op routine.
+
+
+## 2026-05-29T13:00Z — routine-03-eod (late-fire / missed-scheduler for 2026-05-28 PT EOD)
+
+### Wake context
+- Scheduled: 0 21 * * 1-5 PT → 2026-05-29T04:00Z (21:00 PT 2026-05-28 Thursday). Actual wake ≈ 2026-05-29T13:00Z (~9h late). Per established missed-scheduler precedent, the entry-scan evaluates at the most-recently-closed 1H bar at wake time (12:00Z 2026-05-29). EOD card scope = 2026-05-28 PT trading day (Thursday).
+- Account flat going in (closed since 2026-05-26T18:00Z TAO exit-ema20-confirm −$114.75). Cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26; 05-27, 05-28 no trades — streak count unchanged). Live strategy v0.4 (W22-C: G + breakeven half of H, 4R retained). No active 5b cooldowns (BTC 05-25 stop-out cooldown expired 05-26T22:00Z; TAO 05-26 exit was EMA-confirm not stop-hit).
+- Kraken risk_flag: CLEAR (scan 2026-05-28T12:30:32Z, "Markets calm", 0 tier-1/2 triggers).
+
+### Technical (rule-driven, deterministic)
+- **24h regime (kraken_multi_ticker @ wake 13:00Z):** 1/15 universe pairs positive. Positives: HYPE +0.67 (only). LTC 0.00 (flat — not positive). Negatives (asc): TAO −3.70, SUI −2.94, TRX −2.85, FARTCOIN −1.89, PENGU −1.41, LINK −1.26, ADA −1.07, AVAX −1.01, XDG −0.78, SOL −0.78, XRP −0.76, ETH −0.50, BTC −0.46. **Median 24h % = −1.01%** (AVAX, the 8th of 15 sorted ascending).
+- **Rule 5a (regime gate):** FAIL — 1/15 positive < 4/15 floor. **REJECT all new entries this wake.**
+- **Rule 5a-SBD (synchronized breakdown):** **ACTIVE** — both conditions met: (i) 1/15 positive ≤ 1, and (ii) median −1.01% ≤ −1.0% (marginal, by 0.01pp). Defensive trend exit (Exit rule 1-SBD: two consecutive 1H closes < 1H 9-EMA) applies to any open positions — but **book is flat, so SBD has zero defensive value to capture this wake**. Estimated avoided-give-back vs. 20-EMA exit: **$0** (no open longs). Marks a second SBD activation in 7 trading days (prior: 2026-05-28T13:00Z overnight, also flat-book).
+- **Rule 4a liquidity floor (≥$2M 24h notional):** computed for completeness given rule 5a fail. PASS — BTC ~$142.3M (price 73180 × vol 1944), ETH ~$40.3M, HYPE ~$37.4M, SOL ~$15.2M, XRP ~$18.99M, TAO ~$4.29M, XDG ~$1.68M, SUI ~$5.88M, ADA ~$4.38M, LINK ~$1.51M, TRX ~$2.95M, FARTCOIN ~$0.64M, PENGU ~$0.56M, LTC ~$1.72M, AVAX ~$0.72M. Rough PASS list: BTC, ETH, HYPE, SOL, XRP, TAO, SUI, ADA, TRX (9 pairs). FAIL: XDG, LINK, FARTCOIN, PENGU, LTC, AVAX (6 pairs).
+- **Per-pair entry-rule scan: SKIPPED.** Rule 5a hard-vetoes universe-wide; per-pair indicator computation moot. Spot-check: BTC 12:00Z close 73183.5, declining sequence 09:00→12:00Z (73642 → 73528 → 73364 → 73184), clearly below any reasonable 1H 20-EMA seeded from the recent 73,500–73,800 range. Pattern consistent with SBD: broad correlated drift lower with even the relative leaders (HYPE +0.67 / LTC 0.00) only mildly outperforming.
+- **Rule 8 (one-entry tiebreaker):** N/A — zero candidates.
+
+### News (Firecrawl-driven, informational only in v0.4)
+- Not invoked — zero technical-PASS candidates to vet. Per routine spec, news pass is per-candidate, not standalone macro scan. Risk_flag CLEAR ("Markets calm") acts as macro pre-screen and confirms no headline-driven action needed.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.4)
+- Not invoked — zero technical-PASS candidates.
+
+### Decision
+- **Action: NO new entries.** Rule 5a regime gate vetoes all 15 pairs (1/15 positive < 4 needed). SBD active per rule 5a-SBD; flat book means defensive exit rule 1-SBD has nothing to apply to.
+- **No exits processed** (account flat going in).
+- **Universe refresh:** not due (2026-05-29 is not 1st of month; next 2026-06-01).
+- **Monthly archive:** today is **not** the last trading day of May from the perspective of this EOD card. The EOD card scope is 2026-05-28 PT (Thursday); the upcoming 2026-05-29 PT EOD (scheduled 04:00Z 2026-05-30) is the last-trading-day-of-May card and is where the archive sweep belongs. Deferred to next EOD wake.
+
+### Day summary stats (2026-05-28 PT trading day)
+- Day PnL: **$0.00 (0.00%)** — account flat for the full PT trading day (07:00Z 05-28 → 04:00Z 05-29). 0 opened, 0 closed, win rate N/A.
+- Day-open equity: $10,356.03 → Day-close equity: $10,356.03 (unchanged).
+- New equity: **$10,356.03**; drawdown **3.48%** from peak $10,728.95 (warn 12.5%, cap 25% — clear).
+- Losing-day streak: **3** (05-22 L, 05-25 L, 05-26 L; 05-27 no trades, 05-28 no trades — streak neither extended nor broken; cap 7).
+- Rolling perf (approx, precise reference-price computation deferred to routine #4):
+  - 7d: BULL ≈ −3.48% (from peak $10,728.95 set 2026-05-21) vs BTC-hold ≈ −5.7% (2026-05-21 ~$77.6k → today $73.18k) → BULL ahead ~+2.2%.
+  - 30d: BULL ≈ +3.6% (inception $10k 2026-04-20; 30d window now fully computable). BTC 30d ≈ −10% (from ~$81.3k on 2026-04-29 to $73.18k today). Delta ≈ +13–14% in BULL's favor.
+  - 90d: not computable (BULL inception 2026-04-20 = 39 days ago).
+
+### Lessons extraction
+- **No new lessons appended this wake.** Day had zero trades — nothing to extract from. Two existing observations remain relevant and unchanged:
+  1. The 05-26 / 05-27 / 05-28 / 05-29 sequence is the longest stretch of pure-no-trade days since BULL inception. Driver: rule 5a regime veto has been firing continuously since 2026-05-26 ~18:00Z (TAO exit), and even when 5a passes (briefly 2026-05-28T20:00Z midday with 2/15 positive) rule 1 fails universally due to broad drift below 1H 20-EMAs. This is the *designed* behavior — strategy is opting out of choppy/declining tape and preserving capital. Filed as observation in routine-01-overnight 05-26T18:00Z entry; nothing to add today.
+  2. SBD has now activated twice in the past 3 days (05-28T13:00Z, 05-29T13:00Z), both with flat book → $0 captured defensive value to date. This is *expected* — SBD is a "stop bleeding open longs" gate; it can only earn its keep when longs are open. Routine #4 should eventually score SBD's value-add by counting (a) wakes-where-active, (b) wakes-where-active-AND-book-had-longs, (c) avoided-give-back when (b) held. Currently (b) = 0 / (a) = 2 — needs more samples before judging.
+- Below the 2-lesson daily cap. No append to `lessons.md`.
+
+### Telegram
+- **Sending mandatory EOD card** per `routines/03-eod.md` NOTIFY section.

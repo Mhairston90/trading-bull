@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-28T20:00Z routine-02-midday. Account flat; no MTM delta. Cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26; 05-27 no trades; 05-28 no trades). No active cooldowns. Kill switches all clear. **Regime: 5a-veto active but SBD CLEARED** — 2/15 universe pairs positive (HYPE +4.61, XRP +0.37) on 24h, median 24h −1.44%. SBD requires ≤1/15 positive AND median ≤−1.0% — first condition now fails (2 > 1), so SBD's 9-EMA defensive exit reverts to baseline 20-EMA two-bar exit (moot — account flat). Rule 5a still vetoes new entries (2 < 4 needed). BTC 73220.6 (−1.50% 24h); HYPE bid notable as the lone strong-positive.
+> **Last rebuild:** 2026-05-29T13:00Z routine-03-eod (late-fire of scheduled 2026-05-29T04:00Z = 21:00 PT 05-28). EOD card scope = 2026-05-28 PT trading day (Thursday). Account flat throughout 05-28; no MTM delta. Cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26; 05-27 no trades; 05-28 no trades). No active cooldowns. Kill switches all clear. **Regime: 5a-veto active AND SBD RE-ACTIVATED at this late-fire wake** — 1/15 universe pairs positive (HYPE +0.67 only; LTC 0.00 not positive) on 24h, median 24h −1.01%. Both SBD conditions met (≤1/15 positive AND median ≤ −1.0%, the latter by 0.01pp). Defensive 9-EMA two-bar exit applies — but **book is flat, $0 defensive value captured this wake**. Rule 5a vetoes all entries (1 < 4 needed). BTC 73179.7 (−0.46% 24h); TAO −3.70 / SUI −2.94 / TRX −2.85 leading the downside.
 
 ## Account
 
@@ -52,7 +52,7 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 - Consecutive losing trading days: 05-21 W, 05-22 L, 05-25 L, 05-26 L → streak **3** (cap 7); 05-27 and 05-28 no trades (streak neither extended nor broken).
 - Max drawdown: 3.48% from peak $10,728.95 (cap 25%, warn 12.5%) — clear, well below warn.
 - Equity floor: $10,356.03 > $7,500 floor — OK.
-- **All clear. Trading authorized — but regime gate (rule 5a) still vetoes entries; midday routine is position-management only anyway.** Account flat. No active 5b cooldowns. routine-02-midday 2026-05-28T20:00Z: nothing to MTM, no exits possible. SBD CLEARED this wake (2/15 positive > 1 threshold) — defensive 9-EMA exit reverts to baseline 20-EMA two-bar exit; moot while flat. Next entry-scan opportunity: routine-03-eod 2026-05-29 ~04:00Z.
+- **All clear. Trading authorized — but regime gate (rule 5a) still vetoes entries.** Account flat. No active 5b cooldowns. routine-03-eod 2026-05-29T13:00Z (late-fire of 05-29T04:00Z scheduled): EOD scope for 05-28 PT trading day = 0 trades / $0 PnL (flat all day). SBD re-activated this wake (1/15 positive, median −1.01%); defensive 9-EMA two-bar exit applies but book flat → $0 captured. Next entry-scan opportunity: routine-01-overnight 2026-05-29 ~13:00Z (which may already be moot if it also late-fires); else routine-03-eod 2026-05-30 ~04:00Z (last trading day of May → archive sweep due).
 
 ## Pending exit triggers
 
