@@ -7,7 +7,9 @@
 
 ## Purpose
 
-For each active LAB variant in `variants/`, replay the past 24 hours of Kraken 1H + 4H bars, apply that variant's entry and exit rules, record any hypothetical trades to the variant's own `trade_log.md`, rebuild that variant's `portfolio.md`, and refresh `memory/leaderboard.md` with current standings.
+For each active LAB variant in `variants/`, replay the window **since that variant's last successful rebuild** (the `Last rebuild` timestamp in its `portfolio.md`; default 24h on the first run after spin-up; capped at 7 days) of Kraken 1H + 4H bars, apply that variant's entry and exit rules, record any hypothetical trades to the variant's own `trade_log.md`, rebuild that variant's `portfolio.md`, and refresh `memory/leaderboard.md` with current standings.
+
+> **Resilience (added 2026-05-29):** this routine previously replayed only a fixed trailing 24h. If a wake was missed (e.g. the 05-16→05-29 scheduler gap), every entry/exit in the gap was permanently dropped — the v0.12-sbd-exit twin logged zero trades despite v0.2-identical entries firing 7 times. Replaying *since the last successful rebuild* makes missed wakes self-healing.
 
 ## READ (in order)
 
@@ -34,15 +36,16 @@ For each active LAB variant in `variants/`, replay the past 24 hours of Kraken 1
 
 For EACH active variant:
 
-### 1. Fetch past 24h Kraken bars
+### 1. Determine replay window, then fetch Kraken bars
 
-- For all 15 universe pairs, fetch 1H OHLCV for past 24 hours (24 bars) and 4H OHLCV for past 7 days (42 bars, sufficient for trailing indicators)
+- **Replay window (resilience against missed wakes):** start = the `Last rebuild` timestamp in this variant's `portfolio.md` (on the first run after spin-up, use the spin-up date); end = now. **Cap at 7 days** — if the gap is longer, replay only the last 7 days and record the older un-recoverable gap in the leaderboard `Notes`. Do NOT fall back to a fixed 24h: that is the bug that dropped the v0.12 twin's trades.
+- For all 15 universe pairs, fetch 1H OHLCV covering the replay window (window length + 20 bars warmup) and 4H OHLCV for the trailing 7 days (sufficient for trailing indicators)
 - Compute trailing indicators per pair: 1H 20-EMA, 1H ATR(14), 1H RSI(14), 4H 50-EMA, 30-day mean ATR(14) on 1H (720 bars — fetch additional history as needed for variants that require it, e.g., v0.3 rule 5c)
 
 ### 2. Replay exit rules at every 1H close
 
 For each open position in the variant's portfolio:
-- For each of the 24 1H closes in the past 24h:
+- For each 1H close in the replay window (chronological):
   - Evaluate variant exit rules (1H close < 1H 20-EMA, stop hit intra-bar, 4R target hit)
   - If any trigger fires, execute hypothetical CLOSE at the close price (or stop price for stop-hit), append to variant's `trade_log.md`
 - Stop after first triggering close per position
@@ -54,7 +57,7 @@ The three wake-equivalent 1H closes correspond to BULL's main routines:
 - 13:00 PT → 20:00 UTC (midday wake — main does NOT enter, but variants are not subject to that constraint UNLESS the variant strategy explicitly says so. v0.3 inherits v0.2 rules + 5c, so by default variants honor main's wake structure: NO entries at midday.)
 - 21:00 PT → 04:00 UTC next day (EOD wake)
 
-For each entry-eligible wake in the past 24h that has a closed 1H bar:
+For each entry-eligible wake in the replay window that has a closed 1H bar:
 - Evaluate variant entry rules in order (rules 1–8 plus any variant-specific additions like v0.3's 5c)
 - If all rules pass: execute hypothetical OPEN at the wake-bar close price, with 2× ATR stop, sized per the variant's 1.5%-risk rule. Append to `trade_log.md`.
 - If multiple pairs eligible at same wake, apply rule 8 (one-per-wake, prefer highest 30d-rank pair)

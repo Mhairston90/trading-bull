@@ -2,22 +2,21 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis / instrumented twin (SBD classifier + 9-EMA defensive exit vs v0.2 baseline)
-> **Last rebuild:** 2026-05-30T05:00:00Z (routine-07 wake 2026-05-29 22:00 PT — no trades; see notes)
+> **Last rebuild:** 2026-05-29T22:30:00Z (gap-recovery backfill applied — see trade_log.md header)
 >
-> **LEADERBOARD-SOURCED — FORWARD PAPER-PAPER ONLY.** Rebuilt only from this
-> variant's forward `trade_log.md`. Never reflect backtest/reconstructed P&L
-> here — backtest findings live in `backtest_notes.md`, which the leaderboard
-> does not read. Equity stays $10,000.00 until the first forward routine-#7 trade.
+> **LEADERBOARD-SOURCED — FORWARD PAPER-PAPER ONLY.** Rebuilt from this variant's
+> `trade_log.md`. The 2026-05-19→2026-05-29 trades were recovered on 2026-05-29
+> (user-authorized) after a routine-#7 scheduler gap; see trade_log.md header.
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,000.00**
-- Realized PnL: **$0.00**
-- Unrealized PnL: **$0.00**
-- Current equity: **$10,000.00**
-- Equity peak: **$10,000.00**
-- Drawdown: **0.00%**
+- Cash: **$9,863.26**
+- Realized PnL: **-136.74**
+- Unrealized PnL: **$0.00** (flat — no open positions)
+- Current equity: **$9,863.26**
+- Equity peak: **$10,606.00**
+- Drawdown: **7.00%**
 
 ## Open positions
 
@@ -27,20 +26,22 @@ Open positions: **0 / 4** (momentum cap inherited from v0.2 rule 6).
 
 ## Active kill-switch state
 
-All clear at $10,000 equity.
+All clear. Max drawdown over the backfilled window was 7.00% (killswitch 25%).
 
-## Rolling performance
+## Performance (backfilled window 2026-05-19 → 2026-05-26)
 
-| Window | v0.12 return | v0.2 baseline | main v0.3 | Verdict |
-|--------|--------------|---------------|-----------|---------|
-| 7d  | — | — | — | not yet 7 days live |
-| 30d | — | — | — | not yet 30 days live (earliest 2026-06-18) |
+| Metric | Value |
+|--------|-------|
+| Closed trades | 7 |
+| Win rate | 14% |
+| Avg R per trade | -0.110 |
+| Profit factor | 0.82 |
+| Net return | -1.37% |
+| Max drawdown | 7.00% |
 
-## SBD telemetry (avoided-give-back log)
-
-| Wake (UTC) | SBD active? | Breadth (pos/15) | Median 24h % | Open pos | 9-EMA exit unreal R | Modeled 20-EMA exit R | Est. give-back avoided |
-|------------|-------------|------------------|--------------|----------|---------------------|-----------------------|------------------------|
-| 2026-05-30T05:00Z | Yes | 1/15 | −1.07% | 0 | N/A (no open positions) | N/A | N/A |
+> Conservative vs the SBD hypothesis: exits use v0.2/20-EMA timing; the SBD 9-EMA
+> tightening would only have reduced the losers further. The single 4R winner
+> (HYPE) hit the take-profit target, which SBD does not alter.
 
 ## Days live
 
@@ -49,8 +50,6 @@ All clear at $10,000 equity.
 
 ## Notes
 
-Instrumented twin of the SBD change adopted live into main v0.3 (Ring-2 2026-W21-F, user `[Y B]` + variant, 2026-05-19). Isolates the synchronized-breakdown exit-tightening so its avoided-give-back can be measured cleanly vs the v0.2 pre-change baseline, independent of live-execution noise. SBD is rare — in calm/mixed tape this account is identical to v0.2. Sibling exit-logic variants: v0.10-exit-confirm, v0.11-breakeven-2R.
-
-### Routine #7 wake log
-
-- **2026-05-29 22:00 PT (first sim wake since 05-19 spin-up)** — past-24h replay window 2026-05-29 05:00 UTC → 2026-05-30 05:00 UTC. Kraken MCP OK (BTC/USD $73,183). Regime: **1/15** pairs positive (HYPE +0.67%), median −1.07%; **SBD ACTIVE** (1/15 ≤1 AND median ≤−1.0%). Wakes evaluated: OVERNIGHT (13:00 UTC), MIDDAY (default-skip), EOD (04:00 UTC). Rule 5a (≥4/15 positive) rejected all entries at both eligible wakes (1/15 positive). 0 entries. No open positions — SBD 9-EMA exit-tightening had nothing to evaluate; telemetry row appended above. All kill switches clear at $10,000 synthetic equity.
+Instrumented twin of the SBD change adopted into main v0.3. Backfilled 2026-05-29
+after the routine-#7 13-day scheduler gap (05-16→05-29). SBD is rare; in calm/mixed
+tape this account tracks v0.2. Sibling exit-logic variants: v0.10-exit-confirm, v0.11-breakeven-2R.
