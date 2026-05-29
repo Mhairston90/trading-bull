@@ -1885,3 +1885,37 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 ### Telegram
 - **Sending mandatory EOD card** per `routines/03-eod.md` NOTIFY section.
+
+
+## 2026-05-29T13:30Z — routine-01-overnight (on-time wake, scheduled 06:00 PT = 13:00Z)
+
+### Wake context
+- Scheduled: 0 6 * * 1-5 PT → 2026-05-29T13:00Z (06:00 PT Friday 2026-05-29). Actual wake ~13:30Z (~30min late, within wake-tolerance). Most-recently-closed 1H bar at evaluation = 13:00Z 2026-05-29.
+- Account flat going in (closed since 2026-05-26T18:00Z TAO exit-ema20-confirm −14.75). Cash/equity 0,356.03, DD 3.48% from peak 0,728.95, losing-day streak 3 (05-22, 05-25, 05-26; 05-27, 05-28 no trades — streak unchanged). Live strategy v0.4. No active 5b cooldowns.
+- Prior wake (routine-03-eod late-fire 2026-05-29T13:00Z): SBD active, 1/15 positive, median −1.01%. This wake is ~30 min later, same trading session; expected continuation of regime profile.
+- Kraken risk_flag: CLEAR (last scan 2026-05-28T12:30:32Z, "Markets calm", 0 tier-1/2 triggers). Note: risk_flag is stale (~25h old, awaiting 2026-05-29 scan); using as best-available macro signal.
+
+### Technical (rule-driven, deterministic)
+- **24h regime (kraken_multi_ticker @ wake 13:30Z):** **1/15 universe pairs positive.** Positives: HYPE +0.83 (only). Negatives (asc): TAO −3.91, SUI −3.35, TRX −2.54, FARTCOIN −2.51, PENGU −1.71, LINK −1.36, AVAX −1.23, ADA −1.19, XDG −1.12, XRP −0.97, SOL −0.88, ETH −0.52, BTC −0.51, LTC −0.14. **Median 24h % = −1.19%** (ADA, 8th of 15 sorted ascending).
+- **Rule 5a (regime gate):** **FAIL** — 1/15 positive < 4/15 floor. **REJECT all new entries this wake.**
+- **Rule 5a-SBD (synchronized breakdown):** **ACTIVE** — both conditions met: (i) 1/15 positive ≤ 1, and (ii) median −1.19% ≤ −1.0% (now clearer margin, 0.19pp below threshold; the marginal call has resolved into a clean SBD print). Defensive trend exit (Exit rule 1-SBD: two consecutive 1H closes < 1H 9-EMA) applies to any open positions — but **book is flat, so SBD has zero defensive value to capture this wake**. Estimated avoided-give-back vs. 20-EMA exit: **/usr/bin/bash** (no open longs). Marks third consecutive wake with SBD active (05-28T13:00Z, 05-29T13:00Z, 05-29T13:30Z). Persistence of SBD across both yesterday's late-fire EOD and today's overnight is a meaningful read on tape — drift is deepening, not stabilizing (BTC 73180 → 73142, TAO 277 → 251, SUI 0.94 → 0.90, AVAX 9.42 → 8.82).
+- **Rule 4a liquidity floor (≥$2M 24h notional):** computed for completeness given rule 5a fail. Spot-check from ticker data: BTC ~$142M, ETH ~$40.0M, HYPE ~$37.5M, XRP ~$18.9M, SOL ~$15.2M, TAO ~$4.29M, SUI ~$5.77M, ADA ~$4.37M, TRX ~$2.94M, XDG ~$1.69M, LINK ~$1.51M, LTC ~$1.71M, AVAX ~$0.71M, FARTCOIN ~$0.63M, PENGU ~$0.55M. ~9 pass / 6 fail (XDG, LINK, LTC, AVAX, FARTCOIN, PENGU). Moot under 5a veto.
+- **Per-pair entry-rule scan: SKIPPED.** Rule 5a hard-vetoes universe-wide; per-pair indicator computation deferred. Even relative leader HYPE +0.83% is isolated — no second positive pair confirming the bid.
+- **Rule 8 (one-entry tiebreaker):** N/A — zero candidates.
+
+### News (Firecrawl-driven, informational only in v0.4)
+- Not invoked — zero technical-PASS candidates to vet per routine spec (news pass is per-candidate, not standalone macro scan). Risk_flag CLEAR acts as macro pre-screen. Stale risk_flag (~25h) is a known v0 limitation; next scan will refresh tomorrow.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.4)
+- Not invoked — zero technical-PASS candidates.
+
+### Decision
+- **Action: NO new entries.** Rule 5a regime gate vetoes all 15 pairs (1/15 positive < 4 needed). SBD active per rule 5a-SBD; flat book means defensive exit rule 1-SBD has nothing to apply to.
+- **No exits processed** (account flat going in).
+- **Universe refresh:** not due (2026-05-29 is not 1st of month; next 2026-06-01).
+- **Kill switches:** day realized $0.00 (cap 5%, clear); DD 3.48% from peak (warn 12.5%, cap 25%, clear); equity $10,356.03 > $7,500 floor (clear); losing-day streak 3/7. **All clear.**
+- **Telegram:** silent (no kill switch trip, no OPEN, no CLOSE, no actionable news, no universe refresh).
+- **Next decision point:** routine-02-midday 2026-05-29T20:00Z — position-management only by spec; flat book + SBD active → no-op expected. Real next entry-scan = routine-03-eod 2026-05-30T04:00Z (last trading day of May for that EOD scope → archive sweep due there).
+
+### Observation (no lesson appended, just a marker)
+- SBD has now been active for **3 consecutive evaluations** spanning ~24h (05-28 13:00Z overnight, 05-29 13:00Z late-fire EOD, 05-29 13:30Z overnight). The market is deepening the drift, not pausing. Cumulative SBD-active wakes since rule 5a-SBD introduction (W21, 2026-05-19): wake-counter incrementing; book-with-longs counter still at 0. Defensive value to date: $0. Not flagged as a lesson — this is still the designed behavior of a long-only strategy in a breakdown regime (sit out, preserve capital). Will be relevant input to routine #4 SBD value-add scoring once we have at least one wake where SBD fires with open longs.
