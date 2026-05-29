@@ -1922,3 +1922,40 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - SBD has now been active for **3 consecutive evaluations** spanning ~24h (05-28 13:00Z overnight, 05-29 13:00Z late-fire EOD, 05-29 13:30Z overnight). The market is deepening the drift, not pausing. Cumulative SBD-active wakes since rule 5a-SBD introduction (W21, 2026-05-19): wake-counter incrementing; book-with-longs counter still at 0. Defensive value to date: $0. Not flagged as a lesson — this is still the designed behavior of a long-only strategy in a breakdown regime (sit out, preserve capital). Will be relevant input to routine #4 SBD value-add scoring once we have at least one wake where SBD fires with open longs.
 
 2026-05-29T17:06:54Z | harness | day-gate | not Saturday, skipping | no action
+
+
+## 2026-05-29T20:07Z — routine-02-midday (on-time wake, scheduled 13:00 PT = 20:00Z)
+
+### Wake context
+- Scheduled: 0 13 * * 1-5 PT → 2026-05-29T20:00Z. Actual wake ~20:07Z (~7 min late, within tolerance). Book flat going in (closed since 2026-05-26T18:00Z TAO exit-ema20-confirm).
+- Account: cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26). No active 5b cooldowns. No new realized PnL on 2026-05-29 PT (zero trades since open).
+
+### Mark-to-market
+- No open positions → MTM trivially $0 unrealized, equity unchanged at $10,356.03.
+
+### Exit check
+- N/A — book flat. No stops to evaluate, no EMA crosses to confirm, no 4R targets in play.
+
+### Kill switches (re-verified on this wake)
+- Daily realized: **$0.00** (cap −5% loss) — clear.
+- Drawdown: **3.48%** from peak $10,728.95 (warn 12.5%, cap 25%) — clear, well below warn.
+- Equity floor: **$10,356.03** > $7,500 — clear.
+- Losing-day streak: **3 / 7** — clear.
+- MCP availability: kraken_multi_ticker returned full 15-pair payload — clear.
+- **All clear.**
+
+### Regime re-scan (informational — midday is no-entry by spec)
+- **24h regime (kraken_multi_ticker @ 20:07Z):** **8/15 universe pairs positive** — sharp reversal from this morning's 1/15. Positives (desc): HYPE +7.07, PENGU +2.19, LTC +0.62, XDG +0.50, XRP +0.49, ETH +0.43, LINK +0.12, SOL +0.02. Negatives (asc): TAO −4.51, SUI −2.92, TRX −2.40, FARTCOIN −1.28, AVAX −1.01, ADA −0.78, BTC −0.04. **Median 24h % = +0.02%** (SOL, 8th of 15 sorted ascending).
+- **Rule 5a (regime gate): PASS** — 8/15 ≥ 4/15 floor. (Would allow entries — but midday spec forbids new entries; observation only.)
+- **Rule 5a-SBD: CLEARED** — both SBD conditions now fail: (i) 8/15 positive > 1/15 ceiling, AND (ii) median +0.02% > −1.0% threshold. First non-SBD print since SBD entered on 2026-05-28T13:00Z; SBD was active for 3 consecutive prior wakes (~24h span). Defensive 9-EMA two-bar exit no longer in effect; standard 20-EMA two-bar exit (Rule 1) is the live exit again.
+- **Regime read:** the 8-positive-vs-7-negative split is broadly mixed but the relative leaders (HYPE +7%, PENGU +2.2%) are isolated alt-strength rather than a broad-tape reversal — BTC −0.04% flat, ETH +0.43% tepid. SBD clearance is mechanical (thresholds crossed) more than thematic (genuine regime change). Next entry-scan (routine-03-eod 2026-05-30T04:00Z) will reassess on the close of the 03:00Z 1H bar.
+
+### Decision
+- **Action: no-op** by spec — midday is position-management only, and book is flat. Zero entries, zero exits, zero log writes to trade_log.md.
+- **Portfolio.md:** rewritten with refreshed regime classification (SBD cleared) and re-verified kill-switch state. Equity figures unchanged.
+- **Telegram:** silent (no kill-switch trip, no exit, DD 3.48% << 12.5% warn).
+- **Next decision point:** routine-03-eod 2026-05-30T04:00Z — first entry-scan opportunity under cleared 5a regime; also archive-sweep wake (last trading day of May for EOD scope).
+
+### Observation (no lesson appended)
+- SBD wake-counter: 3 SBD-active wakes total, all with book flat → cumulative defensive value captured = **$0**. Counter is now reset on this clearance; routine #4 SBD value-add scoring still has zero open-position evidence to evaluate. Continuing as designed (long-only sit-out worked: book was flat through the entire breakdown window 05-22 → 05-29 except for the BTC −$33.70 / TAO −$114.75 sequence early in the window, both pre-SBD detection).
+
