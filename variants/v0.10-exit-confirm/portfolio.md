@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis (exit rule 1: 2-bar EMA-cross confirmation vs main's 1-bar)
-> **Last rebuild:** 2026-05-17T05:00:00Z (routine-07 wake 2026-05-16 22:00 PT — first simulation wake; no trades, see notes)
+> **Last rebuild:** 2026-05-30T05:00:00Z (routine-07 wake 2026-05-29 22:00 PT — no trades; see notes)
 
 ## Account
 
@@ -43,3 +43,4 @@ Hypothesis variant targeting the commission-drag lesson (score 8). Only the EMA-
 ### Routine #7 wake log
 
 - **2026-05-16 22:00 PT (first sim wake; spun up earlier today)** — past-24h replay window = 2026-05-15 10:00 UTC → 2026-05-16 10:00 UTC. Wakes: OVERNIGHT (05-15 13:00Z), MIDDAY (05-15 20:00Z, default-skip), EOD (05-16 04:00Z). Inherits v0.2 entry rules incl. regime gate 5a (≥4/15 positive 24h). Broadly-red tape — all 15 pairs negative 24h, 0/15 positive at EOD; 5a rejected all entries at both eligible wakes. 0 entries, 0 open positions, so the modified 2-bar EMA-cross exit had nothing to evaluate (no divergence vs main yet). All kill switches clear at $10,000 equity.
+- **2026-05-29 22:00 PT** — past-24h replay window 2026-05-29 05:00 UTC → 2026-05-30 05:00 UTC. Kraken MCP OK (BTC/USD $73,183). Regime: **1/15** pairs positive (HYPE +0.67%), median −1.07%; **SBD active**. Wakes evaluated: OVERNIGHT (13:00 UTC), MIDDAY (default-skip), EOD (04:00 UTC). Rule 5a (≥4/15 positive) rejected all entries at both eligible wakes (1/15 positive). 0 entries. No open positions — 2-bar EMA-cross exit had nothing to evaluate. All kill switches clear at $10,000 synthetic equity.

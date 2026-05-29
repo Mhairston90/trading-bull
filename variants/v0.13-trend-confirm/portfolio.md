@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis (entry-quality filter: 2-bar EMA confirm + 4H RSI ≥ 50 vs main's single-bar entry)
-> **Last rebuild:** 2026-05-20 (initial spin-up, interactive session)
+> **Last rebuild:** 2026-05-30T05:00:00Z (routine-07 wake 2026-05-29 22:00 PT — no trades; see notes)
 
 ## Account
 
@@ -39,3 +39,7 @@ All clear at $10,000 equity.
 ## Notes
 
 Hypothesis variant targeting the whipsaw −1R bucket — the dominant un-addressed loss source on main (9 of 17 closes are −1R stop-outs inside 21h of entry, ≈ −$386 of the ~−$700 in main's losses inception-to-date). Adds entry-quality filters: (a) requires two consecutive 1H closes above the 20-EMA (single-bar tag insufficient), and (b) requires 4H RSI(14) ≥ 50 at entry-scan (higher-timeframe trend confirmation). Strictly entry-restricting vs v0.3 — can only reject entries v0.3 would have taken, never admit new ones. Created interactively 2026-05-20 to accrue paper-paper evidence as the entry-quality counterpart to the v0.10/v0.11/v0.12 exit-quality variant cluster.
+
+### Routine #7 wake log
+
+- **2026-05-29 22:00 PT (first sim wake since 05-20 spin-up)** — past-24h replay window 2026-05-29 05:00 UTC → 2026-05-30 05:00 UTC. Kraken MCP OK (BTC/USD $73,183). Regime: **1/15** pairs positive (HYPE +0.67%), median −1.07%; **SBD active**. Wakes evaluated: OVERNIGHT (13:00 UTC), MIDDAY (default-skip), EOD (04:00 UTC). Rule 5a (≥4/15 positive) rejected all entries at both eligible wakes (1/15 positive) — the two-consecutive-bar EMA gate (v0.13 rule 1) and 4H RSI≥50 filter (rule 3a) were not even evaluated. 0 entries. No open positions. All kill switches clear at $10,000 synthetic equity.
