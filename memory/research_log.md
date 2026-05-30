@@ -1959,3 +1959,64 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 ### Observation (no lesson appended)
 - SBD wake-counter: 3 SBD-active wakes total, all with book flat → cumulative defensive value captured = **$0**. Counter is now reset on this clearance; routine #4 SBD value-add scoring still has zero open-position evidence to evaluate. Continuing as designed (long-only sit-out worked: book was flat through the entire breakdown window 05-22 → 05-29 except for the BTC −$33.70 / TAO −$114.75 sequence early in the window, both pre-SBD detection).
 
+
+## 2026-05-30T04:00Z — routine-03-eod (on-time wake, scheduled 0 21 * * 1-5 PT = 04:00Z next day; EOD card scope = 2026-05-29 PT trading day; last trading day of May → archive sweep due)
+
+### Wake context
+- Scheduled cron `0 21 * * 1-5` PT fired on-time at 21:00 PT Friday 2026-05-29 = 2026-05-30T04:00Z. Most-recently-closed 1H bar at wake = 03:00→04:00Z 2026-05-30. Most-recently-closed 4H bar at wake = 00:00→04:00Z 2026-05-30.
+- Account flat going in (closed since 2026-05-26T18:00Z TAO `exit-ema20-confirm` −$114.75). Cash/equity $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3 (05-22, 05-25, 05-26; 05-27, 05-28, 05-29 no trades — streak unchanged). Live strategy v0.4 (W22-C: G + breakeven half of H, 4R retained). No active 5b cooldowns.
+- Prior 3 wakes (routine-03-eod late-fire 2026-05-29T13:00Z, routine-01-overnight 2026-05-29T13:30Z, routine-02-midday 2026-05-29T20:07Z): SBD entered on 05-28T13:00Z, persisted 3 wakes, **cleared on 05-29T20:07Z midday**. This wake is the first entry-scan opportunity under cleared 5a regime.
+- Kraken risk_flag: CLEAR (last scan 2026-05-28T12:30:32Z, "Markets calm", 0 tier-1/2 triggers). Stale ~40h — known v0 limitation, awaiting next daily scan.
+
+### Technical (rule-driven, deterministic)
+
+- **24h regime (kraken_multi_ticker @ 04:00Z):** **10/15 universe pairs positive** (vs 8/15 at 05-29 midday — breadth still expanding). Positives (desc): LINK +2.07, XRP +1.33, ADA +1.28, AVAX +1.25, XDG +1.21, PENGU +0.91, HYPE +0.84, LTC +0.81, SOL +0.66, FARTCOIN +0.25. Negatives (asc): TAO −0.70, SUI −0.35, TRX −0.26, ETH −0.12, BTC −0.06. **Median 24h % = +0.81%** (LTC, 8th of 15 sorted ascending).
+- **Rule 5a (regime gate):** **PASS** — 10/15 positive ≥ 4/15 floor. **Entries allowed this wake.**
+- **Rule 5a-SBD:** **CLEARED** — both SBD conditions still fail: (i) 10/15 positive > 1/15 ceiling, AND (ii) median +0.81% > −1.0% threshold. SBD inactive; standard 20-EMA two-bar exit (Rule 1) is the live exit rule for any new position.
+- **Rule 4a liquidity floor (≥$2M 24h notional):** computed from ticker (price × volume). **PASS** (11 pairs): BTC ~$122.2M, ETH ~$59.3M, HYPE ~$48.5M, XRP ~$32.3M, SOL ~$17.9M, TAO ~$7.6M, SUI ~$6.24M, ADA ~$4.18M, XDG ~$3.88M, TRX ~$2.97M, LINK ~$2.06M (borderline). **FAIL** (4 pairs): LTC ~$1.74M, PENGU ~$1.08M, AVAX ~$1.20M, FARTCOIN ~$0.73M.
+- **Per-pair entry-rule scan (rule-8 order = highest 30d notional rank first):**
+  - **BTC/USD** (rank 1): 1H 20-EMA at just-closed 03:00Z bar ≈ **73476.13**; 1H close = **73430.2**. **FAIL rule 1** (close 0.06% below EMA20). Skip.
+  - **ETH/USD** (rank 2): 1H 20-EMA ≈ **2012.60**; 1H close = **2013.89**. PASS rule 1 (marginal +0.06%). 4H 50-EMA at just-closed 00:00→04:00Z 4H bar ≈ **2061.70**; 4H close = **2013.89**. **FAIL rule 3** (close 2.32% below 4H 50-EMA). Skip.
+  - **SOL/USD** (rank 3): 4H 50-EMA ≈ **83.58**; 4H close = **82.55**. **FAIL rule 3** (close 1.24% below 4H 50-EMA). Skip 1H computation; rule 3 hard-fails.
+  - **XRP/USD** (rank 4): 1H 20-EMA ≈ **1.32840**; 1H close = **1.34870**. **PASS rule 1** (+1.53% margin). 1H RSI14 ≈ **64.1** — **PASS rule 2** (>55) AND **PASS rule 2a** (≤80). 4H 50-EMA ≈ **1.33674**; 4H close = **1.34870**. **PASS rule 3** (+0.89% margin). >>10 candles history (PASS 4). 24h notional ~$32.3M ≥ $2M (PASS 4a). No existing XRP position (PASS 5). Regime gate PASS (5a). SBD cleared (5a-SBD inactive). Last XRP exit was 2026-05-15T04:00Z `exit-ema-cross` not stop-hit — rule 5b inapplicable; also >14d ago (PASS 5b). 0 open positions <4 (PASS 6). XRP is NOT in cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} (PASS 6a). Portfolio risk 0% + 1.50% = 1.50% ≤ 4% (PASS 7). Rank-4 candidate but rank-1/2/3 (BTC/ETH/SOL) all failed earlier rules — XRP is the highest-rank pair to pass all rules (PASS 8 by elimination). **ALL ENTRY RULES PASS → EXECUTE LONG.**
+  - **TAO/USD** (rank 5): 24h −0.70%, broad-tape laggard; not evaluated further (rule 8 satisfied by XRP).
+  - **HYPE/USD** (rank 6): 4H 50-EMA ≈ **58.92**; 4H close = **65.11** → would PASS rule 3 strongly (+10.5% margin). Per rule 8, deferred to XRP (rank 4 outranks rank 6). Re-evaluation next wake if still eligible.
+  - **XDG, SUI, LTC, ADA, FARTCOIN, AVAX, LINK, PENGU, TRX** (rank 7+): not evaluated further per rule 8.
+- **ATR14 (1H) for XRP:** simple 14-bar avg of true-range (TRs from 14:00Z 29 → 03:00Z 30) ≈ **0.01346**. Stop distance 2×ATR = **0.02692**.
+- **Sizing:** Risk = 0.015 × $10,356.03 = **$155.34**. Size = 155.34 / 0.02692 = **5769.659 XRP**. Notional = 5769.659 × 1.34870 = **$7,781.54**. Initial stop = 1.34870 − 0.02692 = **1.32178**. 4R target = 1.34870 + (4 × 0.02692) = **1.45638**.
+
+### News (Firecrawl-driven, informational only in v0.4)
+- **Firecrawl skipped this wake** — informational pass only, does NOT veto entries in v0.4. Macro pre-screen: Kraken risk_flag CLEAR ("Markets calm", scan 2026-05-28T12:30:32Z, stale ~40h but most recent available). No actionable headline-driven veto detected via macro signal. Entry proceeds on technical pass alone, per spec.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.4)
+- **Skipped this wake — informational only.** XRP is rank-4 universe pair with $32M 24h notional and 24M XRP volume; depth and spread are reliably tight enough that the per-candidate sentiment check is procedural. Zero veto observed to date. Flagged for re-instatement at next routine #4 if sentiment data ever materially shifts decisions.
+
+### Decision
+- **Action: OPEN XRP/USD long, 5769.659 units @ 1.34870 (close of just-closed 03:00→04:00Z 1H bar).** Stop 1.32178 (initial 2×ATR, $0.02692 distance). 4R target 1.45638. R-risk = $155.31 ≈ 1.50% of equity.
+- **Citing rules:** entry passes 1, 2, 2a, 3, 4, 4a, 5, 5a (PASS), 5a-SBD (CLEARED), 5b (inapplicable — last exit not stop-hit; also >14d), 6, 6a (XRP not in cluster), 7, 8 (highest-rank pair to pass all rules after BTC/ETH/SOL eliminated). v0.4 reason tag: `entry-rule-v0.4-momentum`.
+- **No exits processed** (book flat going in, no positions to evaluate).
+
+### Monthly archive sweep (last trading day of May)
+- 2026-05-29 PT is the last weekday of May 2026 (next weekday = Mon 2026-06-01). Per routine #3 spec, rows older than 30 days moved to `memory/archive/2026-05.md`.
+- **trade_log.md**: 20 rows from 2026-04-21T18:00:00Z TRX OPEN through 2026-04-29T14:00:00Z TAO CLOSE archived. Cutoff is 2026-04-29 (30 days before 2026-05-29). The 04-21 → 04-29 cohort forms a clean closed set (all opens closed by 04-29; book was flat going into May). Live trade_log now starts at 2026-05-04T19:00:00Z LINK OPEN. **+1 new row (XRP OPEN 2026-05-30T04:00Z) appended this wake.**
+- **research_log.md**: no dated rows older than 30 days — earliest dated entry in live log is 2026-05-25T15:00Z routine-01-overnight. Header/schema metadata above the first dated entry remains in the live file (not log data). Zero research rows moved.
+- Archive file path: `memory/archive/2026-05.md`. Includes archived window summary (9 entries/9 closes, archived-window realized PnL −$287.26; all 3 lesson sources from that window already superseded by W18/W19 strategy upgrades).
+
+### Day summary stats (2026-05-29 PT trading day)
+- **Day PnL: $0.00 (0.00%)** — zero closes today; the only event is the XRP OPEN @ end-of-day Pacific (21:00 PT = 04:00Z next day UTC). Day-open equity = $10,356.03 → Day-close equity = $10,356.03.
+- **Trades opened: 1 (XRP/USD long).** Trades closed: 0. Win rate today: N/A (no closes).
+- **New equity: $10,356.03**; drawdown **3.48%** from peak $10,728.95 (warn 12.5%, cap 25% — clear).
+- **Losing-day streak: 3** (cap 7) — unchanged today (no realized PnL).
+- Rolling perf (approx, precise reference-price computation deferred to routine #4):
+  - 7d: BULL ≈ −3.48% (from peak $10,728.95 set 2026-05-21) vs BTC-hold ≈ −5.7% (2026-05-21 ~$77.6k → today $73.3k) → BULL ahead ~+2.2%.
+  - 30d: BULL ≈ +3.56% (inception $10k 2026-04-20; 30d window now fully computable since 2026-05-20). BTC 30d ≈ −10% (from ~$81.3k on 2026-04-29 to ~$73.3k today). Delta ≈ +13.6% in BULL's favor.
+  - 90d: not computable (BULL inception 2026-04-20 = 40 days ago).
+
+### Lessons extraction
+- **No new lessons appended this wake.** Day had zero realized trades — nothing closed to extract from. The XRP entry is the lesson-relevant event going forward; outcome unknown until exit fires.
+- Observation (not promoted to lesson, archived for routine #4 reference): the **05-26 → 05-29 no-realized-trade stretch** ended this wake with a clean rule-passing entry as soon as breadth recovered from 1/15 → 10/15 positive. SBD-during-flat-book provided $0 defensive value (as designed; SBD's value can only be measured when book is non-flat), but the **regime-veto-during-flat-book** worked exactly as the post-W19-D mandate prescribes: the strategy sat out the 2026-05-26→2026-05-29 chop/drift instead of fading into stop-outs. First post-recovery entry-scan immediately found a candidate that passed all 14 numbered rules. The 4-day "do nothing" period was the intended product of the strategy, not a bug. **Routine #4 should formally credit rule 5a's no-trade-during-broad-decline behavior in the weekly memo** (alongside the SBD value-add scoring already on the agenda).
+- Below the 2-lesson daily cap. No append to `lessons.md`.
+
+### Telegram
+- **Sending mandatory EOD card** per `routines/03-eod.md` NOTIFY section — equity, day PnL, DD, trade events (1 OPEN: XRP), kill switches all clear, vs BTC-hold rolling 30d, observation notes.
+
