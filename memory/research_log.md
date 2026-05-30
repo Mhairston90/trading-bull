@@ -2022,3 +2022,46 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 2026-05-30T17:00:00Z | harness | system | Saturday harness VERIFY: tv_health_check failed (CDP connection refused, "TradingView is not running with CDP enabled"); tv_launch auto-recovery also failed ("TradingView not found on win32" — exe not at standard AppData/Program Files paths). kraken_ticker XBTUSD OK (last 73772.1, spread 0.1, risk_flag not pulled). Per Ring 3 (guardrails.md) MCP-failure rule, SKIP entire harness routine — no variant backtests, no weekly memo, no proposals, no lessons prune this wake. Identical failure mode to 2026-04-25T17:07Z prior precedent (TV Desktop not running). XRP/USD position from 2026-05-30T04:00Z entry remains untouched (harness routine does not manage positions). Next harness attempt: routine-04 next Saturday 2026-06-06 (operator can also manually launch TradingView Desktop with --remote-debugging-port=9222 and re-run /loop). | SKIPPED harness; Telegram ALERT sent
 2026-05-30T17:40:15Z | allocation | day-gate | not Sunday, skipping | no action
+
+
+## 2026-05-30T20:00Z — routine-02-midday (off-schedule Saturday wake — see note)
+
+### Wake context
+- **Day-of-week anomaly:** doc-cron in `bull-02-midday/SKILL.md` is `0 13 * * 1-5` PT (Mon–Fri), but the OS scheduler fired this task today (Saturday 2026-05-30). Executed the routine as triggered — there is an open XRP position that needs MTM and exit-check management, and skipping a midday wake while long would leave a stop unmonitored for >24h. Flag for next routine #4 (harness) to reconcile actual OS-scheduler config vs documented cron. (For reference: routine-05-allocation today day-gated itself "not Sun"; routine-04-harness today fired but skipped Ring 3 MCP-failure. Today is a normal-fire day for "daily" routines, an off-day for Mon-Fri-only routines.)
+- Position state going in: 1 open (XRP/USD long 5769.659 @ 1.34870, entered 2026-05-30T04:00Z by routine-03-eod). Cash $2,574.49, equity at entry $10,356.03, DD 3.48% from peak $10,728.95, losing-day streak 3.
+
+### Mark-to-market
+- **XRP/USD**: last 1.34722 (kraken_multi_ticker 20:00Z). MTM = 5769.659 × 1.34722 = **$7,773.00**. Unrealized $ = 7773.00 − 7781.54 = **−$8.54**. Unrealized R = −8.54 / 155.31 = **−0.055R**. New equity = 2574.49 + 7773.00 = **$10,347.49**. DD = (10728.95 − 10347.49) / 10728.95 = **3.56%**.
+
+### Exit check (XRP/USD)
+- **Rule 2 — static 2×ATR stop $1.32178:** min low since entry = **1.33556** (04:00Z bar) — stop NOT pierced intrabar. Safe by 1.038% (104 bps) margin.
+- **Rule 1 — two consecutive 1H closes < 20-EMA:** computed 1H 20-EMA on closing series 05-29 15:00Z → 05-30 19:00Z (seed SMA on first 20 bars = 1.33464, then α = 2/21 = 0.09524 smoothing). Most-recent two just-closed bars:
+  - **18:00Z**: close 1.35011 vs EMA20 ≈ **1.33969** → close 0.78% ABOVE EMA (no trigger).
+  - **19:00Z**: close 1.34527 vs EMA20 ≈ **1.34019** → close 0.38% ABOVE EMA (no trigger).
+  - Conclusion: **two-bar EMA20 exit NOT armed** (zero of last two bars below). In-progress 20:00Z bar (close 1.34666 vs running EMA ≈ 1.34061) also above; bar not yet closed so does not count.
+- **Rule 3 — 4R target $1.45638:** max high since entry = **1.35211** (18:00Z bar). Not approached (8.0% away).
+- **Stop management (breakeven ratchet at ≥2R closed):** max close since entry = **1.35089** (17:00Z bar). R at that close = (1.35089 − 1.34870) / 0.02692 = **+0.0814R**. Ratchet **NOT armed** (requires ≥2.0R at any 1H close). Active stop remains 1.32178.
+- **Decision: HOLD.** No exit triggered. Active stop unchanged at $1.32178.
+
+### Regime re-scan (informational — midday spec is no-entry)
+- **24h regime (kraken_multi_ticker @ 20:00Z):** **15/15 universe pairs positive** — broadest breadth print since the synchronized-breakdown window ended. Positives (desc): HYPE +5.57, LINK +2.60, PENGU +2.00, AVAX +1.93, ADA +1.89, XDG +1.71, FARTCOIN +1.57, TAO +1.49, XRP +1.45, LTC +1.27, SOL +1.26, TRX +0.84, BTC +0.69, ETH +0.69, SUI +0.64. **Median 24h % = +1.49%** (TAO, 8th of 15 sorted ascending). No negatives.
+- **Rule 5a (regime gate): PASS** — 15/15 ≥ 4/15 floor. (Midday is no-entry by spec; observation only.)
+- **Rule 5a-SBD: CLEARED** — both SBD conditions fail strongly: (i) 15 positive >> 1 ceiling; (ii) median +1.49% >> −1.0% threshold. Standard 20-EMA two-bar exit (Rule 1) remains live. No 9-EMA defensive override.
+- **Regime read:** broad-tape strength, not isolated alt-strength like 05-29 midday. BTC +0.69, ETH +0.69 confirming alongside alts. Constructive backdrop for the open XRP long; XRP itself +1.45% on the 24h is mid-pack (rank 9/15 by 24h %).
+
+### Kill switches (re-verified)
+- Daily realized: **$0.00** (cap −5% loss) — clear.
+- Drawdown: **3.56%** from peak $10,728.95 (warn 12.5%, cap 25%) — clear, well below warn (no warning-threshold cross to notify on).
+- Equity floor: **$10,347.49** > $7,500 — clear.
+- Losing-day streak: **3 / 7** — clear.
+- MCP availability: kraken_ohlcv (XRP 1H, 30 bars) + kraken_ticker + kraken_multi_ticker (full 15-pair payload) all returned cleanly — clear.
+- **All clear.**
+
+### Decision
+- **Action: HOLD XRP, no exits, no entries.** Zero trade_log writes.
+- **portfolio.md:** rewritten with fresh MTM (equity $10,347.49, DD 3.56%, unrealized −$8.54 / −0.055R) and refreshed regime classification (SBD CLEARED, 15/15 positive).
+- **Telegram:** silent. No Ring 3 trip. No exit. DD 3.56% << 12.5% warn (no warn-cross to alert on). No anomaly to notify per skills/telegram.md midday spec.
+- **Next decision point:** routine-03-eod next Mon-cron fire (2026-06-01T04:00Z UTC = Sunday 21:00 PT for Monday's EOD scope). Saturday/Sunday EOD scopes not generated by `0 21 * * 1-5` PT cron. If midday Saturday-firing is incorrect, expect this gap to be reconciled by routine #4. If midday Saturday-firing is correct, the next midday wake is Sunday 2026-05-31T20:00Z.
+
+### Observation (no lesson appended)
+- 16 closed 1H bars since XRP entry have traded in a narrow $1.336–$1.352 band — tape is consolidating just above entry, neither extending toward 4R nor breaking down toward stop. EMA20 has caught up from below (1.32840 at entry → 1.34019 now) so the 20-EMA exit hurdle has tightened — XRP needs to hold ~$1.34 to keep the EMA-cross exit clear. Not actionable midday (no entries allowed; no exit yet); informational for next EOD wake.
