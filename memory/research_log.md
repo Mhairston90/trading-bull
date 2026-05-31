@@ -2065,3 +2065,5 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 ### Observation (no lesson appended)
 - 16 closed 1H bars since XRP entry have traded in a narrow $1.336–$1.352 band — tape is consolidating just above entry, neither extending toward 4R nor breaking down toward stop. EMA20 has caught up from below (1.32840 at entry → 1.34019 now) so the 20-EMA exit hurdle has tightened — XRP needs to hold ~$1.34 to keep the EMA-cross exit clear. Not actionable midday (no entries allowed; no exit yet); informational for next EOD wake.
+
+2026-05-31T01:02:38Z | idea-scan | day-gate | not Friday, skipping | no action
