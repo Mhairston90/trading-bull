@@ -2111,3 +2111,4 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 ### Off-schedule note
 - This is the 2nd weekend mis-fire today (midday at 20:00Z, EOD at 04:00Z). Cron `0 21 * * 1-5` PT explicitly excludes Sat/Sun but Task Scheduler is firing anyway. Pattern persisted across both midday and EOD slots → not a one-off. Root cause: deferred to next routine-04-harness Sunday review.
+2026-05-31T17:07:18Z | harness | day-gate | not Saturday, skipping | no action
