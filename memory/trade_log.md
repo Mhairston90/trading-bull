@@ -41,3 +41,4 @@
 | 2026-05-26T12:00:00Z | OPEN | TAO/USD | long | 15.273800 | 286.40410 | 276.12100 | 327.53650 | — | — | entry-rule-v0-momentum |
 | 2026-05-26T18:00:00Z | CLOSE | TAO/USD | long | 15.273800 | 280.40233 | — | — | -0.58 | -114.75 | exit-ema20-confirm-missed-scheduler-replay |
 | 2026-05-30T04:00:00Z | OPEN | XRP/USD | long | 5769.659 | 1.34870 | 1.32178 | 1.45638 | — | — | entry-rule-v0.4-momentum |
+| 2026-05-30T23:00:00Z | CLOSE | XRP/USD | long | 5769.659 | 1.33811 | — | — | -0.65 | -101.40 | exit-ema20-confirm-missed-scheduler-replay |

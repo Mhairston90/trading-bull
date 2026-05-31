@@ -7,6 +7,9 @@
 
 2026-05-28T01:03:01Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-05-29T01:02:22Z | idea-scan | day-gate | not Friday, skipping | no action
+
+2026-05-31T04:00Z | eod | off-schedule-fire | cron `0 21 * * 1-5` PT fired on Saturday (Sat 21:00 PT = Sun 04:00Z UTC) — 2nd weekend mis-fire today after routine-02-midday at 20:00Z. Task Scheduler appears to be ignoring the Mon-Fri day-of-week constraint. Pattern persists across multiple slots (midday + EOD) — root-cause investigation deferred to next routine-04-harness. Routine executed normally as the XRP position triggered exit-ema20-confirm at 23:00Z 05-30 and required logging. | logged
+
 > ## Schema (W19-E, effective 2026-04-29)
 >
 > Routine #1 (overnight) and Routine #2 (midday) entry-scan blocks should use the analyst-role split below. Legacy single-line rows above the marker remain as-is.
@@ -2067,3 +2070,44 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - 16 closed 1H bars since XRP entry have traded in a narrow $1.336–$1.352 band — tape is consolidating just above entry, neither extending toward 4R nor breaking down toward stop. EMA20 has caught up from below (1.32840 at entry → 1.34019 now) so the 20-EMA exit hurdle has tightened — XRP needs to hold ~$1.34 to keep the EMA-cross exit clear. Not actionable midday (no entries allowed; no exit yet); informational for next EOD wake.
 
 2026-05-31T01:02:38Z | idea-scan | day-gate | not Friday, skipping | no action
+
+---
+
+## 2026-05-31T04:00Z — routine-03-eod (Sat off-schedule wake; EOD scope = 2026-05-30 PT trading day)
+
+### Position check + replay exit
+- Open at wake-start: XRP/USD long (size 5769.659, entry 1.34870, stop 1.32178, target 1.45638, R-risk $155.31, entered 2026-05-30T04:00:00Z via routine-01-overnight). No routine fired between 2026-05-30T20:00Z midday and now (Sat afternoon → Sat evening PT). XRP price action between those wakes:
+  - 20:00→21:00Z: closes 1.34599, 1.34829 (above EMA20 ≈ 1.34074, 1.34146 → no exit; max realized-at-close R ≈ +0.043)
+  - 22:00Z: close 1.34053 vs EMA20 ≈ 1.34137 → **first below-EMA close**
+  - 23:00Z: close 1.33878 vs EMA20 ≈ 1.34113 → **second consecutive below-EMA close** → strategy v0.4 Exit Rule 1 (W22-G) fires
+- Exit fill: 1.33811 (1.33878 close × 0.9995 adverse slippage). Gross PnL = (1.33811 − 1.34870) × 5769.659 = **−$61.10**. Round-trip commission ≈ 0.52% × avg notional $7,751 ≈ **−$40.30**. Net PnL = **−$101.40 / −0.65R**. Reason tag `exit-ema20-confirm-missed-scheduler-replay` (exit trigger fired at 23:00Z but routine slot didn't actually fire until 04:00Z 05-31 due to weekend mis-fire pattern; the exit is post-fact logged at the trigger timestamp per W22 missed-scheduler-replay convention).
+- Breakeven ratchet (Stop management W22-H-partial) never armed: max 1H close since entry = 1.35089 @ 17:00Z → max R-at-close ≈ +0.081, far below the 2.0R trigger.
+- The two-bar 20-EMA exit avoided the full −1.0R stop-out at 1.32178 ($155 loss) and instead realized −0.65R ($101 loss). Save magnitude: ~$54. Designed behavior of the W22-G change validated on this single trade (n=1, not a lesson; observation only).
+
+### Technical entry scan (W19-E)
+- Universe regime: 14/15 pairs positive on 24h (TRX the lone negative −0.59%). 24h % changes sorted: −0.59, 0.20, 0.31, 0.32, 0.34, 0.35, 0.43, 0.47, 0.49, 0.56, 0.58, 0.64, 0.69, 1.44, 1.60 → median +0.47%. Rule 5a PASS (14/15 ≥ 4 floor). Not SBD (5a-SBD requires ≤1/15 positive AND median ≤ −1.0%; both fail). Kraken risk_flag CLEAR "Markets calm" (scan 2026-05-28).
+- Liquidity floor (rule 4a, 24h notional ≥ $2M) — PASS: BTC $38.9M, ETH $12.9M, SOL $7.5M, XRP $8.95M, TAO $2.45M, HYPE $30.1M, SUI $4.13M, ADA $5.44M. FAIL: XDG $1.79M, LTC $1.00M, FARTCOIN $0.54M, AVAX $0.36M, LINK $1.30M, PENGU $0.65M, TRX $1.05M.
+- Per rule 8 (one entry per wake, prefer highest 30d notional rank), evaluation order: BTC → ETH → SOL → XRP → TAO → HYPE → SUI → ADA.
+- **BTC/USD** (1H close 03:00Z 05-31 = 74037.6): 1H 20-EMA ≈ 73830 (SMA proxy 73780) → PASS rule 1 (+0.28%); 1H RSI14 ≈ 72.4 → PASS rules 2 (>55), 2a (≤80); just-closed 4H bar 00:00→04:00Z 05-31 close = 74037.6, 4H 50-EMA SMA proxy ≈ 75115 (50-bar window from 5/23 00:00Z onwards covers the 77.7k → 72.6k slide; mean anchored higher than current) → **FAIL rule 3** (close < EMA, −1.4% under). REJECT.
+- **ETH, SOL, XRP, TAO** (BTC-cluster + XRP): all expected to fail rule 3 same as BTC — the 50-bar 4H window covers the synchronized 5/21→5/28 selloff for every BTC-correlated pair, anchoring the mean above current price levels. Spot-checked TAO: 4H close 259.13 < 4H 50-EMA proxy 267.82 → FAIL. XRP additionally just exited (rule 5b technically passes since exit was ema20-confirm not stop-hit, but the pair is in active downtrend so rule 1 would fail at next 1H close anyway). REJECT cluster.
+- **ADA**: 4H close 0.23782 vs 4H 50-EMA proxy 0.2393 → FAIL rule 3. REJECT.
+- **HYPE/USD** (1H close 03:00Z 05-31 = 68.77): 1H 20-EMA SMA proxy ≈ 67.77 → PASS rule 1 (+1.5%); 4H close 68.77 > 4H 50-EMA proxy 61.50 → PASS rule 3 (+11.8% — HYPE has rallied through the broader selloff). 1H RSI14 ≈ 53 (Wilder-smoothed from 14 differences over bars 30 12:00 → 31 03:00; gains 3.88, losses 3.70, RS ≈ 1.12) → **FAIL rule 2** (<55 floor). The recent 1H chop within the rally (sharp pullbacks 67.16, 66.57 mixed with pushes to 68.27, 69.38) has dampened momentum below the entry floor. REJECT.
+- **SUI**: not spot-checked given HYPE was the only viable non-cluster rule-3 candidate and it failed rule 2; SUI 24h range $0.8916–$0.9236 is modest (4% range; 24h +0.35%) and SUI's 4H 50-EMA window also includes the 5/21→5/28 broader selloff, so rule 3 also expected to fail. Marked REJECT-pending-fuller-scan (not actionable this wake regardless).
+
+### News (Firecrawl-driven, informational only in v0.2)
+- Skipped this wake — risk_flag CLEAR, no entries to attach headlines to (all candidates rejected on rules 2 or 3). v0.2 strategy is not news-reactive. Context-budget conservation.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.2)
+- Skipped this wake — no entry candidates passed technical gates, so per-pair depth/spread query has no decision relevance.
+
+### Decision
+- **0 OPEN, 1 CLOSE** (XRP exit-ema20-confirm-missed-scheduler-replay at 2026-05-30T23:00:00Z, −0.65R / −$101.40).
+- **portfolio.md:** rewritten with 0 open, cash $10,254.63, realized PnL all-time +$254.63, DD 4.42%, losing-day streak extended 3 → 4.
+- **trade_log.md:** new CLOSE row appended.
+- **lessons.md:** no new entry. The XRP exit is a single-instance validation of W22-G (avoided ~$54 of give-back vs the full stop-out) — too small a sample to elevate to a lesson; logged as observation in position-check block above.
+- **Universe refresh:** today is 2026-05-30 PT (Saturday). Not 1st of month. Next refresh 2026-06-01 (Monday, the 1st PT day).
+- **Monthly archive:** today is Saturday, not the last trading day of May. Last trading day was Friday 2026-05-29 (covered by the prior EOD wake). Archive skipped.
+- **Telegram:** mandatory daily EOD card sent per `skills/telegram.md`.
+
+### Off-schedule note
+- This is the 2nd weekend mis-fire today (midday at 20:00Z, EOD at 04:00Z). Cron `0 21 * * 1-5` PT explicitly excludes Sat/Sun but Task Scheduler is firing anyway. Pattern persisted across both midday and EOD slots → not a one-off. Root cause: deferred to next routine-04-harness Sunday review.
