@@ -38,3 +38,4 @@
 | 2026-05-25T22:00Z | CLOSE | BTC/USD | long | 0.272760 | 77083.46000 | — | — | -1.07 | -162.30 | exit-stop-hit (backfill) |
 | 2026-05-26T12:00Z | OPEN | TAO/USD | long | 14.513854 | 286.40410 | 276.12100 | — | — | — | entry-v0.2-momentum (backfill: routine-07 gap-recovery) |
 | 2026-05-26T18:00Z | CLOSE | TAO/USD | long | 14.513854 | 280.40233 | — | — | -0.58 | -86.56 | exit-ema20-confirm (backfill) |
+| 2026-05-30T13:00Z | OPEN | HYPE/USD | long | 76 | 68.06 | 66.13 | 75.80 | — | — | entry-rule-v0.2-momentum-OVERNIGHT |

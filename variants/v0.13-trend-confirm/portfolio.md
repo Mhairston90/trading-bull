@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis (entry-quality filter: 2-bar EMA confirm + 4H RSI ≥ 50 vs main's single-bar entry)
-> **Last rebuild:** 2026-05-30T05:00:00Z (routine-07 wake 2026-05-29 22:00 PT — no trades; see notes)
+> **Last rebuild:** 2026-05-31T05:00:00Z (routine-07 wake 2026-05-30 22:00 PT — no trades; see notes)
 
 ## Account
 
@@ -43,3 +43,4 @@ Hypothesis variant targeting the whipsaw −1R bucket — the dominant un-addres
 ### Routine #7 wake log
 
 - **2026-05-29 22:00 PT (first sim wake since 05-20 spin-up)** — past-24h replay window 2026-05-29 05:00 UTC → 2026-05-30 05:00 UTC. Kraken MCP OK (BTC/USD $73,183). Regime: **1/15** pairs positive (HYPE +0.67%), median −1.07%; **SBD active**. Wakes evaluated: OVERNIGHT (13:00 UTC), MIDDAY (default-skip), EOD (04:00 UTC). Rule 5a (≥4/15 positive) rejected all entries at both eligible wakes (1/15 positive) — the two-consecutive-bar EMA gate (v0.13 rule 1) and 4H RSI≥50 filter (rule 3a) were not even evaluated. 0 entries. No open positions. All kill switches clear at $10,000 synthetic equity.
+- **2026-05-30 22:00 PT** — replay window 2026-05-30T05:00Z → 2026-05-31T05:00Z. Kraken MCP OK. Regime at OVERNIGHT: ~12/15 positive; rule 5a PASS, SBD cleared. HYPE candidate: passes rules 1 (2-bar EMA confirm: both 12:00Z bar (68.33>EMA~65.77) and 13:00Z bar (68.06>EMA~66.01) above 20-EMA ✓) and 4H RSI≥50 filter. However: **vol-compression gate 5c (inherited from v0.3) BLOCKED entry** — HYPE ATR elevated in active rally, compression not confirmed. BTC/TAO fail rule 3 (4H<50-EMA). EOD: same. 0 entries. Kill switches clear at $10,000. Days live: **11**. Note: v0.13's additional entry quality filters (2-bar EMA, 4H RSI≥50) would have passed for HYPE at OVERNIGHT — but vol-comp gate was the binding constraint, not v0.13's own filters. The SBD-cleared, regime-OK wake would have been testable were it not for the inherited vol-comp gate.

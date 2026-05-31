@@ -5,4 +5,4 @@
 | Timestamp (UTC) | Event | Pair | Side | Size | Price | Stop | Target | R at exit | Realized PnL | Reason tag |
 |-----------------|-------|------|------|------|-------|------|--------|-----------|--------------|------------|
 
-(empty — spun up 2026-05-16)
+| 2026-05-30T13:00Z | OPEN | HYPE/USD | long | 77 | 68.06 | 66.13 | 75.80 | — | — | entry-rule-v0.2-momentum-OVERNIGHT |

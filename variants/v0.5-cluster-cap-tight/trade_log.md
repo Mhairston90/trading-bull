@@ -14,4 +14,4 @@
 
 ## Trades
 
-(empty — variant spun up 2026-04-29)
+| 2026-05-30T13:00Z | OPEN | HYPE/USD | LONG | 77 | 68.06 | 66.13 | 75.80 | — | entry-rule-v0.5-momentum-OVERNIGHT | v0.5-cluster-cap-tight |
