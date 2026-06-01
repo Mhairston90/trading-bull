@@ -10,6 +10,8 @@
 
 2026-05-31T04:00Z | eod | off-schedule-fire | cron `0 21 * * 1-5` PT fired on Saturday (Sat 21:00 PT = Sun 04:00Z UTC) — 2nd weekend mis-fire today after routine-02-midday at 20:00Z. Task Scheduler appears to be ignoring the Mon-Fri day-of-week constraint. Pattern persists across multiple slots (midday + EOD) — root-cause investigation deferred to next routine-04-harness. Routine executed normally as the XRP position triggered exit-ema20-confirm at 23:00Z 05-30 and required logging. | logged
 
+2026-06-01T00:03Z | midday | day-gate | cron `0 13 * * 1-5` PT fired on Sunday (Sun ~17:00 PT = 2026-06-01T00:03Z UTC) — off-schedule weekend fire, day-of-week constraint Mon-Fri not enforced by Task Scheduler. 0 open positions → no MTM, no exit checks; entries forbidden in midday by design. Kill switches all clear (DD 4.42% from peak $10,728.95, equity $10,254.63 > $7,500 floor, daily PnL 0 today). Skipping. Pattern continues — root-cause investigation queued for routine-04-harness. | no action
+
 > ## Schema (W19-E, effective 2026-04-29)
 >
 > Routine #1 (overnight) and Routine #2 (midday) entry-scan blocks should use the analyst-role split below. Legacy single-line rows above the marker remain as-is.
