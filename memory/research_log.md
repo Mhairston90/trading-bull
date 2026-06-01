@@ -14,6 +14,8 @@
 
 2026-06-01T00:03Z | midday | day-gate | cron `0 13 * * 1-5` PT fired on Sunday (Sun ~17:00 PT = 2026-06-01T00:03Z UTC) — off-schedule weekend fire, day-of-week constraint Mon-Fri not enforced by Task Scheduler. 0 open positions → no MTM, no exit checks; entries forbidden in midday by design. Kill switches all clear (DD 4.42% from peak $10,728.95, equity $10,254.63 > $7,500 floor, daily PnL 0 today). Skipping. Pattern continues — root-cause investigation queued for routine-04-harness. | no action
 
+2026-06-01T10:06:50Z | harness | day-gate | not Saturday, skipping | no action
+
 > ## Schema (W19-E, effective 2026-04-29)
 >
 > Routine #1 (overnight) and Routine #2 (midday) entry-scan blocks should use the analyst-role split below. Legacy single-line rows above the marker remain as-is.
