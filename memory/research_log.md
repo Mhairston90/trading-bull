@@ -2180,3 +2180,4 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 ### Off-schedule note (carry-over)
 - The 2026-05-30 weekend mis-fire pattern (midday + EOD firing on Sat/Sun despite `1-5` day-of-week constraint) is still uninvestigated — routine-04-harness 05-30 was Ring-3 skipped (TV Desktop not running). Today's routine-01-overnight fired correctly on Mon 06:00 PT, so the cron itself works on weekdays. Investigation deferred to next routine-04-harness 2026-06-06 (assuming TV Desktop is launched by then).
 
+2026-06-01T17:40:14Z | allocation | day-gate | not Sunday, skipping | no action
