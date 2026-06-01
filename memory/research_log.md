@@ -2181,3 +2181,30 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - The 2026-05-30 weekend mis-fire pattern (midday + EOD firing on Sat/Sun despite `1-5` day-of-week constraint) is still uninvestigated — routine-04-harness 05-30 was Ring-3 skipped (TV Desktop not running). Today's routine-01-overnight fired correctly on Mon 06:00 PT, so the cron itself works on weekdays. Investigation deferred to next routine-04-harness 2026-06-06 (assuming TV Desktop is launched by then).
 
 2026-06-01T17:40:14Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-06-01T20:07Z routine-02-midday (on-schedule Mon 13:00 PT fire)
+
+### Context
+- Book flat (no open positions since XRP exit 2026-05-30T23:00Z). No MTM, no exit checks possible.
+- Midday routine forbids new entries by design — position-management only.
+
+### Regime re-verification (Kraken multi_ticker, 15 universe pairs)
+- **Breadth: 4/15 positive** (HYPE +1.65%, NEAR +11.61%, TAO +0.26%, XDG +0.10%); 11/15 negative.
+- **Median 24h % = −1.55%** (8th of 15 sorted: ADA −1.86%, AVAX −0.11%, ETH −0.22%, FARTCOIN −3.75%, LINK −0.94%, LTC −2.35%, SOL −1.55%, SUI −1.89%, TAO +0.26%, TRX −2.05%, XBT −2.87%, XRP −2.61%, HYPE +1.65%, NEAR +11.61%, XDG +0.10%).
+- **Rule 5a (regime gate, ≥4 floor): PASSES** (4/15 = floor exactly). Recovered from 0/15 FAIL at routine-01-overnight 15:50Z, ~4h ago. Entries from regime perspective re-authorized — but midday cannot open entries anyway. Next entry-eligible wake: routine-03-eod 2026-06-01T21:00 PT (04:00Z 06-02).
+- **Rule 5a-SBD: CLEARED** (4/15 > 1-positive ceiling). SBD was active for ~4h (15:50Z → 20:07Z) on this episode; book was flat throughout → SBD's tightened 9-EMA exit never had a position to apply to → cumulative SBD value-add this episode = $0 (consistent with overnight log).
+- Notable single-pair move: **NEAR +11.61%** (added to universe today via 1st-of-month refresh). Justifies the inclusion immediately — meeting the early-strength characteristic that drove its 30d notional rise. NEAR not currently entry-eligible from BULL (RSI/EMA on 1H not evaluated this wake by design — entries forbidden), but flagged for next entry-eligible routine.
+
+### Kill switches (re-verified, cash-only equity unchanged $10,254.63)
+- Daily realized 2026-06-01 PT: **$0.00** (no closes today) — clear vs −5% loss cap.
+- Drawdown: **4.42%** from peak $10,728.95 (warn 12.5%, cap 25%) — clear, well below halfway warn.
+- Equity floor: $10,254.63 > $7,500 — clear.
+- Losing-day streak: **4** (unchanged; cap 7) — clear.
+- Kraken MCP `kraken_multi_ticker` returned 15/15 pairs cleanly — clear.
+- **All clear.**
+
+### Decision
+- **Action: no entries (forbidden by routine), no exits (no open positions).** 0 trade_log writes.
+- portfolio.md rewritten with refreshed regime classification (5a PASS, SBD CLEARED, 4/15 positive, median −1.55%); equity, cash, peak, drawdown unchanged.
+- **Telegram: silent.** No kill-switch trip, no exit fired, drawdown unchanged at 4.42% (no 12.5% warn crossing).
+- **Next wake:** routine-03-eod 2026-06-01T21:00 PT (Mon 04:00Z 06-02). Book flat heading into EOD entry-scan; if breadth holds ≥4 and a pair meets 55<RSI≤80 + EMA stack at 1H/4H close, EOD may open. NEAR is the standout candidate to watch (+11.61% 24h with newly-promoted universe rank).
