@@ -2117,3 +2117,64 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - This is the 2nd weekend mis-fire today (midday at 20:00Z, EOD at 04:00Z). Cron `0 21 * * 1-5` PT explicitly excludes Sat/Sun but Task Scheduler is firing anyway. Pattern persisted across both midday and EOD slots → not a one-off. Root cause: deferred to next routine-04-harness Sunday review.
 2026-05-31T17:07:18Z | harness | day-gate | not Saturday, skipping | no action
 2026-05-31T17:25:00Z | allocation | W22 review | momentum 100% (only declared bucket); 30d +1.12R +$541.92 / since-inception (90d-proxy, 41d) −6.32R +$254.63 / WR 20% n=25; vs BTC 30d +11.53pts / 7d +2.05pts / since-inception +5.54pts; W22 closes 3 (all losses, −$249.85); proposal: none (single-bucket allocation, momentum positive on PnL both windows, divergence between negative R and positive $ is the designed 2-big-wins payoff shape per feedback-perf-analysis-framing); pending strategy edits: none (W22-G/H-partial applied 2026-05-20); routine-04 SKIPPED Sat 05-30 (TV Desktop not running, Ring 3 MCP-failure)
+
+
+---
+
+## 2026-06-01T15:50Z — routine-01-overnight (Mon on-time wake; first scheduler fire after weekend mis-fire pattern)
+
+### Wake context
+- Scheduled cron `0 6 * * 1-5` PT fired on-time Monday 2026-06-01 (~08:50 PT = 15:50Z). Account flat going in (last close XRP exit-ema20-confirm-missed-scheduler-replay 2026-05-30T23:00:00Z, −$101.40 / −0.65R). Cash/equity $10,254.63, DD 4.42% from peak $10,728.95, losing-day streak 4 (05-22, 05-25, 05-26, 05-30). Live strategy v0.4 (W22-G two-bar EMA20 + W22-H-partial breakeven ratchet at +2R; 4R take-profit retained).
+- **First-of-month sweep this wake:** today is 2026-06-01 (Monday, the first weekday of June). Universe refresh mandatory per routine spec.
+- Kraken risk_flag: CLEAR (last scan 2026-05-28T12:30:32Z, "Markets calm", 0 tier-1/2 triggers). Stale ~96h — known v0 limitation; treating as macro pre-screen pass since the news-side veto channel has no fresher print.
+
+### Technical (rule-driven, deterministic)
+
+- **24h regime (kraken_multi_ticker @ 15:50Z):** **0/15 universe pairs positive** — sharpest negative breadth print since the W21 SBD window. 24h % changes sorted ascending: FARTCOIN −7.68, PENGU −5.76, XRP −3.70, ADA −3.56, SUI −3.51, BTC −3.46, SOL −3.35, TAO −3.22, LTC −3.09, AVAX −2.79, LINK −2.58, XDG −1.97, ETH −1.85, TRX −1.40, HYPE −1.28. **Median 24h % = −3.22%** (TAO, 8th of 15 sorted).
+- **Rule 5a (regime gate): FAIL** — 0/15 positive < 4/15 floor. **All new entries blocked this wake.**
+- **Rule 5a-SBD: ACTIVE** — both SBD conditions satisfied: (i) 0/15 positive ≤ 1 ceiling; (ii) median −3.22% ≤ −1.0% threshold. SBD active for the first time since the W21 window 2026-05-28→2026-05-29 cleared on 2026-05-29T20:07Z (~52 wakes between SBD prints).
+- **SBD defensive value this wake:** book is flat (0 open positions) → SBD's 9-EMA tightened-exit override has zero open-position evidence to apply. Cumulative SBD value-add captured = **$0** for this episode start (counter resets to 0 wakes of non-flat-book SBD).
+- **Per-pair entry-rule scan:** all 15 pairs **REJECT** on rule 5a (regime gate fail). No per-pair indicator scan executed — 5a is a wake-level veto, not a per-pair filter. Detail scan deferred until 5a clears.
+- **Note on entry feasibility under cleared 5a:** of the 15 pairs, only HYPE and TRX would even potentially survive rule 1 (1H close > 1H 20-EMA) given the broad −3% sell. With every pair red, momentum entries this wake would face severe rule 1 failures regardless of 5a. 5a's reject-all is mechanically redundant with rule 1 today but operationally appropriate — the explicit veto is cleaner and matches the W19-D regime-confirmation intent.
+
+### Position management
+- 0 open positions → no MTM, no exit checks, no stop-management evaluation. SBD's tightened 9-EMA exit override has no positions to apply to.
+
+### News (Firecrawl-driven, informational only in v0.4)
+- **Firecrawl skipped this wake** — informational pass only, does NOT veto entries; 5a has already vetoed via regime gate so no entries to attach headlines to. Macro pre-screen: Kraken risk_flag CLEAR (stale 96h but most recent available). Context-budget conservation.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.4)
+- Skipped this wake — zero technical-pass candidates means zero sentiment relevance.
+
+### Universe refresh (first-of-month, executed)
+- Pulled 30d daily OHLCV (`kraken_ohlcv` interval=1d bars=30) for all 15 incumbents + 3 near-misses from 2026-04-20 (DOT, NEAR, UNI). Computed 30d notional = Σ(vwap × volume) across the 30 daily bars.
+- **30d notional ranking (USD, approx):** BTC ~$3920M, ETH ~$1100M, SOL ~$573M, HYPE ~$535M, XRP ~$528M, SUI ~$312M, TAO ~$195M, XDG ~$180M, NEAR ~$177M, ADA ~$106M, LINK ~$81M, LTC ~$66M, FARTCOIN ~$48M, TRX ~$48M, AVAX ~$42M, PENGU ~$38M, DOT ~$22M, UNI ~$20M.
+- **Diff from prior 24h-proxy universe (2026-04-20):**
+  - **Added:** NEAR/USD (rank 9) — driven by 2026-05-21→05-29 parabolic rally 1.30 → 2.77 with 5-9M-coin daily volumes ($177M 30d notional vs PENGU $38M).
+  - **Dropped:** PENGU/USD (was rank 14, falls to ~$38M near-miss). Meme decay 0.011 → 0.0074 over 30d with declining daily volume.
+  - **Promotions:** HYPE 6→4 (rally), SUI 8→6 (early-May runup); DOGE 7→8 (drift); other relative shuffles.
+  - **No open positions on PENGU** → no holdover-position handling triggered. PENGU may re-enter next refresh if volume recovers.
+- `memory/universe.md` rewritten with the new top-15 + diff log.
+
+### Kill switches (re-verified)
+- Daily realized: **$0.00** today (cap −5% loss) — clear.
+- Drawdown: **4.42%** from peak $10,728.95 (warn 12.5%, cap 25%) — clear, well below warn.
+- Equity floor: **$10,254.63** > $7,500 — clear.
+- Losing-day streak: **4 / 7** — clear (warn at 5 informally; not yet tripped).
+- MCP availability: kraken_multi_ticker + kraken_pairs + kraken_ohlcv (18 pairs × 30 bars) + kraken_risk_flag all returned cleanly — clear.
+- **All clear.**
+
+### Decision
+- **Action: no entries, no exits.** 0 trade_log writes. 5a regime gate FAIL → reject all new entries. SBD active but book flat → defensive override inert.
+- **portfolio.md:** rewritten with refreshed regime classification (5a FAIL, SBD ACTIVE, 0/15 positive, median −3.22%) and re-verified kill-switch state. Equity unchanged at $10,254.63 (no MTM positions; cash-only).
+- **trade_log.md:** no writes this wake.
+- **universe.md:** rewritten with first-real-30d-aggregation top-15 (NEAR in, PENGU out, HYPE & SUI promoted).
+- **Telegram:** send "universe refreshed" notification per `routines/01-overnight.md` NOTIFY spec (universe was refreshed this wake → mandatory notify branch). Silent on SBD entry — informational-only regime state change without trade impact, and the W21 SBD precedent did not send a dedicated Telegram either.
+- **Next decision point:** routine-02-midday 2026-06-01T20:00Z (Mon 13:00 PT on-time fire). Book flat → no MTM/exit to manage, but midday will re-verify regime state and may see 5a clear if broad tape recovers.
+
+### Observation (no lesson appended)
+- The 2026-05-30→2026-06-01 sequence is a textbook regime swing: 2026-05-30T20:00Z saw the broadest positive print of the month (15/15 positive, median +1.49%); 36h later 2026-06-01T15:50Z shows the opposite extreme (0/15 positive, median −3.22%). The XRP exit-ema20-confirm at 2026-05-30T23:00Z and the rejection-of-new-entries on the 05-31 EOD wake both saved capital that would otherwise have entered ahead of today's drawdown. Designed behavior of W19-D regime gate + W22-G two-bar EMA20 exit validated in tandem; n=1, observation only, not promoted to lesson.
+
+### Off-schedule note (carry-over)
+- The 2026-05-30 weekend mis-fire pattern (midday + EOD firing on Sat/Sun despite `1-5` day-of-week constraint) is still uninvestigated — routine-04-harness 05-30 was Ring-3 skipped (TV Desktop not running). Today's routine-01-overnight fired correctly on Mon 06:00 PT, so the cron itself works on weekdays. Investigation deferred to next routine-04-harness 2026-06-06 (assuming TV Desktop is launched by then).
+

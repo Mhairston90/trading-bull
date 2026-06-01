@@ -2,13 +2,13 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-05-31T04:00Z routine-03-eod (Sat 21:00 PT fire — cron `0 21 * * 1-5` PT should not fire on Saturday; this is the 2nd off-schedule weekend fire today after routine-02-midday — flagged in research_log; executing the routine since the XRP position triggered exit-ema20-confirm at 23:00Z 05-30 and must be logged). **Replay exit:** at 2026-05-30T22:00:00Z 1H close (1.34053) and 2026-05-30T23:00:00Z 1H close (1.33878), XRP/USD close was below the rising 1H 20-EMA (≈1.34137 / ≈1.34113 respectively) for two consecutive 1H bars, satisfying strategy v0.4 Exit Rule 1 (W22-G two-bar 20-EMA confirmation). Exit fires on the close of the second below-EMA bar = 2026-05-30T23:00:00Z. Slipped fill 1.33811 (0.05% adverse on 1.33878 close). Realized PnL −$101.40 / **−0.65R** on R-risk $155.31. Breakeven ratchet did NOT arm — max 1H close since entry was 1.35089 (17:00Z) → max realized-at-close R ≈ +0.081, well below the 2.0R trigger. Stop hit was avoided ($1.32178 stop, low since entry 1.33556) — the two-bar EMA exit converted a path that was drifting toward the static stop into a smaller −0.65R exit. Cash post-exit $10,254.63 = prior cash $2,574.49 + exit notional $7,720.44 − exit commission $20.07 (entry commission was absorbed at entry). Equity = cash only (0 open) = $10,254.63. **DD 4.42% from peak $10,728.95** (cap 25%, warn 12.5%) — still clear. Losing-day streak extends 3→4 (05-22 L, 05-25 L, 05-26 L, 05-30 L; the no-PnL-realized days 05-27/28/29 neither broke nor extended the streak). Universe regime: 14/15 positive 24h (TRX the lone negative at −0.59%), median ≈+0.47% — Rule 5a PASS, SBD CLEARED. Kraken risk_flag CLEAR. Kill switches all clear. **EOD entry scan:** BTC, TAO, ADA all fail rule 3 (4H close < 4H 50-EMA, regime in early recovery from the 05-27→05-28 selloff that bottomed BTC ~72.6k); HYPE passes rule 3 (close 68.77 > 50-EMA proxy ~61.50) and rule 4a (24h notional ~$30M) and is the only viable rule-3-passing non-cluster candidate, but FAILS rule 2 (1H RSI14 ≈ 53 < 55 floor — recent chop within the rally has dampened momentum). No entry this wake. **0 OPEN, 1 CLOSE.**
+> **Last rebuild:** 2026-06-01T15:50Z routine-01-overnight (Mon on-time wake, 06:00 PT cron). Regime sharply reversed since prior wake — **24h breadth 0/15 positive, median −3.22%; rule 5a-SBD ACTIVE** for first time since 2026-05-29 SBD-cleared. Book flat (XRP closed 2026-05-30T23:00:00Z on exit-ema20-confirm replay, −$101.40 / −0.65R) → SBD's tightened 9-EMA defensive exit has 0 open positions to apply to; cumulative SBD value-add this episode = $0 to-date. **All entries rejected** by 5a regime gate (0/15 < 4 floor). 0 OPEN, 0 CLOSE. **First-of-month universe refresh executed:** NEAR/USD added (rank 9), PENGU/USD dropped (was rank 14); HYPE promoted 6→4, SUI promoted 8→6 on May rally volume. No open positions on PENGU → no holdover-position handling. Universe file rewritten with first true 30d-notional aggregation (replacing 2026-04-20 24h-proxy snapshot). Kraken risk_flag CLEAR (stale 96h, most recent available). Kill switches all clear.
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,254.63** (+$7,680.14 this wake from XRP exit net of exit commission)
-- Realized PnL (all-time): **+$254.63** (−$101.40 this wake from XRP exit-ema20-confirm)
+- Cash: **$10,254.63** (unchanged from prior wake — no trades this routine)
+- Realized PnL (all-time): **+$254.63**
   - BTC −$9.14 (exit-ema-cross 2026-04-24T04:00Z) *(archived)*
   - TRX −$26.69 (exit-stop-hit 2026-04-24T20:00Z) *(archived)*
   - LTC +$39.40 (exit-ema-cross 2026-04-25T17:00Z, +1.32R) *(archived)*
@@ -42,18 +42,43 @@
 
 ## Open positions
 
-_(none — XRP/USD closed 2026-05-30T23:00:00Z on exit-ema20-confirm replay)_
+_(none — book flat since XRP/USD exit 2026-05-30T23:00:00Z)_
 
 Portfolio risk-at-moment: **0.00%** of equity (cap 4%).
 Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 0/2).
 
 ## Active kill-switch state
 
-- Daily realized on 2026-05-30 PT trading day: **−$101.40** (XRP exit at 16:00 PT 05-30 = 23:00Z 05-30) — −0.98% of $10,356.03 start-of-day equity; within 5% LOSS cap (would require ~$518 loss to trip).
-- Consecutive losing trading days: 05-21 W, 05-22 L, 05-25 L, 05-26 L, then 05-27/28/29 no-realized-PnL (open XRP), 05-30 L → streak **4** (cap 7; warn at 5 informally).
-- Max drawdown: 4.42% from peak $10,728.95 (cap 25%, warn 12.5%) — clear, well below warn.
+- Daily realized on 2026-06-01 PT trading day: **$0.00** (no closes today; XRP exit was 2026-05-30 PT) — clear vs 5% loss cap.
+- Consecutive losing trading days: 05-22 L, 05-25 L, 05-26 L, 05-30 L (05-27/28/29/31 no-realized-PnL → streak unchanged) → streak **4** (cap 7; warn at 5 informally — still 1 day from informal warn).
+- Max drawdown: **4.42%** from peak $10,728.95 (cap 25%, warn 12.5%) — clear.
 - Equity floor: $10,254.63 > $7,500 floor — OK.
-- **All clear. Trading authorized for next routine.** Regime gate (rule 5a) PASSES (14/15 positive ≥ 4 floor); SBD CLEARED (median 24h % ≈ +0.47% > −1.0% threshold and 14 positive > 1 ceiling). No active 5b cooldowns (XRP exit-ema20-confirm is not `exit-stop-hit` — rule 5b cooldown applies only to stop-outs per strict letter; XRP technically re-eligible at next wake but failed rule 2 this wake anyway). routine-03-eod 2026-05-31T04:00Z (Sat off-schedule wake — see research_log): **0 OPEN, 1 CLOSE.** Next wake: routine-04-harness scheduled Sunday 21:00 PT (= 2026-06-01T04:00Z UTC).
+- Regime gate (rule 5a) **FAILS** (0/15 positive < 4 floor); **SBD ACTIVE** (0/15 ≤ 1 ceiling AND median −3.22% ≤ −1.0% threshold). 5a's reject-all-new-entries is in force this wake. SBD's tightened 9-EMA exit override is inert this wake (book flat).
+- No active 5b cooldowns (XRP 2026-05-30 exit was ema20-confirm, not stop-hit — rule 5b inapplicable; >24h elapsed anyway).
+- **All clear (kill switches). Trading authorized for next routine BUT all new entries currently vetoed by 5a until breadth recovers to ≥4/15 positive.** routine-01-overnight 2026-06-01T15:50Z: **0 OPEN, 0 CLOSE.** Universe refreshed (1st-of-month sweep). Next wake: routine-02-midday 2026-06-01T20:00Z (Mon 13:00 PT scheduled).
+
+## Universe refresh — 2026-06-01 (first true 30d aggregation)
+
+| Rank | Pair | Change vs prior |
+|------|------|-----------------|
+| 1 | BTC | — |
+| 2 | ETH | — |
+| 3 | SOL | — |
+| 4 | HYPE | ▲ from 6 |
+| 5 | XRP | ▼ from 4 |
+| 6 | SUI | ▲ from 8 |
+| 7 | TAO | ▼ from 5 |
+| 8 | XDG (DOGE) | — |
+| 9 | NEAR | **NEW** (was off-list near-miss) |
+| 10 | ADA | — |
+| 11 | LINK | ▲ from 13 |
+| 12 | LTC | ▼ from 9 |
+| 13 | FARTCOIN | ▼ from 11 |
+| 14 | TRX | ▲ from 15 |
+| 15 | AVAX | ▼ from 12 |
+
+- **PENGU dropped** (was rank 14) → moves to near-miss watch list (~$38M 30d notional).
+- **Near-miss watch:** PENGU $38M, DOT $22M, UNI $20M.
 
 ## Pending exit triggers
 
@@ -63,8 +88,8 @@ _(none — no open positions)_
 
 | Window | BULL return | BTC-hold return | Delta | Result |
 |--------|-------------|-----------------|-------|--------|
-| 7d | ≈ −4.42% (from peak $10,728.95 set 2026-05-21) | ≈ −4.6% (BTC 2026-05-21 ~$77.6k → today $74.0k) | ≈ +0.2% | BULL ahead (thin) |
-| 30d | ≈ +2.55% (inception $10k 2026-04-20; window now fully computable since 2026-05-20) | ≈ −9.0% (BTC 2026-04-29 ~$81.3k → today $74.0k) | ≈ +11.6% | BULL ahead |
-| 90d | — | — | — | not computable (BULL inception 2026-04-20 = 41 days ago) |
+| 7d | ≈ −4.42% (from peak $10,728.95 set 2026-05-21) | ≈ −8.5% (BTC 2026-05-25 ~$77.6k → today $71.0k) | ≈ +4.1% | BULL ahead |
+| 30d | ≈ +2.55% (inception $10k 2026-04-20; window now fully computable) | ≈ −12.6% (BTC 2026-05-02 ~$81.2k → today $71.0k) | ≈ +15.1% | BULL ahead |
+| 90d | — | — | — | not computable (BULL inception 2026-04-20 = 42 days ago) |
 
 (7d and 30d figures approximate — precise reference-price computation deferred to routine #4. 90d window first computable ~2026-07-19.)
