@@ -2209,3 +2209,55 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - portfolio.md rewritten with refreshed regime classification (5a PASS, SBD CLEARED, 4/15 positive, median −1.55%); equity, cash, peak, drawdown unchanged.
 - **Telegram: silent.** No kill-switch trip, no exit fired, drawdown unchanged at 4.42% (no 12.5% warn crossing).
 - **Next wake:** routine-03-eod 2026-06-01T21:00 PT (Mon 04:00Z 06-02). Book flat heading into EOD entry-scan; if breadth holds ≥4 and a pair meets 55<RSI≤80 + EMA stack at 1H/4H close, EOD may open. NEAR is the standout candidate to watch (+11.61% 24h with newly-promoted universe rank).
+
+## 2026-06-02T04:11Z routine-03-eod (on-schedule Mon 21:00 PT fire)
+
+### Context
+- Book flat (no open positions since XRP exit 2026-05-30T23:00Z). No MTM, no exit checks possible.
+- EOD is entry-eligible per strategy (technical + news + sentiment passes per W19-E schema).
+
+### Technical (rule-driven, deterministic — 15 universe pairs, just-closed Kraken multi_ticker)
+- **Breadth: 3/15 positive** (HYPE +0.95%, NEAR +2.86%, TAO +0.08%); 12/15 negative.
+- **Median 24h % = −0.95%** (8th of 15 sorted ascending: FARTCOIN −2.15%, ADA −2.07%, AVAX −1.46%, LTC −1.44%, SUI −1.34%, XRP −1.17%, LINK −1.11%, **SOL −0.95%**, BTC −0.92%, XDG −0.57%, TRX −0.53%, ETH −0.45%, TAO +0.08%, HYPE +0.95%, NEAR +2.86%).
+- **Rule 5a (regime gate, ≥4 floor): FAILS** (3/15 = floor−1). Slipped from PASS at midday (4/15 at 20:07Z) — XDG turned negative (+0.10% → −0.57%) over the ~8h session, while no new pair entered positive territory.
+- **Rule 5a-SBD: NOT triggered** (3/15 > 1-positive ceiling; median −0.95% > −1.0% threshold). 5a alone is sufficient to block all new entries this wake.
+- Per-pair RSI14 / EMA stack scan: **SKIPPED** — rule 5a fails for all 15 pairs uniformly; no pair-specific gate can recover an entry-eligible candidate. Logged here for transparency: NEAR (+2.86%, the standout) would have been the rule-8 highest-ranked entry candidate among positive-breadth pairs by 30d notional rank (rank 9 — but the only positive-momentum pair that also clears the $2M/24h liquidity floor by a wide margin; HYPE rank 4 and TAO rank 7 also clear liquidity); detailed RSI/EMA evaluation deferred to next wake where breadth gate passes.
+- **Final candidate list: ∅ (empty — regime gate fail).**
+
+### News (Firecrawl-driven, informational)
+- No candidates to scan → skipped this wake. (W19-E schema: News pass runs only against technical-PASS candidates.)
+
+### Sentiment (Kraken depth/spread proxy)
+- No candidates to scan → skipped this wake.
+
+### Decision
+- **Action: SKIP this wake.** 0 OPEN, 0 CLOSE (no positions to close, no entries authorized).
+- Cited rules: 5a fails (3/15 positive < 4 floor).
+- portfolio.md rewritten with refreshed regime classification (5a FAIL, 3/15 positive, median −0.95%, not SBD); equity, cash, peak, drawdown unchanged.
+
+### Kill switches (re-verified, cash-only equity unchanged $10,254.63)
+- Daily realized 2026-06-01 PT: **$0.00** (no closes today) — clear vs −5% loss cap.
+- Drawdown: **4.42%** from peak $10,728.95 (warn 12.5%, cap 25%) — clear.
+- Equity floor: $10,254.63 > $7,500 — clear.
+- Losing-day streak: **4** (unchanged today — no realized PnL since 05-30 XRP exit; 05-31/06-01 are zero-PnL days; cap 7) — clear.
+- Kraken MCP `kraken_multi_ticker` returned 15/15 pairs cleanly; `kraken_risk_flag` CLEAR (scan_time 2026-05-28T12:30:32Z — stale by ~5d but tier-keyword scan is informational only and not a kill switch in itself).
+- **All clear.**
+
+### Day summary stats
+- Day PnL: **$0.00 (0.00%)** (no trades, no MTM changes — book flat all day)
+- Trades opened today: **0**; trades closed today: **0**; win rate today: **n/a**
+- Equity: **$10,254.63** (+2.55% from $10,000 inception)
+- Drawdown: **4.42%** from peak $10,728.95 (set 2026-05-21)
+- Rolling 7d: BULL ≈ −4.42% from peak vs BTC-hold ≈ −9.0% (BTC 2026-05-25T15:00Z ~$77.6k → 2026-06-02T04:00Z $70.66k = −8.94%); delta **≈ +4.5%, BULL ahead**.
+- Rolling 30d: BULL ≈ +2.55% (inception baseline still inside window) vs BTC-hold ≈ −13.0% (BTC 2026-05-02 ~$81.2k → $70.66k = −12.98%); delta **≈ +15.5%, BULL ahead**.
+- Rolling 90d: not computable (BULL inception 2026-04-20 = 43 days ago).
+
+### Lessons extraction
+- No trades opened or closed today → no per-trade observations to extract.
+- Meta-observation (NOT appended to lessons.md — instead noted here for routine-04-harness consideration): The regime gate oscillated three times in a single day (FAIL→PASS→FAIL: 0/15 at 15:50Z → 4/15 at 20:07Z → 3/15 at 04:11Z next day). Breadth hovered at the rule-5a floor of 4 for ~8 hours and slipped back below by EOD. The 4-floor is a discrete threshold over a noisy estimator (24h % change crosses zero with normal intraday drift); near-floor wakes will see frequent oscillation without meaningful change in tape. This is a known design choice (strict rule; W19-D), not a bug. No lesson appended — the gate did its job (book stayed flat through the slippage).
+
+### Monthly archive
+- Today is Mon 2026-06-01 PT (= 2026-06-02 UTC). Last trading day of May was Fri 2026-05-29; archive sweep should have run then. Last trading day of June will be Tue 2026-06-30. **No archive this wake.**
+
+### Next wake
+- routine-01-overnight 2026-06-02T15:00Z (Tue 08:00 PT). Book flat heading in; need ≥4/15 breadth recovery for entry-eligibility. NEAR remains the standout positive-momentum pair (+2.86% 24h, +14% since universe addition was justified by 1st-of-month volume aggregation).

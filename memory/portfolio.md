@@ -2,7 +2,7 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-01T20:07Z routine-02-midday (Mon on-time 13:00 PT cron). Book still flat (XRP closed 2026-05-30T23:00:00Z, −$101.40 / −0.65R) → no MTM, no exit checks, no entries (midday forbids by design). Equity unchanged at $10,254.63. **Regime recovered since overnight wake**: 24h breadth **4/15 positive** (HYPE +1.65%, NEAR +11.61%, TAO +0.26%, XDG +0.10%); median **−1.55%**. **Rule 5a now PASSES** (4 = floor exactly; recovered from 0/15 FAIL at 15:50Z). **SBD CLEARED** (4 > 1-positive ceiling). SBD episode duration ~4h (15:50Z → 20:07Z) with book flat throughout → cumulative SBD value-add = $0. NEAR +11.61% is the standout move (universe addition justified day-1). 0 OPEN, 0 CLOSE this wake. Kill switches all clear (DD 4.42%, equity $10,254.63 > $7,500 floor, daily PnL $0, loss-streak 4). Kraken MCP returned 15/15 cleanly. Telegram silent (no anomaly).
+> **Last rebuild:** 2026-06-02T04:11Z routine-03-eod (Mon on-time 21:00 PT cron). Book still flat (XRP closed 2026-05-30T23:00:00Z, −$101.40 / −0.65R) → no MTM, no exit checks possible. Equity unchanged at $10,254.63. **Regime slipped since midday**: 24h breadth **3/15 positive** (HYPE +0.95%, NEAR +2.86%, TAO +0.08%); median **−0.95%**. **Rule 5a now FAILS** (3 = floor−1; oscillated FAIL→PASS→FAIL across 3 wakes today). **5a-SBD NOT triggered** (3 > 1-positive ceiling and median −0.95% > −1.0% threshold). No entries opened (regime gate blocked all 15 pairs); no exits required (book flat). 0 OPEN, 0 CLOSE this wake. Day PnL $0 / 0.00%. Trades today: 0 opened, 0 closed. NEAR remains the standout positive-momentum pair (+2.86% 24h, would have been rule-8 highest-ranked candidate among positive-breadth pairs). Kill switches all clear (DD 4.42%, equity $10,254.63 > $7,500 floor, daily PnL $0, loss-streak 4 unchanged). Kraken MCP returned 15/15 cleanly. Telegram: EOD card sent per routine #3 mandatory daily card requirement.
 
 ## Account
 
@@ -53,9 +53,9 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 - Consecutive losing trading days: 05-22 L, 05-25 L, 05-26 L, 05-30 L (05-27/28/29/31 no-realized-PnL → streak unchanged) → streak **4** (cap 7; warn at 5 informally — still 1 day from informal warn).
 - Max drawdown: **4.42%** from peak $10,728.95 (cap 25%, warn 12.5%) — clear.
 - Equity floor: $10,254.63 > $7,500 floor — OK.
-- Regime gate (rule 5a) **PASSES** (4/15 positive = 4 floor exactly; recovered from 0/15 FAIL at overnight wake 15:50Z). **SBD CLEARED** (4 > 1-positive ceiling; episode duration ~4h with book flat). Entries re-authorized from regime perspective — but midday routine forbids entries by design; next entry-eligible wake = routine-03-eod 2026-06-01T21:00 PT.
+- Regime gate (rule 5a) **FAILS** (3/15 positive < 4 floor; slipped from 4/15 PASS at midday 20:07Z as XDG turned negative). **5a-SBD not triggered** (3 > 1-positive ceiling, median −0.95% > −1.0%). New entries blocked this wake.
 - No active 5b cooldowns (XRP 2026-05-30 exit was ema20-confirm, not stop-hit — rule 5b inapplicable; >24h elapsed anyway).
-- **All clear (kill switches). Trading authorized.** routine-02-midday 2026-06-01T20:07Z: **0 OPEN, 0 CLOSE** (midday is position-management only; book flat → no MTM/exit). Next wake: routine-03-eod 2026-06-02T04:00Z (Mon 21:00 PT scheduled).
+- **All clear (kill switches). Entries blocked by 5a (not a kill switch — rule-driven skip).** routine-03-eod 2026-06-02T04:11Z: **0 OPEN, 0 CLOSE** (book flat → no MTM/exit; 5a blocked entry scan). Next wake: routine-01-overnight 2026-06-02T15:00Z (Tue 08:00 PT scheduled).
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
