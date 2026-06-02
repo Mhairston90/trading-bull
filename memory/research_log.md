@@ -2261,3 +2261,59 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 ### Next wake
 - routine-01-overnight 2026-06-02T15:00Z (Tue 08:00 PT). Book flat heading in; need ≥4/15 breadth recovery for entry-eligibility. NEAR remains the standout positive-momentum pair (+2.86% 24h, +14% since universe addition was justified by 1st-of-month volume aggregation).
+
+---
+
+## 2026-06-02T15:00Z — routine-01-overnight (Tue on-time 08:00 PT fire)
+
+### Wake context
+- Scheduled cron `0 6 * * 1-5` PT fired on-time Tue 2026-06-02 (~08:00 PT = 15:00Z). Book flat (no open positions since XRP exit-ema20-confirm-missed-scheduler-replay 2026-05-30T23:00:00Z, −$101.40 / −0.65R). Cash/equity $10,254.63, DD 4.42% from peak $10,728.95, losing-day streak 4 (05-22, 05-25, 05-26, 05-30 — 05-31/06-01 zero-PnL).
+- Live strategy v0.4 (W22-G two-bar EMA20 + W22-H-partial breakeven ratchet at +2R; 4R take-profit retained).
+- Kraken risk_flag: CLEAR (scan_time 2026-05-28T12:30:32Z, "Markets calm", 0 tier-1/2 triggers). Stale ~5d — known v0 limitation; informational pre-screen only, not a kill switch.
+
+### Technical (rule-driven, deterministic)
+
+- **24h regime (kraken_multi_ticker @ 15:00Z):** **0/15 universe pairs positive** — second consecutive 0/15 print this 24h window (overnight 2026-06-01T15:50Z was also 0/15 with median −3.22%; today is sharper). 24h % changes sorted ascending: AVAX −5.38, SUI −5.12, ADA −5.06, BTC −4.82, XRP −4.77, LTC −4.77, SOL −4.75, **XDG −4.53 (median)**, LINK −4.34, FARTCOIN −3.58, ETH −3.32, TAO −3.18, HYPE −1.74, TRX −1.73, NEAR −0.70. **Median 24h % = −4.53%** (XDG, 8th of 15 sorted; sharper than 06-01's −3.22%).
+- **Rule 5a (regime gate, ≥4 floor): FAIL** — 0/15 positive < 4/15 floor. **All new entries blocked this wake.**
+- **Rule 5a-SBD: ACTIVE** — both SBD conditions satisfied: (i) 0/15 positive ≤ 1 ceiling; (ii) median −4.53% ≤ −1.0% threshold. Margin against the median threshold is comfortable (−4.53 vs −1.0 floor → −3.53pts of headroom). This is the **2nd consecutive SBD-active wake** in the current episode (started 2026-06-01T15:50Z, briefly cleared at 06-01 midday 20:07Z @ 4/15, re-tripped at EOD 04:11Z @ 3/15 on rule 5a alone but not SBD, now SBD re-active at 15:00Z 06-02). Strictly: SBD has been active in 2 of the last 4 wakes; the in-between wakes (06-01 midday PASS 4/15, 06-02 EOD 3/15) were 5a-only failures, not SBD. Counting only SBD-active prints, this is wake 2 of the current SBD chain.
+- **SBD defensive value this wake:** book is flat (0 open positions) → SBD's 9-EMA tightened-exit override has zero open-position evidence to apply. Cumulative SBD value-add in current episode = **$0** (no open-position exposure during any SBD-active wake yet).
+- **Per-pair entry-rule scan:** all 15 pairs **REJECT** on rule 5a (regime gate fail). No per-pair indicator scan executed — 5a is a wake-level veto, not a per-pair filter. Of the 15 24h % changes, **NEAR −0.70% is closest to positive** (would be the rule-8 ranked candidate by 30d notional should NEAR alone flip positive — rank 9, but the strongest 24h-relative pair and 4H/1H setup not relevant under 5a veto). HYPE −1.74% (rank 4) and TRX −1.73% (rank 14) are the next-closest. With every pair red, every pair would also likely fail rule 1 (1H close > 1H 20-EMA) regardless of 5a — explicit veto is operationally redundant with the per-pair gates today but matches W19-D regime-confirmation intent.
+
+### Position management
+- 0 open positions → no MTM, no exit checks, no stop-management evaluation. SBD's tightened 9-EMA exit override has no positions to apply to.
+
+### News (Firecrawl-driven, informational only in v0.4)
+- **Firecrawl skipped this wake** — informational pass only; does NOT veto entries; 5a has already vetoed via regime gate so no entries to attach headlines to. Macro pre-screen: Kraken risk_flag CLEAR (stale 5d, most recent available). Context-budget conservation, consistent with overnight 2026-06-01 precedent under SBD-active conditions.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.4)
+- Skipped this wake — zero technical-pass candidates means zero sentiment relevance.
+
+### Universe refresh
+- Today is 2026-06-02 PT (Tuesday). First-of-month refresh already executed 2026-06-01T15:50Z (true 30d aggregation). Next refresh 2026-07-01. **No refresh this wake.**
+
+### Kill switches (re-verified)
+- Daily realized 2026-06-02 PT: **$0.00** (fresh UTC day, no closes today) — clear vs −5% loss cap.
+- Drawdown: **4.42%** from peak $10,728.95 (warn 12.5%, cap 25%) — clear, well below halfway warn.
+- Equity floor: **$10,254.63** > $7,500 — clear.
+- Losing-day streak: **4 / 7** — clear (warn at 5 informally; not yet tripped; 06-01 was zero-PnL → streak does not advance).
+- MCP availability: kraken_multi_ticker returned 15/15 cleanly; kraken_risk_flag returned cleanly — clear.
+- **All clear.**
+
+### Decision
+- **Action: no entries, no exits.** 0 trade_log writes. 5a regime gate FAIL → reject all new entries. SBD active but book flat → defensive override inert.
+- **portfolio.md:** rewritten with refreshed regime classification (5a FAIL, SBD ACTIVE, 0/15 positive, median −4.53%) and re-verified kill-switch state. Equity unchanged at $10,254.63 (no MTM positions; cash-only).
+- **trade_log.md:** no writes this wake.
+- **universe.md:** unchanged (refresh was yesterday).
+- **lessons.md:** no append (no trades, no news cluster, no notable anomaly beyond the SBD/breadth dynamics already covered by 05-19 SBD lesson and 06-01 wake observation).
+- **Telegram:** silent. No kill-switch trip, no entries opened, no exits fired, no universe refresh, no ACTIONABLE news. Per `skills/telegram.md`, routine #1 sends only when (a) kill switch tripped, (b) new position opened, or (c) ACTIONABLE news flagged. None apply.
+- **Next decision point:** routine-02-midday 2026-06-02T20:00Z (Tue 13:00 PT on-time fire). Book flat → midday will re-verify regime; SBD likely persists into midday unless a sharp recovery print appears.
+
+### Observation (no lesson appended)
+- The 06-01→06-02 sequence is a textbook second leg of a synchronized breakdown: 06-01T15:50Z was 0/15 median −3.22%; ~24h later 06-02T15:00Z is 0/15 median −4.53% (sharper). The intervening midday/EOD wakes hovered at the 5a floor (4→3) but never recovered. Designed behavior of W19-D regime gate is holding through compounded breakdown; book has stayed flat through what would have been a costly entry environment. n=1 episode-level observation; not promoted to lesson (the prior W21 SBD episode already established the pattern).
+
+### Off-schedule note (carry-over)
+- The 2026-05-30 weekend mis-fire pattern (cron `0 21 * * 1-5` firing on Sat/Sun despite day-of-week constraint) remains uninvestigated — routine-04-harness 05-30 was Ring-3 skipped (TV Desktop not running). All weekday slots since are firing on-time. Investigation queued for routine-04-harness 2026-06-06 (Saturday).
+
+### Next wake
+- routine-02-midday 2026-06-02T20:00Z (Tue 13:00 PT). Position-management only — entries forbidden by routine design. If breadth recovers to ≥4/15 by then, 5a clears (entries re-authorized for routine-03-eod 04:00Z 06-03). If SBD persists, defensive 9-EMA exit override would activate for any open position — but book is flat. NEAR is the only pair within 1% of flipping positive; worth watching.
+
