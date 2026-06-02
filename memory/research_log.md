@@ -2318,3 +2318,5 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - routine-02-midday 2026-06-02T20:00Z (Tue 13:00 PT). Position-management only — entries forbidden by routine design. If breadth recovers to ≥4/15 by then, 5a clears (entries re-authorized for routine-03-eod 04:00Z 06-03). If SBD persists, defensive 9-EMA exit override would activate for any open position — but book is flat. NEAR is the only pair within 1% of flipping positive; worth watching.
 
 2026-06-02T17:07:21Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-06-02T17:40Z | allocation | day-gate | not Sunday, skipping | no action
