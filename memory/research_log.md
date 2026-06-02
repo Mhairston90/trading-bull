@@ -17,6 +17,8 @@
 
 2026-06-01T10:06:50Z | harness | day-gate | not Saturday, skipping | no action
 
+2026-06-02T20:00Z | midday | mtm-and-exit-check | book flat (XRP closed 2026-05-30T23:00Z). 0 open positions → MTM step inert (kraken_multi_ticker not needed; Kraken MCP not loaded this session, flagged informationally). No exit checks possible. Midday entry scan forbidden by routine design. Drawdown 4.42% unchanged from peak $10,728.95. Equity $10,254.63 unchanged. Day PnL 0.00%. Kill-switch proximity: DD 4.42% / 12.5% warn / 25% cap (35% of warn budget consumed; 17.7% of cap); equity $10,254.63 vs $7,500 floor (+$2,754.63 headroom); daily PnL $0 vs 5% cap; loss-streak 4 vs 7 cap. No exits. No Telegram (no kill-switch trip, no exit event, DD comfortably below halfway-warn threshold). | no action
+
 > ## Schema (W19-E, effective 2026-04-29)
 >
 > Routine #1 (overnight) and Routine #2 (midday) entry-scan blocks should use the analyst-role split below. Legacy single-line rows above the marker remain as-is.
