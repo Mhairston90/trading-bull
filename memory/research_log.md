@@ -2326,3 +2326,61 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 2026-06-02T17:40Z | allocation | day-gate | not Sunday, skipping | no action
 2026-06-03T17:22:56Z | harness | day-gate | not Saturday, skipping | no action
+
+---
+
+## 2026-06-03T17:24Z — routine-01-overnight (Wed on-time 10:24 PT fire; nominal cron 06:00 PT)
+
+### Wake context
+- Scheduled cron `0 6 * * 1-5` PT for routine-01-overnight; this slot fired at 2026-06-03T17:24Z (≈10:24 PT). Slot ID confirmed `bull-01-overnight` (matches scheduled-task body — no slot-identity mismatch).
+- Book flat (no open positions since XRP exit-ema20-confirm-missed-scheduler-replay 2026-05-30T23:00:00Z). Equity $10,254.63, DD 4.42% from peak $10,728.95, losing-day streak 4 (05-22, 05-25, 05-26, 05-30).
+- Live strategy v0.4 (W22-G two-bar EMA20 + W22-H-partial breakeven ratchet at +2R; 4R take-profit retained).
+
+### VERIFY — MCP availability gate (Ring 3 trigger)
+- **Kraken MCP: NOT LOADED** — `kraken_multi_ticker`, `kraken_ohlcv`, `kraken_ticker`, `kraken_risk_flag`, `kraken_pairs`, `kraken_spread`, `kraken_depth` all unavailable to this Claude session (ToolSearch query `kraken` returned no matches; no Kraken-related tools loaded or discoverable as deferred).
+- **TradingView MCP: CDP CONNECTION FAILED** — `tv_health_check` returned `CDP connection failed after 5 attempts: fetch failed` (TradingView Desktop appears offline; auto-launch via `tv_launch` not attempted to avoid side effects from an automated scheduled wake on an inattended desktop).
+- **Per `memory/guardrails.md` Ring 3 row:** *"Kraken MCP / TradingView MCP / Telegram MCP failure → SKIP this routine run, append error to `research_log.md`, retry next routine"* — this is the third consecutive wake hitting the dual MCP outage (routine-03-eod 2026-06-03T04:00Z, routine-02-midday 2026-06-02T20:00Z prior, both skipped on the same condition per portfolio.md notes).
+
+### DO — skipped per Ring 3 (MCP outage)
+- **Overnight price pull (step 1):** SKIPPED — no Kraken MCP. Cannot compute 24h % changes for the 15 universe pairs → cannot evaluate rule 5a breadth gate, cannot evaluate 5a-SBD classifier, cannot evaluate per-pair entry conditions.
+- **Position check (step 2):** SKIPPED on-mechanics — book flat (0 open positions), so even with MCP up this step would be a no-op. Logged for completeness: zero stops to evaluate, zero W22-G two-bar EMA20 confirmations to track, zero breakeven-ratchet (W22-H-partial) updates to apply.
+- **Entry scan / Technical pass (step 3):** SKIPPED — no 1H/4H OHLCV source. Cannot compute EMA20/EMA50/RSI14/ATR14 per `skills/decide.md`. All 15 universe pairs uniformly REJECT on MCP-unavailability (not on a per-pair rule).
+- **News scan (step 4):** SKIPPED — News pass runs only against technical-PASS candidates per W19-E schema; with zero candidates the pass is vacuous. (Firecrawl would have been available standalone, but routine #1 spec attaches News to candidate pairs; running a free-floating Firecrawl pass would burn tokens without contributing to a decision.)
+- **Sentiment pass (step 4a):** SKIPPED — no candidates and no Kraken `kraken_spread` / `kraken_depth` access. Vacuous.
+- **Entry placement (step 5):** SKIPPED — zero eligible entries.
+- **Universe refresh (step 7):** Today is 2026-06-03 (Wed). First-of-month was 2026-06-01 (refreshed on schedule). Next refresh 2026-07-01. Not due this wake regardless of MCP state.
+
+### Regime classification (carried forward, not freshly measured)
+- Last fresh print was routine-01-overnight 2026-06-02T15:00Z: **0/15 positive, median −4.53%, 5a FAIL, 5a-SBD ACTIVE**. The intervening routine-02-midday 06-02T20:00Z and routine-03-eod 06-03T04:00Z were both MCP-skipped (no fresh breadth measurement). Holding the 06-02T15:00Z classification as the most recent verifiable regime state pending MCP recovery.
+- **Decision impact:** Even if MCP were available, the carried-forward regime would near-certainly still 5a-FAIL (24h windows roll forward but a 0/15 print recovering to ≥4/15 within ~26h is unprecedented in current data) — the entry block stands either way. The cost of skipping today is purely informational (no fresh breadth datapoint), not decisional (no entries would have been opened regardless).
+
+### Kill switches (re-verified from portfolio.md state; no fresh equity recompute possible without MCP)
+- Daily realized 2026-06-03 PT: **$0.00** (no closes today — book flat) — clear vs −5% loss cap.
+- Drawdown: **4.42%** from peak $10,728.95 (warn 12.5%, cap 25%) — clear, well below halfway warn.
+- Equity floor: **$10,254.63** > $7,500 — clear.
+- Losing-day streak: **4 / 7** — clear (warn at 5 informally; 06-01/02/03 are zero-PnL → streak does not advance).
+- MCP availability: **FAILED** — Kraken not loaded + TV CDP failed. Per Ring 3 row this triggers a SKIP-this-wake action, not a HALT (no `RESUME` required; auto-retry next routine).
+- **All clear (no Ring 3 HALT-class trip; the MCP-failure row is a transient SKIP).**
+
+### WRITE
+- `memory/trade_log.md`: no writes (no trades).
+- `memory/portfolio.md`: no rewrite. The 2026-06-03T04:00Z routine-03-eod-derived state is still authoritative (book flat, equity $10,254.63, DD 4.42%, regime classification carried forward) — re-writing it under MCP-skipped conditions would create churn without new information and would falsely imply a fresh regime measurement.
+- `memory/research_log.md`: this entry (the routine's required artifact under MCP-skip).
+- `memory/universe.md`: no write (not first-of-month).
+- `memory/lessons.md`: no append. The 3-wake MCP outage is a process/infrastructure pattern, not a strategy lesson; if it persists through the weekend, routine-04-harness 2026-06-06 should investigate (queued).
+
+### COMMIT
+- `git add memory/ && git commit -m "routine-01-overnight 2026-06-03: 0 trades, 1 research items"` (1 research item = this MCP-skip log entry).
+
+### NOTIFY
+- **Telegram: silent.** Per `skills/telegram.md` routine #1 sends only when (a) Ring 3 HALT-class kill switch tripped, (b) new OPEN or stop-out CLOSE, or (c) ACTIONABLE news flagged. MCP-failure row is a transient SKIP (per the Ring 3 table explicit action), not a HALT/PAUSE trigger; no `RESUME` is required. Absence of message = "all clear, nothing to flag." Consistent with the 2026-06-03T04:00Z EOD precedent (EOD has its own mandatory daily card by separate rule; routine #1 does not).
+
+### Cross-wake pattern (process observation, not a strategy lesson)
+- This is the **3rd consecutive scheduled wake** to hit the dual-MCP outage (routine-02-midday 06-02T20:00Z, routine-03-eod 06-03T04:00Z, routine-01-overnight 06-03T17:24Z). Cause is presumed local-environment: Kraken MCP not configured/loaded on this machine, TV Desktop offline. Day-gate-skipped slots (harness/idea-scan/allocation) ran fine because they don't exercise MCPs. The pattern is the same dual-outage flagged in portfolio.md's last-rebuild note. **Operational implication:** if MCP outage persists beyond the weekend, decisional capacity is degraded — entries are blocked (purely from inability to measure), but defensive exits on open positions would also be blocked (book is flat right now, so this is a future-risk note, not a current loss). Queued for routine-04-harness 2026-06-06 investigation.
+
+### Off-schedule note (carry-over, unchanged)
+- The 2026-05-30 weekend mis-fire pattern (cron `0 21 * * 1-5` firing on Sat/Sun despite day-of-week constraint) remains uninvestigated — investigation queued for routine-04-harness 2026-06-06 alongside the MCP-availability investigation.
+
+### Next wake
+- routine-02-midday 2026-06-03T20:00Z (Wed 13:00 PT on-time fire). Same MCP-availability gate applies. If Kraken MCP/TV Desktop recover by then, position-management proceeds normally (book flat → mechanics are no-ops). If outage persists, midday skips on the same Ring 3 row.
+
