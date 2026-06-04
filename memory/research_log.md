@@ -2387,3 +2387,5 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - routine-02-midday 2026-06-03T20:00Z (Wed 13:00 PT on-time fire). Same MCP-availability gate applies. If Kraken MCP/TV Desktop recover by then, position-management proceeds normally (book flat → mechanics are no-ops). If outage persists, midday skips on the same Ring 3 row.
 
 2026-06-03T17:40:42Z | allocation | day-gate | not Sunday, skipping | no action
+
+2026-06-04T17:07:12Z | harness | day-gate | not Saturday, skipping | no action
