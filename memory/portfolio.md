@@ -2,12 +2,12 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-03T20:00Z routine-02-midday (Wed 13:00 PT on-time cron). Book still flat — no MTM, no exit checks (0 open positions, 5th consecutive flat-book wake since XRP exit 2026-05-30T23:00Z). Midday entry scan forbidden by routine design (position management only). Kraken MCP not loaded this session (consistent with prior wakes 2026-06-02T15:00Z / 2026-06-02T20:00Z / 2026-06-03T04:00Z) — but inert with no positions to quote. TradingView MCP did connect this wake (78 tools available) — unused, no entries permitted in midday slot. No trades today (0 opened, 0 closed). Equity unchanged $10,254.63 (cash-only). Day PnL $0 / 0.00%. Drawdown 4.42% from peak $10,728.95 — unchanged. Consecutive losing trading days: 4 (06-02 no closes → streak unchanged). Kill switches all clear (DD 4.42% < 12.5% warn / 25% cap, equity $10,254.63 > $7,500 floor, daily PnL $0 < 5% cap, loss-streak 4 < 7 cap). Prior wake (2026-06-03T04:00Z EOD): also flat, MCP dual-degraded (Kraken not loaded + TV CDP-failed), EOD entry scan skipped, mandatory EOD card sent. Prior overnight (2026-06-02T15:00Z): 0/15 positive breadth, median −4.53%, 5a-SBD active; NEAR −0.70% closest to positive — regime hostility expected unchanged.
+> **Last rebuild:** 2026-06-04T20:00Z routine-02-midday (Thu 13:00 PT on-time cron). Book still flat — no MTM, no exit checks (0 open positions, 6th consecutive flat-book wake since XRP exit 2026-05-30T23:00Z). Midday entry scan forbidden by routine design (position management only). Kraken MCP and TradingView MCP both inert this wake — irrelevant with no positions to quote and entries forbidden. No trades today (0 opened, 0 closed). Equity unchanged $10,254.63 (cash-only). Day PnL $0 / 0.00%. Drawdown 4.42% from peak $10,728.95 — unchanged. Consecutive losing trading days: 4 (06-03 no closes → streak unchanged). Kill switches all clear (DD 4.42% < 12.5% warn / 25% cap, equity $10,254.63 > $7,500 floor, daily PnL $0 < 5% cap, loss-streak 4 < 7 cap). Prior wake (2026-06-03T20:00Z midday): also flat, no exits, silent. Prior EOD (2026-06-03T04:00Z): MCP dual-degraded, EOD entry scan skipped, mandatory EOD card sent.
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,254.63** (unchanged from prior wake — no trades this routine)
+- Cash: **$10,254.63** (unchanged — no trades this routine)
 - Realized PnL (all-time): **+$254.63**
   - BTC −$9.14 (exit-ema-cross 2026-04-24T04:00Z) *(archived)*
   - TRX −$26.69 (exit-stop-hit 2026-04-24T20:00Z) *(archived)*
@@ -49,13 +49,13 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 
 ## Active kill-switch state
 
-- Daily realized on 2026-06-02 PT trading day: **$0.00** (no closes today; XRP exit was 2026-05-30 PT) — clear vs 5% loss cap.
-- Consecutive losing trading days: 05-22 L, 05-25 L, 05-26 L, 05-30 L (05-27/28/29/31, 06-01 no-realized-PnL → streak unchanged) → streak **4** (cap 7; warn at 5 informally — still 1 day from informal warn).
+- Daily realized on 2026-06-04 PT trading day: **$0.00** (no closes today; XRP exit was 2026-05-30 PT, 5 days ago) — clear vs 5% loss cap.
+- Consecutive losing trading days: 05-22 L, 05-25 L, 05-26 L, 05-30 L (05-27/28/29/31, 06-01/02/03 no-realized-PnL → streak unchanged) → streak **4** (cap 7; warn at 5 informally — still 1 day from informal warn).
 - Max drawdown: **4.42%** from peak $10,728.95 (cap 25%, warn 12.5%) — clear.
 - Equity floor: $10,254.63 > $7,500 floor — OK.
-- Regime gate (rule 5a) **FAILS** (0/15 positive < 4 floor; sharply worse than EOD 06-01's 3/15 — every universe pair now red). **5a-SBD ACTIVE** (0 ≤ 1-positive ceiling, median −4.53% ≤ −1.0% threshold). New entries blocked this wake. SBD's tightened 9-EMA exit override is inert (book flat — no open positions to apply to).
+- Regime gate (rule 5a) — not re-evaluated this wake (midday is position-management only, no entry scan; last observed 2026-06-03 indicated 5a fail / 5a-SBD active). Will be refreshed next overnight/EOD wake. SBD's tightened 9-EMA exit override is inert (book flat — no open positions to apply to).
 - No active 5b cooldowns (XRP 2026-05-30 exit was ema20-confirm, not stop-hit — rule 5b inapplicable; >24h elapsed anyway).
-- **All clear (kill switches).** routine-02-midday 2026-06-03T20:00Z: **0 OPEN, 0 CLOSE** (book flat → MTM step inert; no exit checks possible; midday entries forbidden by routine design). Drawdown 4.42% unchanged. Loss-streak 4 unchanged (no closes today). No Telegram (silent — no kill-switch trip, no exits, DD comfortably below halfway-warn). Prior wake routine-03-eod 2026-06-03T04:00Z: 0 OPEN, 0 CLOSE, mandatory EOD card sent, MCP dual-degraded. Prior overnight routine-01-overnight 2026-06-03T08:00Z: (per scheduler), result captured in commit history. Next wake: routine-03-eod 2026-06-04T04:00Z (Wed 21:00 PT scheduled).
+- **All clear (kill switches).** routine-02-midday 2026-06-04T20:00Z: **0 OPEN, 0 CLOSE** (book flat → MTM step inert; no exit checks possible; midday entries forbidden by routine design). Drawdown 4.42% unchanged. Loss-streak 4 unchanged (no closes today). No Telegram (silent — no kill-switch trip, no exits, DD comfortably below halfway-warn). Next wake: routine-03-eod 2026-06-05T04:00Z (Thu 21:00 PT scheduled).
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
