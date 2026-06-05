@@ -3,6 +3,8 @@
 > **Append-only.** News and external research notes per routine run.
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
+2026-06-05T20:00Z | midday | mtm-and-exit-check | book flat (XRP closed 2026-05-30T23:00Z, 6d ago — 8th consecutive flat-book wake covering 2 EOD + 5 midday + 1 prior EOD). 0 open positions → MTM step inert (kraken_multi_ticker not needed; Kraken MCP not loaded this session — 9th consecutive wake without Kraken MCP since 2026-06-02T15:00Z; tradingview-mcp registered at wake but unused, midday has no open positions to quote and entry scan is forbidden in midday by design). No exit checks possible (0 open positions). Midday entry scan forbidden by routine design (entry responsibility belongs to routine-01-overnight and routine-03-eod). Drawdown 4.42% unchanged from peak $10,728.95. Equity $10,254.63 unchanged. Day PnL $0.00 / 0.00%. Kill-switch proximity: DD 4.42% / 12.5% warn / 25% cap (35.4% of warn budget consumed; 17.7% of cap); equity $10,254.63 vs $7,500 floor (+$2,754.63 headroom, +36.7%); daily PnL $0 vs 5% cap; loss-streak 4 vs 7 cap (informal warn at 5 — would trigger informally on next L close). No exits. No Telegram (silent — no kill-switch trip, no exit event, DD comfortably below halfway-warn threshold). Regime gate not re-evaluated (no entry scan permitted in midday); last observed 2026-06-03 wake showed 0/15 positive, median −4.53%, 5a-SBD active — stale by 2+ days. Day-of-week check: 2026-06-05 = Friday, cron `0 13 * * 1-5` PT in-window (no day-gate skip). Next wake: routine-03-eod 2026-06-06T04:00Z (Fri 21:00 PT scheduled). | no action
+
 2026-06-03T04:28:46Z | idea-scan | day-gate | not Friday, skipping | no action
 
 | 2026-06-02T01:02:32Z | idea-scan | day-gate | not Friday, skipping | no action |
