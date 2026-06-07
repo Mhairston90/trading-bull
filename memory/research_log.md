@@ -2409,3 +2409,5 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 2026-06-05T17:40:32Z | allocation | day-gate | not Sunday, skipping | no action
 2026-06-06T17:40:27Z | allocation | day-gate | not Sunday, skipping | no action
 2026-06-07T17:07:12Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-06-07T17:40:42Z | allocation | W23-allocation-only | book flat 8 days, no proposal, no apply, BTC-ref approx (Kraken MCP unavailable 13th wake), R30d +2.47 / R-since +-6.32 / WR-since 20% | weekly_memos/2026-W23.md created
