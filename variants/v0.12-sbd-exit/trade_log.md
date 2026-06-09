@@ -39,3 +39,4 @@
 | 2026-05-26T12:00Z | OPEN | TAO/USD | long | 14.513854 | 286.40410 | 276.12100 | — | — | — | entry-v0.2-momentum (backfill: routine-07 gap-recovery) |
 | 2026-05-26T18:00Z | CLOSE | TAO/USD | long | 14.513854 | 280.40233 | — | — | -0.58 | -86.56 | exit-ema20-confirm (backfill) |
 | 2026-05-30T13:00Z | OPEN | HYPE/USD | long | 76 | 68.06 | 66.13 | 75.80 | — | — | entry-rule-v0.2-momentum-OVERNIGHT |
+| 2026-05-31T11:00Z | CLOSE | HYPE/USD | long | 76 | 68.29 | — | — | +0.12 | +17.48 | exit-ema-cross (SBD inactive at 05-31 wakes → default 20-EMA single-bar; mcp-outage gap replay 2026-06-09, user-directed) |

@@ -6,3 +6,4 @@
 |-----------------|-------|------|------|------|-------|------|--------|-----------|--------------|------------|
 
 | 2026-05-30T13:00Z | OPEN | HYPE/USD | long | 77 | 68.06 | 66.13 | 75.80 | — | — | entry-rule-v0.2-momentum-OVERNIGHT |
+| 2026-05-31T11:00Z | CLOSE | HYPE/USD | long | 77 | 68.29 | — | — | +0.12 | +17.71 | exit-ema-cross (breakeven ratchet never armed — 2R level 71.92 first reached 23:00Z, after exit; mcp-outage gap replay 2026-06-09, user-directed) |

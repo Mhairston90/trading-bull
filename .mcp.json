@@ -4,7 +4,7 @@
       "type": "stdio",
       "command": "C:/Users/Mhair/AppData/Local/Programs/Python/Python311/python.exe",
       "args": [
-        "C:/Users/Mhair/OneDrive/Desktop/claude/Trading Strategy/kraken_mcp.py"
+        "C:/Users/Mhair/OneDrive/Desktop/trading-bull/scripts/kraken_mcp.py"
       ],
       "env": {}
     },

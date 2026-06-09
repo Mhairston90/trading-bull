@@ -15,3 +15,4 @@
 ## Trades
 
 | 2026-05-30T13:00Z | OPEN | HYPE/USD | LONG | 77 | 68.06 | 66.13 | 75.80 | — | entry-rule-v0.5-momentum-OVERNIGHT | v0.5-cluster-cap-tight |
+| 2026-05-31T11:00Z | CLOSE | HYPE/USD | LONG | 77 | 68.29 | — | — | +0.12 | exit-ema-cross (PnL +$17.71; mcp-outage gap replay 2026-06-09, user-directed; marginal call: close 68.29 vs EMA20 68.2922) | v0.5-cluster-cap-tight |
