@@ -2422,3 +2422,4 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 2026-06-08T05:34:46Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-08T17:40:12Z | allocation | day-gate | not Sunday, skipping | no action
 2026-06-09T01:02:11Z | idea-scan | day-gate | not Friday, skipping | no action
+2026-06-09T17:07:13Z | harness | day-gate | not Saturday, skipping | no action
