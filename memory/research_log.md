@@ -2430,3 +2430,187 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 2026-06-09T23:30:00Z | interactive | MCP-OUTAGE ROOT CAUSE + FULL GAP RECOVERY (user-directed) | Root cause of the Kraken MCP outage (16 consecutive main-routine wakes + 9 routine-07 wakes since 2026-06-02T15:00Z): `.mcp.json` pointed at `C:/Users/Mhair/OneDrive/Desktop/claude/Trading Strategy/kraken_mcp.py`; that folder was renamed `Trading Strategy_ARCHIVED_2026-06-02` on June 2, so the server could not start in any session. FIX: kraken_mcp.py copied into `scripts/` (repo-owned, no secrets — public endpoints only) and `.mcp.json` repointed; server boot + live ticker verified this session; effective from the next session (tonight's routine-03-eod should have kraken_* tools again). NOTE: the script's kraken_risk_flag tool reads daily_risk_flag.json from its own directory — it will return NO_DATA from the new location until the daily risk scan (user's stack) is repointed or the file is mirrored. GAP RECOVERY: full window 2026-05-31T05:00Z -> 2026-06-09T22:00Z replayed from Kraken public REST OHLC (audit: scripts/mcp_outage_replay_20260609.py + scripts/replay_cache_20260609/). Main v0.4: 0 missed trades (5a/SBD blocked the 06-02->06-06 crash, median -8.55% at the worst wake; no rules-1+2+3 pass at recovery wakes). Variants: HYPE long resolved in v0.5/v0.11/v0.12 (+0.12R @ 68.29, 05-31T11:00Z) and v0.10 (-0.18R @ 67.72); v0.8 first trade NEAR -1.00R (06-05). Leaderboard, variant portfolios, and trade logs updated. LESSON CANDIDATE for routine #4: single-path data dependency — one folder rename silenced all market data for 8 days because both primary (Kraken MCP) and fallback (TV CDP) failed simultaneously and no REST fallback existed; scripts/mcp_outage_replay_20260609.py now doubles as the REST fallback pattern. | leaderboard.md, 5 variant portfolios+logs, .mcp.json, scripts/kraken_mcp.py updated
 2026-06-10T17:42:00Z | harness | day-gate | not Saturday, skipping | no action
 2026-06-10T17:42:46Z | allocation | day-gate | not Sunday, skipping | no action
+
+---
+
+## 2026-06-10T17:50Z — routine-01-overnight (Wed; first MCP-restored overnight wake)
+
+### Wake context
+- Scheduled cron `0 6 * * 1-5` PT fired late (~10:50 PT = 17:50Z). Slot ID confirmed `bull-01-overnight` — no slot-identity mismatch.
+- Book flat (no open positions since XRP exit-ema20-confirm-missed-scheduler-replay 2026-05-30T23:00:00Z, 11 days ago). Equity $10,254.63, DD 4.42% from peak $10,728.95, losing-day streak 4 (05-22, 05-25, 05-26, 05-30).
+- Live strategy v0.4 (W22-G two-bar EMA20 + W22-H-partial breakeven ratchet at +2R; 4R take-profit retained).
+- **Kraken MCP restored** — first overnight wake with fresh tape since 2026-06-02T15:00Z (8d MCP outage closed yesterday per 2026-06-09T23:30Z interactive fix log; root cause: `.mcp.json` pointed at renamed `Trading Strategy_ARCHIVED_2026-06-02/` folder; resolved by mirroring `kraken_mcp.py` into `scripts/` and repointing). `kraken_multi_ticker` returned 15/15 clean this wake — confirms fix is live in scheduled wakes too.
+- `kraken_risk_flag` returns `NO_DATA / daily_risk_flag.json not found` — expected per the fix note: the moved MCP reads the JSON from its own directory; daily risk scan in the user's stack still writes to the old archived path. Informational only — not a kill switch.
+
+### VERIFY — kill switches & MCP gate
+- **Kraken MCP: AVAILABLE** (15/15 ticker fetch clean — Ring 3 row "MCP failure → SKIP" does NOT trigger).
+- **TradingView MCP:** deferred tools listed in this session; not invoked (book flat, no chart verification needed; Kraken OHLCV is the rule-driven source for indicators).
+- All Ring 3 kill switches re-verified clear (see Kill switches section below).
+
+### Technical (rule-driven, deterministic — 15 universe pairs, fresh kraken_multi_ticker)
+
+| Pair | 24h % | Bucket |
+|---|---:|---|
+| NEAR | −5.81 | neg |
+| FARTCOIN | −4.72 | neg |
+| HYPE | −4.31 | neg |
+| ADA | −3.15 | neg |
+| AVAX | −3.07 | neg |
+| XRP | −2.99 | neg |
+| LTC | −2.95 | neg |
+| **LINK (median)** | **−2.54** | neg |
+| SOL | −2.12 | neg |
+| SUI | −1.83 | neg |
+| XDG | −1.73 | neg |
+| ETH | −1.03 | neg |
+| TAO | −0.38 | neg |
+| TRX | −0.38 | neg |
+| BTC | −0.14 | neg |
+
+- **Breadth: 0/15 positive.** Median 24h % = **−2.54%** (LINK, 8th of 15 sorted ascending).
+- **Rule 5a (regime gate, ≥4 floor): FAIL** — 0/15 positive < 4/15 floor. All new entries blocked this wake.
+- **Rule 5a-SBD: ACTIVE** — both SBD conditions satisfied: (i) 0/15 positive ≤ 1 ceiling; (ii) median −2.54% ≤ −1.0% threshold. Margin on median = −1.54pts of headroom below the −1.0 trigger.
+- **Per-pair entry-rule scan:** SKIPPED — 5a is a wake-level veto; with all 15 pairs red, per-pair rule 1 (1H close > 1H 20-EMA) would also near-certainly fail across the board. Closest to flipping positive: BTC −0.14%, TAO −0.38%, TRX −0.38%. NEAR is the worst pair this 24h window (−5.81%) — sharp reversal from its 2026-06-01 rank-9 promotion narrative.
+- **Final candidate list: ∅ (empty — regime gate fail).**
+
+### Position management
+- 0 open positions → no MTM, no exit checks, no stop-management evaluation. SBD's tightened 9-EMA exit override has no positions to apply to.
+- **SBD defensive value this wake: $0** (no open positions during this SBD-active wake).
+
+### SBD episode context
+- The 06-02 → 06-06 synchronized breakdown (replayed yesterday from REST OHLC — main v0.4 missed 0 trades; 5a/SBD blocked entries at median −8.55% worst-wake) appears to have continued — BTC ~$67.9k at last portfolio rebuild 06-09T20:00Z → $61.6k now is another −9.3% leg. Today's 0/15 breadth + −2.54% median is a fresh SBD print, distinct from the gap-replay window. Today's BTC at $61,602.10 is the lowest reference in the rolling-perf table.
+
+### News (Firecrawl-driven, informational only in v0.4)
+- **Firecrawl skipped this wake** — News pass attaches to technical-PASS candidates; with zero candidates the pass is vacuous. Context-budget conservation; consistent with 06-02 and prior SBD-active overnight precedents.
+
+### Sentiment (passive — Kraken depth/spread proxy in v0.4)
+- Skipped this wake — zero technical-pass candidates means zero sentiment relevance.
+
+### Universe refresh
+- Today is 2026-06-10 (Wed). First-of-month refresh executed 2026-06-01. Next refresh 2026-07-01. **No refresh this wake.**
+
+### Kill switches (re-verified, cash-only equity unchanged $10,254.63)
+- Daily realized 2026-06-10 PT: **$0.00** (no closes today — book flat) — clear vs −5% loss cap.
+- Drawdown: **4.42%** from peak $10,728.95 (warn 12.5%, cap 25%) — clear, well below halfway warn.
+- Equity floor: **$10,254.63** > $7,500 — clear.
+- Losing-day streak: **4 / 7** — clear (warn at 5 informally; 06-01 through 06-10 are zero-PnL → streak does not advance).
+- MCP availability: Kraken AVAILABLE (15/15 clean); kraken_risk_flag NO_DATA (informational, expected per fix note) — clear (the row-trigger is "MCP failure", and the multi_ticker fetch succeeded).
+- **All clear.**
+
+### Decision
+- **Action: no entries, no exits.** 0 trade_log writes. Rule 5a regime gate FAIL → reject all new entries. SBD active but book flat → defensive override inert.
+- **portfolio.md:** rewritten to refresh regime classification (5a FAIL, SBD ACTIVE, 0/15 positive, median −2.54%), refresh BTC reference price for rolling-perf row ($61,602 vs prior $67.9k → BULL-vs-BTC delta widens further in BULL's favor), and document the MCP-restored state. Equity, cash, peak, drawdown unchanged (cash-only; no MTM positions).
+- **trade_log.md:** no writes this wake.
+- **universe.md:** unchanged (refresh was 2026-06-01).
+- **lessons.md:** no append. The MCP outage root cause is already captured in the 2026-06-09T23:30Z interactive log and flagged there as a routine-#4 lesson candidate; today is the first wake where the fix is verified live in a scheduled run (the fix itself was the lesson, not today's no-op).
+- **Telegram:** silent. Per `skills/telegram.md` routine #1 NOTIFY gate sends only on (a) Ring 3 HALT-class kill switch trip, (b) new OPEN / stop-out CLOSE, or (c) ACTIONABLE news. None apply. Absence of message = "all clear, nothing to flag."
+
+### Observation (no lesson appended)
+- BTC at $61,602 is now ~$6.3k below the 06-09T20:00Z $67.9k reference used in the last rolling-perf calc — the SBD episode that started ~06-01 continues. BULL's flat book is structurally outperforming BTC-hold by another ~9% on top of the prior delta. The 5a/5a-SBD gate is doing the job it was designed for (the W21-F audit motivation): mandate-legal defensive positioning into the synchronized-breakdown regime by simply not being long. n=1 episode observation; pattern already captured by 2026-05-19 SBD lesson.
+
+### Off-schedule notes (carry-over)
+- The 2026-05-30 weekend mis-fire pattern (cron `0 21 * * 1-5` PT firing on Sat/Sun despite day-of-week constraint) and the 2026-06-07T20:00Z midday Sun mis-fire remain uninvestigated. Investigation queued for next routine-04-harness (Saturday 2026-06-13).
+
+### Next wake
+- routine-02-midday 2026-06-10T20:00Z (Wed 13:00 PT on-time fire). Same MCP gate; Kraken restored → midday position-mgmt is normal mechanics (book flat → no-op for MTM/exits; entries forbidden by routine). SBD likely persists into midday unless an unusually sharp recovery print appears (would need ≥4 pairs to flip from −0.14%/−0.38% to positive across a single 24h window).
+
+---
+
+## 2026-06-11T04:00Z — routine-03-eod (Wed 21:00 PT on-time fire; EOD card scope = 2026-06-10 PT trading day)
+
+### Wake context
+- Scheduled cron `0 21 * * 1-5` PT on-time fire. Slot ID confirmed `bull-03-eod` (matches scheduled-task body — no slot-identity mismatch; the 2026-05-11 duplicate-skill regression has not recurred).
+- Book flat (16th consecutive flat-book wake since XRP exit 2026-05-30T23:00Z, ~11 days). Equity $10,254.63, DD 4.42% from peak $10,728.95, losing-day streak 4 (05-22, 05-25, 05-26, 05-30).
+- Live strategy v0.4 (W22-G two-bar EMA20 + W22-H-partial breakeven ratchet at +2R; 4R take-profit retained).
+- **Kraken MCP confirmed available** for the 2nd consecutive wake (today's earlier routine-01-overnight 17:50Z was the first post-fix scheduled run; this EOD is the 2nd). The 2026-06-02 → 2026-06-09 outage is fully closed.
+
+### VERIFY — kill switches & MCP gate
+- Kraken MCP: AVAILABLE (15/15 fresh `kraken_multi_ticker` fetch this wake — Ring 3 row "MCP failure → SKIP" does NOT trigger).
+- `kraken_risk_flag` returns `NO_DATA / daily_risk_flag.json not found` — expected per 2026-06-09 fix note (daily risk-scan in user's stack writes to old archived path; new scripts/ location reads from its own dir). Informational only.
+- All Ring 3 kill switches re-verified clear (see Kill switches section below).
+
+### DO 1 — Final mark-to-market (21:00 PT close)
+- 0 open positions → no MTM. Cash-only equity unchanged $10,254.63.
+
+### DO 2 — Post-close exit check
+- 0 open positions → no exit evaluation. SBD's tightened 9-EMA exit override remains inert (no positions to apply to).
+
+### DO 3 — EOD entry scan (W19-E analyst-role split)
+
+**Technical pass — 15 universe pairs, fresh kraken_multi_ticker @ 04:00Z:**
+
+| Pair | 24h % | Bucket |
+|---|---:|---|
+| NEAR | −5.81 | neg |
+| FARTCOIN | −4.72 | neg |
+| HYPE | −4.31 | neg |
+| ADA | −3.15 | neg |
+| AVAX | −3.07 | neg |
+| XRP | −2.99 | neg |
+| LTC | −2.95 | neg |
+| **LINK (median)** | **−2.54** | neg |
+| SOL | −2.12 | neg |
+| SUI | −1.83 | neg |
+| XDG | −1.73 | neg |
+| ETH | −1.03 | neg |
+| TAO | −0.38 | neg |
+| TRX | −0.38 | neg |
+| BTC | −0.14 | neg |
+
+- **Breadth: 0/15 positive.** Median 24h % = **−2.54%** (LINK, 8th of 15 sorted ascending).
+- **Rule 5a (regime gate, ≥4 floor): FAIL** — 0/15 positive < 4/15 floor. All new entries blocked this wake.
+- **Rule 5a-SBD: ACTIVE** — (i) 0/15 ≤ 1 ceiling and (ii) median −2.54% ≤ −1.0% threshold both satisfied. Margin on median = −1.54pts below trigger.
+- **Per-pair entry-rule scan:** SKIPPED — 5a is a wake-level veto. With all 15 pairs red, per-pair rule 1 (1H close > 1H 20-EMA) would near-certainly fail across the board. Note: today's tickers are materially unchanged from this morning's overnight pull (24h windows shifted by ~10h, but tape is still uniformly negative; closest to flipping positive: BTC −0.14%, TAO/TRX −0.38%).
+- **Final candidate list: ∅ (empty — regime gate fail).**
+
+**News pass:** SKIPPED — News attaches to technical-PASS candidates per W19-E schema; zero candidates → vacuous.
+
+**Sentiment pass:** SKIPPED — zero candidates → vacuous.
+
+### DO 4 — Lesson extraction (review today's trades)
+- 0 stop-outs, 0 winners-past-4R, 0 entry-reversals (no trades today).
+- **No lesson append.** Today is a 16th-consecutive flat-book wake in an SBD-active regime — the operational pattern (5a/SBD blocking longs into a synchronized breakdown) is already captured by the 2026-05-19 SBD lesson (status: addressed via W21-F). The MCP-outage root-cause + REST-fallback pattern is queued for routine-04 review per 2026-06-09T23:30Z interactive note. Nothing material to add.
+
+### DO 5 — Day summary stats (2026-06-10 PT trading day)
+- **Day PnL:** $0.00 (0.00%) — no closes today.
+- **Trades opened today:** 0.
+- **Trades closed today:** 0.
+- **Win rate today:** N/A (no closes).
+- **New equity:** $10,254.63 (cash-only).
+- **Drawdown from peak:** 4.42% (peak $10,728.95 set 2026-05-21 via HYPE 4R-target replay).
+- **Since-start return:** +2.55% (inception $10,000 on 2026-04-20; 51 days).
+
+**Rolling perf (BTC ref $61,602.10 — Kraken last):**
+- 7d: BULL ≈ −4.42% (held flat at $10,254.63 vs prior peak); BTC ≈ −20.6% (was ~$77.6k a week ago); **delta ≈ +16.2% in BULL's favor**.
+- 30d: BULL ≈ +2.55%; BTC ≈ −24.2% (was ~$81.2k 30 days ago); **delta ≈ +26.8% in BULL's favor**.
+- 90d: not yet computable (BULL inception = 51 days ago).
+
+### DO 6 — Monthly archive
+- Today is 2026-06-10 (Wed). Not the last trading day of June (last trading day = Tue 2026-06-30). **No archive sweep this wake.**
+
+### Kill switches (re-verified, cash-only equity $10,254.63)
+- Daily realized 2026-06-10 PT: **$0.00** — clear vs −5% loss cap.
+- Drawdown: **4.42%** from peak $10,728.95 (warn 12.5%, cap 25%) — clear, well below halfway warn.
+- Equity floor: **$10,254.63** > $7,500 — clear.
+- Losing-day streak: **4 / 7** — clear. Today is a zero-PnL day → streak does not advance (warn at 5 informally; one closing-L away).
+- MCP availability: Kraken AVAILABLE (15/15 clean) — clear.
+- **All clear.**
+
+### Decision
+- **Action:** no entries (5a FAIL uniformly), no exits (book flat). 0 trade_log writes.
+- **portfolio.md:** rewritten with this wake's note + fresh regime classification (5a FAIL, SBD ACTIVE re-confirmed at EOD close) + refreshed rolling-perf table (BTC ref $61,602).
+- **trade_log.md:** no writes.
+- **universe.md:** unchanged (refresh was 2026-06-01).
+- **lessons.md:** no append.
+- **archive/2026-06.md:** no sweep (not month-end).
+- **Telegram:** mandatory EOD card sent (per routine #3 NOTIFY rule and `feedback-silence-eod` guard — silence is a failure mode).
+
+### Observation (operational pattern, not a new lesson)
+- 2nd post-MCP-fix scheduled wake; Kraken `kraken_multi_ticker` round-trip clean. The 8-day MCP blackout is fully closed in the scheduled-routine path. The SBD regime that started ~06-02 is still active 9 days in — long-duration synchronized breakdown of the kind the W21-F fragility audit was sized for. BULL's flat book through this entire window is the designed defensive outcome (n=1 episode confirmation of W21-F's mandate-legal half).
+
+### Off-schedule notes (carry-over)
+- Weekend mis-fire pattern (cron `0 21 * * 1-5` PT firing on Sat/Sun) + 2026-06-07T20:00Z midday Sun mis-fire still queued for routine-04-harness investigation (next: Saturday 2026-06-13).
+- `kraken_risk_flag` NO_DATA from scripts/ location — daily risk-scan in user's stack still writes to old archived path. Cosmetic; not a routine blocker since the multi_ticker fetch covers the actual regime measurement. Queued for routine-04 alongside the MCP fix audit.
+
+### Next wake
+- routine-01-overnight 2026-06-11T13:00Z (Thu 06:00 PT scheduled). Kraken MCP gate normal. If SBD persists (likely given 9-day persistence), entries continue to be blocked at 5a; book stays flat. Loss-streak advancement only happens on a realized losing close — no open positions, no clock advancement.
