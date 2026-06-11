@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB-SWEEP (parameter sweep of v0.4, RSI threshold 25 → 30)
-> **Last rebuild:** 2026-06-09 interactive mcp-outage gap replay (user-directed; Kraken public REST bars 2026-05-31T05:00Z → 2026-06-09T22:00Z — full window recovered)
+> **Last rebuild:** 2026-06-12T05:00Z (routine-07 wake 2026-06-11 22:00 PT — 0 trades; 48h replay)
 
 ## Account
 
@@ -34,7 +34,8 @@ All clear at $9,850.00 equity. DD 1.50% well under caps.
 ## Days live
 
 - Spin-up: 2026-05-12
-- Promotion-eligible: 2026-06-11
+- As of last rebuild: **31 days**
+- Promotion-eligible: **2026-06-11 (reached)** — 1 closed trade in rolling 30d (NEAR −1R) — below 10-trade minimum → NOT promotion-eligible; variant continues in LAB.
 
 ## Notes
 
@@ -46,3 +47,4 @@ Parameter sweep — RSI oversold threshold 30 (vs v0.4's 25). Tests whether v0.4
 - **2026-05-29 22:00 PT** — past-24h replay window 2026-05-29 05:00 UTC → 2026-05-30 05:00 UTC. Kraken MCP OK (BTC/USD $73,183). Wakes evaluated: OVERNIGHT (13:00 UTC), MIDDAY (default-skip), EOD (04:00 UTC). At OVERNIGHT: M3 failed universe-wide (1H bar at 13:00 UTC red for all sampled pairs). At EOD: M3 passed BTC/SOL/HYPE/TAO/ADA; M2 (RSI < 30) failed for all — computed RSI BTC≈55, SOL≈59, HYPE≈75, TAO≈50, ADA≈58, none near oversold. 0 entries. No open positions. All kill switches clear at $10,000 synthetic equity.
 - **2026-05-30 22:00 PT** — replay window 2026-05-30T05:00Z → 2026-05-31T05:00Z. Kraken MCP OK. OVERNIGHT: M3 checked — HYPE 13:00Z bar red (68.34→68.06); BTC/SOL/TAO green but M2 (RSI < 30) fails — BTC RSI ~62, SOL RSI ~55, TAO RSI ~59. EOD: M3 passed for BTC/SOL/TAO/HYPE; M2 (RSI < 30): BTC RSI ~70, HYPE RSI ~60, TAO RSI ~62, SOL RSI ~65 — all far above the relaxed 30 threshold. 0 entries. Kill switches clear at $10,000. Days live: **19**.
 - **2026-06-09 interactive (user-directed mcp-outage gap replay)** — 9 missed routine-07 wakes recovered from Kraken public REST bars. **FIRST TRADE for this variant — and the only missed entry in the entire rack during the outage: NEAR/USD long 1087.076038 @ 2.1241 at the 2026-06-05T04:00Z EOD wake** (M1 ✓ 4H close > 4H 200-EMA — NEAR's late-May rally kept it above its long EMA while everything else crashed below; M2 ✓ RSI 26.9 < 30 — crash-day oversold; M3 ✓ reversal candle close 2.1241 > prev low 2.1129 and > open 2.1224; M4 ✓ $26.8M vol). Stop 1.986115 (1.5×ATR 0.137985). **CLOSED 2026-06-05T08:00Z @ 1.986115 exit-stop-hit, −1.00R, −$150.00** — the 06-05 crash leg (universe median −6.15% that wake) ran straight through the reversal candle in 4 hours. **Sweep datum vs parent/siblings: parent v0.4 (RSI<25) and v0.9 (RSI<20) did NOT take this trade (RSI 26.9 above neither threshold)** — first divergence evidence in the sweep, and it favors the tighter thresholds: the relaxed floor bought a knife-catch in a synchronized breakdown. Equity $9,850.00, book flat. Audit: `scripts/mcp_outage_replay_20260609.py`.
+- **2026-06-11 22:00 PT** — replay window 2026-06-10T05:00Z → 2026-06-12T05:00Z (48h; last rebuild 2026-06-09 22:00Z). Kraken MCP OK (BTC/USD $62,563; 4H OHLCV unavailable). Wakes: OVERNIGHT (2026-06-10T13:00Z), EOD (2026-06-11T04:00Z), OVERNIGHT (2026-06-11T13:00Z), EOD (2026-06-12T04:00Z). **OVERNIGHT 2026-06-10T13:00Z:** SBD active (mean-rev ignores 5a by design). M3 (reversal candle): declining tape → red/mixed bars → M3 FAIL. NEAR RSI (1H-derived) ≈ 45 → M2 (RSI < 30) FAIL. 0 entries. **EOD 2026-06-11T04:00Z:** SBD active. BTC green (+2.26% 24h) M3 partial; NEAR RSI ≈ 36 (closest to threshold but > 30) → M2 FAIL. M1 (4H close > 4H 200-EMA): post-crash, most pairs likely below 200-EMA. 0 entries. **OVERNIGHT 2026-06-11T13:00Z:** SBD active, declining tape. M3 FAIL. 0 entries. **EOD 2026-06-12T04:00Z:** SBD CLEARED ✓. M3 PASSES (15/15 green ✓). M2 (RSI < 30): BTC 1H RSI ~57.9 — far above 30. NEAR RSI elevated in bounce. No pair near oversold in full-positive tape. M1: uncertain (4H API unavailable). **0 entries.** Exit replay no-op (book flat). Kill switches all clear at $9,850. **30-day promotion threshold reached (2026-06-11 = day 30 from spin-up). 1 closed trade lifetime (NEAR −1R) — below 10-trade minimum → NOT promotion-eligible.** Days live: **31**.

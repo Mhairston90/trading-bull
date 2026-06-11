@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB-SWEEP (parameter sweep of v0.4, RSI threshold 25 → 20)
-> **Last rebuild:** 2026-05-31T05:00:00Z (routine-07 wake 2026-05-30 22:00 PT — no trades; see notes)
+> **Last rebuild:** 2026-06-12T05:00Z (routine-07 wake 2026-06-11 22:00 PT — 0 trades; see notes)
 
 ## Account
 
@@ -34,6 +34,7 @@ All clear at $10,000 equity.
 ## Days live
 
 - Spin-up: 2026-05-16
+- As of last rebuild: **27 days**
 - Promotion-eligible: 2026-06-15
 
 ## Notes
@@ -45,3 +46,5 @@ Parameter sweep — RSI oversold threshold 20 (vs v0.4's 25, v0.8's 30). Bracket
 - **2026-05-16 22:00 PT (first sim wake; spun up earlier today)** — past-24h replay window = 2026-05-15 10:00 UTC → 2026-05-16 10:00 UTC. Wakes: OVERNIGHT (05-15 13:00Z), MIDDAY (05-15 20:00Z, default-skip), EOD (05-16 04:00Z). Inherits v0.4 rules. M3 (reversal candle: 1H close > open) failed for all 15 universe pairs at BOTH eligible wakes — synchronized red crash bar 05-15 13:00Z, red universe-wide again at 05-16 04:00Z. M3 blocks before the strict RSI<20 floor (M2) is evaluated (and RSI<20 is rarer still). 0 entries, 0 open positions. All kill switches clear at $10,000 equity.
 - **2026-05-29 22:00 PT** — past-24h replay window 2026-05-29 05:00 UTC → 2026-05-30 05:00 UTC. Kraken MCP OK (BTC/USD $73,183). Wakes evaluated: OVERNIGHT (13:00 UTC), MIDDAY (default-skip), EOD (04:00 UTC). At OVERNIGHT: M3 failed universe-wide (1H bar at 13:00 UTC red for all sampled pairs). At EOD: M3 passed BTC/SOL/HYPE/TAO/ADA; M2 (RSI < 20 — strict threshold) failed for all — computed RSI BTC≈55, SOL≈59, HYPE≈75, TAO≈50, ADA≈58, far from deeply oversold. 0 entries. No open positions. All kill switches clear at $10,000 synthetic equity.
 - **2026-05-30 22:00 PT** — replay window 2026-05-30T05:00Z → 2026-05-31T05:00Z. Kraken MCP OK. OVERNIGHT and EOD: M3 passed for several pairs at EOD; M2 (RSI < 20 — strict threshold) failed all — market in broad recovery, RSI values ranging 55-80 across monitored pairs. 0 entries. Kill switches clear at $10,000. Days live: **15**.
+- **2026-06-10 22:00 PT** *(partial-run — header/days updated but wake-log not written; retroactively captured here)* — 7-day cap replay 2026-06-04T05:00Z → 2026-06-11T05:00Z (prior rebuild 2026-05-31T05:00Z). Crash wakes: SBD active → 5a FAIL; M3 also failed (red bars). Recovery wakes 06-07→06-09: 5a PASS; M3 green for some pairs; M2 (RSI < 20 ultra-strict): recovering RSI 55-75 — far from deeply oversold. Post-recovery 06-09T13:00Z → tonight: SBD active → 5a FAIL. **0 entries.** Book flat. Kill switches clear at $10,000.
+- **2026-06-11 22:00 PT** — replay window 2026-06-11T05:00Z → 2026-06-12T05:00Z (24h). Kraken MCP OK (BTC/USD $62,563; 4H OHLCV unavailable). **OVERNIGHT 2026-06-11T13:00Z:** SBD active; even if M3 passed, M2 (RSI < 20) far from triggered in declining tape. **EOD 2026-06-12T04:00Z:** 5a PASS, SBD CLEARED. M3 PASSES (15/15 positive ✓). M2 (RSI < 20 ultra-strict): BTC 1H RSI ~57.9 — nowhere near 20. No pair remotely oversold in broad-positive bounce. **0 entries.** Exit replay no-op (book flat). Kill switches all clear at $10,000. Days live: **27**.
