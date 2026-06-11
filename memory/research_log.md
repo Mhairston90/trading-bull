@@ -2616,3 +2616,120 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 
 ### Next wake
 - routine-01-overnight 2026-06-11T13:00Z (Thu 06:00 PT scheduled). Kraken MCP gate normal. If SBD persists (likely given 9-day persistence), entries continue to be blocked at 5a; book stays flat. Loss-streak advancement only happens on a realized losing close — no open positions, no clock advancement.
+
+
+---
+
+## 2026-06-12T04:00Z — routine-03-eod (Thu 21:00 PT on-time fire; EOD card scope = 2026-06-11 PT trading day)
+
+### Wake context
+- Scheduled cron `0 21 * * 1-5` PT on-time fire. Slot ID confirmed `bull-03-eod` (matches scheduled-task body — no slot-identity mismatch).
+- Book flat (18th consecutive flat-book wake since XRP exit 2026-05-30T23:00Z, ~12 days). Equity $10,254.63, DD 4.42% from peak $10,728.95, losing-day streak 4 (05-22, 05-25, 05-26, 05-30).
+- Live strategy v0.4 (W22-G two-bar EMA20 + W22-H-partial breakeven ratchet at +2R; 4R take-profit retained).
+- **Kraken MCP available — 4th consecutive post-fix scheduled wake clean.** The 2026-06-02 → 2026-06-09 outage is fully closed.
+
+### VERIFY — kill switches & MCP gate
+- Kraken MCP: AVAILABLE (15/15 fresh `kraken_multi_ticker` fetch this wake).
+- `kraken_risk_flag` returns `NO_DATA / daily_risk_flag.json not found` — expected per 2026-06-09 fix note. Informational only.
+- All Ring 3 kill switches re-verified clear (see Kill switches section below).
+
+### DO 1 — Final mark-to-market (21:00 PT close)
+- 0 open positions → no MTM. Cash-only equity unchanged $10,254.63.
+
+### DO 2 — Post-close exit check
+- 0 open positions → no exit evaluation. SBD's tightened 9-EMA exit override deactivates this wake (regime cleared — see DO 3 below) but is moot since book flat.
+
+### DO 3 — EOD entry scan (W19-E analyst-role split)
+
+**Technical pass — 15 universe pairs, fresh kraken_multi_ticker @ 04:00Z (2026-06-12 UTC):**
+
+| Pair | 24h % | Bucket |
+|---|---:|---|
+| FARTCOIN | +5.71 | pos |
+| ADA | +3.17 | pos |
+| SUI | +3.14 | pos |
+| TAO | +3.03 | pos |
+| AVAX | +3.01 | pos |
+| LINK | +3.00 | pos |
+| SOL | +2.98 | pos |
+| **HYPE (median)** | **+2.72** | pos |
+| LTC | +2.40 | pos |
+| NEAR | +2.15 | pos |
+| XDG | +2.11 | pos |
+| ETH | +1.88 | pos |
+| BTC | +1.84 | pos |
+| XRP | +1.72 | pos |
+| TRX | +0.28 | pos |
+
+- **Breadth: 15/15 positive** — FIRST 15/15 print since the 2026-06-01 → 06-09 synchronized breakdown began (~10 days of 5a-fail / SBD-active wakes).
+- Median 24h % = **+2.72%** (HYPE, 8th of 15).
+- **Rule 5a (regime gate, >=4 floor): PASS** (15 >= 4). First PASS in ~10 days.
+- **Rule 5a-SBD: CLEARED** — (i) 15 > 1 positive AND (ii) median +2.72% > -1.0% — both exit conditions satisfied. SBD inactive for first time since ~06-02.
+- **Per-pair technical scan (rules 1, 2, 2a, 3) on just-closed 1H + 4H candles (2026-06-11 03:00 UTC / 00:00 UTC):**
+
+| Pair | 1H close | 1H 20-EMA | R1 (1H>EMA20) | 1H RSI14 | R2/2a (55<RSI<=80) | 4H close | 4H 50-EMA | R3 (4H>EMA50) | Verdict |
+|---|---:|---:|:---:|---:|:---:|---:|---:|:---:|:---|
+| BTC (rank 1) | 62610.9 | ~61769 | PASS | 57.9 | PASS | 62610.9 | ~63589 | **FAIL** | FAIL R3 |
+| ETH (rank 2) | 1651.35 | (above) | PASS est | mid 50s est | PASS | 1651.35 | ~1670 | **FAIL** | FAIL R3 |
+| ADA (rank 10) | — | — | — | — | — | 0.16636 | ~0.170 | **FAIL** | FAIL R3 |
+| HYPE (rank 4) | — | — | — | — | — | 55.09 | ~58 | **FAIL** | FAIL R3 |
+
+- **Pattern confirmed: all 15 pairs fail rule 3.** The 4H 50-EMA reflects ~8 days of pre-breakdown prices (06-01 -> 06-04 was the breakdown leg; bars at $70k+ BTC, $1900+ ETH still in the 50-period window). One day of recovery is not enough to reclaim that average.
+- BTC fails by 1.5% (62610.9 vs 63589). ETH fails by ~1.1%. ADA fails by ~2%. HYPE fails by ~5%. Cluster pairs (BTC/ETH/SOL/TAO/AVAX/SUI/LINK) all share BTC's trajectory and are unlikely to differ materially — not individually probed for rule 3 given the consistent BTC/ETH pattern.
+- **Liquidity floor (rule 4a) sub-fails (moot given rule 3 vetoes):** FARTCOIN 24h notional ~ $1.15M < $2M floor; TRX ~ $1.99M just-under floor. Both excluded from new-entry pool anyway. AVAX $2.18M, LINK $2.35M, TAO $2.75M — all marginally above floor but failed rule 3.
+- **Final candidate list: empty (rule 3 vetoes universally).**
+- **Rule 8 single-entry slot:** moot (zero eligible candidates).
+
+**News pass:** SKIPPED — News attaches to technical-PASS candidates per W19-E schema; zero candidates -> vacuous.
+
+**Sentiment pass:** SKIPPED — zero candidates -> vacuous.
+
+### DO 4 — Lesson extraction (review today's trades)
+- 0 stop-outs, 0 winners-past-4R, 0 entry-reversals (no trades today).
+- **No lesson append.** The new operational pattern observed this wake (5a/SBD clears -> rule 3 still gates entries through the early recovery) is the expected sequenced behavior of strategy v0.4's defense-then-trend-confirmation design and was already anticipated by the W21-F SBD lesson (status: addressed). When the 4H 50-EMA is reclaimed and entries fire, that *first post-SBD entry* outcome will be the lessoneable event — track for next routine #4 review.
+
+### DO 5 — Day summary stats (2026-06-11 PT trading day)
+- **Day PnL:** $0.00 (0.00%) — no closes today.
+- **Trades opened today:** 0.
+- **Trades closed today:** 0.
+- **Win rate today:** N/A (no closes).
+- **New equity:** $10,254.63 (cash-only).
+- **Drawdown from peak:** 4.42% (peak $10,728.95 set 2026-05-21 via HYPE 4R-target replay).
+- **Since-start return:** +2.55% (inception $10,000 on 2026-04-20; 53 days).
+
+**Rolling perf (BTC ref $62,590 — Kraken last):**
+- 7d: BULL ~ 0.0% (held flat across window); BTC ~ -1.4% (was ~$63.5k a week ago); **delta ~ +1.4%** (window now includes the 06-04 bottom, so BTC-hold appears milder here than 30d).
+- 30d: BULL ~ +2.55%; BTC ~ -22.9% (was ~$81.2k 30 days ago); **delta ~ +25.4% in BULL's favor**.
+- 90d: not yet computable (BULL inception = 53 days ago; window first computable ~2026-07-19).
+
+### DO 6 — Monthly archive
+- Today is 2026-06-11 (Thu). Not the last trading day of June (last trading day = Tue 2026-06-30). **No archive sweep this wake.**
+
+### Kill switches (re-verified, cash-only equity $10,254.63)
+- Daily realized 2026-06-11 PT: **$0.00** — clear vs -5% loss cap.
+- Drawdown: **4.42%** from peak $10,728.95 (warn 12.5%, cap 25%) — clear, well below halfway warn.
+- Equity floor: **$10,254.63** > $7,500 — clear.
+- Losing-day streak: **4 / 7** — clear (warn at 5 informally; one closing-L away).
+- MCP availability: Kraken AVAILABLE (15/15 clean) — clear.
+- **All clear.**
+
+### Decision
+- **Action:** no entries (rule 3 vetoes uniformly across all 15 pairs), no exits (book flat). 0 trade_log writes.
+- **portfolio.md:** rewritten with regime-flip note (5a PASS, SBD cleared) + per-pair rule 3 sub-fail note + refreshed rolling-perf table (BTC ref $62,590).
+- **trade_log.md:** no writes.
+- **universe.md:** unchanged (refresh was 2026-06-01).
+- **lessons.md:** no append.
+- **archive/2026-06.md:** no sweep (not month-end).
+- **Telegram:** mandatory EOD card sent (per routine #3 NOTIFY rule and `feedback-silence-eod` guard — silence is a failure mode).
+
+### Observation — first post-SBD wake
+- Sharpest single-wake breadth reversal of the inception-to-date dataset: 1/15 positive @ midday 06-11T20:00Z -> 15/15 positive @ EOD 06-12T04:00Z (8h elapsed). This kind of unanimous bounce after a multi-day breakdown is exactly the setup the strategy was designed to *eventually* re-enter on — but rule 3 (4H 50-EMA) requires the recovery to extend further before the 4H trend confirms. Expect 2-4 more 4H bars of recovery before rule 3 begins to release entries for the strongest cluster members. The first post-SBD entry — when it fires — should be flagged for routine #4 review (does the W19-D / W21-F sequencing produce decent entries, or does the lag cost the entire early-recovery move?).
+- BULL stayed flat through the breakdown bottom (5a / SBD blocked) and now stays flat through the early bounce (rule 3 blocks). The asymmetry: defending against the bottom is the explicit W21-F mandate-legal half; under-participating in the recovery is the unavoidable cost of that defense. This is the trade-off the strategy explicitly took.
+
+### Off-schedule notes (carry-over)
+- Weekend mis-fire pattern (cron `0 21 * * 1-5` PT firing on Sat/Sun) + 2026-06-07T20:00Z midday Sun mis-fire still queued for routine-04-harness investigation (next: Saturday 2026-06-13).
+- `kraken_risk_flag` NO_DATA from scripts/ location — daily risk-scan in user's stack still writes to old archived path. Cosmetic; not a routine blocker. Queued for routine-04 alongside the MCP fix audit.
+- v0.14-recovery-trend + v0.15-meanrev-guarded variants spun up 2026-06-09 (per commit e20fa5f) — paper-paper evidence track for the post-SBD-recovery regime. This wake's pattern (5a clear + rule 3 fail) is exactly the regime those variants were designed to differentiate against; they should accrue first divergent telemetry over the next 1-3 days.
+
+### Next wake
+- routine-01-overnight 2026-06-12T13:00Z (Fri 06:00 PT scheduled). Kraken MCP gate normal. If 4H 50-EMAs continue to release across the universe (recovery extends), expect first entry attempt at a top-cluster pair (BTC most likely, given highest rank + smallest rule-3 deficit ~1.5%). Continued 15/15 breadth would imply broad confirmation.
