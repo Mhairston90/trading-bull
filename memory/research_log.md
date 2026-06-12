@@ -2868,3 +2868,5 @@ Source: `python scripts/indicators.py` @ 16:38:34Z (closed-bar; converged EMAs; 
 ### Next wake
 - routine-02-midday 2026-06-12T19:30Z (Fri 12:30 PT). Expect rule 3 to remain the binding constraint; SOL/HYPE/XDG are the closest single-bar-from-eligible candidates. BTC still needs an R2 lift (RSI 54.0 → 55+) on top of an R3 reclaim, so it is one rule further from eligible than SOL/HYPE despite higher rank.
 
+
+2026-06-12T17:07:14Z | harness | day-gate | not Saturday, skipping | no action
