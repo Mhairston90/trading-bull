@@ -2773,3 +2773,98 @@ Built per user direction (follow-up to the void-entry corrections). Removes LLM 
 - Prints per-rule margins (R1, R2, R2a, R3 vs 50-EMA, R3 vs 20-EMA for v0.14, R4a notional, vol-comp gates .5x/.7x), regime gate (5a / SBD), 2xATR stop distances, and the PT calendar date (date-guard support). --json and --pair flags. Fetch failures reported as UNKNOWN (exit 1), never silently treated as FAIL.
 - Routines 01/03/07 amended: script output is authoritative for current-bar evaluation; in-line computation is fallback-only with the >=200-bar warm-up floor.
 - First live run (08:05Z): 15/15 pairs, 720 bars each. Regime 12/15 positive, median +0.59% - 5a PASS, SBD CLEAR. BTC pulled back to $63,013: rules 1, 2, AND 3 all FAIL now (50-EMA $63,656, margin -$643) - main's flat book remains correct. NEAR is the only R1+R2 pass but fails R3. A/B telemetry: v0.14's BTC long (entry $63,430.6) is ~-$66 underwater while main sat out; stop $62,647.6 intact.
+
+---
+
+## 2026-06-12T16:38Z — routine-01-overnight (Fri 06:00 PT scheduled; fired 09:38 PT)
+
+### Wake context
+- Scheduled cron `0 6 * * 1-5` PT. Slot ID confirmed `bull-01-overnight` (matches scheduled-task body). Calendar date: 2026-06-12 PT.
+- Book flat (20th consecutive flat-book wake since XRP exit 2026-05-30T23:00Z, ~13 days). Equity $10,254.63, DD 4.42% from peak $10,728.95, loss-streak 4.
+- Live strategy v0.4 (W22-G two-bar EMA20 exit, W22-H-partial breakeven ratchet at +2R, 4R take-profit retained, W21-F SBD override).
+- Kraken connectivity: indicators script (Kraken public REST) returned 15/15 clean fetches @ 720 bars 1H + 720 bars 4H. No MCP failures.
+- **First wake fully governed by the new `scripts/indicators.py` engine** (per 2026-06-12 routine amendment); no LLM in-context arithmetic on the rule path.
+
+### VERIFY — kill switches
+- Daily realized 2026-06-12 PT: $0.00 — clear vs 5% loss cap.
+- DD: 4.42% — clear (warn 12.5%, cap 25%).
+- Equity: $10,254.63 > $7,500 — clear.
+- Loss-streak: 4 / 7 — clear.
+- Kraken MCP / public-REST: AVAILABLE — clear.
+- **All clear. No kill switch tripped → proceed to DO.**
+
+### DO 1 — Overnight price pull (Kraken multi-ticker via indicators engine)
+- 15/15 universe pairs returned. 24h % distribution sorted ascending:
+  - −1.97 TRX, −0.61 SUI, +0.09 AVAX, +0.91 LINK, +0.94 ETH, +1.12 FARTCOIN, +1.41 BTC, **+1.49 XRP (median)**, +1.65 NEAR, +1.76 LTC, +2.02 TAO, +2.31 ADA, +2.66 SOL, +2.90 XDG, +5.17 HYPE.
+- Breadth: **13/15 positive**, median **+1.49%**. **5a PASS** (13 ≥ 4 floor — 2nd consecutive PASS). **5a-SBD CLEARED** (13 > 1 AND median +1.49 > −1.0). SBD's tightened 9-EMA exit override stays deactivated (moot — book flat).
+- Step-from-prior-wake: similar breadth to last night's EOD print (15/15, +2.72%) — modest cooling but solidly net-positive.
+
+### DO 2 — Position check (stops on open positions)
+- 0 open positions → no MTM, no stop checks. Step inert.
+
+### DO 3 — Technical analyst pass (rules 1, 2, 2a, 3, 4a — per-pair, indicators-authoritative)
+
+Source: `python scripts/indicators.py` @ 16:38:34Z (closed-bar; converged EMAs; 720-bar warm-up satisfies the ≥200-bar 50-EMA floor on every pair).
+
+| Pair | R1 (1H>EMA20) | R2/2a (55<RSI≤80) | R3 (4H>EMA50, $ margin) | R4a (notional≥$2M) | Verdict |
+|---|:---:|:---:|:---:|:---:|:---|
+| BTC | PASS +169.1 | **FAIL** (RSI 54.0) | **FAIL** -102.4 (close 63,551.7 vs EMA 63,654.1) | OK $108.7M | FAIL R2, R3 |
+| ETH | **FAIL** -7.66 | **FAIL** (RSI 47.6) | **FAIL** -34.54 | OK $31.6M | FAIL R1, R2, R3 |
+| SOL | PASS +0.50 | PASS (RSI 57.1) | **FAIL** -0.144 (close 67.21 vs EMA 67.354) | OK $19.8M | FAIL R3 (-0.21%) |
+| HYPE | PASS +0.82 | PASS (RSI 57.0) | **FAIL** -0.318 (close 59.6 vs EMA 59.918) | OK $31.9M | FAIL R3 (-0.53%) |
+| XRP | FAIL | FAIL (RSI 46.7) | FAIL | OK | FAIL all |
+| SUI | FAIL | FAIL (RSI 44.6) | FAIL | OK | FAIL all |
+| TAO | FAIL | FAIL (RSI 50.7) | FAIL | OK | FAIL all |
+| XDG | PASS +0.00054 | **FAIL** (RSI 54.1) | **PASS** +0.00052 (close 0.08726 vs EMA 0.08675) | OK | FAIL R2 (close-borderline) |
+| NEAR | FAIL | FAIL (RSI 45.6) | FAIL | OK | FAIL all |
+| ADA | FAIL | FAIL (RSI 51.3) | FAIL | OK | FAIL all |
+| LINK | FAIL | FAIL (RSI 47.5) | FAIL | OK | FAIL all |
+| LTC | PASS +0.061 | FAIL (RSI 52.2) | FAIL -0.874 | OK | FAIL R2, R3 |
+| FARTCOIN | PASS +0.00024 | FAIL (RSI 51.4) | FAIL | **FAIL** $0.51M | FAIL R2, R3, R4a |
+| TRX | FAIL | FAIL (RSI 41.1) | FAIL | OK | FAIL all |
+| AVAX | FAIL | FAIL (RSI 45.0) | FAIL -0.397 | **FAIL** $1.24M | FAIL all + R4a |
+
+- **Candidate set: empty.** Zero pairs pass all of rules 1, 2, 2a, 3 simultaneously.
+- **Closest near-misses worth flagging:**
+  1. **BTC (rank 1)** — R3 FAIL by only $102.4 (-0.16%) on converged 720-bar math. Tracks the yesterday-interactive ADDENDUM's prediction ("price needs to clear ~$63,700"); EMA has drifted down to $63,654, current close $63,552. R2 also FAILS at RSI 54.0 (under 55 by 0.95) — climbing back from the breakdown trough but not yet through the floor. Two rules sub-fail, both by small margins — no entry.
+  2. **SOL (rank 3)** — first pair to pass R1+R2 this recovery; FAIL R3 by only $0.144 (-0.21%). One more 4H bar of strength likely releases.
+  3. **HYPE (rank 4)** — R1+R2 PASS; R3 FAIL by $0.318 (-0.53%). Largest 24h % (+5.17) in universe but still under its 4H 50-EMA.
+  4. **XDG (rank 8)** — only pair with R3 PASS (just barely, +$0.00052). R2 FAIL at RSI 54.1, also fractional. The (R3-pass, R2-borderline-fail) combo is the cleanest single-rule veto of the wake.
+- **Rule 8 single-entry slot:** moot (zero eligible).
+- **v0.14 R3-20 telemetry (recovery-trend variant probe):** 9 of 15 pairs PASS the 20-EMA version (BTC +$695, ETH +$1.06, SOL +$1.30, HYPE +$1.47, TAO +$2.00, XDG +$0.0017, ADA +$0.0023, LINK +$0.0013, LTC +$0.20, FARTCOIN +$0.00094). The 50-EMA vs 20-EMA gap is the recovery-trend regime BULL's main rule 3 is *designed* to filter through, by W21-F construction. A/B evidence accrues to v0.14's rack telemetry, not main.
+- **Liquidity floor (R4a) confirmed sub-fails:** FARTCOIN $0.51M, AVAX $1.24M — excluded from the entry pool regardless of other rules (also moot here).
+
+### DO 4 — News pass
+- **SKIPPED — vacuous (zero technical-PASS candidates).** Per W19-E schema, news attaches only to technical-PASS pairs; no work to do. Firecrawl gate untested this wake.
+
+### DO 4a — Sentiment pass
+- **SKIPPED — vacuous (zero technical-PASS candidates).** Per W19-E schema. Kraken spread/depth not queried.
+
+### DO 5 — Eligible new entries
+- **Zero eligible. 0 trade_log writes.**
+
+### DO 6 — Reject log
+- Per routine §6, every reject is recorded above with the failing rule cited. Full per-pair table in DO 3 satisfies this.
+
+### DO 7 — First-of-month universe refresh
+- Today is 2026-06-12 (Fri), not the 1st. **No refresh.** (Last refresh: 2026-06-01.)
+
+### Decision
+- **Action:** no entries (rule 3 vetoes universally; cluster pairs additionally fail R2), no exits (book flat). 0 trade_log writes, 0 universe writes, 0 lessons writes.
+- **portfolio.md:** rewritten with this wake's regime classification + per-pair near-miss notes + refreshed kill-switch state.
+- **trade_log.md:** no writes.
+- **research_log.md:** this entry.
+
+### Observation — first wake under indicators.py governance
+- Engine returned 15/15 clean 720-bar fetches and rule-margin output in a single sub-30-second invocation. No LLM arithmetic on the rule path → the $584 EMA-error class is now structurally unreachable for the entry-scan step (its only remaining mode is fallback if the script itself fails, which it didn't).
+- The converged 720-bar 4H 50-EMA for BTC drifted $63,682.6 → $63,654.1 ($-28.5) in the 8.5h between the 2026-06-12T06:50Z addendum and now. The drift is consistent with the gradual roll-off of pre-breakdown high-price 4H bars from the 50-bar window — predictable, not a math instability.
+- Per the W21-F + 2026-06-11 EOD comment: the post-SBD recovery is now ~18-24h in. Rule 3 (4H 50-EMA) blocking the strongest cluster members by 0.1–0.5% is the expected lag of the slow-trend filter. The first BTC entry will come on a clean reclaim with R2 lifting through 55 — both are within striking distance of one more 4H bar of strength. Track for routine #4.
+
+### Off-schedule notes (carry-over, unchanged)
+- Weekend mis-fire pattern (cron `0 21 * * 1-5` PT firing on Sat/Sun) + 2026-06-07T20:00Z midday Sun mis-fire still queued for routine-04-harness (Sat 2026-06-13).
+- `kraken_risk_flag` NO_DATA cosmetic — queued for routine-04.
+- Routine-04 vol-comp slot review (v0.3 / v0.7 / v0.13 — 0 trades in 44/31/23 days; vol-comp gates structurally cannot fire in recovery tape).
+
+### Next wake
+- routine-02-midday 2026-06-12T19:30Z (Fri 12:30 PT). Expect rule 3 to remain the binding constraint; SOL/HYPE/XDG are the closest single-bar-from-eligible candidates. BTC still needs an R2 lift (RSI 54.0 → 55+) on top of an R3 reclaim, so it is one rule further from eligible than SOL/HYPE despite higher rank.
+
