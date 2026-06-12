@@ -22,12 +22,16 @@ When Claude Code is reopened, the scheduler resumes from the **next** scheduled 
 
 **Current choice (2026-05-04):** A + B (auto-launch + keep open). D deferred to v2 infrastructure work.
 
+**2026-05-24 restoration note:** A Codex-side ops audit found Claude Desktop running but `C:\Users\Mhair\AppData\Roaming\Claude\claude_desktop_config.json` had `"ccdScheduledTasksEnabled": false`, which disables the Claude Code scheduled-task runner even while the app is open. Restored it to `true`. Also converted `C:\Users\Mhair\.claude\scheduled-tasks\bull-01-overnight\SKILL.md` from an older copied prompt body into a source-of-truth wrapper that reads `routines/01-overnight.md`, matching the safer `bull-03-eod` pattern.
+
 ### How to verify cron is alive
 
 In a Claude Code session, ask:
 > List BULL scheduled tasks
 
 If `lastRunAt` for any task is older than its scheduled cadence, cron stalled. Check that Claude Code is actually running (not just minimized — fully alive).
+
+Also verify `ccdScheduledTasksEnabled` is `true` in `C:\Users\Mhair\AppData\Roaming\Claude\claude_desktop_config.json`. If it is `false`, BULL's scheduled task files can exist but no routine will fire.
 
 ### How to manually fire a missed routine
 
