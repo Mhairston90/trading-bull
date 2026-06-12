@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis / instrumented twin (SBD classifier + 9-EMA defensive exit vs v0.2 baseline)
-> **Last rebuild:** 2026-06-12T05:00Z (routine-07 wake 2026-06-11 22:00 PT — 1 OPEN BTC; correction: prior entry was June 10 23:00 PT run mislabeled as June 11)
+> **Last rebuild:** 2026-06-12T06:45Z (interactive void-entry correction — BTC OPEN voided, converged 4H 50-EMA shows rule 3 FAIL; book flat. Prior rebuild: routine-07 wake 2026-06-11 22:00 PT.)
 >
 > **LEADERBOARD-SOURCED — FORWARD PAPER-PAPER ONLY.** Rebuilt from this variant's
 > `trade_log.md`. The 2026-05-19→2026-05-29 trades were recovered on 2026-05-29
@@ -11,28 +11,28 @@
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$0.01** (BTC position fully deployed)
-- Realized PnL: **-$119.26** (7 backfilled trades −$136.74 + HYPE +$17.48 closed 2026-05-31T11:00Z)
-- Unrealized PnL: **+$20.63** (BTC/USD 0.155773 @ 63430.6, MTM $63,563)
-- Position values (MTM): **$9,901.37** (0.155773 BTC × $63,563)
-- Current equity: **$9,901.38**
+- Cash: **$9,880.74**
+- Realized PnL: **-$119.26** (7 backfilled trades −$136.74 + HYPE +$17.48 closed 2026-05-31T11:00Z; BTC 2026-06-12 void-entry correction $0.00)
+- Unrealized PnL: **$0.00** (no open positions)
+- Position values (MTM): **$0.00**
+- Current equity: **$9,880.74**
 - Equity peak: **$10,606.00**
-- Drawdown: **6.64%** ((10,606 − 9,901.38) / 10,606)
+- Drawdown: **6.84%** ((10,606 − 9,880.74) / 10,606)
 
 ## Open positions
 
-| BTC/USD | LONG | 0.155773 | 63430.6 | 62647.6 | 66562.6 | 2026-06-12T04:00Z |
+_(none — the BTC OPEN of 2026-06-12T04:00Z was voided 06:45Z; see trade_log void-entry-correction row)_
 
-Open positions: **1 / 4** (momentum cap inherited from v0.2 rule 6). Portfolio risk-at-moment: **1.23%** ($121.9 / $9,880.74 equity at entry; cap 4%).
+Open positions: **0 / 4** (momentum cap inherited from v0.2 rule 6). Portfolio risk-at-moment: **0.00%** (cap 4%).
 
 ## Active kill-switch state
 
-- Daily realized: $0 today (no closes; open BTC position) — clear vs 5% cap
+- Daily realized: $0 today — clear vs 5% cap
 - Consecutive losing trading days: 0 (cap 7)
-- Max drawdown: 6.64% from peak $10,606.00 (cap 25%, warn 12.5%) — clear
-- Equity floor: $9,901.38 > $7,500 — OK
-- SBD state: CLEARED — default 20-EMA exit active (no 9-EMA tightening); BTC long open
-- **All clear. 1 open position (BTC/USD).**
+- Max drawdown: 6.84% from peak $10,606.00 (cap 25%, warn 12.5%) — clear
+- Equity floor: $9,880.74 > $7,500 — OK
+- SBD state: CLEARED — default 20-EMA exit active (no 9-EMA tightening); book flat
+- **All clear. Book flat.**
 
 ## Performance (2026-05-19 → 2026-06-09)
 
@@ -53,7 +53,7 @@ Open positions: **1 / 4** (momentum cap inherited from v0.2 rule 6). Portfolio r
 
 - Spin-up: 2026-05-19
 - As of last rebuild: **24 days**
-- Promotion-eligible: 2026-06-18 — 8 closed trades in window (need ≥10) → NOT promotion-eligible. BTC trade open; counting requires close.
+- Promotion-eligible: 2026-06-18 — 8 closed trades in window (need ≥10) → NOT promotion-eligible. (The 2026-06-12 BTC void-entry correction row is administrative — $0/0R — and does not count as a trade.)
 
 ## Notes
 
@@ -69,3 +69,4 @@ tape this account tracks v0.2. Sibling exit-logic variants: v0.10-exit-confirm, 
 - **CORRECTION NOTE (2026-06-11 22:00 PT):** The entry labeled "2026-06-11 22:00 PT" below was written by the June 10 22:00 PT run (commit 8da048a, actual time June 10 23:00:31 PT), which mislabeled itself as June 11. It used BTC close ~$62,590 (the June 11 04:00Z bar) instead of the correct June 12 04:00Z bar ($63,430.6). The EOD 0-entry conclusion was WRONG for v0.12: BTC actually PASSES rule 3 (63430.6 > 50-EMA ~63,013). SBD CLEARED → default 20-EMA exit (not 9-EMA). **Correction: 1 OPEN row for BTC at EOD 2026-06-12T04:00Z (appended to trade_log).**
 - **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — stale)** — replay window 2026-06-10T05:00Z → 2026-06-12T05:00Z (48h; last rebuild 2026-06-09 22:00Z). Kraken MCP OK (BTC/USD $62,563; 4H OHLCV unavailable). Wakes: OVERNIGHT (2026-06-10T13:00Z), EOD (2026-06-11T04:00Z), OVERNIGHT (2026-06-11T13:00Z), EOD (2026-06-12T04:00Z). **OVERNIGHT 2026-06-10T13:00Z:** SBD active → 5a FAIL. SBD exit logic: book flat → no positions to tighten to 9-EMA. 0 entries. **EOD 2026-06-11T04:00Z:** SBD active (1/15 positive, median −2.30%) → 5a FAIL. 0 entries. **OVERNIGHT 2026-06-11T13:00Z:** SBD active → 5a FAIL. 0 entries. **EOD 2026-06-12T04:00Z:** 5a PASS, SBD CLEARED (15/15 positive). SBD 9-EMA override deactivated. Entry scan: all 15 pairs fail rule 3 (4H close < 4H 50-EMA — INCORRECT per prior session's stale $62,590 close). **0 entries (WRONG).** Kill switches all clear at $9,880.74. Days live: 24.
 - **2026-06-11 22:00 PT (this wake — correction run)** — replay window 2026-06-12T05:00Z → 2026-06-12T05:00Z (24h from prior stale state; correcting prior wake's wrong EOD projection). Kraken MCP: BTC close 63430.6 at 2026-06-12T04:00Z confirmed. **EOD 2026-06-12T04:00Z (corrected):** 5a 10/15 positive ✓; SBD CLEARED ✓ (median +0.17%); SBD 9-EMA override INACTIVE → default 20-EMA exit applies. BTC: rule 1 (1H close 63430.6 > EMA20 ~63200 ✓), rule 2 (1H RSI 57.4 ≥ 55 ✓), rule 3 (4H 63430.6 > 4H 50-EMA ~63013 ✓ marginal +$417); cluster 0/2→1/2 ✓; ATR $391.5, stop 2×ATR=$783. Size: risk $121.9 / $9,880.74 cash; cash-capped to 0.155773 BTC = $9,880.73 notional, risk 1.23%. **ENTRY: BTC/USD LONG 0.155773 @ 63430.6, stop 62647.6, target 66562.6.** SBD telemetry: SBD cleared at this entry → standard 20-EMA exit. Exit replay (stale OVERNIGHT positions): n/a (book was flat due to prior error). Kill switches all clear. Equity MTM $9,901.38, DD 6.64% from peak $10,606. Days live: **24**.
+- **2026-06-12T06:45Z interactive — VOID-ENTRY CORRECTION:** the correction run's BTC OPEN was itself based on a short-warm-up EMA. Converged 720-bar 4H 50-EMA = **$63,682.6** → close $63,430.6 **FAILS rule 3 by $252** (the wake's ~$63,013 estimate was a 60-bar-seed artifact; spread $584). v0.12's entry rules are v0.2/main's verbatim (only the SBD exit differs), and main correctly deferred — this position was a computation error, not the SBD hypothesis. **BTC OPEN voided at entry price ($0 PnL, 0R); book flat at $9,880.74, DD 6.84%.** Warm-up spec (720 bars, ≥200 to converge) added to routines 01/03/07 this session.

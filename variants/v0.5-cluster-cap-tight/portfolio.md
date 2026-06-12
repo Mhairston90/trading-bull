@@ -1,34 +1,33 @@
 # Variant v0.5-cluster-cap-tight — Synthetic Portfolio
 
 > **Paper-paper account.** Synthetic $10K starting equity.
-> **Last rebuild:** 2026-06-12T05:00Z (routine-07 wake 2026-06-11 22:00 PT — 1 OPEN BTC; correction: prior entry was June 10 23:00 PT run mislabeled as June 11)
+> **Last rebuild:** 2026-06-12T06:45Z (interactive void-entry correction — BTC OPEN voided, converged 4H 50-EMA shows rule 3 FAIL; book flat. Prior rebuild: routine-07 wake 2026-06-11 22:00 PT.)
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$0.01** (BTC position fully deployed)
-- Realized PnL (variant lifetime): **+$17.71** (HYPE/USD +0.12R, closed 2026-05-31T11:00Z)
-- Unrealized PnL: **+$20.90** (BTC/USD 0.157932 @ 63430.6, MTM $63,563)
-- Position values (MTM): **$10,038.61** (0.157932 BTC × $63,563)
-- Current equity (cash + positions MTM): **$10,038.62**
+- Cash: **$10,017.71**
+- Realized PnL (variant lifetime): **+$17.71** (HYPE/USD +0.12R, closed 2026-05-31T11:00Z; BTC 2026-06-12 void-entry correction $0.00)
+- Unrealized PnL: **$0.00** (no open positions)
+- Position values (MTM): **$0.00**
+- Current equity (cash + positions MTM): **$10,017.71**
 - Equity peak: **$10,122.66** (2026-05-31T05:00Z rebuild, HYPE MTM)
-- Drawdown from peak: **0.83%** ($10,122.66 → $10,038.62)
+- Drawdown from peak: **1.04%** ($10,122.66 → $10,017.71)
 
 ## Open positions
 
-| BTC/USD | LONG | 0.157932 | 63430.6 | 62647.6 | 66562.6 | 2026-06-12T04:00Z |
+_(none — the BTC OPEN of 2026-06-12T04:00Z was voided 06:45Z; see trade_log void-entry-correction row)_
 
-Portfolio risk-at-moment: **1.23%** ($123.7 / $10,017.71 equity at entry; cap 4%).
-Open positions: **1 / 4** (cluster slots 1/**1** — BTC in large-cap cluster).
+Portfolio risk-at-moment: **0.00%** of equity (cap 4%).
+Open positions: **0 / 4** (cluster slots 0/**1**).
 
 ## Active kill-switch state
 
-- Daily realized: $0 today (no closes; open BTC position) — clear vs 5% cap
-- Daily unrealized: +$20.90 (positive; well under 5% loss cap)
+- Daily realized: $0 today — clear vs 5% cap
 - Consecutive losing trading days: 0 (cap 7)
-- Max drawdown: 0.83% (cap 25%, warn 12.5%)
-- Equity floor: $10,038.62 > $7,500 — OK
-- **All clear. 1 open position (BTC/USD).**
+- Max drawdown: 1.04% (cap 25%, warn 12.5%)
+- Equity floor: $10,017.71 > $7,500 — OK
+- **All clear. Book flat.**
 
 ## Rolling performance vs main BULL v0.4
 
@@ -42,7 +41,7 @@ Open positions: **1 / 4** (cluster slots 1/**1** — BTC in large-cap cluster).
 
 - Spin-up: 2026-04-29
 - As of last rebuild: **44 days**
-- Promotion-eligible date: **2026-05-29 (reached)** — 1 closed trade in rolling 30d (need ≥10) → NOT promotion-eligible. BTC trade open as of this wake; counting requires close.
+- Promotion-eligible date: **2026-05-29 (reached)** — 1 closed trade in rolling 30d (need ≥10) → NOT promotion-eligible. (The 2026-06-12 BTC void-entry correction row is administrative — $0/0R — and does not count as a trade.)
 
 ## Notes
 
@@ -57,3 +56,4 @@ Tests whether tightening cluster cap from 2 to 1 (rule 6a) reduces cascade-event
 - **2026-06-09 interactive (user-directed mcp-outage gap replay)** — routine-07 missed 9 consecutive wakes (05-31 → 06-08 PT; Kraken MCP path broke 2026-06-02 when the user archived the old `Trading Strategy` folder). Full window 2026-05-31T05:00Z → 2026-06-09T22:00Z replayed from Kraken public REST 1H/4H bars (720-bar history covers the whole gap — nothing permanently lost, superseding the earlier "2-day unrecoverable" estimate). **Exit replay: HYPE/USD CLOSED 2026-05-31T11:00Z @ 68.29 exit-ema-cross (+0.12R, +$17.71)** — close 68.29 < EMA20 68.2922 (marginal, 3bp; logged in trade_log). Entry scans at all 17 gap wakes: regime gate 5a/SBD rejected 06-01 → 06-06 + 06-09T13:00Z (crash: median as low as −8.55% on 06-03, 0/15 positive 06-04→06-06); regime-OK wakes (06-04T04:00Z, 06-07 → 06-09T04:00Z) had **no pair passing rules 1+2+3 jointly** (post-crash: 4H closes below 4H 50-EMA universe-wide; closest call HYPE RSI 54.8 vs 55 floor at 06-04T04:00Z). **0 new entries.** Equity $10,017.71, book flat. Audit: `scripts/mcp_outage_replay_20260609.py` + cached bars.
 - **CORRECTION NOTE (2026-06-11 22:00 PT):** The entry labeled "2026-06-11 22:00 PT" below was written by the June 10 22:00 PT run (commit 8da048a, June 10 23:00:31 PT), which mislabeled itself as June 11. It used BTC close ~$62,590 (the June 11 04:00Z bar) instead of the correct EOD June 12 04:00Z bar ($63,430.6). The 0-entry conclusion for EOD was WRONG for v0.5: BTC actually PASSES rule 3 (63430.6 > 50-EMA ~63,013). **Correction: 1 OPEN row for BTC at EOD 2026-06-12T04:00Z (appended to trade_log above).** The stale entry is preserved below for audit.
 - **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — stale)** — replay window 2026-06-10T05:00Z → 2026-06-12T05:00Z (48h; last rebuild 2026-06-09 22:00Z). Kraken MCP OK (BTC/USD $62,563; 4H OHLCV unavailable — connection error). Wakes evaluated: OVERNIGHT (2026-06-10T13:00Z), MIDDAY (2026-06-10T20:00Z, skip), EOD (2026-06-11T04:00Z), OVERNIGHT (2026-06-11T13:00Z), MIDDAY (2026-06-11T20:00Z, skip), EOD (2026-06-12T04:00Z). **OVERNIGHT 2026-06-10T13:00Z:** SBD active (per v0.3 gap analysis — SBD held from 2026-06-09T13:00Z onward); rule 5a FAIL → 0 entries. **EOD 2026-06-11T04:00Z:** SBD active (1/15 positive — only BTC +2.26% 24h; median −2.30%); 5a FAIL → 0 entries. **OVERNIGHT 2026-06-11T13:00Z:** SBD active (confirmed by flanking bookends); 5a FAIL → 0 entries. **EOD 2026-06-12T04:00Z:** 5a PASS, SBD CLEARED (15/15 positive, median +2.72% — major regime flip). Entry scan: all 15 pairs fail rule 3 (4H close < 4H 50-EMA — BTC 50-EMA ~$63,589 vs close $62,590). Cluster cap 6a (1 max): moot. **0 entries.** Exit replay no-op (book flat). Kill switches all clear. Equity $10,017.71. Days live: **44**.
+- **2026-06-12T06:45Z interactive — VOID-ENTRY CORRECTION:** the correction run's BTC OPEN (2026-06-12T04:00Z) was itself based on a short-warm-up EMA. Converged 720-bar 4H 50-EMA = **$63,682.6** → close $63,430.6 **FAILS rule 3 by $252** (the wake's ~$63,013 estimate was a 60-bar-seed artifact; spread $584). v0.5's rule 3 is identical to main's, and main correctly deferred — so this position was a computation error, not the cluster-cap hypothesis. **BTC OPEN voided at entry price ($0 PnL, 0R); book flat at $10,017.71.** Warm-up spec (720 bars, ≥200 to converge) added to routines 01/03/07 this session. Note: v0.14's BTC entry SURVIVES this re-check — its 4H 20-EMA rule passes by +$778 with converged computation, making it the rack's only live position and a clean A/B against main's 50-EMA deferral.

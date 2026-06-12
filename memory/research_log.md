@@ -2756,3 +2756,12 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - (carry-over) `kraken_risk_flag` NO_DATA cosmetic fix audit.
 - **(NEW) Vol-comp slot review:** v0.3/v0.7/v0.13 hold 3 of 10 rack slots with 0 trades in 44/31/23 days; the ATR-spike gate structurally cannot fire in a post-crash recovery tape. Weigh swapping at least one slot toward a recovery-regime hypothesis (per `feedback-variant-breadth`); rack changes per variants/README retirement priority, promotion-class changes Ring-2.
 - **(NEW) Verify tonight's routine-07 (Fri 22:00 PT) labels itself 2026-06-12 PT** and replays from 2026-06-12T05:00Z - first wake under the new date guard; must cover the 3 open BTC positions' exit checks for the full day.
+
+### ADDENDUM 2026-06-12T06:50Z | interactive | converged-EMA re-adjudication - v0.5/v0.12 BTC entries VOIDED, main's deferral validated
+
+Computed BTC 4H 50-EMA with full 720-bar Kraken REST warm-up (the new routine spec, applied immediately):
+- **Converged 4H 50-EMA = $63,682.6** vs close $63,430.6 -> **rule 3 FAILS by $252 (-0.40%)**. The wake's ~$63,013 estimate (60-bar seed) was off by $584 - the "marginal PASS by $417" was entirely a warm-up artifact.
+- **Main's EOD deferral was objectively correct**, not merely prudent. The W21-F defensive posture held on accurate math.
+- **v0.5 + v0.12 BTC OPENs voided** at entry price ($0 PnL, 0R correction rows in their trade logs; portfolios rebuilt flat at $10,017.71 / $9,880.74). Their entry rules are main's verbatim - the positions were computation errors, not hypothesis divergences; keeping them would have corrupted both twins' A/B fidelity.
+- **v0.14's BTC entry RE-VALIDATED:** converged 4H 20-EMA = $62,652.1 -> its rule 3 passes by +$778.5. v0.14 is now the rack's only live position and a clean, genuine A/B: same bar, converged math, 20-EMA passes where 50-EMA fails. If BTC runs from here, that is direct evidence for the recovery-trend hypothesis; if it stops out, evidence for main's slower filter.
+- Tomorrow's overnight wake (Fri 06:00 PT) should expect BTC rule 3 to still FAIL unless price clears ~$63,700 (converged 50-EMA, drifting down slowly) - no entry unless the recovery extends another leg.
