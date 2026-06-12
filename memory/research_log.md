@@ -2740,3 +2740,19 @@ All clear. Daily realized −0.21% (cap 5%); losing-day streak 1 (cap 7); DD 0.2
 - routine-01-overnight 2026-06-12T13:00Z (Fri 06:00 PT scheduled). Kraken MCP gate normal. If 4H 50-EMAs continue to release across the universe (recovery extends), expect first entry attempt at a top-cluster pair (BTC most likely, given highest rank + smallest rule-3 deficit ~1.5%). Continued 15/15 breadth would imply broad confirmation.
 2026-06-11T17:06:43Z | harness | day-gate | not Saturday, skipping | no action
 2026-06-11T17:40:06Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-06-12T06:30Z | interactive | ops catch-up + date-bug fix (user-directed session, Thu 06-11 ~23:15 PT)
+
+### Findings
+- **Routine-07 +1-day UTC/PT mislabel (FIXED):** the 06-10 and 06-11 routine-07 wakes both labeled themselves with the UTC calendar date (wake fires 22:00-23:59 PT = next day UTC). Tonight's run stamped `Last rebuild: 2026-06-13T05:00Z` (future) into all 10 variant portfolios - the next wake's replay window would have started in the future and skipped ~23h of exit checks on the 3 open BTC variant positions (v0.5, v0.12, v0.14). All labels corrected to true timestamps (tonight = 2026-06-11 22:00 PT slot / 2026-06-12T05:00Z); trade data verified correct (entries priced off the real EOD 2026-06-12T04:00Z bar, close 63430.6). Commits 1677e62 (fix), a8406c0 (Codex poll).
+- **Date-labeling guards added** to routines 03, 06, 07 (all fire past UTC midnight; routine-03 commit 6d9102b had the same mislabel on 06-10).
+- **4H 50-EMA warm-up spec fixed** in routines 01, 03, 07: request 720 bars of 4H history; >= 200 bars required for 50-EMA convergence. Routine-07's old spec ("trailing 7 days" = ~42 bars) was mathematically insufficient for a 50-EMA and was the source of the $400-500 rule-3 uncertainty that forced tonight's BTC entry deferral. **Tomorrow's overnight scan (Fri 06:00 PT) should re-adjudicate BTC rule 3 with full warm-up - the ambiguity is now removable, not a judgment call.**
+- **Fresh Codex poll (2026-06-12T06:00Z):** Codex v0 -7.09% ($9,291.39), re-entered the recovery with 2 trend longs (ETH + SOL, ~60% gross) while one bad trade from its 8% kill limit. Aggro v0 unchanged +5.41% all-cash - its short-breakdown edge is structurally idle in a recovery tape. BULL +5.58%, lead 0.17pp, 20 days to 07-01 deadline.
+- **Hermes monitor: all clean.** Stale-trade sentinel 0 findings (3 strategies), open-trade health ok (17 Codex positions scanned), cache health 46/46 files fresh, Decision Desk P1 items all decided 06-10. Only warnings are Codex-side cache-use notices (theirs).
+- Housekeeping: stranded OPERATING.md restoration note (2026-05-24) committed (53a0618); `.claude/` local artifacts gitignored.
+
+### Queued for routine-04-harness (Sat 2026-06-13)
+- (carry-over) Weekend mis-fire pattern + 06-07 midday Sun mis-fire investigation.
+- (carry-over) `kraken_risk_flag` NO_DATA cosmetic fix audit.
+- **(NEW) Vol-comp slot review:** v0.3/v0.7/v0.13 hold 3 of 10 rack slots with 0 trades in 44/31/23 days; the ATR-spike gate structurally cannot fire in a post-crash recovery tape. Weigh swapping at least one slot toward a recovery-regime hypothesis (per `feedback-variant-breadth`); rack changes per variants/README retirement priority, promotion-class changes Ring-2.
+- **(NEW) Verify tonight's routine-07 (Fri 22:00 PT) labels itself 2026-06-12 PT** and replays from 2026-06-12T05:00Z - first wake under the new date guard; must cover the 3 open BTC positions' exit checks for the full day.

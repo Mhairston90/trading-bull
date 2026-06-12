@@ -4,6 +4,8 @@
 **Mode:** local
 **Context budget target:** 80K tokens
 
+> **Date-labeling guard (added 2026-06-11):** this wake fires at 18:00+ PT, which is already the **next calendar day in UTC** (01:00–02:00Z). Label idea_bank rows and the commit message with the **PT calendar date at fire time** — never the UTC date. (Routines #3 and #7 both made +1-day mislabels from this exact UTC/PT crossing.)
+
 ## Purpose
 
 Harvest the past week's content from curated quants/researchers in `memory/idea_sources.md`, extract testable claims, score them, append to `memory/idea_bank.md`. **Idea generation only — never trade authority.**

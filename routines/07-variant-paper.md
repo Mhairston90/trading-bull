@@ -41,7 +41,7 @@ For EACH active variant:
 ### 1. Determine replay window, then fetch Kraken bars
 
 - **Replay window (resilience against missed wakes):** start = the `Last rebuild` timestamp in this variant's `portfolio.md` (on the first run after spin-up, use the spin-up date); end = now. **Cap at 7 days** — if the gap is longer, replay only the last 7 days and record the older un-recoverable gap in the leaderboard `Notes`. Do NOT fall back to a fixed 24h: that is the bug that dropped the v0.12 twin's trades.
-- For all 15 universe pairs, fetch 1H OHLCV covering the replay window (window length + 20 bars warmup) and 4H OHLCV for the trailing 7 days (sufficient for trailing indicators)
+- For all 15 universe pairs, fetch 1H OHLCV covering the replay window (window length + 20 bars warmup) and 4H OHLCV at **maximum available depth — request 720 bars** (Kraken serves up to 720 per call ≈ 120 days of 4H). **The 4H 50-EMA requires ≥ 200 bars of warm-up to converge**; the previous "trailing 7 days" spec yielded only ~42 bars — mathematically insufficient for a 50-EMA — and produced the $400–500 rule-3 uncertainty on BTC at the 2026-06-11 EOD scan. If a pair has < 150 4H bars of history, flag its rule-3 result LOW-CONFIDENCE in the leaderboard notes.
 - Compute trailing indicators per pair: 1H 20-EMA, 1H ATR(14), 1H RSI(14), 4H 50-EMA, 30-day mean ATR(14) on 1H (720 bars — fetch additional history as needed for variants that require it, e.g., v0.3 rule 5c)
 
 ### 2. Replay exit rules at every 1H close

@@ -4,6 +4,8 @@
 **Mode:** local
 **Context budget target:** 120K tokens
 
+> **Date-labeling guard (added 2026-06-11):** this wake fires at 21:00+ PT, which is already the **next calendar day in UTC** (04:00–05:00Z). Label the EOD journal, the commit message, and all "today" references with the **PT calendar date at fire time** — never the UTC date. Sanity check before WRITE: the label date must equal today's PT date. (Commit `6d9102b`, the 06-10 PT EOD, mislabeled its body "Thu 21:00 PT"; routine #7 made the same +1-day error twice.)
+
 ## READ (in order)
 
 1. `CLAUDE.md`
@@ -27,7 +29,7 @@
 1. **Final mark-to-market:** Kraken prices as of 21:00 PT close.
 2. **Post-close exit check:** Each open position against just-closed 1H candle. Trigger exits per strategy.md rules. Log + rebuild portfolio.
 3. **EOD entry scan (W19-E analyst-role split):** For each universe pair without open position, run the three analyst passes:
-   - **Technical:** check entry conditions per `strategy.md` (rules 1, 2, 2a, 3, 4, 4a, 5, 5a, 5b, 6, 6a, 7, 8) on just-closed 1H candle
+   - **Technical:** check entry conditions per `strategy.md` (rules 1, 2, 2a, 3, 4, 4a, 5, 5a, 5b, 6, 6a, 7, 8) on just-closed 1H candle. **Indicator warm-up (added 2026-06-11):** request **720 bars** of 4H history; the 4H 50-EMA needs ≥ 200 bars to converge (a ~60-bar seed gave $400–500 of rule-3 error on BTC at the 06-11 scan). Never adjudicate a marginal rule 3 on a short-warm-up EMA; if < 150 4H bars exist, log rule 3 as LOW-CONFIDENCE.
    - **News:** for each technical-PASS candidate, Firecrawl scan headlines (CoinDesk + TheBlock, past 6h, base-asset tagged), tag `neutral / supportive / contradictory`. Informational only — does NOT veto in v0.2.
    - **Sentiment:** Kraken `kraken_spread` + `kraken_depth` per candidate. Informational only.
    Execute eligible entries. Log to `research_log.md` using the W19-E schema (Technical / News / Sentiment / Decision subsections).
