@@ -2870,3 +2870,5 @@ Source: `python scripts/indicators.py` @ 16:38:34Z (closed-bar; converged EMAs; 
 
 
 2026-06-12T17:07:14Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-06-12T17:40:37Z | allocation | day-gate | not Sunday, skipping | no action
