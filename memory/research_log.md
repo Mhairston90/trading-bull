@@ -2880,3 +2880,13 @@ Completes the automation set started with scripts/indicators.py:
 - **scripts/pre_commit_check.py + installed git hooks** (pre-commit + commit-msg): blocks secrets (telegram/firecrawl token formats, secret env-var assignments), future-dated Last rebuild / Last refresh / trade-log timestamps in staged memory/ and variants/ files, and routine-XX commit subjects dated in the future PT. Tested all rejection paths live including a real blocked commit. Hooks are unversioned - reinstall after fresh clone with --install (documented in OPERATING.md). Routines must not use --no-verify.
 - **Routine-07 nightly Codex poll** - spec addition: each wake refreshes the two EXTERNAL contest rows from data\codex\ portfolios (equity, open positions, competition net %, days remaining); unreadable files leave rows unchanged with a noted failed poll.
 - Telegram env validated (--dry-run OK) - watchdog alert path is live.
+
+### 2026-06-12T20:05Z | interactive | silent-strategy diagnosis (OPUS camp) + gate_telemetry sentinel (user-approved stack addition)
+
+User flagged BULL v0 (no trades 2 weeks), Crypto MR v1/Aggressive (1 month), and the basket breakouts (3 weeks) as "something off." Systematic diagnosis: **nothing broken — all legitimately regime-gated.**
+- Runners alive: all logs regenerated daily (Task Scheduler "BasketBreakoutVariants" 03:30), Kraken-8 CSV cache current to same-day 16:00Z.
+- Crypto MR v1/agg: RSI(2)<10 fired 91-114x/pair since 5/16 but the 4H EMA50>EMA200 gate death-crossed on all 8 pairs 5/16-5/24 and stays shut (gaps -9% to -18% — weeks from recross). Independent recomputation reproduced the sims' exact last-trade bars (DOGE 05-16T04:00Z).
+- Basket breakouts: zero 120h-high strong-close bars on any pair since 5/22 (the LINK/DOT 5/22 bars WERE the last trades). Ungated aggressive_v1 also silent = signal starvation, not gate. Nearest re-arm: BTC +1.1%.
+- BULL v0: own documented gates; leaderboard ingests via bull-github adapter (current).
+- Caveat per hermes: the -27% DDs predate the gates shutting; P2 diagnose-persistent-loss decisions don't need new trades.
+**New sentinel (user-approved):** `C:	rading\Claude\Trading Strategy\gate_telemetry.py` -> `strategy-leaderboard\data\health\gate_telemetry.md` nightly via run_nightly_variants.bat (telemetry exit excluded from composite EC). Verdicts: ACTIVE / GATED / ELIGIBLE-SILENT / STALE — makes healthy gating distinguishable from dead runners at a glance. First run: 6/6 GATED, ALL CLEAR, committed+pushed to leaderboard repo (1370586). Stack touch points (approved): 1 new script, 1 BAT append, 1 new tracked report file. Params are copies of frozen specs — update if specs unfreeze.
