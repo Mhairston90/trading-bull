@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis (mean-reversion: RSI<30 floor + SBD knife-catch guard; A/B vs v0.8)
-> **Last rebuild:** 2026-06-13T05:00Z (routine-07 wake 2026-06-12 22:00 PT — 0 entries; correction: prior entry was June 10 23:00 PT run mislabeled as June 11)
+> **Last rebuild:** 2026-06-12T05:00Z (routine-07 wake 2026-06-11 22:00 PT — 0 entries; correction: prior entry was June 10 23:00 PT run mislabeled as June 11)
 
 ## Account
 
@@ -43,6 +43,6 @@ Combines v0.8's relaxed RSI<30 with an SBD entry guard. The benchmark trade: v0.
 
 ### Routine #7 wake log
 
-- **CORRECTION NOTE (2026-06-12 22:00 PT):** Prior entry labeled "2026-06-11 22:00 PT" was from the June 10 22:00 PT run (first sim wake, mislabeled). Mean-rev analysis unaffected by BTC close correction (M2 RSI<30 fails regardless). 0-entry conclusion unchanged.
+- **CORRECTION NOTE (2026-06-11 22:00 PT):** Prior entry labeled "2026-06-11 22:00 PT" was from the June 10 22:00 PT run (first sim wake, mislabeled). Mean-rev analysis unaffected by BTC close correction (M2 RSI<30 fails regardless). 0-entry conclusion unchanged.
 - **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — first sim wake, stale)** — Wakes: OVERNIGHT (2026-06-10T13:00Z), EOD (2026-06-11T04:00Z), OVERNIGHT (2026-06-11T13:00Z), EOD (2026-06-12T04:00Z). SBD active at first 3 wakes → v0.15 guard blocks. EOD 2026-06-12T04:00Z: SBD CLEARED → guard inactive; M3 PASSES (15/15 ✓); M2 (RSI<30): BTC ~57.9 → FAIL. **0 entries.** Kill switches clear at $10,000. Days live: 3.
-- **2026-06-12 22:00 PT (this wake)** — **EOD 2026-06-12T04:00Z (confirmed):** SBD CLEARED ✓ (guard inactive); M3 PASSES (15/15 green ✓); M2 (RSI < 30): BTC RSI 57.4 >> 30; no pair near oversold. **0 entries.** A/B vs v0.8: same outcome (both 0); guard was irrelevant this wake since SBD cleared before entry window. Next divergence requires RSI<30 during an SBD-active wake. Kill switches all clear at $10,000. Days live: **3**.
+- **2026-06-11 22:00 PT (this wake)** — **EOD 2026-06-12T04:00Z (confirmed):** SBD CLEARED ✓ (guard inactive); M3 PASSES (15/15 green ✓); M2 (RSI < 30): BTC RSI 57.4 >> 30; no pair near oversold. **0 entries.** A/B vs v0.8: same outcome (both 0); guard was irrelevant this wake since SBD cleared before entry window. Next divergence requires RSI<30 during an SBD-active wake. Kill switches all clear at $10,000. Days live: **3**.

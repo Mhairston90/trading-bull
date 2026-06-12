@@ -3,6 +3,8 @@
 **Cron:** `0 22 * * *` (PT) — daily at 22:00 PT (after routine #3 EOD at 21:00 PT)
 **Mode:** local
 **Context budget target:** 100K tokens
+
+> **Date-labeling guard (added 2026-06-11):** this wake fires at 22:00–23:59 PT, which is already the **next calendar day in UTC** (05:00–07:00Z). Label the wake, the leaderboard entry, every `Last rebuild` stamp, and the commit message with the **PT calendar date at fire time** — never the UTC date. Sanity check before WRITE: the wake-label date must equal today's PT date, and every `Last rebuild` timestamp must be ≤ now. The 06-10 and 06-11 wakes both mislabeled themselves +1 day by using the UTC date; the future-dated `Last rebuild` stamps would have truncated the next wake's replay window and skipped ~23h of exit checks on open positions.
 **Critical constraint:** does NOT modify main BULL's `memory/strategy.md`, `memory/portfolio.md`, `memory/trade_log.md`, `memory/research_log.md`, or any non-variant routine.
 
 ## Purpose

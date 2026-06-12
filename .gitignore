@@ -6,3 +6,5 @@ __pycache__/
 .DS_Store
 *.log
 .firecrawl/
+.claude/settings.local.json
+.claude/worktrees/
