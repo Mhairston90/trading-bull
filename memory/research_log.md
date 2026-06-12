@@ -2765,3 +2765,11 @@ Computed BTC 4H 50-EMA with full 720-bar Kraken REST warm-up (the new routine sp
 - **v0.5 + v0.12 BTC OPENs voided** at entry price ($0 PnL, 0R correction rows in their trade logs; portfolios rebuilt flat at $10,017.71 / $9,880.74). Their entry rules are main's verbatim - the positions were computation errors, not hypothesis divergences; keeping them would have corrupted both twins' A/B fidelity.
 - **v0.14's BTC entry RE-VALIDATED:** converged 4H 20-EMA = $62,652.1 -> its rule 3 passes by +$778.5. v0.14 is now the rack's only live position and a clean, genuine A/B: same bar, converged math, 20-EMA passes where 50-EMA fails. If BTC runs from here, that is direct evidence for the recovery-trend hypothesis; if it stops out, evidence for main's slower filter.
 - Tomorrow's overnight wake (Fri 06:00 PT) should expect BTC rule 3 to still FAIL unless price clears ~$63,700 (converged 50-EMA, drifting down slowly) - no entry unless the recovery extends another leg.
+
+### 2026-06-12T08:10Z | interactive | NEW TOOL: scripts/indicators.py - deterministic wake-time indicator engine
+
+Built per user direction (follow-up to the void-entry corrections). Removes LLM in-context arithmetic from the entry/exit rule path - the class of error that produced the $584 EMA mistake and two voided entries on 06-11.
+- Fetches 720 bars of 1H + 4H per universe pair (Kraken public REST, closed bars only), computes SMA-seeded converged EMAs, Wilder RSI14/ATR14, 30d mean ATR.
+- Prints per-rule margins (R1, R2, R2a, R3 vs 50-EMA, R3 vs 20-EMA for v0.14, R4a notional, vol-comp gates .5x/.7x), regime gate (5a / SBD), 2xATR stop distances, and the PT calendar date (date-guard support). --json and --pair flags. Fetch failures reported as UNKNOWN (exit 1), never silently treated as FAIL.
+- Routines 01/03/07 amended: script output is authoritative for current-bar evaluation; in-line computation is fallback-only with the >=200-bar warm-up floor.
+- First live run (08:05Z): 15/15 pairs, 720 bars each. Regime 12/15 positive, median +0.59% - 5a PASS, SBD CLEAR. BTC pulled back to $63,013: rules 1, 2, AND 3 all FAIL now (50-EMA $63,656, margin -$643) - main's flat book remains correct. NEAR is the only R1+R2 pass but fails R3. A/B telemetry: v0.14's BTC long (entry $63,430.6) is ~-$66 underwater while main sat out; stop $62,647.6 intact.
