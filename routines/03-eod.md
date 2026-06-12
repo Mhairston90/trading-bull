@@ -23,6 +23,7 @@
 
 - Re-check kill switches with latest Kraken prices
 - Confirm day's activity in trade_log matches expectations from routine #1 + #2 logs
+- **Ops watchdog (added 2026-06-12):** run `python scripts/watchdog.py --telegram`. Findings auto-alert; note them in the EOD card's Notes section and continue.
 
 ## DO
 

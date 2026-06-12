@@ -31,6 +31,7 @@ For each active LAB variant in `variants/`, replay the window **since that varia
 
 ## VERIFY
 
+- **Ops watchdog (added 2026-06-12):** run `python scripts/watchdog.py --telegram`. Findings auto-alert; note them in the leaderboard wake entry and continue.
 - Confirm Kraken MCP reachable (`kraken_ticker` BTC/USD smoke test)
 - If Kraken MCP fails: skip routine, write skip note to `memory/leaderboard.md` `### Last simulator wake` field, do NOT touch variant files (per Ring 3 MCP-failure rule, but localized — main routines are unaffected)
 
@@ -96,6 +97,8 @@ Recompute the `Active rack` table in `memory/leaderboard.md`:
 - vs BTC-hold = variant net return − BTC-hold return over the same window (computed from Kraken BTC/USD bars)
 
 Re-rank by 30d rolling net return for variants that have ≥ 30 days live; pre-30d variants sort below main.
+
+**Nightly competitor poll (added 2026-06-12):** read `C:\trading\strategy-leaderboard\data\codex\portfolio.md` and `C:\trading\strategy-leaderboard\data\codex\aggro_portfolio.md` (read-only — existing-stack read is permitted). Refresh the two EXTERNAL Codex rows in `memory/leaderboard.md`: current equity, open positions, drawdown, Competition net % = (equity − $10,000) / $10,000, poll timestamp, and days remaining to the 2026-07-01 deadline. If either file is unreadable, leave that row unchanged and note the failed poll in the wake entry — never guess competitor state.
 
 ### 7. Auto-retirement check
 

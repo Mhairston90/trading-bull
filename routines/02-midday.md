@@ -21,6 +21,7 @@
 
 - Re-check kill switches from `portfolio.md` using latest Kraken prices
 - If any trip: halt, ALERT
+- **Ops watchdog (added 2026-06-12):** run `python scripts/watchdog.py --telegram`. Findings auto-alert; note in the midday research_log row and continue.
 
 ## DO
 

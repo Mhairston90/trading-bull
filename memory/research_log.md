@@ -2872,3 +2872,11 @@ Source: `python scripts/indicators.py` @ 16:38:34Z (closed-bar; converged EMAs; 
 2026-06-12T17:07:14Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-06-12T17:40:37Z | allocation | day-gate | not Sunday, skipping | no action
+
+### 2026-06-12T19:45Z | interactive | ops automations #2-4: watchdog, git hooks, nightly Codex poll (user-directed)
+
+Completes the automation set started with scripts/indicators.py:
+- **scripts/watchdog.py** - 7 checks: routine heartbeats vs cadence (01/02/03: 80h, 07: 30h, weeklies: 200h), future timestamps in state files, dirty working tree, stale open-position MTM (>30h), ccdScheduledTasksEnabled flag, unpushed commits, .mcp.json path validity. Wired into VERIFY of routines 01/02/03/07 with --telegram auto-alerting. Each past incident (9-day MCP outage, disabled scheduler flag, stranded OPERATING.md, +1-day stamps, 9-day un-MTM'd HYPE position) maps to a check that would have caught it on day one. Verified live: correctly flagged its own uncommitted file as a dirty-tree finding; all other checks clean.
+- **scripts/pre_commit_check.py + installed git hooks** (pre-commit + commit-msg): blocks secrets (telegram/firecrawl token formats, secret env-var assignments), future-dated Last rebuild / Last refresh / trade-log timestamps in staged memory/ and variants/ files, and routine-XX commit subjects dated in the future PT. Tested all rejection paths live including a real blocked commit. Hooks are unversioned - reinstall after fresh clone with --install (documented in OPERATING.md). Routines must not use --no-verify.
+- **Routine-07 nightly Codex poll** - spec addition: each wake refreshes the two EXTERNAL contest rows from data\codex\ portfolios (equity, open positions, competition net %, days remaining); unreadable files leave rows unchanged with a noted failed poll.
+- Telegram env validated (--dry-run OK) - watchdog alert path is live.

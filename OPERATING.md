@@ -64,3 +64,11 @@ There is no automated sync between Codex's trading repo and the leaderboard's lo
 | `0 22 * * *` | #7 variant-paper | 22:05 | daily — simulates variant rack |
 
 All times PT. Day-gate routines (#4 #5) fire daily but no-op on the wrong day.
+
+## Ops automations (added 2026-06-12)
+
+Three mechanical safety nets, built after the +1-day date-mislabel and $584-EMA incidents:
+
+1. **`scripts/indicators.py`** — deterministic wake-time indicator engine (720-bar converged EMA/RSI/ATR, per-rule margins, regime gate). Routines 01/03/07 treat its table as authoritative; in-line model math is fallback-only.
+2. **`scripts/watchdog.py`** — runs in routine VERIFY steps (01/02/03/07). Checks routine heartbeats vs cadence, future timestamps, dirty tree, stale open-position MTM, `ccdScheduledTasksEnabled`, unpushed commits, and `.mcp.json` path validity. `--telegram` flag alerts on findings. Would have caught the 9-day MCP outage on day one.
+3. **Git hooks** — `scripts/pre_commit_check.py` blocks commits containing secrets (telegram/firecrawl token formats, env-var assignments), future-dated `Last rebuild`/`Last refresh`/trade-log timestamps, and `routine-XX YYYY-MM-DD` commit subjects dated in the future (PT-date rule). Hooks live in `.git/hooks` (NOT versioned): after any fresh clone, reinstall with `python scripts/pre_commit_check.py --install`. Routines must never bypass with `--no-verify`.

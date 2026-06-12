@@ -23,6 +23,7 @@
 
 - Confirm no Ring 3 kill switch is tripped (read `portfolio.md` kill-switch state section)
 - If tripped: skip to NOTIFY step with status quo, do not open new positions
+- **Ops watchdog (added 2026-06-12):** run `python scripts/watchdog.py --telegram` (routine heartbeats, future timestamps, dirty tree, stale open-position MTM, scheduler flag, unpushed commits, MCP config paths). Findings auto-alert via Telegram; note them in research_log and continue — watchdog findings are not by themselves kill switches.
 
 ## DO
 
