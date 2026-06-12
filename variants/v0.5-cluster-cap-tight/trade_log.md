@@ -16,3 +16,4 @@
 
 | 2026-05-30T13:00Z | OPEN | HYPE/USD | LONG | 77 | 68.06 | 66.13 | 75.80 | — | entry-rule-v0.5-momentum-OVERNIGHT | v0.5-cluster-cap-tight |
 | 2026-05-31T11:00Z | CLOSE | HYPE/USD | LONG | 77 | 68.29 | — | — | +0.12 | exit-ema-cross (PnL +$17.71; mcp-outage gap replay 2026-06-09, user-directed; marginal call: close 68.29 vs EMA20 68.2922) | v0.5-cluster-cap-tight |
+| 2026-06-12T04:00Z | OPEN | BTC/USD | LONG | 0.157932 | 63430.6 | 62647.6 | 66562.6 | — | entry-rule-v0.5-momentum-EOD (1H close 63430.6 > EMA20 ~63200 ✓; 1H RSI 57.4 ≥ 55 ✓; 4H close 63430.6 > 4H 50-EMA ~63013 ✓ marginal +$417; rule 4 BTC liq ✓; 5a 10/15 pos ✓; SBD CLEARED ✓; cluster 1/1 ✓; ATR 391.5, stop 2×ATR=783, size cash-capped 0.157932 BTC, risk $123.7/1.23%) | v0.5-cluster-cap-tight |

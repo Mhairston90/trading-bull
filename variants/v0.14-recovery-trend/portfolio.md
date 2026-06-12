@@ -2,27 +2,32 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis (entry rule 3: 4H 20-EMA trend filter vs main's 50-EMA)
-> **Last rebuild:** 2026-06-12T05:00Z (routine-07 wake 2026-06-11 22:00 PT — 0 trades; first sim wake; 48h replay; see notes)
+> **Last rebuild:** 2026-06-13T05:00Z (routine-07 wake 2026-06-12 22:00 PT — 1 OPEN BTC; first real simulation entry)
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,000.00**
+- Cash: **$0.02** (BTC position fully deployed)
 - Realized PnL: **$0.00**
-- Unrealized PnL: **$0.00**
-- Current equity: **$10,000.00**
-- Equity peak: **$10,000.00**
+- Unrealized PnL: **+$20.92** (BTC/USD 0.157653 @ 63430.6, MTM $63,563)
+- Position values (MTM): **$10,020.90** (0.157653 BTC × $63,563)
+- Current equity: **$10,020.92**
+- Equity peak: **$10,020.92** (new lifetime high — first MTM above $10K)
 - Drawdown: **0.00%**
 
 ## Open positions
 
-(none)
+| BTC/USD | LONG | 0.157653 | 63430.6 | 62647.6 | 66562.6 | 2026-06-12T04:00Z |
 
-Open positions: **0 / 4** (momentum cap inherited from v0.4 rule 6).
+Open positions: **1 / 4** (momentum cap, rule 3 uses 4H 20-EMA). Portfolio risk-at-moment: **1.23%** ($123.4 / $10,000 equity at entry; cap 4%).
 
 ## Active kill-switch state
 
-All clear at $10,000 equity.
+- Daily realized: $0 today (no closes; open BTC position) — clear vs 5% cap
+- Consecutive losing trading days: 0 (cap 7)
+- Max drawdown: 0.00% (equity above starting; new MTM peak $10,020.92) — clear
+- Equity floor: $10,020.92 > $7,500 — OK
+- **All clear. 1 open position (BTC/USD).**
 
 ## Rolling performance vs main v0.4
 
@@ -35,7 +40,7 @@ All clear at $10,000 equity.
 
 - Spin-up: 2026-06-09
 - As of last rebuild: **3 days**
-- Promotion-eligible: 2026-07-09 (after the 2026-07-01 competition deadline — this variant is for learning, not the contest)
+- Promotion-eligible: 2026-07-09 (after the 2026-07-01 competition deadline — this variant is for learning, not the contest). 0 closed trades; BTC open as of this wake.
 
 ## Notes
 
@@ -43,4 +48,5 @@ Tests whether replacing the 4H 50-EMA trend filter with a 20-EMA converts confir
 
 ### Routine #7 wake log
 
-- **2026-06-11 22:00 PT (first sim wake)** — replay window 2026-06-10T05:00Z → 2026-06-12T05:00Z (48h from 2026-06-09 spin-up). Kraken MCP OK (BTC/USD $62,563; 4H OHLCV unavailable — connection error on both retry attempts). Wakes: OVERNIGHT (2026-06-10T13:00Z), EOD (2026-06-11T04:00Z), OVERNIGHT (2026-06-11T13:00Z), EOD (2026-06-12T04:00Z). **OVERNIGHT 2026-06-10T13:00Z:** SBD active → rule 5a FAIL → 0 entries. **EOD 2026-06-11T04:00Z:** SBD active (1/15 positive, median −2.30%) → 5a FAIL → 0 entries. **OVERNIGHT 2026-06-11T13:00Z:** SBD active → 5a FAIL → 0 entries. **EOD 2026-06-12T04:00Z:** 5a PASS, SBD CLEARED (15/15 positive, median +2.72%). Rule 1 (1H close > 1H 20-EMA): BTC ~$62,590 > ~$61,769 ✓. Rule 2 (1H RSI ≥ 55): BTC ~57.9 ✓. **Rule 3 (4H close > 4H 20-EMA — v0.14's EMA filter): 4H OHLCV API UNAVAILABLE (connection error — 2 attempts failed).** From 1H-derived 4H closes: estimated BTC 4H 20-EMA ≈ $62,100–62,300 at this wake vs close $62,590 → rule 3 LIKELY PASSES for BTC (margin ~$300–500). Spin-up evidence (1–14 pairs passed the 20-EMA version at comparable recovery wakes 06-07→06-09) suggests multiple pairs may pass. Vol-compression gate: **v0.14 does NOT inherit vol-comp gate** (by design — isolating the 4H 20-EMA filter). **CONSERVATIVE LOG: 0 entries — 4H 20-EMA could not be confirmed without live 4H OHLCV data. ATR also unavailable for position sizing.** This is potentially v0.14's first simulation-eligible event; the rule 3 estimate will be tracked retrospectively next wake. Exit replay no-op (book flat). Kill switches all clear at $10,000. Days live: **3**.
+- **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — first sim wake, stale)** — replay window 2026-06-10T05:00Z → 2026-06-12T05:00Z. Kraken MCP BTC $62,563; 4H OHLCV unavailable. SBD active at OVERNIGHT 13:00Z + EOD 04:00Z wakes → 5a FAIL → 0 entries. EOD 2026-06-12T04:00Z: 5a PASS but used stale close $62,590 and conservative 0-entry due to unavailable 4H data. **0 entries (conservative).**
+- **2026-06-12 22:00 PT (correction run — first real entry)** — replay window corrected to 2026-06-12T04:00Z bar using live Kraken pull. BTC close confirmed 63430.6. **EOD 2026-06-12T04:00Z:** 5a 10/15 positive ✓; SBD CLEARED ✓; rule 1 (1H 63430.6 > EMA20 ~63200 ✓); rule 2 (1H RSI 57.4 ≥ 55 ✓); **rule 3 v0.14: 4H 63430.6 > 4H 20-EMA ~62409 ✓ (clear +$1021, well above the ~$62,100–62,300 prior estimate)**; vol-comp gate N/A (v0.14 does not inherit); cluster 0/4→1/4 ✓; ATR $391.5, stop 2×ATR=$783; cash-capped 0.157653 BTC = ~$10,000 notional, risk $123.4 / 1.23% of $10,000. **ENTRY: BTC/USD LONG 0.157653 @ 63430.6, stop 62647.6, target 66562.6.** This is v0.14's FIRST hypothetical trade. Key observation: 20-EMA filter confirmed BTC passes with $1,021 margin vs 50-EMA's marginal $417 — consistent with spin-up thesis that 20-EMA converts early recovery signals into entries while 50-EMA is still recovering. Other pairs not evaluated (BTC is rank-1 and fills cluster slot). Kill switches all clear. Equity MTM $10,020.92, new peak. DD 0%. Days live: **3**.

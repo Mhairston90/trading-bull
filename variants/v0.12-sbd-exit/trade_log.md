@@ -40,3 +40,4 @@
 | 2026-05-26T18:00Z | CLOSE | TAO/USD | long | 14.513854 | 280.40233 | — | — | -0.58 | -86.56 | exit-ema20-confirm (backfill) |
 | 2026-05-30T13:00Z | OPEN | HYPE/USD | long | 76 | 68.06 | 66.13 | 75.80 | — | — | entry-rule-v0.2-momentum-OVERNIGHT |
 | 2026-05-31T11:00Z | CLOSE | HYPE/USD | long | 76 | 68.29 | — | — | +0.12 | +17.48 | exit-ema-cross (SBD inactive at 05-31 wakes → default 20-EMA single-bar; mcp-outage gap replay 2026-06-09, user-directed) |
+| 2026-06-12T04:00Z | OPEN | BTC/USD | long | 0.155773 | 63430.6 | 62647.6 | 66562.6 | — | — | entry-rule-v0.2-momentum-EOD (1H close 63430.6 > EMA20 ~63200 ✓; 1H RSI 57.4 ≥ 55 ✓; 4H 63430.6 > 50-EMA ~63013 ✓ marginal; 5a 10/15 pos ✓; SBD CLEARED → default 20-EMA exit; cluster 0/2→1/2 ✓; ATR 391.5, stop 783, size cash-capped 0.155773 BTC, risk $121.9/1.23%) |

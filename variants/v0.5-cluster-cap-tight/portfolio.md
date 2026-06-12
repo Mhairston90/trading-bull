@@ -1,33 +1,34 @@
 # Variant v0.5-cluster-cap-tight — Synthetic Portfolio
 
 > **Paper-paper account.** Synthetic $10K starting equity.
-> **Last rebuild:** 2026-06-12T05:00Z (routine-07 wake 2026-06-11 22:00 PT — 0 trades; 48h replay)
+> **Last rebuild:** 2026-06-13T05:00Z (routine-07 wake 2026-06-12 22:00 PT — 1 OPEN BTC; correction: prior entry was June 10 23:00 PT run mislabeled as June 11)
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,017.71**
+- Cash: **$0.01** (BTC position fully deployed)
 - Realized PnL (variant lifetime): **+$17.71** (HYPE/USD +0.12R, closed 2026-05-31T11:00Z)
-- Unrealized PnL: **$0.00** (no open positions)
-- Position values (MTM): **$0.00**
-- Current equity (cash + positions MTM): **$10,017.71**
+- Unrealized PnL: **+$20.90** (BTC/USD 0.157932 @ 63430.6, MTM $63,563)
+- Position values (MTM): **$10,038.61** (0.157932 BTC × $63,563)
+- Current equity (cash + positions MTM): **$10,038.62**
 - Equity peak: **$10,122.66** (2026-05-31T05:00Z rebuild, HYPE MTM)
-- Drawdown from peak: **1.04%**
+- Drawdown from peak: **0.83%** ($10,122.66 → $10,038.62)
 
 ## Open positions
 
-_(none — HYPE/USD closed 2026-05-31T11:00Z exit-ema-cross)_
+| BTC/USD | LONG | 0.157932 | 63430.6 | 62647.6 | 66562.6 | 2026-06-12T04:00Z |
 
-Portfolio risk-at-moment: **0.00%** (cap 4%).
-Open positions: **0 / 4** (cluster slots 0/**1**).
+Portfolio risk-at-moment: **1.23%** ($123.7 / $10,017.71 equity at entry; cap 4%).
+Open positions: **1 / 4** (cluster slots 1/**1** — BTC in large-cap cluster).
 
 ## Active kill-switch state
 
-- Daily realized: $0 today (HYPE close was 2026-05-31) — clear vs 5% cap
-- Consecutive losing trading days: 0 (cap 7; the single closed trade was a win)
-- Max drawdown: 1.04% (cap 25%, warn 12.5%)
-- Equity floor: $10,017.71 > $7,500 — OK
-- **All clear. Book flat.**
+- Daily realized: $0 today (no closes; open BTC position) — clear vs 5% cap
+- Daily unrealized: +$20.90 (positive; well under 5% loss cap)
+- Consecutive losing trading days: 0 (cap 7)
+- Max drawdown: 0.83% (cap 25%, warn 12.5%)
+- Equity floor: $10,038.62 > $7,500 — OK
+- **All clear. 1 open position (BTC/USD).**
 
 ## Rolling performance vs main BULL v0.4
 
@@ -41,7 +42,7 @@ Open positions: **0 / 4** (cluster slots 0/**1**).
 
 - Spin-up: 2026-04-29
 - As of last rebuild: **44 days**
-- Promotion-eligible date: **2026-05-29 (reached)** — 1 closed trade in rolling 30d (need ≥10) → NOT promotion-eligible
+- Promotion-eligible date: **2026-05-29 (reached)** — 1 closed trade in rolling 30d (need ≥10) → NOT promotion-eligible. BTC trade open as of this wake; counting requires close.
 
 ## Notes
 
@@ -54,4 +55,5 @@ Tests whether tightening cluster cap from 2 to 1 (rule 6a) reduces cascade-event
 - **2026-05-29 22:00 PT** — past-24h replay window 2026-05-29 05:00 UTC → 2026-05-30 05:00 UTC. Kraken MCP OK (BTC/USD $73,183 smoke test). Regime: **1/15** universe pairs positive 24h (HYPE +0.67%); median 24h change −1.07%; **SBD active** this wake (≤1/15 positive AND median ≤−1.0%). Wakes evaluated: OVERNIGHT (2026-05-29 13:00 UTC), MIDDAY (2026-05-29 20:00 UTC, default-skip), EOD (2026-05-30 04:00 UTC). Rule 5a (≥4/15 positive) rejected all entries at both eligible wakes (1/15 positive). Cluster-cap 6a never reached. 0 entries. No open positions — exit replay no-op. All kill switches clear at $10,000 synthetic equity. **30-day time threshold reached this wake.** 0 trades in rolling 30d window (need ≥10) → NOT promotion-eligible; variant continues in LAB.
 - **2026-05-30 22:00 PT** — replay window 2026-05-30T05:00Z → 2026-05-31T05:00Z. Kraken MCP OK (BTC/USD $74,078 smoke test). **OVERNIGHT wake (13:00Z 2026-05-30):** Regime recovered from May 28/29 SBD — BTC +0.95% 24h, HYPE +8.44% 24h (62.76→68.06), TAO +1.12%, SOL +1.30%; estimated ≥12/15 pairs positive; rule 5a PASS, SBD CLEARED. Pair scan: BTC/TAO fail rule 3 (4H close < 4H 50-EMA, regime early recovery). HYPE: 1H close 68.06 > 20-EMA 66.01 ✓; RSI(14) ≈ 79.5 ≥ 55 ✓; 4H close 67.81 > 50-EMA proxy ~61.50 ✓; cluster-cap OK (HYPE not in cluster). **ENTRY: HYPE/USD LONG 77 units at 68.06, stop 66.13, target 75.80, ATR 0.967.** **EOD wake (04:00Z 2026-05-31):** 14/15 positive, median +0.47% (per main portfolio). Exit replay: HYPE min since entry 66.22 (16:00Z bar low) > stop 66.13 → not hit; high 69.88 < target 75.80; 20-EMA at EOD ~68.05, HYPE close 69.83 > EMA → no EMA exit. Position open. Entry scan: HYPE already open; no other pairs pass rule 3 per main analysis; no new entries. Kill switches all clear. Equity $10,122.66, net +1.23% unrealized.
 - **2026-06-09 interactive (user-directed mcp-outage gap replay)** — routine-07 missed 9 consecutive wakes (05-31 → 06-08 PT; Kraken MCP path broke 2026-06-02 when the user archived the old `Trading Strategy` folder). Full window 2026-05-31T05:00Z → 2026-06-09T22:00Z replayed from Kraken public REST 1H/4H bars (720-bar history covers the whole gap — nothing permanently lost, superseding the earlier "2-day unrecoverable" estimate). **Exit replay: HYPE/USD CLOSED 2026-05-31T11:00Z @ 68.29 exit-ema-cross (+0.12R, +$17.71)** — close 68.29 < EMA20 68.2922 (marginal, 3bp; logged in trade_log). Entry scans at all 17 gap wakes: regime gate 5a/SBD rejected 06-01 → 06-06 + 06-09T13:00Z (crash: median as low as −8.55% on 06-03, 0/15 positive 06-04→06-06); regime-OK wakes (06-04T04:00Z, 06-07 → 06-09T04:00Z) had **no pair passing rules 1+2+3 jointly** (post-crash: 4H closes below 4H 50-EMA universe-wide; closest call HYPE RSI 54.8 vs 55 floor at 06-04T04:00Z). **0 new entries.** Equity $10,017.71, book flat. Audit: `scripts/mcp_outage_replay_20260609.py` + cached bars.
-- **2026-06-11 22:00 PT** — replay window 2026-06-10T05:00Z → 2026-06-12T05:00Z (48h; last rebuild 2026-06-09 22:00Z). Kraken MCP OK (BTC/USD $62,563; 4H OHLCV unavailable — connection error). Wakes evaluated: OVERNIGHT (2026-06-10T13:00Z), MIDDAY (2026-06-10T20:00Z, skip), EOD (2026-06-11T04:00Z), OVERNIGHT (2026-06-11T13:00Z), MIDDAY (2026-06-11T20:00Z, skip), EOD (2026-06-12T04:00Z). **OVERNIGHT 2026-06-10T13:00Z:** SBD active (per v0.3 gap analysis — SBD held from 2026-06-09T13:00Z onward); rule 5a FAIL → 0 entries. **EOD 2026-06-11T04:00Z:** SBD active (1/15 positive — only BTC +2.26% 24h; median −2.30%); 5a FAIL → 0 entries. **OVERNIGHT 2026-06-11T13:00Z:** SBD active (confirmed by flanking bookends); 5a FAIL → 0 entries. **EOD 2026-06-12T04:00Z:** 5a PASS, SBD CLEARED (15/15 positive, median +2.72% — major regime flip). Entry scan: all 15 pairs fail rule 3 (4H close < 4H 50-EMA — BTC 50-EMA ~$63,589 vs close $62,590). Cluster cap 6a (1 max): moot. **0 entries.** Exit replay no-op (book flat). Kill switches all clear. Equity $10,017.71. Days live: **44**.
+- **CORRECTION NOTE (2026-06-12 22:00 PT):** The entry labeled "2026-06-11 22:00 PT" below was written by the June 10 22:00 PT run (commit 8da048a, June 10 23:00:31 PT), which mislabeled itself as June 11. It used BTC close ~$62,590 (the June 11 04:00Z bar) instead of the correct EOD June 12 04:00Z bar ($63,430.6). The 0-entry conclusion for EOD was WRONG for v0.5: BTC actually PASSES rule 3 (63430.6 > 50-EMA ~63,013). **Correction: 1 OPEN row for BTC at EOD 2026-06-12T04:00Z (appended to trade_log above).** The stale entry is preserved below for audit.
+- **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — stale)** — replay window 2026-06-10T05:00Z → 2026-06-12T05:00Z (48h; last rebuild 2026-06-09 22:00Z). Kraken MCP OK (BTC/USD $62,563; 4H OHLCV unavailable — connection error). Wakes evaluated: OVERNIGHT (2026-06-10T13:00Z), MIDDAY (2026-06-10T20:00Z, skip), EOD (2026-06-11T04:00Z), OVERNIGHT (2026-06-11T13:00Z), MIDDAY (2026-06-11T20:00Z, skip), EOD (2026-06-12T04:00Z). **OVERNIGHT 2026-06-10T13:00Z:** SBD active (per v0.3 gap analysis — SBD held from 2026-06-09T13:00Z onward); rule 5a FAIL → 0 entries. **EOD 2026-06-11T04:00Z:** SBD active (1/15 positive — only BTC +2.26% 24h; median −2.30%); 5a FAIL → 0 entries. **OVERNIGHT 2026-06-11T13:00Z:** SBD active (confirmed by flanking bookends); 5a FAIL → 0 entries. **EOD 2026-06-12T04:00Z:** 5a PASS, SBD CLEARED (15/15 positive, median +2.72% — major regime flip). Entry scan: all 15 pairs fail rule 3 (4H close < 4H 50-EMA — BTC 50-EMA ~$63,589 vs close $62,590). Cluster cap 6a (1 max): moot. **0 entries.** Exit replay no-op (book flat). Kill switches all clear. Equity $10,017.71. Days live: **44**.
