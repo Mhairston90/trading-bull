@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB-SWEEP (parameter sweep of v0.4, RSI threshold 25 → 20)
-> **Last rebuild:** 2026-06-12T05:00Z (routine-07 wake 2026-06-11 22:00 PT — 0 entries; correction: prior entry was June 10 23:00 PT run mislabeled as June 11)
+> **Last rebuild:** 2026-06-13T05:08Z (routine-07 wake 2026-06-12 22:00 PT — 0 entries; RSI far above mean-rev thresholds)
 
 ## Account
 
@@ -34,7 +34,7 @@ All clear at $10,000 equity.
 ## Days live
 
 - Spin-up: 2026-05-16
-- As of last rebuild: **27 days**
+- As of last rebuild: **28 days**
 - Promotion-eligible: 2026-06-15
 
 ## Notes
@@ -50,3 +50,4 @@ Parameter sweep — RSI oversold threshold 20 (vs v0.4's 25, v0.8's 30). Bracket
 - **CORRECTION NOTE (2026-06-11 22:00 PT):** Prior entry labeled "2026-06-11 22:00 PT" was from the June 10 22:00 PT run. Mean-rev analysis unaffected by BTC close correction (M2 RSI<20 fails regardless: RSI 57.4 >> 20). 0-entry conclusion unchanged.
 - **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — stale)** — **OVERNIGHT 2026-06-11T13:00Z:** SBD active; M2 (RSI<20) far from triggered. **EOD 2026-06-12T04:00Z:** SBD CLEARED, M3 PASSES (15/15 ✓), M2 (RSI<20): BTC ~57.9 → FAIL. **0 entries.** Kill switches clear at $10,000. Days live: 27.
 - **2026-06-11 22:00 PT (this wake)** — **EOD 2026-06-12T04:00Z (confirmed):** SBD CLEARED ✓; M3 PASSES (15/15 green ✓); M2 (RSI < 20 ultra-strict): BTC RSI 57.4 — nowhere near 20. **0 entries.** Ultra-strict RSI<20 threshold makes entries extremely rare; no pair remotely oversold in broad-positive tape. Kill switches clear at $10,000. Days live: **27**.
+- **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **OVERNIGHT + EOD:** M2 (RSI < 20 ultra-strict): no pair anywhere near 20. **0 entries.** Kill switches all clear at $10,000. Days live: **28**.

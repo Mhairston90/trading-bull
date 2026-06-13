@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB-SWEEP (parameter sweep of v0.4, RSI threshold 25 → 30)
-> **Last rebuild:** 2026-06-12T05:00Z (routine-07 wake 2026-06-11 22:00 PT — 0 entries; correction: prior entry was June 10 23:00 PT run mislabeled as June 11)
+> **Last rebuild:** 2026-06-13T05:08Z (routine-07 wake 2026-06-12 22:00 PT — 0 entries; RSI far above mean-rev thresholds)
 
 ## Account
 
@@ -34,7 +34,7 @@ All clear at $9,850.00 equity. DD 1.50% well under caps.
 ## Days live
 
 - Spin-up: 2026-05-12
-- As of last rebuild: **31 days**
+- As of last rebuild: **32 days**
 - Promotion-eligible: **2026-06-11 (reached)** — 1 closed trade in rolling 30d (NEAR −1R) — below 10-trade minimum → NOT promotion-eligible; variant continues in LAB.
 
 ## Notes
@@ -50,3 +50,4 @@ Parameter sweep — RSI oversold threshold 30 (vs v0.4's 25). Tests whether v0.4
 - **CORRECTION NOTE (2026-06-11 22:00 PT):** Prior entry labeled "2026-06-11 22:00 PT" was from the June 10 22:00 PT run. Mean-rev analysis unaffected by BTC close correction (M2 RSI<30 fails regardless: RSI 57.4 >> 30). 0-entry conclusion unchanged.
 - **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — stale)** — Wakes: OVERNIGHT (2026-06-10T13:00Z), EOD (2026-06-11T04:00Z), OVERNIGHT (2026-06-11T13:00Z), EOD (2026-06-12T04:00Z). SBD active at all 3 prior-wakes → M3 FAIL or M2 FAIL. EOD 2026-06-12T04:00Z: SBD CLEARED, M3 PASSES, M2 (RSI<30) BTC RSI ~57.9 FAIL. **0 entries.** Kill switches clear at $9,850. Days live: 31.
 - **2026-06-11 22:00 PT (this wake)** — **EOD 2026-06-12T04:00Z (confirmed):** SBD CLEARED ✓; M3 PASSES (15/15 green ✓); M2 (RSI < 30): BTC 1H RSI 57.4 >> 30; NEAR RSI elevated in bounce; no pair near oversold. M2 failure is the binding constraint. **0 entries.** A/B vs sibling v0.9/v0.4: all mean-rev variants uniformly 0-entry in broad-positive tape; next divergence will occur at a deeply oversold wake (RSI 20-30 range). Kill switches all clear at $9,850. Days live: **31**.
+- **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **OVERNIGHT 2026-06-12T13:00Z:** M2 (RSI < 30): no pair near oversold. 0 entries. **EOD 2026-06-13T04:00Z:** 4/15 positive, SBD CLEAR. M3 PASSES. M2 (RSI < 30): TAO 1H RSI 62.5 >> 30; universe-wide RSI elevated. **0 entries.** Kill switches all clear at $9,850. Days live: **32**.

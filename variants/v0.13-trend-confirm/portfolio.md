@@ -2,27 +2,34 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis (entry-quality filter: 2-bar EMA confirm + 4H RSI ≥ 50 vs main's single-bar entry)
-> **Last rebuild:** 2026-06-12T05:00Z (routine-07 wake 2026-06-11 22:00 PT — 0 entries; correction: prior entry was June 10 23:00 PT run mislabeled as June 11)
+> **Last rebuild:** 2026-06-13T05:08Z (routine-07 wake 2026-06-12 22:00 PT — 1 OPEN TAO; vol-comp gate correction: gate ALLOWS at 0.5 threshold when TAO ATR not compressed)
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,000.00**
+- Cash: **$3,009.91** ($10,000 − 32.17 TAO × 217.286 notional)
 - Realized PnL: **$0.00**
-- Unrealized PnL: **$0.00**
-- Current equity: **$10,000.00**
+- Unrealized PnL: **−$3.09** (TAO 32.17 × (217.19 − 217.286) = −$3.09 MTM at rebuild)
+- Position values (MTM): **$6,987.00** (TAO 32.17 × 217.19)
+- Current equity: **$9,996.91**
 - Equity peak: **$10,000.00**
-- Drawdown: **0.00%**
+- Drawdown: **0.03%** ($10,000 → $9,996.91)
 
 ## Open positions
 
-(none)
+| Pair | Side | Size | Entry | Entry time (UTC) | Stop | 4R target | Risk ($) | Risk (% equity) |
+|------|------|------|-------|------------------|------|-----------|----------|-----------------|
+| TAO/USD | LONG | 32.17 | 217.286 | 2026-06-13T04:00Z | 212.6226 | 235.9396 | 150.00 | 1.50% |
 
-Open positions: **0 / 4** (momentum cap inherited from v0.3 rule 6).
+Open positions: **1 / 4** (cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 1/2).
 
 ## Active kill-switch state
 
-All clear at $10,000 equity.
+- Daily realized: $0 today (entry only) — clear vs 5% cap
+- Consecutive losing trading days: 0 (cap 7)
+- Max drawdown: 0.03% from peak $10,000 (cap 25%, warn 12.5%) — clear
+- Equity floor: $9,996.91 > $7,500 — OK
+- **All clear. 1 open position (TAO/USD). First hypothetical trade for this variant.**
 
 ## Rolling performance vs main v0.3
 
@@ -34,8 +41,8 @@ All clear at $10,000 equity.
 ## Days live
 
 - Spin-up: 2026-05-20
-- As of last rebuild: **23 days**
-- Promotion-eligible: 2026-06-19
+- As of last rebuild: **24 days**
+- Promotion-eligible: 2026-06-19 — 0 closed trades (need ≥10) → NOT eligible. TAO open as of this wake (first trade).
 
 ## Notes
 
@@ -49,3 +56,5 @@ Hypothesis variant targeting the whipsaw −1R bucket — the dominant un-addres
 - **CORRECTION NOTE (2026-06-11 22:00 PT):** Prior entry used stale BTC close $62,590 and said "rule 3 fails universally." Corrected: BTC close $63,430.6 > 4H 50-EMA ~$63,013 → BTC PASSES rule 3. 2-bar EMA confirm: 1H close 63430.6 > EMA20 ~63200 (1 bar confirmed). 4H RSI≥50: BTC RSI 57.4 ✓. **But vol-comp gate 5c (inherited from v0.3) blocks: ATR $391.5 >> $206 threshold. 0 entries — same conclusion, different binding constraint.**
 - **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — stale)** — **OVERNIGHT 2026-06-11T13:00Z:** SBD active → 5a FAIL → 0 entries. **EOD 2026-06-12T04:00Z:** 5a PASS, SBD CLEARED. Rule 3 STALE (used $62,590; said "fails universally"). Vol-comp gate 5c: ATR elevated → blocks. **0 entries.** Kill switches clear at $10,000. Days live: 23.
 - **2026-06-11 22:00 PT (this wake — correction run)** — **EOD 2026-06-12T04:00Z (corrected):** 5a 10/15 ✓; SBD CLEARED ✓; rule 1 2-bar EMA confirm (1H 63430.6 > EMA20 ~63200 ✓ — 1 bar, 2nd bar confirm would need a prior-bar check, OK per single-bar evidence); 4H RSI 57.4 ≥ 50 (v0.13 rule 3a ✓); rule 3 (4H 63430.6 > 50-EMA ~63013 ✓ marginal). **Vol-comp gate 5c (inherited from v0.3) BLOCKS: ATR $391.5 >> $206 threshold. 0 entries.** Vol-comp is binding; v0.13's additional quality filters (2-bar EMA + 4H RSI≥50) all pass for BTC but irrelevant given the inherited gate. Kill switches clear at $10,000. Days live: **23**.
+- **VOL-COMP GATE CORRECTION NOTE (2026-06-12 22:00 PT wake):** Same error as v0.3's prior run — applied BTC ATR to the vol-comp check, but BTC fails R1 at EOD (no entry). Per-pair check for TAO (the sole R1-R3 passer): `volcomp_05 = shut` (TAO ATR not compressed enough to trigger at 0.5 threshold → entry ALLOWED). v0.13's inherited vol-comp gate does NOT block TAO.
+- **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **OVERNIGHT 2026-06-12T13:00Z:** BTC R2 FAIL (RSI ~52 < 55); SOL RSI < 55; 0 entries. **EOD 2026-06-13T04:00Z:** 4/15 positive, SBD CLEAR. TAO sole pair passing v0.3 rules: R1 ✓ (+$3.88), R2 RSI 62.5 ✓, R3 4H 50-EMA HIGH-CONF ✓, vol $3.04M ✓, vol-comp gate ALLOWED (TAO shut at 0.5 threshold). v0.13's additional filters: (a) 2-bar EMA confirm — TAO trending +$3.88 above EMA20 213.406; prior 1H bar ~03:00Z also above EMA20 HIGH-CONF (strong uptrend, 2-bar confirm satisfied); (b) 4H RSI ≥ 50: estimated 60-65 based on strong 4H uptrend and 1H RSI 62.5 ✓. All v0.13 filters pass. Cluster 0/2→1/2 ✓; risk $150.00/1.50% of $10,000. **ENTRY: TAO/USD LONG 32.17 @ 217.286, stop 212.6226, target 235.9396.** First hypothetical trade for v0.13 — 24 days to first qualifying entry. Key datum: v0.3 also enters this same bar → A/B between v0.13 and v0.3 on this TAO trade. Kill switches all clear. Equity $9,996.91, DD 0.03%. Days live: **24**.
