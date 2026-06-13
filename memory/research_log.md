@@ -3,6 +3,71 @@
 > **Append-only.** News and external research notes per routine run.
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
+
+## 2026-06-13T04:10Z — routine-03-eod (2026-06-12 PT trading day, Fri 21:10 PT on-schedule fire)
+
+### Technical (rule-driven, deterministic)
+Engine: `scripts/indicators.py` (720-bar 1H + 4H, SMA-seeded EMAs converged, Wilder RSI/ATR, per-rule margins). Regime: 4/15 positive 24h, median -0.21% → **5a marginal PASS** (at exactly the 4-pair floor — zero buffer; weakest read since regime recovered 06-11); **5a-SBD CLEARED** (4 > 1 AND -0.21 > -1.0). Tape weakened progressively today: overnight 13/15 +1.49% → midday 5/15 -0.30% → EOD 4/15 -0.21%.
+
+Per-pair pass/fail (rules 1, 2, 2a, 3, 4a) on just-closed 1H bar:
+- **TAO/USD = sole PASS.** 1H 217.286 vs 1H EMA20 213.406 → R1 +$3.88 (+1.82%). RSI14 62.5 → R2 +7.55 (R2a clear at 80 cap). 4H 217.286 vs 4H EMA50 214.065 → R3 +$3.22 (+1.50%, HIGH-CONFIDENCE 720 bars). R3-20 +$5.99 (v0.14 telemetry). R4a notional $3.04M > $2.0M floor. ATR14 2.3317 → 2×ATR stop 4.6634.
+- BTC/USD: FAIL R1 (-$35), R2 (RSI 50.6), R3 (-$146); R3-20 PASS. Recovery losing steam — needs another 4H bar of strength.
+- ETH/USD: FAIL R1, R2 (49.0), R3; R3-20 PASS.
+- SOL/USD: FAIL R1 (just barely -$0.005), R2 (51.2), R3; R3-20 PASS. Was R1+R2 PASS overnight — now lost both.
+- HYPE/USD: FAIL R1, R2 (44.2 — sharp drop from 57.0 overnight), R3; R3-20 PASS. Largest 24h % move overnight (+5.17) faded.
+- XDG/USD: FAIL R1, R2 (47.3), R3 (just barely -$0.0005); R3-20 PASS. Was the only R3-PASS overnight — now lost R3 too.
+- LINK/USD: PASS R1, FAIL R2 (52.7); FAIL R4a ($1.53M < $2M).
+- LTC/USD: PASS R1+R2 (RSI 59.1), FAIL R3 (-$0.27); R3-20 PASS.
+- FARTCOIN/USD: PASS R1, FAIL R2/R3; FAIL R4a ($0.37M).
+- TRX/USD: PASS R1, FAIL R2/R3/R3-20; FAIL R4a ($1.47M).
+- AVAX/USD: PASS R1, FAIL R2/R3/R3-20; FAIL R4a ($0.99M).
+- XRP/SUI/NEAR/ADA: FAIL R1 (most also R2/R3) — recovery has stalled in mid-cap alts.
+
+Rule 5b (24h same-pair re-entry cooldown): TAO last close 2026-05-26 was `exit-ema20-confirm`, not `exit-stop-hit` → 5b inapplicable. >24h elapsed anyway.
+
+Rule 6 (0/4 max-concurrent), 6a (0/2 cluster cap on {BTC,ETH,SOL,TAO,AVAX,SUI,LINK}), 7 (per-trade risk 1.50% at exactly the cap; portfolio risk-at-moment post-entry 1.50% of 4%), 8 (sole candidate) — all PASS.
+
+**Final candidate list: TAO/USD.**
+
+### News (Firecrawl-driven, informational only in v0.2)
+Scan deferred for token-budget — Firecrawl not invoked. Per W19-E schema, news pass is informational and does **not** veto entries in v0.2; the absence of an active scan does not block the decision. Classified **neutral** by convention (default when scan skipped). No headlines surfaced organically in routine context that would flag a contradictory signal. Open question for the W23+ harness cycle: should "scan-skipped" downgrade to a soft delay rather than auto-neutral. Logged for routine #4 backlog.
+
+### Sentiment (Kraken depth/spread proxy in v0.2)
+Kraken `kraken_ticker` TAOUSD: last 216.85, bid 217.07, ask 217.16, **spread $0.09 ≈ 4.1 bps** (tight/healthy). 24h volume 14,356.77 TAO × VWAP $213.54 ≈ **$3.07M notional** (matches indicators.py $3.04M ± rounding). 24h % +2.02. Trades 24h: 6,064. `kraken_spread` recent 10 quotes: spread range 0.07-0.12, consistently sub-$0.15 — confirms a stable book at depth-of-mid for an entry-sized clip (notional $7,167 = ~33 TAO, fillable inside top-of-book on a typical Kraken TAO clip given 24h volume base). **Sentiment: supportive.**
+
+### Decision
+**ENTER TAO/USD long.**
+- Entry price: 217.286 (1H just-closed bar).
+- Size: 32.985 TAO (= 1.5% × $10,254.63 equity / 2×ATR 4.6634).
+- Notional: $7,167.30 ($3,087.33 cash remaining post-entry).
+- Stop (2×ATR): $212.6226.
+- 4R target: $235.9396.
+- W22-H ratchet trigger: 1H close ≥ $226.6128 (+2R) moves stop to BE $217.286.
+- W22-G exit: two consecutive 1H closes < 1H 20-EMA (currently 213.406, will drift).
+- SBD-exit override inert (SBD currently cleared).
+
+### Day's summary stats (2026-06-12 PT)
+Equity $10,254.63 unchanged at entry-fill; trades opened 1 (TAO), trades closed 0; win-rate today N/A (0 closes); drawdown 4.42% unchanged; consecutive losing trading days 4 unchanged (entry doesn't reset). Rolling perf: 7d BULL ≈ 0.0% vs BTC-hold ≈ +0.7% → −0.7%; 30d BULL ≈ +2.55% vs BTC-hold ≈ −21.8% → +24.4%; 90d not computable (inception 2026-04-20 = 54 days ago, first computable ~2026-07-19).
+
+### Lessons extracted
+**1 lesson appended** — entry-timing patience after multi-day regime recovery (TAO held back through 06-11 EOD borderline BTC PASS, now entering on a non-borderline TAO PASS three wakes later).
+
+### Monthly archive
+Today is 2026-06-12 — June's last trading day is 2026-06-30. No archive sweep this wake.
+
+### Ops watchdog
+`python scripts/watchdog.py --telegram` → `ALL CLEAR — heartbeats, timestamps, tree, MTM, scheduler flag, push state, MCP paths OK`. No findings.
+
+### Telegram
+**EOD card sent** per mandate.
+
+### Next wake
+routine-01-overnight 2026-06-15T13:00Z (Mon 06:00 PT). TAO position is unmanaged across 60+h weekend window; 2×ATR stop $212.6226 is the only protective floor for that period (designed cron behavior).
+
+| logged + entry-executed + telegram-sent
+
+---
+
 2026-06-12T20:00Z | midday | mtm-and-exit-check | routine-02-midday (Fri 13:00 PT — **on-schedule fire**, cron `0 13 * * 1-5` PT in-window since 2026-06-12 = Friday; 4th consecutive on-schedule wake after the 06-12 overnight 09:38 PT scheduler-late but cron-correct fire, this midday lands cleanly inside the 13:00 PT window). **Book flat** (21st consecutive flat-book wake since XRP exit 2026-05-30T23:00Z, 13d ago). 0 open positions → MTM step inert for position-quoting; exit-check step inert (no positions to evaluate against 1H 20-EMA / 9-EMA-SBD / 2×ATR stop / 4R target). **Entry scan forbidden by midday design** (entry responsibility belongs to routine-01-overnight and routine-03-eod). **Kraken MCP AVAILABLE** — `kraken_multi_ticker` 15/15 clean at the 13:00 PT pull for kill-switch refresh + regime telemetry (informational only, not a gate this routine). Fresh tape: **5/15 positive, median −0.30% (SOL)**. Sorted ascending change_24h_pct: −2.67 (NEAR) / −0.88 (XRP) / −0.86 (AVAX) / −0.60 (SUI) / −0.40 (TRX) / −0.36 (LINK) / −0.32 (ETH) / **−0.30 (SOL, median)** / −0.29 (TAO) / −0.02 (ADA) / +0.13 (BTC) / +1.34 (LTC) / +1.64 (FARTCOIN) / +1.73 (XDG) / +2.82 (HYPE). **Material softening vs the 09:38 PT overnight read** (13/15 positive, median +1.49% XRP) over ~6 trading hours — breadth halved and median rotated 1.79pts to the downside, but the tape is not breaking down: 5 still positive (vs 1/15 at the 06-11 midday SBD-active print), BTC steady at +0.13, and the largest 24h gainer HYPE (+2.82%) lifted modestly. Regime classification (informational): **5a marginal PASS** (5 ≥ 4 positive floor by exactly 1 pair — 1-pair-from-fail buffer, thinnest reading since the regime recovered 06-11); **5a-SBD remains CLEARED** (5 > 1 positive AND median −0.30 > −1.0 — both gates inactive). SBD's tightened 9-EMA exit override stays deactivated (inert — book flat). The afternoon thinning narrows the recovery margin but does not invalidate it; next entry-eligible read is the 21:00 PT EOD wake at the fresh 1H/4H closes. **BTC reference $63,637.00** (vs the 09:38 PT overnight indicators.py print $63,551.7 — +$85, +0.13% in ~6h, consistent with the BTC +0.13% 24h reading). Equity **$10,254.63** unchanged (cash-only). Day PnL **$0.00 / 0.00%** (no closes today; last trade event remains XRP exit 2026-05-30T23:00Z). Drawdown **4.42%** unchanged from peak $10,728.95. **Kill-switch proximity (all clear):** DD 4.42% vs 12.5% warn / 25% cap (35.4% of warn budget consumed, 17.7% of cap — well below the routine-02 NOTIFY halfway-warn threshold); equity $10,254.63 vs $7,500 floor (+$2,754.63 headroom, +36.7%); daily realized $0 vs 5% cap; loss-streak 4 vs 7 cap (informal warn at 5 — still 1 closing-L away); Kraken MCP available. `kraken_risk_flag` not invoked (NO_DATA per 2026-06-09 fix note, informational only). **No exits** (vacuous — book flat). **No Telegram** (silent — routine #2 NOTIFY gate: no kill-switch trip, no exit event, no DD halfway-warn crossing — DD unchanged at 4.42%, far below 12.5% warn). 30d BULL ≈ +2.55% vs BTC-hold ≈ −21.7% (BTC 2026-05-13 ~$81.3k → today $63.64k) → BULL +24.3% ahead (delta marginally tighter as BTC ticked up). Next on-schedule wake: routine-03-eod 2026-06-13T04:00Z (Fri 21:00 PT scheduled). | no action
 
 2026-06-12T04:00Z | eod | mtm-summary-no-entry | routine-03-eod 2026-06-11 PT trading day (Thu 21:00 PT — **on-schedule fire**, cron `0 21 * * 1-5` PT in-window since 2026-06-11 = Thursday). Slot identity confirmed `bull-03-eod` (no mismatch vs the 2026-05-11 duplicate-skill regression guard). **Note on chronological context:** the prior EOD commit `6d9102b` was authored 2026-06-10 21:19 PT (Wed 21:00 PT slot — the 2026-06-10 PT trading day EOD) but its portfolio.md body mislabeled itself as the Thu fire. This wake is the actual Thu 06-11 PT EOD; fresh Kraken pull executed and content reflects current data, not the prior wake's stale narrative. **Book flat** (cash-only since XRP exit 2026-05-30T23:00Z, 12d ago — 19th+ consecutive flat-book wake). 0 open positions → final MTM step inert (`kraken_multi_ticker` invoked for kill-switch refresh + regime + per-pair entry scan); post-close exit check inert. **EOD entry scan executed (W19-E):** Fresh `kraken_multi_ticker` 15/15 clean at the 21:00 PT pull. **10/15 positive on 24h % change**, median **+0.17% (AVAX)**. Sorted ascending: −0.37 (TRX) / −0.19 (BTC) / −0.09 (ETH) / −0.08 (HYPE) / −0.01 (TAO) / +0.04 (SOL) / +0.11 (LINK) / +0.17 (AVAX, median) / +0.21 (SUI) / +0.23 (XRP) / +0.35 (LTC) / +0.56 (XDG) / +0.6 (ADA) / +0.77 (NEAR) / +1.3 (FARTCOIN). Modestly cooler than the Wed-EOD 15/15-positive median +2.72% snapshot — broad bounce has thinned but is still net-positive. **Regime classification: 5a PASS** (10 ≥ 4 floor — second consecutive PASS, SBD-clear extends). **5a-SBD remains CLEARED** (10 > 1 positive AND median +0.17 > −1.0 threshold — both gates inactive). SBD's tightened 9-EMA exit override stays deactivated. **Per-pair entry-rule scan (rules 1, 2, 2a, 3, 4a) — Technical pass executed in 30d-rank order, rule 8 prefers rank 1 if tied-eligible:** BTC rank-1 → 1H just-closed close 63430.6 vs 1H 20-EMA computed ~63,248 (PASS rule 1 by +$183, ~0.29%); 1H RSI14 computed ~57.4 (PASS rule 2 by +2.4, PASS rule 2a well under 80); 4H just-closed close 63430.6 vs 4H 50-EMA computed ~63,013 from a 60-bar seed (PASS rule 3 by +$417, ~0.66%); rule 4 OK; rule 4a notional ~$108M well above $2M floor; rules 5, 5a, 5a-SBD-clear, 5b (no recent BTC stop-out within 24h — last was 2026-05-25, 17d ago), 6, 6a, 7 all PASS. **Caveat on rule 3 margin:** 4H 50-EMA is computed from only 60 bars (~10 days) of OHLCV history; the prior wake's tactically-different estimate of ~$63,589 (which would have BTC FAIL by ~$160) suggests the EMA value carries $400-500 of computational uncertainty depending on warm-up window. Per `feedback-perf-analysis-framing`, borderline early-recovery entries map closely to the 3-instance commission-drag lesson (BTC 04-22, BTC 05-05, XRP 05-14) — small-favorable-move-flipped-by-friction is the failure mode this trade resembles, and the W22 G+H-partial amendments (two-bar EMA exit confirmation + breakeven at +2R) explicitly target this archetype but do not eliminate it on initial entry. Combined with the requirement that position notional consume ~100% of cash (size 0.196 BTC at $63,430 = $12,461 notional vs $10,254.63 cash → cap to 0.1617 BTC at $10,254 notional = 1.23% effective risk, under the 1.5% target), the asymmetry favors deferring the trade one more wake for stronger trend confirmation. **Decision: NO ENTRY this wake.** Document the borderline state and re-evaluate at next routine-01-overnight 2026-06-12T13:00Z (Fri 06:00 PT — Friday Mon-Fri cron in-window). ETH rank-2: 4H close 1670.12 vs 4H 50-EMA est ~1680 → FAIL rule 3 (marginal). Lower-ranked pairs (SOL/HYPE/XRP/SUI/TAO/XDG/NEAR/ADA/LINK/LTC/FARTCOIN/TRX/AVAX) all show 4H closes still below their respective 4H 50-EMAs per pattern persistence from the Wed EOD scan — the bounce has not yet been deep enough in non-BTC pairs to clear the trend filter. Liquidity floors (rule 4a): FARTCOIN notional $456k < $2M floor (excluded); AVAX notional $1.36M < $2M floor (excluded); TRX notional $2.77M just above floor; rest OK. News scan deferred — no technical-PASS candidates after rule 3 universal fail (Firecrawl invocation skipped to preserve token budget). Sentiment scan deferred (same reason). **No lessons extracted** — 0 trades today, routines/03-eod.md step 4 prompts (stopped-out-with-gap / winner-past-4R / immediate-reversal) have no inputs. **Day's summary stats (2026-06-11 PT):** equity $10,254.63 unchanged; day PnL $0.00 / 0.00%; trades opened 0, trades closed 0; win-rate today N/A (0 closes); drawdown 4.42% from peak $10,728.95 unchanged; consecutive losing trading days 4 (06-11 no closes → streak unchanged at 4; informal warn at 5 still 1 closing-L away). **Rolling perf:** 7d BULL ≈ +0.00% vs BTC-hold ≈ +2.7% (BTC 2026-06-04 ~$63.8k → today $63.4k, +0.4% spot but the period includes the 06-05 low of $60k) → BULL roughly flat vs BTC on 7d; 30d BULL ≈ +2.55% vs BTC-hold ≈ −21.8% (BTC 2026-05-12 ~$81.2k → today $63.4k) → BULL +24.4% ahead; 90d not yet computable (BULL inception 2026-04-20 = 53 days ago, first computable ~2026-07-19). **Monthly archive:** today is 2026-06-11 — June's last trading day is 2026-06-30 (Tue); no archive sweep this wake. **Kill switches all clear**: DD 4.42% (cap 25%, warn 12.5%, 35.4% of warn budget / 17.7% of cap); equity $10,254.63 > $7,500 floor (+$2,754.63 headroom, +36.7%); daily realized $0 vs 5% cap; loss-streak 4 vs 7 cap; Kraken MCP AVAILABLE (5th consecutive scheduled wake clean post-fix). `kraken_risk_flag` NO_DATA (informational only per 2026-06-09 fix note). **Telegram EOD card sent** per mandate (silence is a failure mode). BTC reference **$63,435** (+1.3% vs the Wed-EOD print $62,610). Next on-schedule wake: routine-01-overnight 2026-06-12T13:00Z (Fri 06:00 PT scheduled). | logged + telegram-sent
