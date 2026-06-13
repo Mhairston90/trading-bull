@@ -4,6 +4,77 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-06-13T15:50Z — routine-01-overnight (**Sat off-schedule fire**, cron `0 6 * * 1-5` would not have fired today)
+
+**Slot identity confirmed `bull-01-overnight`.** Off-schedule context: today is Saturday 2026-06-13; the Mon-Fri cron should not have fired this slot, but the routine was triggered (manual / harness re-fire / scheduler override — root cause TBD, flagging for next-harness investigation queue). Executing the routine as designed once awake: replay exit triggers that fired during the unmanaged weekend window, run entry scan against the just-closed 1H/4H bar, and notify.
+
+### Position MTM + exit replay (TAO/USD)
+TAO position carried from the 2026-06-13T04:00Z Fri-EOD entry ($217.286 size 32.985). Walked 1H closes since entry via `kraken_ohlcv` (20-bar lookback): 04:00Z $217.19 / 05:00Z $214.56 / 06:00Z $220.34 / **07:00Z $234.6331 (R=+3.72 — breakeven ratchet fires per W22-H-partial, stop moves $212.62 → $217.286)** / **08:00Z $237.3015 (R=+4.29 gross / +4.04R net → 4R take-profit trigger per Exit rule 3)** / subsequent bars 09:00-14:00Z all higher ($244.98 → $265.85, intra-bar high $268.99). Strategy convention exits at the first 1H close ≥ 4R, fill price = that bar close (no intra-bar exits per strategy.md). **Exit: 2026-06-13T09:00Z @ $237.3015, +4.04R net, +$621.22 net realized** (gross $660.21 − $38.99 roundtrip 0.26% × 2 commission). Reason tag `exit-4R-target-missed-scheduler-replay` matching 2026-05-21T08:00Z HYPE precedent. (Open question for routine #4 backlog: missed-scheduler replays could take exit at higher of {bar close, 4R target} to reflect rule intent — this trade we leave +$0.16/unit on the table vs theoretical 4R-exact fill, but adopting that variant requires explicit gate to avoid look-ahead.)
+
+### Technical (rule-driven, deterministic) — entry scan
+Engine: `scripts/indicators.py` against the 2026-06-13T15:00Z just-closed 1H bar (and converged 4H 50-EMAs over 720 bars HIGH-CONFIDENCE). Regime: **11/15 positive on 24h % change, median +0.52%** → **5a PASS** (well above 4-pair floor — 7-pair buffer, recovery resumed strongly after Fri-EOD's zero-buffer print). **5a-SBD CLEARED** (11 > 1 positive AND +0.52 > -1.0 median — both gates inactive). Per-pair (rules 1, 2, 2a, 3, 4a, 5b, 6, 6a, 7, 8):
+- **BTC/USD = rank-1 PASS** (sole rule-8 winner). 1H 64,188.1 vs 1H 20-EMA 63,768.1 → R1 +$420 (+0.66%). RSI14 64.9 → R2 +9.935 (clear of 80 cap). 4H 64,188.1 vs 4H 50-EMA 63,656.9 → R3 +$263.8 (+0.41%, HIGH-CONFIDENCE 720 bars). R4a $75.89M >> $2M floor. ATR14 233.74 → 2×ATR stop 467.48. Rule 5b inapplicable (last BTC close 2026-05-25T22:00Z exit-stop-hit, 18d > 24h cooldown). Rules 6 (0/4), 6a (0/2 cluster — TAO just closed), 7 (0.72% per-trade risk under 1.5% cap, portfolio 0.72% of 4% cap) all PASS. Rule 8 (highest 30d notional rank) — BTC at rank 1 wins over SOL/SUI/XDG.
+- SOL/USD: PASS R1+R2 (RSI 66.6)+R2a+R3 (+$0.55)+R4a ($13.18M). Rank 3 — loses tiebreak to BTC under rule 8.
+- SUI/USD: PASS R1+R2 (RSI 63.5)+R2a+R3 (+$0.0046)+R4a ($4.18M). Rank 6 — loses tiebreak.
+- XDG/USD: PASS R1+R2 (RSI 60.8)+R2a+R3 (+$0.00108)+R4a ($6.11M). Rank 8 — loses tiebreak.
+- TAO/USD: post-exit re-eligibility — FAIL R2a (RSI 90.8 > 80 cap, climactic) AND no 5b cooldown needed (exit was 4R-target not stop-hit). Climactic RSI is the explicit W19-D lesson rejection mode. No re-entry.
+- ETH/USD: FAIL R3 (-$11.73 vs 4H EMA 1,689.14). R3-20 PASS (v0.14 telemetry).
+- HYPE/USD: FAIL R3 (-$1.18). R3-20 PASS marginal.
+- XRP/USD: FAIL R3 (-$0.0003 — razor-thin).
+- NEAR/USD: FAIL R3 (-$0.062). R3-20 FAIL too — recovery still lagging.
+- ADA/USD: FAIL R3 (-$0.0002 — razor-thin). R3-20 PASS.
+- LINK/USD: PASS R1+R2+R3, **FAIL R4a** ($1.12M < $2M floor) — excluded by liquidity.
+- LTC/USD: PASS R1+R2+R3, **FAIL R4a** ($1.68M < $2M).
+- FARTCOIN/USD: PASS R1+R2+R3, **FAIL R4a** ($0.33M).
+- TRX/USD: FAIL R3 (-$0.0061). FAIL R4a ($0.83M).
+- AVAX/USD: FAIL R3 (-$0.21). FAIL R4a ($0.74M).
+
+**Final candidate list: BTC/USD (rule 8 winner over SOL/SUI/XDG).**
+
+### News (Firecrawl-driven, informational only in v0.2)
+Scan deferred for token-budget — Firecrawl not invoked. Per W19-E schema, news pass is informational and does **not** veto entries in v0.2. Classified **neutral** by convention. The TAO +23% 24h move did surface organically as a notable price anomaly (likely token-specific catalyst, possibly listing / staking-yield news on Bittensor) — TAO position already on the book through the move; no informational read needed for an exit-decision the strategy already triggered deterministically. No active scan for BTC entry; same convention applies.
+
+### Sentiment (Kraken depth/spread proxy in v0.2)
+**BTC `kraken_spread` (10 most-recent quotes at 15:52:40 UTC):** bid/ask cluster $64,235-$64,237, spread range $0.10-$1.40, mostly $0.10-$1.40 (≈0.02-0.22 bps). Very tight, well-defined top-of-book. Order-book depth implicit in BTC's massive 24h notional ($75.89M from indicators.py / $60.2M from `kraken_multi_ticker` 24h volume × ~$64k); 0.168 BTC clip ($10,784 notional) is microscopic vs available depth — fills inside top-of-book at the model price. **Sentiment: supportive.**
+
+### Decision
+**(1) EXIT TAO/USD long → 2026-06-13T09:00Z (replay) @ $237.3015, +4.04R net, +$621.22 realized.**
+**(2) ENTER BTC/USD long.**
+- Entry price: $64,188.10 (1H just-closed bar 14:00-15:00 UTC).
+- **Size: 0.168 BTC (cash-constrained, first cash-binding sizing since inception).** Ideal 1.5%-risk size would be 0.349 BTC = $22,400 notional, but post-TAO-exit cash is $10,875.85; mandate forbids leverage → size capped to fit cash with small commission buffer.
+- Notional: $10,783.60 ($92.25 cash remaining post-entry, before entry commission of ~$28 charged at exit).
+- Risk: $78.54 = 0.72% of equity (below 1.5% target — under-risked, not over).
+- Stop (2×ATR): $63,720.62 ($467.48 below entry, -0.73%).
+- 4R target: $66,058.02 ($1,869.92 above entry, +2.91%).
+- W22-H ratchet trigger: 1H close ≥ $65,123.06 (+2R) moves stop to BE $64,188.10.
+- W22-G exit: two consecutive 1H closes < 1H 20-EMA (currently 63,768.1, will drift).
+- SBD-exit override inert (SBD currently cleared).
+
+### Day's summary stats (2026-06-13 PT)
+Equity $10,875.85 post-events (was $10,254.63 → +$621.22). **New equity peak $10,875.85** (supersedes prior $10,728.95 set 2026-05-21 by $146.90). Drawdown reset to 0.00%. Trades opened 1 (BTC), trades closed 1 (TAO @ 4R replay). Win-rate today 1/1 = 100%. **Consecutive losing trading days RESET to 0** (winning realized close breaks the 4-day streak 05-22/25/26/30). Rolling perf updated: 7d BULL ≈ +6.06% vs BTC ≈ +1.5% → +4.6%; 30d BULL ≈ +8.76% vs BTC ≈ -21.0% → +29.8% (BULL extending lead via the TAO 4R catch); 90d not computable.
+
+### Lessons extracted
+Notable: the TAO trade is the second 4R take-profit since inception (after SOL 2026-05-11 +4.03R) and the SECOND missed-scheduler 4R replay after HYPE 2026-05-21. Pattern: large overnight / weekend moves on momentum entries entered on Friday EOD have hit 4R during the cron-dark window twice in five weeks. This is consistent with the W22-H-partial rationale (breakeven ratchet protects the winner against round-trip) and the W19-D RSI-cap exclusion (the entry RSI was 62.5, well under the 80 cap — not climactic at entry, and was correctly admitted). **No new lesson appended** — this is reinforcement of existing W21-F + W22 design, not a new pattern. Cash-binding entry sizing IS a new observable phenomenon worth a lesson — logged for routine #4 backlog (whether rule 8 should accept lower-ranked but fully-fundable candidates in cash-bound scenarios; current rule 8 rank-strict + cash-cap gives a smaller-than-target BTC position vs a larger SOL/SUI/XDG that would size to 1.5%).
+
+### Monthly archive
+Today is 2026-06-13 — June's last trading day is 2026-06-30 (Tue). No archive sweep this wake.
+
+### Ops watchdog
+`python scripts/watchdog.py --telegram` → `ALL CLEAR — heartbeats, timestamps, tree, MTM, scheduler flag, push state, MCP paths OK`. No findings.
+
+### Telegram
+**Dual-event notify sent** per routine #1 NOTIFY gate (4R take-profit replay + new BTC entry both qualify; combined into one message to avoid notification spam).
+
+### Off-schedule fire flag
+**Today is Saturday — Mon-Fri cron should not have fired this slot.** Routine executed anyway because the system was awake and material events (TAO 4R replay) were pending. The 4R close at 09:00 UTC happened during the explicitly-flagged unmanaged weekend window per the Fri-EOD portfolio.md note ("TAO position carries unmanaged across 60+ hours"). Off-schedule wake CAPTURED that exit at the correct historical bar close, then opportunistically opened BTC at the most recent closed 1H bar. **Flagging for next harness investigation:** was this fire intentional (manual / harness override), an extra Task Scheduler retry, or a cron misconfiguration? If routine-01 fires unscheduled on weekends, the "weekend carry" reasoning in EOD wake notes may be wrong. Add to investigation queue alongside the existing Mon-Fri-enforcement check.
+
+### Next wake
+routine-01-overnight 2026-06-15T13:00Z (Mon 06:00 PT scheduled per cron). BTC position carries ~45h unmanaged across the remainder of the weekend; 2×ATR stop $63,720.62 is the protective floor (-0.73% from entry).
+
+| 2 trade events (1 exit-replay + 1 entry) + telegram-sent + research-logged
+
+---
+
 ## 2026-06-13T04:10Z — routine-03-eod (2026-06-12 PT trading day, Fri 21:10 PT on-schedule fire)
 
 ### Technical (rule-driven, deterministic)
