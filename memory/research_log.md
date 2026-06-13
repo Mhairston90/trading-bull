@@ -3069,3 +3069,4 @@ Hunting for leaderboard gaps found a REAL active bug: **FABLE Crypto Drift v1 de
 - **New sentinel:** C:	rading\Fableutomation_health_opus.py -> data/health/automation_health_opus.md (nightly, last step of run-fable-nightly.bat, --git-commit). Checks per-family newest AND oldest file age (catches one-dead-among-fresh), nightly-log traceback scan, Task Scheduler last results. First run correctly ALARMed on this morning's traceback (self-clears tomorrow). Exit 2 on alarm.
 - **Decision Desk:** 5 undecided crypto/stocks basket P2 items ack/deferred with July-1 archive criteria, citing the gating diagnosis (leaderboard 57e73e0).
 - Side observation: the wake-cluster scheduling pattern (all OPUS tasks fire simultaneously on machine wake) remains; atomic writes + retries make it safe, but if new cache writers are added, they must write atomically too.
+2026-06-13T17:40:06Z | allocation | day-gate | not Sunday, skipping | no action
