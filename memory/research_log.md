@@ -4,6 +4,37 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-06-13T17:00Z — routine-04-harness (Sat 10:00 PT on-schedule)
+
+Day-gate passed (today IS Saturday PT). VERIFY: TradingView `tv_health_check` → CDP connection failed (5th consecutive harness blocked, W20/W22/W23-misfire/this). Kraken MCP OK (BTC $63,979.4 smoke test, spread 0.1, vwap $63,751.47, 24h +0.69%). Per W19/W20 precedent: reduced-scope harness proceeds without TV backtests; full memo at `memory/weekly_memos/2026-W24.md`.
+
+**Performance W24:** 1 closed trade (TAO +4.04R / +$621.22, 4R take-profit missed-scheduler replay at 09:00Z) + 1 open (BTC 0.168 @ $64,188.10 from 15:00Z this wake). **New all-time equity peak $10,875.85** (+8.76% inception-to-date, supersedes prior $10,728.95 / 2026-05-21). Drawdown reset 0.00%. Loss-streak reset 4 → 0. Win rate W24 100% (1/1). All kill switches CLEAR.
+
+**Lessons scored:** `2026-05-19 SBD-defensive-asymmetry` → 8 (provisional confirmed). `2026-06-12 entry-timing-patience` → 6 (provisional confirmed; reinforced by today's TAO 4R outcome — disciplined entry produced the largest winner of the quarter). 7 active lessons; cap 50; no prune.
+
+**Variants:** rack 10/10 (7 hypothesis + 3 sweep). No new spin-ups (rack full + no autoloop slots available + hypothesis-protection). v0.10/v0.11/v0.6 already archived per W22 retirement audit. No promotion-eligible variant: v0.14-recovery-trend's first trade was a scratch (+0.01R BTC); v0.5 has 1 trade (+0.12R HYPE); v0.8 has 1 trade (−1.00R NEAR). All others 0 synthetic trades.
+
+**Competitor (read-only `C:/trading/strategy-leaderboard/data/codex/`):** BULL +8.76% leads Codex v0 (−6.80%, +15.56 pts) and Codex Aggro (+5.41%, +3.35 pts). Aggro gap widened ~3pts in one Sat from the TAO catch. Codex v0 multi-sleeve same-pair structure mandate-incompatible; Codex Aggro currently flat with short-basket time-stops fading. No structural import.
+
+**Proposal: NONE.** v0.4 performing exactly as designed (TAO trade exercised W22-H breakeven ratchet at +3.72R → caught 4R target next bar — opposite of XRP archetype that motivated the fix). No new lessons. Rack-side hypothesis evidence not yet adequate. TV blocker still gating Ring-2 evidence requirements. Competitive position favorable.
+
+**Backlog items logged for next harness:**
+- Cash-aware rule-8 tiebreaker (single-instance: BTC sized to 0.72% risk this wake because cash ran out post-TAO-exit; SOL/SUI/XDG would have sized to full 1.5%).
+- Missed-scheduler 4R replay convention (take higher of {bar close, 4R target} — TAO left ~$2/unit on table this wake).
+- Codify R3 entry margin floor once 4–6 patience-arcs accumulate (current evidence n=1).
+
+**Open questions (re-escalated to user):**
+1. TV Desktop install — week 5 (W20 escalation unanswered).
+2. IDEA-12 ETF-flow daily feed — wire pre-emptively or wait? (W20 question unanswered).
+3. Cash-aware rule-8 — draft as Ring-2 next harness or treat as corner-case?
+4. Missed-scheduler replay convention — amend to take higher of {close, target}?
+
+**Telegram:** weekly digest queued (mandatory per routine #4 NOTIFY gate).
+
+| harness summary committed: 0 ring-2 proposals, 2 lesson scores assigned, 0 variant promotions, 0 retirements, BULL leads contest by +3.35 / +15.56 pts
+
+---
+
 ## 2026-06-13T15:50Z — routine-01-overnight (**Sat off-schedule fire**, cron `0 6 * * 1-5` would not have fired today)
 
 **Slot identity confirmed `bull-01-overnight`.** Off-schedule context: today is Saturday 2026-06-13; the Mon-Fri cron should not have fired this slot, but the routine was triggered (manual / harness re-fire / scheduler override — root cause TBD, flagging for next-harness investigation queue). Executing the routine as designed once awake: replay exit triggers that fired during the unmanaged weekend window, run entry scan against the just-closed 1H/4H bar, and notify.
