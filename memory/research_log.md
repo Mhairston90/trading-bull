@@ -4,6 +4,10 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-06-13T20:07Z — routine-02-midday (Sat 13:07 PT off-schedule)
+
+Off-schedule Saturday fire (cron `0 13 * * 1-5`, framework dispatched anyway — third off-schedule weekend fire today after routine-01 15:50Z and routine-04 17:00Z). **No exits, no entries (midday spec forbids entries).** BTC/USD long 0.168 @ $64,188.10 (entered 5h54m ago at 15:00Z) — 5 full 1H closes since entry plus a partial 20:00 UTC bar. Exit-rule sweep all-clean: (1) EMA20 chain post-entry computed off 63,768.1 α=2/21 baseline → 63,814 / 63,831 / 63,842 / 63,869 / 63,908; all 5 closes (64,253 / 63,989 / 63,944 / 64,130 / 64,282) above the rising EMA. Rule 1 inert. (2) Stop $63,720.62 not pierced — lowest post-entry low $63,893.2 (16:00 bar), $172.58 buffer. (3) 4R target $66,058.02 not hit — highest post-entry high $64,294.0. Breakeven ratchet not armed (highest 1H close 64,282 = +0.20R, vs +2R threshold $65,123). MTM: BTC last $64,211.9 → position $10,787.60 + cash $92.25 = equity $10,879.85, unrealized +$3.95 / +0.05R. Equity peak unchanged at $10,875.85 (peak tracks realized closes; MTM is $4 above but does not advance). Drawdown 0.00%. Kill switches all CLEAR. Kraken MCP available, no MCP failures. Telegram silent (no notify-trigger met). Next wake: routine-01-overnight 2026-06-15T13:00Z (Mon 06:00 PT), ~37h carry. Backlog: confirm with user whether framework's weekend dispatches are intentional or whether the Mon-Fri cron filter should be enforced inside each routine spec.
+
 ## 2026-06-13T17:00Z — routine-04-harness (Sat 10:00 PT on-schedule)
 
 Day-gate passed (today IS Saturday PT). VERIFY: TradingView `tv_health_check` → CDP connection failed (5th consecutive harness blocked, W20/W22/W23-misfire/this). Kraken MCP OK (BTC $63,979.4 smoke test, spread 0.1, vwap $63,751.47, 24h +0.69%). Per W19/W20 precedent: reduced-scope harness proceeds without TV backtests; full memo at `memory/weekly_memos/2026-W24.md`.
