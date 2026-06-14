@@ -3074,3 +3074,5 @@ Hunting for leaderboard gaps found a REAL active bug: **FABLE Crypto Drift v1 de
 - **Decision Desk:** 5 undecided crypto/stocks basket P2 items ack/deferred with July-1 archive criteria, citing the gating diagnosis (leaderboard 57e73e0).
 - Side observation: the wake-cluster scheduling pattern (all OPUS tasks fire simultaneously on machine wake) remains; atomic writes + retries make it safe, but if new cache writers are added, they must write atomically too.
 2026-06-13T17:40:06Z | allocation | day-gate | not Sunday, skipping | no action
+
+2026-06-14T01:02Z | idea-scan | day-gate | not Friday, skipping | no action
