@@ -3076,3 +3076,114 @@ Hunting for leaderboard gaps found a REAL active bug: **FABLE Crypto Drift v1 de
 2026-06-13T17:40:06Z | allocation | day-gate | not Sunday, skipping | no action
 
 2026-06-14T01:02Z | idea-scan | day-gate | not Friday, skipping | no action
+
+---
+
+## 2026-06-14T04:11Z — routine-03-eod (Sat 21:11 PT — 2026-06-13 PT EOD)
+
+### Wake context
+- Cron `0 21 * * 1-5` PT. Slot ID `bull-03-eod` (verified — body matched, no `bull-01-overnight` regression like the 2026-05-11 incident `3ce53b1`). Calendar date label: **2026-06-13 PT** (per the date-labeling guard — fire is 04:11Z UTC = next-calendar-day UTC, but the routine labels with the PT date at fire time).
+- 1 open position (BTC long 0.168 from this morning). 13 closed 1H bars since entry.
+- Live strategy v0.4 (W22-G two-bar EMA20 exit, W22-H-partial breakeven ratchet at +2R, 4R take-profit retained, W21-F SBD override).
+- Kraken connectivity: indicators script 15/15 clean fetches @ 720 bars 1H + 4H; `kraken_multi_ticker` + 20-bar 1H BTC OHLCV both clean.
+- Watchdog: `ALL CLEAR — heartbeats, timestamps, tree, MTM, scheduler flag, push state, MCP paths OK`.
+
+### VERIFY — kill switches
+- Daily realized 2026-06-13 PT: **+$621.22 / +6.06%** (TAO 4R replay) — loss cap is downside-only, CLEAR.
+- DD: 0.00% — CLEAR (warn 12.5%, cap 25%).
+- Equity (MTM): $10,930.40 > $7,500 — CLEAR.
+- Loss-streak: 0 / 7 — CLEAR (reset this morning).
+- Kraken MCP / public-REST / indicators script: AVAILABLE — CLEAR.
+- **All clear. No kill switch tripped → proceed to DO.**
+
+### DO 1 — Final mark-to-market
+- BTC last 1H close $64,512.8 (03:00 UTC bar). Spot $64,490.3 mid-04:00 bar.
+- Position notional $10,838.15 = 0.168 × $64,512.8. Cash $92.25. Equity **$10,930.40**.
+- Unrealized PnL +$54.55 gross, R **+0.69**.
+
+### DO 2 — Post-close exit check on BTC
+| Rule | Test | Result |
+|---|---|---|
+| Rule 1 (W22-G two 1H closes < EMA20) | EMA20 $63,762; 13 post-entry closes range $63,944.3–$64,560.9 all above EMA | **INERT** (0/13 below) |
+| Rule 1-SBD | SBD CLEARED (15/15 positive +1.90% > -1.0) | **N/A** |
+| Rule 2 (stop $63,720.62) | Lowest intra-bar low post-entry $63,893.2 (16:00 UTC) = $172.58 above stop | **NOT TRIPPED** |
+| Rule 3 (4R target $66,058.02) | Highest 1H high post-entry $64,750.0 (21:00 UTC) = $1,308 below target | **NOT HIT** |
+| Breakeven ratchet (W22-H-partial) | Requires +2R close ≥ $65,123.06; highest post-entry close $64,560.9 = $562.16 below | **NOT ARMED** |
+
+**0 exits this wake.** Stop stays at $63,720.62 (original 2×ATR).
+
+### DO 3 — EOD entry scan (W19-E analyst-role split)
+
+Source: `python scripts/indicators.py` @ 04:10:49Z (closed-bar; 720-bar converged EMAs; ≥200-bar 50-EMA floor satisfied on all 15 pairs).
+
+| Pair | R1 (1H>EMA20) | R2/2a (55<RSI≤80) | R3 (4H>EMA50, $ margin) | R4a (notional≥$2M) | Verdict |
+|---|:---:|:---:|:---:|:---:|:---|
+| BTC | PASS +296.6 | PASS +10.02 (RSI 65.0) | PASS +750.8 | OK $53.65M | **EXCLUDED rule 5 (open pos)** |
+| ETH | PASS +2.87 | PASS +0.46 (RSI 55.5) | **FAIL** -6.95 (EMA 1,687.82) | OK $25.19M | FAIL R3 |
+| SOL | PASS +0.6328 | PASS +10.22 (RSI 65.2) | PASS +1.426 (EMA 67.5139) | OK $12.01M | **PASS** |
+| HYPE | PASS +0.5414 | PASS +1.72 (RSI 56.7) | PASS +0.7266 (EMA 59.8534) | OK $13.29M | **PASS** |
+| XRP | PASS +0.0055 | PASS +5.28 (RSI 60.3) | PASS +0.0046 (EMA 1.14864) | OK $9.43M | **PASS** |
+| SUI | PASS +0.0033 | PASS +1.43 (RSI 56.4) | PASS +0.0042 (EMA 0.764531) | OK $5.28M | **PASS** |
+| TAO | PASS +19.32 | PASS +22.9 (RSI 77.9, under 80 cap by 2.1) | PASS +52.63 (EMA 223.059) | OK $19.27M | **PASS** (RSI climactic-adjacent) |
+| XDG | PASS +0.0004 | PASS +2.61 (RSI 57.6) | PASS +0.001139 (EMA 0.086949) | OK $3.68M | **PASS** |
+| NEAR | PASS +0.0305 | PASS +3.34 (RSI 58.3) | PASS +0.0247 (EMA 2.1092) | OK $4.41M | **PASS** |
+| ADA | PASS +0.0007 | **FAIL** (RSI 54.9) | **FAIL** -0.000482 | OK $8.65M | FAIL R2, R3 |
+| LINK | **FAIL** -0.003234 | **FAIL** (RSI 51.3) | PASS +0.03262 | OK $3.62M | FAIL R1, R2 |
+| LTC | PASS +0.464 | PASS +14.25 (RSI 69.3) | PASS +0.7507 | **FAIL** $1.91M | FAIL R4a |
+| FARTCOIN | FAIL | FAIL (RSI 47.3) | FAIL | **FAIL** $0.50M | FAIL all |
+| TRX | FAIL | FAIL (RSI 42.2) | FAIL | **FAIL** $0.65M | FAIL all |
+| AVAX | PASS +0.0283 | PASS +3.37 (RSI 58.4) | **FAIL** -0.1379 | **FAIL** $0.84M | FAIL R3, R4a |
+
+- **Eligible candidate set (7):** SOL (rank 3), HYPE (4), XRP (5), SUI (6), TAO (7), XDG (8), NEAR (9). Compared to this morning's lone BTC pass, EOD has 7-wide eligible set with comfortable R3 margins (+0.40% to +23.6% above 4H EMA50). Recovery is now durably through the slow-trend filter.
+- **Regime:** 15/15 positive 24h, median **+1.90%** → **5a PASS** (well clear of 4-pair floor; breadth up from morning's 11/15 +0.52%). **5a-SBD CLEARED** (15 > 1 AND +1.90 > -1.0).
+- **Rule 5b cooldowns:** all 7 candidates clear (SOL last close 22d ago, HYPE 22d, XRP 14d, SUI never, **TAO 19h ago but exit was `exit-4R-target` not `exit-stop-hit` — 5b INACTIVE** because the rule explicitly gates re-entry after a stop-out, XDG never, NEAR never).
+- **Rule 6:** 1/4 used → PASS for a 2nd entry.
+- **Rule 6a (cluster):** {BTC, ETH, SOL, TAO, AVAX, SUI, LINK} 1/2 (BTC); adding SOL/SUI/TAO would push to 2/2 (still PASS).
+- **Rule 8 (highest 30d notional rank):** **SOL** wins (rank 3 highest among eligible).
+
+### DO 4 — News pass
+- **SOL technical-PASS only:** Firecrawl skipped this wake (token budget; news pass is informational-only per W19-E, does not veto). No supportive/contradictory headline tags recorded.
+
+### DO 4a — Sentiment pass
+- **SOL Kraken sentiment:** spread/depth not queried — decision is going to defer on cash-binding (see DO 5), so sentiment data adds no decision-value. **SKIPPED** with this rationale logged.
+
+### DO 5 — Eligible new entries — **CASH-BINDING DEFER**
+
+**Rule 7 sizing on SOL (rule-8 winner):**
+- Ideal risk = 1.5% × $10,930.40 = $163.96
+- Stop distance 2×ATR = $0.91043 per unit
+- Ideal size = 180.10 SOL = $12,402 notional
+- Available cash = **$92.25** — fundable size capped to 1.338 SOL = $92.21 notional (99.96% of cash)
+- Capped risk = $1.22 = **0.011% of equity** (vs 1.5% target)
+- Roundtrip commission @ 0.52% on $92.21 = $0.48 = **39% of the trade's stop risk**
+- +4R win nets +$4.40 (+0.04% equity); −1R loss nets −$1.70 (−0.016% equity) — both below any meaningful R-impact
+
+**Decision: defer.** A micro-position with commission-friction > 1/3 of stop risk is not what the strategy v0.4 sizing path contemplates. The same block applies to all 7 eligible candidates (none can be sized above the friction floor while BTC consumes 99.16% of equity at $10,838.15 / $10,930.40 = 99.16%). This is the second instance this PT day (morning routine-01 capped BTC at 0.168 = 99.15% cash use; tonight's scan finds no operationally meaningful add). **Structural state:** no second concurrent entry will be operationally meaningful until (i) BTC resolves (4R close / stop trip / two-bar EMA20 exit), or (ii) routine #4 amends rule 8 to accept lower-ranked but fully-fundable candidates as fallback. Routine #4 backlog item carries forward from morning; tonight is data point #2.
+
+**0 trade_log writes.**
+
+### DO 6 — Lessons review
+Today's events screened against the routine's three lesson prompts:
+- **Stopped out with gap?** No stops today.
+- **Winner past 4R before TP?** TAO trigger bar close $237.30 was the take-profit; the very next 1H bar (10:00 UTC, post-exit) ran to a high of $268.99 (+4.30R extension above the take-profit). Strategy convention takes the exit at the close that first satisfied the rule, not the subsequent runup. This is the second 4R replay where the post-trigger bar extended further (HYPE 2026-05-21 was the first, +0.7% post-exit runup). **Materiality:** the extension-given-up question was explicitly considered and rejected at W22 ("4R cap stays" per `feedback-perf-analysis-framing`). No strategy.md change proposed. Not material as a new lesson — already covered by lesson 2026-04-24 commission-drag (exit-logic gap) and W22 design decision.
+- **Entry immediately reversed?** BTC entry $64,188.10 went sideways through 16:00–18:00 UTC ($63,944.3 low close = R -0.52) then trended up to current +0.69R. Not a reversal pattern; well within designed adverse-motion budget.
+
+**No new lessons entries this wake** (per routine "up to 2 per day, not more" — zero is allowed when nothing material).
+
+### DO 7 — Monthly archive
+- Today is 2026-06-13 PT (Saturday). Month ends 2026-06-30 (Tuesday). **Not last trading day of month.** No archive.
+
+### Decision
+- **Action:** 0 entries (7 eligible, all cash-binding-blocked), 0 exits (BTC inside rules), 0 lessons. **0 trade_log writes, 0 universe writes, 0 lessons writes.**
+- **portfolio.md:** rewritten with this wake's EOD numbers + scan rationale + refreshed kill-switch state.
+- **research_log.md:** this entry.
+
+### Telegram
+- **Mandatory EOD card sent** per routine §NOTIFY (silence is a failure mode).
+
+### Next wake
+- routine-01-overnight 2026-06-15T13:00Z (Mon 06:00 PT — Sun off per cron). BTC position carries unmanaged ~33h between this fire and Mon routine-01 wake. Protective layers: 2×ATR stop $63,720.62 ($792 below last close), rising 1H EMA20 ($63,762, $750 below close), +0.69R cushion already accrued.
+
+### Observation — operational state at PT-day close
+- The day's dominant pattern is a textbook archetype reinforcement: the disciplined patience-through-borderline-arc thesis from lesson 2026-06-12 produced the TAO +4.04R / +$621.22 morning win (largest single trade of the quarter); the next opportunity arrived within 6 hours (the BTC entry-1 PASS that became the cash-binding entry) and is now +0.69R unrealized after 13 well-behaved post-entry closes. The 7-eligible EOD scan suggests the regime recovery has continued through the day; if BTC closes well (4R, eventual EMA exit on a gain, or even a small stop trip), Monday's wake should re-encounter several of tonight's eligibles with cash freed.
+- The cash-binding-blocked entry condition documented twice today is a real strategy state. Routine #4 backlog: quantify the EV of "wait for current position to resolve" vs "amend rule 8 to take a fundable lower-ranked alternative." Tonight is data point #2; data point #1 was the routine-01 morning observation.
