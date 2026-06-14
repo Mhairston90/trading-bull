@@ -1,7 +1,7 @@
 # Variant v0.4-mean-reversion-sleeve — Synthetic Portfolio
 
 > **Paper-paper account.** Synthetic $10K starting equity.
-> **Last rebuild:** 2026-06-13T05:08Z (routine-07 wake 2026-06-12 22:00 PT — 0 entries; RSI far above mean-rev thresholds)
+> **Last rebuild:** 2026-06-14T05:00Z (routine-07 wake 2026-06-13 22:00 PT — 0 entries; RSI far above mean-rev thresholds; 15/15 positive EOD)
 
 ## Account
 
@@ -40,7 +40,7 @@ Open positions: **0 / 2** (variant max-concurrent 2 — mean-reversion sized sma
 ## Days live
 
 - Spin-up: 2026-04-29
-- As of last rebuild: **45 days**
+- As of last rebuild: **46 days**
 - Promotion-eligible date: **2026-05-29 (reached)** — 0 trades lifetime (need ≥10 in rolling 30d) → NOT promotion-eligible
 
 ## Notes
@@ -58,3 +58,4 @@ Tests whether BULL's mandate-allowed-but-unused mean-reversion bucket adds edge 
 - **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — stale)** — **OVERNIGHT 2026-06-11T13:00Z:** SBD active (confirmed by flanking bookends) — M3 check: red/mixed bars in declining tape → M3 FAIL → 0 entries. **EOD 2026-06-12T04:00Z:** 5a PASS, SBD CLEARED (15/15 positive). M3 PASSES (green ✓). M2 (RSI < 25): BTC ~57.9 — far above 25. **0 entries.** Kill switches clear at $10,000. Days live: 44.
 - **2026-06-11 22:00 PT (this wake)** — **EOD 2026-06-12T04:00Z (confirmed):** SBD CLEARED ✓; M3 PASSES (15/15 green ✓); M2 (RSI < 25): BTC 1H RSI 57.4 >> 25; no pair near oversold in 10/15 positive tape. M2 failure is binding. **0 entries.** Kill switches all clear at $10,000. Days live: **44**.
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **OVERNIGHT 2026-06-12T13:00Z:** M3 check — mixed-green bars; M2 (RSI < 25): no pair near oversold. 0 entries. **EOD 2026-06-13T04:00Z:** 4/15 positive, SBD CLEAR. M3 PASSES (green bars). M2 (RSI < 25): TAO 1H RSI 62.5 >> 25; universe-wide RSI 48-65 range — no pair approaching oversold. **0 entries.** Mean-rev variants are structurally blocked in broad-positive tape; next entry opportunity requires an oversold pull-back (RSI < 25 for this variant). Kill switches all clear at $10,000. Days live: **45**.
+- **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). **OVERNIGHT 2026-06-13T13:00Z:** M3 check — momentum pairs rallying (green bars); M2 (RSI < 25): universe RSI broadly elevated in 15/15 positive tape build-up; TAO RSI ~70, BTC RSI ~55 — no pair near oversold. 0 entries. **EOD 2026-06-14T04:00Z (indicators.py):** 15/15 positive, SBD CLEAR. M3 PASSES (green bars universe-wide). M2 (RSI < 25): TAO RSI ~76 >> 25; universe-wide RSI 48-76 range — no pair approaching deeply oversold. **0 entries.** Mean-rev variants structurally blocked in broad-positive, broad-rallying tape; RSI must reach <25 for any entry. Kill switches all clear at $10,000. Days live: **46**.

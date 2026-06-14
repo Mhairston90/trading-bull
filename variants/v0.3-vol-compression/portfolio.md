@@ -2,35 +2,35 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity. Does NOT affect main BULL portfolio or any real broker.
 > **Rebuilt each routine #7 wake** from this variant's `trade_log.md`.
-> **Last rebuild:** 2026-06-13T05:08Z (routine-07 wake 2026-06-12 22:00 PT — 1 OPEN TAO; vol-comp gate correction: gate ALLOWS at 0.5 threshold when ATR not compressed)
+> **Last rebuild:** 2026-06-14T05:00Z (routine-07 wake 2026-06-13 22:00 PT — TAO CLOSE +4.29R/+$643.90, BTC OPEN OVERNIGHT/CLOSE −0.26R/−$18.51, SOL OPEN EOD; 2 closed trades lifetime)
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$3,009.91** ($10,000 − 32.17 TAO × 217.286 notional)
-- Realized PnL (variant lifetime): **$0.00**
-- Unrealized PnL: **−$3.09** (TAO 32.17 × (217.19 − 217.286) = −$3.09 MTM at rebuild)
-- Position values (MTM): **$6,987.00** (TAO 32.17 × 217.19)
-- Current equity (cash + positions MTM): **$9,996.91**
-- Equity peak: **$10,000.00** (set at spin-up 2026-04-29)
-- Drawdown from peak: **0.03%** ($10,000 → $9,996.91)
+- Cash: **$9.44** ($10,625.39 − 155 SOL × $68.49 notional)
+- Realized PnL (variant lifetime): **+$625.39** (TAO/USD +$643.90 +4.29R closed 2026-06-13T09:00Z; BTC/USD −$18.51 −0.26R closed 2026-06-13T17:00Z)
+- Unrealized PnL: **$0.00** (SOL 155 × ($68.49 − $68.49) = $0 at EOD entry price)
+- Position values (MTM): **$10,615.95** (SOL 155 × $68.49)
+- Current equity (cash + positions MTM): **$10,625.39**
+- Equity peak: **$10,643.90** (set 2026-06-13T09:00Z at TAO 4R close; prior peak $10,000 at spin-up)
+- Drawdown from peak: **0.17%** ($10,643.90 → $10,625.39 after BTC −$18.51)
 
 ## Open positions
 
 | Pair | Side | Size | Entry | Entry time (UTC) | Stop | 4R target | Risk ($) | Risk (% equity) |
 |------|------|------|-------|------------------|------|-----------|----------|-----------------|
-| TAO/USD | LONG | 32.17 | 217.286 | 2026-06-13T04:00Z | 212.6226 | 235.9396 | 150.00 | 1.50% |
+| SOL/USD | LONG | 155 | 68.49 | 2026-06-14T04:00Z | 67.560 | 72.210 | 144.15 | 1.36% |
 
-Portfolio risk-at-moment: **1.50%** (cap 4%).
+Portfolio risk-at-moment: **1.36%** (cap 4%).
 Open positions: **1 / 4** (cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 1/2).
 
 ## Active kill-switch state
 
-- Daily realized: $0 today (entry only) — clear vs 5% cap
+- Daily realized: +$625.39 (TAO +$643.90 − BTC $18.51; net positive, loss cap is downside-only) — clear vs 5% cap
 - Consecutive losing trading days: 0 (cap 7)
-- Max drawdown: 0.03% from peak $10,000 (cap 25%, warn 12.5%) — clear
-- Equity floor: $9,996.91 > $7,500 — OK
-- **All clear. 1 open position (TAO/USD). First hypothetical trade for this variant.**
+- Max drawdown: 0.17% from peak $10,643.90 (cap 25%, warn 12.5%) — clear
+- Equity floor: $10,625.39 > $7,500 — OK
+- **All clear. 1 open position (SOL/USD). 2 closed trades lifetime (TAO +4.29R, BTC −0.26R).**
 
 ## Rolling performance (vs main BULL v0.2)
 
@@ -45,8 +45,8 @@ Open positions: **1 / 4** (cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 1/2).
 ## Days live
 
 - Spin-up: 2026-04-29
-- As of last rebuild: **45 days**
-- Promotion-eligible date: **2026-05-29 (reached)** — 0 closed trades lifetime (need ≥10 in rolling 30d) → NOT promotion-eligible. TAO open as of this wake (first trade).
+- As of last rebuild: **46 days**
+- Promotion-eligible date: **2026-05-29 (reached)** — 2 closed trades lifetime (need ≥10 in rolling 30d) → NOT promotion-eligible. SOL open as of this wake.
 
 ## Notes
 
@@ -66,3 +66,4 @@ The variant runs entirely paper-paper. Its trades have NO effect on the real BUL
 - **2026-06-11 22:00 PT (this wake — correction run)** — replay window 2026-06-12T04:00Z bar confirmed live. **EOD 2026-06-12T04:00Z (corrected):** 5a 10/15 positive ✓; SBD CLEARED ✓; rule 1 (1H 63430.6 > EMA20 ~63200 ✓); rule 2 (1H RSI 57.4 ≥ 55 ✓); rule 3 (4H 63430.6 > 4H 50-EMA ~63013 ✓ — passes marginally; prior session WRONG to say rule 3 fails universally). **Vol-comp gate 5c BLOCKS: current ATR $391.5, 30d-mean ATR ~$412, threshold 0.5×$412 = $206; current ATR far exceeds threshold. 0 entries.** Vol-comp gate is the binding constraint (rule 3 passes for BTC; vol-comp blocks). Exit replay no-op. Kill switches all clear at $10,000. Days live: **44**.
 - **VOL-COMP GATE CORRECTION NOTE (2026-06-12 22:00 PT wake):** The above entry's reasoning "current ATR far exceeds threshold → blocks" was based on BTC's ATR ($391.5 >> $206). But BTC fails R1 at EOD (close 63,494 < EMA20 ~63,526), so the vol-comp gate is never even evaluated for BTC. The vol-comp check must be per-pair on the pairs that pass R1-R3. At this wake, TAO is the sole pair passing R1-R3. For TAO: indicators.py reports `volcomp_05 = shut` (atr NOT < 0.5×mean → gate NOT triggered → entry ALLOWED by rule 5c). The prior session incorrectly applied BTC's ATR to a gate that only matters for pairs that reach the entry scan.
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **OVERNIGHT 2026-06-12T13:00Z:** BTC 1H close ~63,406.6 → R1 PASS, but R2 FAIL (RSI ~52 < 55); SOL RSI < 55 pre-rally; 0 entries. **EOD 2026-06-13T04:00Z:** 4/15 positive, SBD CLEAR. TAO sole PASS: R1 ✓ (+$3.88), R2 RSI 62.5 ✓, R3 4H 50-EMA HIGH-CONF ✓ (+$3.22), vol $3.04M ✓. Vol-comp gate 5c: TAO ATR 2.4062, indicators `volcomp_05 = shut` (NOT compressed → rule 5c does NOT reject) → **ALLOWED**. Cluster 0/2→1/2 ✓. Risk $150.00/1.50% of $10,000. **ENTRY: TAO/USD LONG 32.17 @ 217.286, stop 212.6226, target 235.9396.** This is v0.3's FIRST hypothetical trade — 45 days to first qualifying entry. Key observation: vol-comp gate finally allows after 45d of elevated-ATR environments; TAO's ATR is the first pair to show sufficient compression at EOD while simultaneously passing R1-R3. Kill switches all clear. Equity $9,996.91, DD 0.03%. Days live: **45**.
+- **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). **EXIT — TAO/USD CLOSE 2026-06-13T09:00Z @ $237.3015:** 08:00Z bar close $237.3015 ≥ 4R target $235.9396 → 4R exit fires. PnL: 32.17 × $20.0155 = **+$643.90 / +4.29R**. Cash post-close $10,643.90. **NEW PEAK $10,643.90.** **OVERNIGHT 13:00Z:** BTC 12:00Z bar close $64,100.0 passes R1 (+$250 above EMA20), R2 (RSI ~58), R3 (4H 50-EMA +$338), R4a, 5a pos. Vol-comp 5c: BTC ATR ~$211 vs 0.5×mean ~$206 — shut at 0.5 → ALLOWED ✓. **ENTRY: BTC/USD LONG 0.1660 @ $64,100.0, stop $63,677.02, target $65,791.92.** Cash-binding (ideal 0.3774 BTC). **EXIT — BTC/USD CLOSE 2026-06-13T17:00Z @ $63,988.5:** 16:00Z 1H close $63,988.5 < EMA20 ~$64,003 — single-bar v0.3 exit rule. Stop $63,677.02 not hit. PnL: 0.1660 × −$111.5 = **−$18.51 / −0.26R**. Cash post-close $10,625.39. **EOD 2026-06-14T04:00Z (indicators.py):** 15/15 positive, median +1.32%. BTC blocked (vol-comp OPEN/OPEN at 0.5). SOL passes R1-R3, vol-comp `shut` at 0.5 → ALLOWED. **ENTRY: SOL/USD LONG 155 @ $68.49, stop $67.560, target $72.210.** Risk $144.15/1.36% of $10,625.39. Kill switches all clear. Equity $10,625.39, DD 0.17% from peak $10,643.90. Days live: **46**.

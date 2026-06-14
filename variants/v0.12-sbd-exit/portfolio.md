@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis / instrumented twin (SBD classifier + 9-EMA defensive exit vs v0.2 baseline)
-> **Last rebuild:** 2026-06-13T05:08Z (routine-07 wake 2026-06-12 22:00 PT — 1 OPEN TAO)
+> **Last rebuild:** 2026-06-14T05:00Z (routine-07 wake 2026-06-13 22:00 PT — TAO CLOSE +4.29R/+$636.09, BTC OPEN OVERNIGHT/CLOSE −0.37R/−$25.55, BTC OPEN EOD; 10 closed trades lifetime)
 >
 > **LEADERBOARD-SOURCED — FORWARD PAPER-PAPER ONLY.** Rebuilt from this variant's
 > `trade_log.md`. The 2026-05-19→2026-05-29 trades were recovered on 2026-05-29
@@ -11,41 +11,41 @@
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$2,975.39** ($9,880.74 − 31.78 TAO × 217.286 notional)
-- Realized PnL: **-$119.26** (8 closed trades; BTC void-entry $0.00)
-- Unrealized PnL: **−$3.05** (TAO 31.78 × (217.19 − 217.286) = −$3.05 MTM at rebuild)
-- Position values (MTM): **$6,902.30** (TAO 31.78 × 217.19)
-- Current equity: **$9,877.69**
-- Equity peak: **$10,606.00**
-- Drawdown: **6.87%** ((10,606 − 9,877.69) / 10,606)
+- Cash: **$0.62** ($10,491.28 − 0.1631 BTC × $64,320.2 notional ≈ $0.62)
+- Realized PnL: **+$491.28** (8 prior trades −$119.26; TAO +$636.09 +4.29R closed 2026-06-13T09:00Z; BTC OVERNIGHT −$25.55 −0.37R closed 2026-06-13T18:00Z; BTC void $0.00)
+- Unrealized PnL: **$0.00** (BTC 0.1631 × ($64,320.2 − $64,320.2) = $0 at EOD entry price)
+- Position values (MTM): **$10,490.66** (BTC 0.1631 × $64,320.2)
+- Current equity: **$10,491.28**
+- Equity peak: **$10,606.00** (set from prior HYPE win — not surpassed this wake)
+- Drawdown: **1.08%** (($10,606 − $10,491.28) / $10,606)
 
 ## Open positions
 
 | Pair | Side | Size | Entry | Entry time (UTC) | Stop | 4R target | Risk ($) | Risk (% equity) |
 |------|------|------|-------|------------------|------|-----------|----------|-----------------|
-| TAO/USD | long | 31.78 | 217.286 | 2026-06-13T04:00Z | 212.6226 | 235.9396 | 148.21 | 1.50% |
+| BTC/USD | long | 0.1631 | 64320.2 | 2026-06-14T04:00Z | 63897.22 | 66012.12 | 68.98 | 0.66% |
 
-Open positions: **1 / 4** (cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 1/2). Portfolio risk-at-moment: **1.50%** (cap 4%).
+Open positions: **1 / 4** (cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 1/2). Portfolio risk-at-moment: **0.66%** (cap 4%). SBD CLEARED → W22-G 2-bar exit active on this position.
 
 ## Active kill-switch state
 
-- Daily realized: $0 today (entry only) — clear vs 5% cap
+- Daily realized: +$610.54 (TAO +$636.09 − BTC OVERNIGHT $25.55; net positive) — clear vs 5% cap
 - Consecutive losing trading days: 0 (cap 7)
-- Max drawdown: 6.87% from peak $10,606.00 (cap 25%, warn 12.5%) — clear
-- Equity floor: $9,877.69 > $7,500 — OK
-- SBD state: CLEARED — default 20-EMA exit active (no 9-EMA tightening)
-- **All clear. 1 open position (TAO/USD).**
+- Max drawdown: 1.08% from peak $10,606.00 (cap 25%, warn 12.5%) — clear
+- Equity floor: $10,491.28 > $7,500 — OK
+- SBD state: CLEARED — W22-G 2-bar exit active on BTC position (no 9-EMA tightening)
+- **All clear. 1 open position (BTC/USD). 10 closed trades lifetime.**
 
 ## Performance (2026-05-19 → 2026-06-09)
 
 | Metric | Value |
 |--------|-------|
-| Closed trades | 8 |
-| Win rate | 25% |
-| Avg R per trade | -0.08 |
-| Profit factor | 0.84 |
-| Net return | -1.22% (MTM equity $9,877.69 with TAO open) |
-| Max drawdown | 6.87% |
+| Closed trades | 10 (8 prior + TAO +4.29R + BTC OVERNIGHT −0.37R; void excluded) |
+| Win rate | 30% (3/10: HYPE +4.04R, HYPE +0.12R, TAO +4.29R) |
+| Avg R per trade | +0.33 (net R sum 3.27 / 10 trades) |
+| Profit factor | 1.63 (8.45 winners / 5.18 losers) |
+| Net return | +4.91% (equity $10,491.28 vs $10,000 start; BTC EOD open) |
+| Max drawdown | 1.08% (from peak $10,606) |
 
 > Conservative vs the SBD hypothesis: exits use v0.2/20-EMA timing; the SBD 9-EMA
 > tightening would only have reduced the losers further. The single 4R winner
@@ -54,8 +54,8 @@ Open positions: **1 / 4** (cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 1/2). Portfol
 ## Days live
 
 - Spin-up: 2026-05-19
-- As of last rebuild: **25 days**
-- Promotion-eligible: 2026-06-18 — 8 closed trades (need ≥10) → NOT promotion-eligible. TAO open (not yet closed).
+- As of last rebuild: **26 days**
+- Promotion-eligible: 2026-06-18 — **10 closed trades (threshold reached!) → promotion-eligible by trade count.** BTC EOD open. See routine-04 for promotion review gate.
 
 ## Notes
 
@@ -73,3 +73,4 @@ tape this account tracks v0.2. Sibling exit-logic variants: v0.10-exit-confirm, 
 - **2026-06-11 22:00 PT (this wake — correction run)** — replay window 2026-06-12T05:00Z → 2026-06-12T05:00Z (24h from prior stale state; correcting prior wake's wrong EOD projection). Kraken MCP: BTC close 63430.6 at 2026-06-12T04:00Z confirmed. **EOD 2026-06-12T04:00Z (corrected):** 5a 10/15 positive ✓; SBD CLEARED ✓ (median +0.17%); SBD 9-EMA override INACTIVE → default 20-EMA exit applies. BTC: rule 1 (1H close 63430.6 > EMA20 ~63200 ✓), rule 2 (1H RSI 57.4 ≥ 55 ✓), rule 3 (4H 63430.6 > 4H 50-EMA ~63013 ✓ marginal +$417); cluster 0/2→1/2 ✓; ATR $391.5, stop 2×ATR=$783. Size: risk $121.9 / $9,880.74 cash; cash-capped to 0.155773 BTC = $9,880.73 notional, risk 1.23%. **ENTRY: BTC/USD LONG 0.155773 @ 63430.6, stop 62647.6, target 66562.6.** SBD telemetry: SBD cleared at this entry → standard 20-EMA exit. Exit replay (stale OVERNIGHT positions): n/a (book was flat due to prior error). Kill switches all clear. Equity MTM $9,901.38, DD 6.64% from peak $10,606. Days live: **24**.
 - **2026-06-12T06:45Z interactive — VOID-ENTRY CORRECTION:** the correction run's BTC OPEN was itself based on a short-warm-up EMA. Converged 720-bar 4H 50-EMA = **$63,682.6** → close $63,430.6 **FAILS rule 3 by $252** (the wake's ~$63,013 estimate was a 60-bar-seed artifact; spread $584). v0.12's entry rules are v0.2/main's verbatim (only the SBD exit differs), and main correctly deferred — this position was a computation error, not the SBD hypothesis. **BTC OPEN voided at entry price ($0 PnL, 0R); book flat at $9,880.74, DD 6.84%.** Warm-up spec (720 bars, ≥200 to converge) added to routines 01/03/07 this session.
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). Wakes evaluated: OVERNIGHT (2026-06-12T13:00Z), MIDDAY (skip), EOD (2026-06-13T04:00Z). **OVERNIGHT 13:00Z:** BTC R2 FAIL (RSI ~52 < 55 at nominal 13:00Z bar); SOL RSI uncertain but likely < 55 pre-rally; 0 entries. **EOD 2026-06-13T04:00Z:** 4/15 positive, SBD CLEAR. TAO sole PASS. SBD CLEARED → standard 20-EMA exit applies (not 9-EMA). SBD telemetry: 0 SBD exposure since last wake. **ENTRY: TAO/USD LONG 31.78 @ 217.286, stop 212.6226, target 235.9396.** Kill switches all clear. DD 6.87%. Days live: **25**.
+- **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). **EXIT — TAO/USD CLOSE 2026-06-13T09:00Z @ $237.3015:** 08:00Z bar close ≥ 4R target $235.9396. PnL: 31.78 × $20.0155 = **+$636.09 / +4.29R**. SBD CLEARED → standard exit; 4R fires first. Cash $10,516.83. Total realized +$516.83 (from −$119.26). DD from peak $10,606 now 0.84% ($89.17). **OVERNIGHT 13:00Z:** BTC passes R1-R4, SBD CLEARED → W22-G 2-bar exit active. **ENTRY: BTC/USD LONG 0.1641 @ $64,100.0, stop $63,677.02, target $65,791.92.** SBD telemetry: SBD CLEARED at entry → W22-G 2-bar exit, not 9-EMA tightening. **EXIT — BTC CLOSE 2026-06-13T18:00Z @ $63,944.3:** 17:00Z bar close $63,944.3 < EMA20 ~$63,998 — 2nd consecutive close below 1H EMA20 (16:00Z close $63,988.5 [1st], 17:00Z $63,944.3 [2nd]) → W22-G 2-bar rule fires. PnL: 0.1641 × −$155.7 = **−$25.55 / −0.37R**. Cash $10,491.28. Total realized +$491.28. **EOD 2026-06-14T04:00Z (indicators.py):** 15/15 positive, SBD CLEAR → W22-G 2-bar exit active. BTC passes all rules. **ENTRY: BTC/USD LONG 0.1631 @ $64,320.2, stop $63,897.22, target $66,012.12.** SBD telemetry: CLEARED throughout — 0 SBD exposure this wake, 0 avoided-give-back. **MILESTONE: 10 closed trades reached this wake (threshold for promotion-eligible). Avg R +0.33, profit factor 1.63. Promotion gate opens 2026-06-18 but competition deadline 2026-07-01 — routing #4 to review.** Kill switches all clear. Equity $10,491.28, DD 1.08% from peak $10,606. Days live: **26**.

@@ -2,27 +2,34 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB-SWEEP (parameter sweep of v0.3, threshold 0.5 → 0.7)
-> **Last rebuild:** 2026-06-13T05:08Z (routine-07 wake 2026-06-12 22:00 PT — 0 entries; vol-comp 0.7 threshold blocks TAO)
+> **Last rebuild:** 2026-06-14T05:00Z (routine-07 wake 2026-06-13 22:00 PT — FIRST TRADE: TAO/USD LONG 9 @ $274.733 EOD; vol-comp 0.7 threshold ALLOWS TAO this wake; day 33)
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,000.00**
+- Cash: **$7,527.40** ($10,000 − 9 TAO × $274.733 notional)
 - Realized PnL: **$0.00**
-- Unrealized PnL: **$0.00**
+- Unrealized PnL: **$0.00** (TAO 9 × ($274.733 − $274.733) = $0 at EOD entry price)
+- Position values (MTM): **$2,472.60** (TAO 9 × $274.733)
 - Current equity: **$10,000.00**
 - Equity peak: **$10,000.00**
 - Drawdown: **0.00%**
 
 ## Open positions
 
-(none)
+| Pair | Side | Size | Entry | Entry time (UTC) | Stop | 4R target | Risk ($) | Risk (% equity) |
+|------|------|------|-------|------------------|------|-----------|----------|-----------------|
+| TAO/USD | LONG | 9 | 274.733 | 2026-06-14T04:00Z | 259.015 | 337.606 | 141.46 | 1.41% |
 
-Open positions: **0 / 4**. Cluster: 0/2.
+Open positions: **1 / 4**. Cluster: 1/2 (TAO in cluster).
 
 ## Active kill-switch state
 
-All clear at $10,000 equity.
+- Daily realized: $0 (entry only) — clear vs 5% cap
+- Consecutive losing trading days: 0 (cap 7)
+- Max drawdown: 0.00% from peak $10,000 (cap 25%, warn 12.5%) — clear
+- Equity floor: $10,000.00 > $7,500 — OK
+- **All clear. 1 open position (TAO/USD). FIRST TRADE for v0.7 — day 33.**
 
 ## Rolling performance vs main v0.2 AND parent v0.3
 
@@ -34,8 +41,8 @@ All clear at $10,000 equity.
 ## Days live
 
 - Spin-up: 2026-05-12
-- As of last rebuild: **32 days**
-- Promotion-eligible: **2026-06-11 (reached)** — 0 trades in rolling 30d (need ≥10) → NOT promotion-eligible
+- As of last rebuild: **33 days**
+- Promotion-eligible: **2026-06-11 (reached)** — 0 closed trades in rolling 30d (TAO open — need ≥10) → NOT promotion-eligible
 
 ## Notes
 
@@ -51,3 +58,4 @@ Parameter sweep — `vol_compression_threshold = 0.7` (vs v0.3's 0.5). Tests whe
 - **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — stale)** — replay window 2026-06-11T05:00Z → 2026-06-12T05:00Z (24h). **OVERNIGHT 2026-06-11T13:00Z:** SBD active → 5a FAIL → 0 entries. **EOD 2026-06-12T04:00Z:** 5a PASS, SBD CLEARED. Entry scan: all 15 pairs fail rule 3 (STALE: used BTC close $62,590). Vol-comp gate 5c (0.7× threshold): ATR elevated → blocked. **0 entries.** Kill switches clear at $10,000. Days live: 31.
 - **2026-06-11 22:00 PT (this wake — correction run)** — **EOD 2026-06-12T04:00Z (corrected):** 5a 10/15 ✓; SBD CLEARED ✓; rules 1-3: BTC passes (1H 63430.6 > EMA20 ✓; RSI 57.4 ✓; 4H 63430.6 > 50-EMA ~63013 ✓ marginal). **Vol-comp gate 5c (0.7× threshold) BLOCKS: threshold 0.7×$412 = $288; current ATR $391.5 > $288. 0 entries.** 0.7× gate blocks all entries even after rule 3 correction — variant stricter than parent v0.3 by design. Kill switches clear at $10,000. Days live: **31**.
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **OVERNIGHT 2026-06-12T13:00Z:** BTC R2 FAIL (RSI ~52 < 55); 0 entries. **EOD 2026-06-13T04:00Z:** 4/15 positive, SBD CLEAR. TAO sole pair passing R1-R3 (R1 +$3.88 ✓, R2 RSI 62.5 ✓, R3 4H 50-EMA HIGH-CONF ✓). Vol-comp gate 5c (0.7× threshold): indicators `volcomp_07 = OPEN` (TAO ATR 2.4062 IS compressed relative to 0.7× mean → rule 5c rejects). **TAO blocked by 0.7× vol-comp gate. 0 entries.** Key divergence from parent v0.3: v0.3 (0.5 threshold) ALLOWS TAO; v0.7 (0.7 threshold) BLOCKS TAO — same bar, same pair, gate threshold is the sole difference. This is the first meaningful A/B data point between v0.3 and v0.7. Kill switches all clear at $10,000. Days live: **32**.
+- **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). **Exit check:** book flat at replay start → no-op. **OVERNIGHT 13:00Z:** BTC R2 FAIL (RSI ~52); 0 entries. **EOD 2026-06-14T04:00Z (indicators.py):** 15/15 positive, SBD CLEAR. BTC OPEN at 0.7 threshold (volcomp_07=OPEN) → blocked. SOL OPEN at 0.7 → blocked. TAO: `volcomp_07=shut` → ALLOWED ✓. TAO passes R1 (274.733 > EMA20 ✓), R2 (RSI 76.3 ≥ 55 ✓, ≤80 cap ✓), R3 (4H 50-EMA +$52.63 ✓), R4a ($20.46M ✓), 5a ✓, SBD ✓. Cluster 0/2→1/2 ✓. ATR 7.8591, 2×ATR 15.7182. Size: 1.5%×$10,000/15.7182 = 9.54 → floor 9 units. **ENTRY: TAO/USD LONG 9 @ $274.733, stop $259.015, target $337.606. FIRST TRADE for v0.7 — 33 days to first entry.** A/B vs parent v0.3 this session: v0.3 entered TAO at the 0.5-threshold EOD (2026-06-13T04:00Z) and exited at 4R today; v0.7 was blocked then, enters now on fresh 05:00Z EOD bar with regime +15/15. Different entries, same pair — not yet a clean A/B divergence on PnL. Risk $141.46/1.41% of $10,000. Kill switches all clear. Equity $10,000.00, DD 0.00%. Days live: **33**.
