@@ -4,6 +4,66 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-06-14T17:14Z — routine-01-overnight (**Sun off-schedule fire**, cron `0 6 * * 1-5` would not have fired today)
+
+**Slot identity confirmed `bull-01-overnight`.** Fourth consecutive off-schedule weekend dispatch (Sat AM/midday/EOD + this Sun AM). Open question for next routine #4 remains: codify whether weekend framework dispatches should run-as-designed (current behavior — caught today's missed exit ~4h late) or hard-gate to the Mon-Fri cron.
+
+### Position MTM + exit replay (BTC/USD)
+BTC long 0.168 @ $64,188.10 entered 2026-06-13T15:00Z (Sat 08:00 PT). Walked 1H closes since the 2026-06-14T04:11Z routine-03-eod snapshot via `kraken_ohlcv` 30-bar lookback: 04:00Z 64,320.2 / 05:00Z 64,331.7 / 06:00Z 64,257.5 / 07:00Z 64,409.8 / 08:00Z 64,430.3 / 09:00Z 64,570.0 / 10:00Z 64,500.1 / 11:00Z 64,521.5 / **12:00Z 64,282.9** / **13:00Z 64,272.8** / 14:00Z 63,941.5 / 15:00Z 63,982.4 / 16:00Z 63,915.4. **EMA20 back-prop anchored on script-confirmed 16:00Z EMA = $64,228.10** (`scripts/indicators.py` 17:14:02Z output, FAIL -312.7 vs close), α = 2/21 ≈ 0.09524: EMA_15 = (64,228.10 − 0.09524 × 63,915.4)/0.90476 = $64,260.95; EMA_14 = $64,290.40; EMA_13 = $64,327.42; EMA_12 = $64,333.43; EMA_11 = $64,339.01. Per-bar position vs EMA20: 07:00 +151.6 / 08:00 +156.9 / 09:00 +268.6 / 10:00 +180.0 / 11:00 +182.5 / **12:00 -50.5 (first below)** / **13:00 -54.6 (second below — W22-G triggers)** / 14:00 -348.9 / 15:00 -278.5 / 16:00 -312.7. **Exit fires at the close of the 13:00Z bar = $64,272.8 (raw close).** With 0.05% adverse slippage per `skills/decide.md`: fill = $64,272.8 × 0.9995 = **$64,240.66**. **Per-trade risk at entry** = 0.168 × (64,188.10 - 63,720.62) = $78.5366. **Realized PnL** = 0.168 × (64,240.66 - 64,188.10) − 0.0026 × 0.168 × (64,188.10 + 64,240.66) = 8.83 − 56.10 = **-$47.27**. **R-multiple** = -47.27 / 78.5366 = **-0.60R**. Reason tag `exit-ema20-confirm-missed-scheduler-replay` matching 2026-05-22 TAO/HYPE/AVAX precedent.
+
+**Cross-rule check (would any other exit have fired earlier?):**
+- Rule 2 (stop $63,720.62): not pierced. Lowest intra-bar low post-entry was the 14:00Z bar low $63,850.7 — $130.08 above stop. Even with the latest decline, no bar has reached stop. *(If the Sun decline continues into Mon and we re-enter on a fresh signal that gets stopped, we have $130 of stop-buffer history to inform sizing.)*
+- Rule 3 (4R target $66,058.02): not hit. Highest 1H high post-entry was 21:00Z 06-13 = $64,750.0 — $1,308 short.
+- Stop ratchet (+2R = $65,123.06): never armed. Highest 1H close post-entry was 09:00Z 06-14 = $64,570.0 → +0.82R. Stop remained at the initial 2×ATR throughout, so we did not have the W22-H breakeven floor working today. *Counterfactual: had the ratchet armed, exit would have been at $64,188.10 entry-price floor — would still net negative after commission ($-56.10 vs today's -$47.27, slightly worse).* The ratchet's protective value remains an event-tail trade-off, not a regular outcome.
+
+**Friction accounting:** This is the second commission-drag scratch on record (after BTC 2026-05-06 +0.06R / +$1.42). The exit's gross PnL is +$8.83 / +0.11R — the commission roundtrip ($56.10) entirely eats the price-move profit. **The W22-G two-bar confirmation did its job:** prior single-bar rule would also have exited here, but would *additionally* have exited at the 16:00Z UTC bar 2026-06-13 (the single below-EMA close in the Sat session that recovered the next bar), where the loss would have been larger because of where the EMA was relative to entry. W22-G inert-then-fire trace matches design intent.
+
+### Technical (rule-driven, deterministic) — entry scan
+Engine: `scripts/indicators.py` 17:14:02Z against the just-closed 16:00Z UTC 1H bar (and converged 4H 50-EMAs, 720-bar 4H window HIGH-CONFIDENCE for all 15 pairs). Regime: **3/15 positive on 24h % change (TAO +0.12, LTC +0.55, TRX +0.28), median -0.90%** → **5a FAIL** (3 below 4-pair floor — sharp reversal from this morning's 15/15 +1.90% print; the Sat rally has fully unwound in the Sun session and most pairs are now mildly red). **5a-SBD CLEAR** (3 > 1 positive AND -0.90 > -1.0 median — both gates respond independently; median is right at the SBD threshold, but the positive-count check decisively keeps SBD inactive). **All new entries rejected per rule 5a.**
+
+Per-pair (recorded for audit even though rule 5a vetoes):
+
+| Pair | R1 (>EMA20) | R2 (RSI≥55) | R2a (RSI≤80) | R3 (4H>EMA50) | R4a (≥$2M) | Net |
+|---|---|---|---|---|---|---|
+| BTC/USD | FAIL -312.7 | FAIL RSI 39.8 | OK | PASS +159.7 | OK | FAIL |
+| ETH/USD | FAIL -10.46 | FAIL RSI 35.6 | OK | FAIL -23.81 | OK | FAIL |
+| SOL/USD | FAIL -0.475 | FAIL RSI 41.1 | OK | FAIL -0.135 | OK | FAIL |
+| HYPE/USD | FAIL -0.381 | FAIL RSI 46.8 | OK | PASS +0.281 | OK | FAIL |
+| XRP/USD | FAIL -0.005 | FAIL RSI 41.9 | OK | FAIL -0.014 | OK | FAIL |
+| SUI/USD | FAIL -0.008 | FAIL RSI 35.8 | OK | FAIL -0.015 | OK | FAIL |
+| TAO/USD | **PASS +0.32** | **FAIL RSI 54.2 (-0.82)** | OK | **PASS +34.69** | OK | **FAIL by 1 rule** |
+| XDG/USD | FAIL -0.001 | FAIL RSI 40.0 | OK | FAIL -0.001 | OK | FAIL |
+| NEAR/USD | FAIL -0.021 | FAIL RSI 44.9 | OK | FAIL -0.037 | OK | FAIL |
+| ADA/USD | FAIL -0.003 | FAIL RSI 29.0 | OK | FAIL -0.006 | OK | FAIL |
+| LINK/USD | FAIL -0.064 | FAIL RSI 34.6 | OK | FAIL -0.089 | OK | FAIL |
+| LTC/USD | **PASS +0.018** | **FAIL RSI 53.0 (-2.0)** | OK | **PASS +0.273** | OK | **FAIL by 1 rule** |
+| FARTCOIN/USD | FAIL -0.002 | FAIL RSI 36.8 | OK | FAIL -0.004 | FAIL $0.53M | FAIL |
+| TRX/USD | **PASS +0.001** | **PASS RSI 59.5** | OK | **FAIL -0.003** | FAIL $0.65M | FAIL by 2 rules |
+| AVAX/USD | FAIL -0.097 | FAIL RSI 29.0 | OK | FAIL -0.300 | FAIL $0.94M | FAIL |
+
+**Eligible candidates: 0.** Closest near-misses are TAO and LTC (each one rule away — RSI just under 55 floor); these are the kind of candidates that flip eligible on a 1-2 bar continuation move and would warrant priority observation at the next routine wake.
+
+### News (Firecrawl) — informational only
+**Skipped this wake.** Routine §DO step 4 calls news pulls only for technical-PASS candidates; zero PASS candidates means zero queries. No actionable headline check required.
+
+### Sentiment (Kraken spread/depth) — informational only
+**Skipped this wake.** Same reason: no PASS candidates to query.
+
+### Decision (W19-E)
+**Position management:** 1 CLOSE (BTC -0.60R / -$47.27, exit-ema20-confirm-missed-scheduler-replay 2026-06-14T13:00Z).
+**Entries:** 0 (5a FAIL: 3/15 positive < 4-pair floor; additionally no per-pair PASS even setting 5a aside).
+**Account post-wake:** cash $10,828.58, no open positions, equity $10,828.58, peak $10,875.85 (unchanged), DD 0.43%, loss streak 1.
+
+### Ops / watchdog
+- `scripts/watchdog.py --telegram` 17:13:47Z: 1 finding (`dirty-tree: M memory/research_log.md`). Investigation: `git status` 5 seconds later returned clean (`nothing to commit, working tree clean`). Likely write-in-flight false-positive or a transient state from the EOD commit's tail. Telegram already received the watchdog alert; will note in the post-mortem of this wake (no separate fix needed).
+- Kraken MCP available (`kraken_multi_ticker` 15-pair pull clean, `kraken_ohlcv` 30-bar 1H pull clean).
+- Indicators script clean run, 30s wall time, all 15 pairs returned 720 4H bars (HIGH-CONFIDENCE on 4H 50-EMA per W19-D warm-up floor).
+
+### Telegram
+Mandatory CLOSE-event notification sent (per routine §NOTIFY: "Any new OPEN or stop-out CLOSE during this run → brief summary").
+
+---
+
 ## 2026-06-13T20:07Z — routine-02-midday (Sat 13:07 PT off-schedule)
 
 Off-schedule Saturday fire (cron `0 13 * * 1-5`, framework dispatched anyway — third off-schedule weekend fire today after routine-01 15:50Z and routine-04 17:00Z). **No exits, no entries (midday spec forbids entries).** BTC/USD long 0.168 @ $64,188.10 (entered 5h54m ago at 15:00Z) — 5 full 1H closes since entry plus a partial 20:00 UTC bar. Exit-rule sweep all-clean: (1) EMA20 chain post-entry computed off 63,768.1 α=2/21 baseline → 63,814 / 63,831 / 63,842 / 63,869 / 63,908; all 5 closes (64,253 / 63,989 / 63,944 / 64,130 / 64,282) above the rising EMA. Rule 1 inert. (2) Stop $63,720.62 not pierced — lowest post-entry low $63,893.2 (16:00 bar), $172.58 buffer. (3) 4R target $66,058.02 not hit — highest post-entry high $64,294.0. Breakeven ratchet not armed (highest 1H close 64,282 = +0.20R, vs +2R threshold $65,123). MTM: BTC last $64,211.9 → position $10,787.60 + cash $92.25 = equity $10,879.85, unrealized +$3.95 / +0.05R. Equity peak unchanged at $10,875.85 (peak tracks realized closes; MTM is $4 above but does not advance). Drawdown 0.00%. Kill switches all CLEAR. Kraken MCP available, no MCP failures. Telegram silent (no notify-trigger met). Next wake: routine-01-overnight 2026-06-15T13:00Z (Mon 06:00 PT), ~37h carry. Backlog: confirm with user whether framework's weekend dispatches are intentional or whether the Mon-Fri cron filter should be enforced inside each routine spec.
@@ -3188,3 +3248,5 @@ Today's events screened against the routine's three lesson prompts:
 - The day's dominant pattern is a textbook archetype reinforcement: the disciplined patience-through-borderline-arc thesis from lesson 2026-06-12 produced the TAO +4.04R / +$621.22 morning win (largest single trade of the quarter); the next opportunity arrived within 6 hours (the BTC entry-1 PASS that became the cash-binding entry) and is now +0.69R unrealized after 13 well-behaved post-entry closes. The 7-eligible EOD scan suggests the regime recovery has continued through the day; if BTC closes well (4R, eventual EMA exit on a gain, or even a small stop trip), Monday's wake should re-encounter several of tonight's eligibles with cash freed.
 - The cash-binding-blocked entry condition documented twice today is a real strategy state. Routine #4 backlog: quantify the EV of "wait for current position to resolve" vs "amend rule 8 to take a fundable lower-ranked alternative." Tonight is data point #2; data point #1 was the routine-01 morning observation.
 2026-06-14T17:13:40Z | harness | day-gate | not Saturday, skipping | no action
+2026-06-15T03:13:15Z | allocation | W24 review | momentum 100% retained (only active bucket; 30d +2.48R / +75.85 / -2.07R / WR 23%); vs BTC-hold all evaluable windows positive (7d +11.73pts, 30d +24.86pts, since-inception +24.65pts); 90d non-evaluable until 2026-07-19; no Ring 2 proposal pending application; allocation change: no | telegram digest sent
+2026-06-15T03:13:15Z | allocation | W24 review | momentum 100% retained (only active bucket; 30d +2.48R / +$617.78 / WR 20%; since-inception +$875.85 / -2.07R / WR 23%); vs BTC-hold all evaluable windows positive (7d +11.73pts, 30d +24.86pts, since-inception +24.65pts); 90d non-evaluable until 2026-07-19; no Ring 2 proposal pending application; allocation change: no | telegram digest sent

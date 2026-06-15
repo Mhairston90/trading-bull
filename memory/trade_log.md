@@ -45,3 +45,4 @@
 | 2026-05-30T23:00:00Z | CLOSE | XRP/USD | long | 5769.659 | 1.33811 | — | — | -0.65 | -101.40 | exit-ema20-confirm-missed-scheduler-replay |
 | 2026-06-13T09:00:00Z | CLOSE | TAO/USD | long | 32.985 | 237.3015 | — | — | +4.04 | +621.22 | exit-4R-target-missed-scheduler-replay |
 | 2026-06-13T15:00:00Z | OPEN | BTC/USD | long | 0.168 | 64188.10 | 63720.62 | 66058.02 | — | — | entry-rule-v0.4-momentum |
+| 2026-06-14T13:00:00Z | CLOSE | BTC/USD | long | 0.168 | 64240.66 | — | — | -0.60 | -47.27 | exit-ema20-confirm-missed-scheduler-replay |
