@@ -3,6 +3,7 @@
 > **Append-only.** News and external research notes per routine run.
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
+2026-06-15T03:16:45Z | idea-scan | day-gate | not Friday, skipping | no action
 
 ## 2026-06-14T17:14Z — routine-01-overnight (**Sun off-schedule fire**, cron `0 6 * * 1-5` would not have fired today)
 
