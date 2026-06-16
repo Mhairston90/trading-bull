@@ -46,3 +46,5 @@
 | 2026-06-13T09:00:00Z | CLOSE | TAO/USD | long | 32.985 | 237.3015 | — | — | +4.04 | +621.22 | exit-4R-target-missed-scheduler-replay |
 | 2026-06-13T15:00:00Z | OPEN | BTC/USD | long | 0.168 | 64188.10 | 63720.62 | 66058.02 | — | — | entry-rule-v0.4-momentum |
 | 2026-06-14T13:00:00Z | CLOSE | BTC/USD | long | 0.168 | 64240.66 | — | — | -0.60 | -47.27 | exit-ema20-confirm-missed-scheduler-replay |
+| 2026-06-16T12:00:00Z | OPEN | ETH/USD | long | 5.1162 | 1797.88 | 1766.13 | 1924.87 | — | — | entry-rule-v0.4-momentum |
+| 2026-06-16T15:00:00Z | CLOSE | ETH/USD | long | 5.1162 | 1765.25 | — | — | -1.32 | -214.33 | exit-stop-hit-missed-scheduler-replay |

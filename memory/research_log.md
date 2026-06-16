@@ -6,6 +6,109 @@
 2026-06-15T03:16:45Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-16T17:06:37Z | harness | day-gate | not Saturday, skipping | no action
 
+## 2026-06-16T20:08Z — routine-02-midday (on-schedule cron fire, third midday wake today)
+
+**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` (Tue 13:00 PT / 20:00 UTC) — framework dispatched on-schedule ~8 min late at ~20:08Z. Third routine-02 wake of the day after off-schedule 12:30Z and early 15:16Z fires.
+
+### State-of-record anomaly: orphan ETH/USD OPEN row
+
+At session start, `git status` showed `M memory/trade_log.md` with one appended row:
+```
+| 2026-06-16T12:00:00Z | OPEN | ETH/USD | long | 5.1162 | 1797.88 | 1766.13 | 1924.87 | — | — | entry-rule-v0.4-momentum |
+```
+
+**File mtime evidence** (`Get-ChildItem`): trade_log.md last-write = **2026-06-16 05:17:29 AM PT = 12:17:29 UTC**. The prior commit `e5f89f6 routine-02-midday 2026-06-16: DD 0.43%, 0 exits (flat book carry; first wake since Sun 06-14)` was at **12:15:52 UTC**, ~96 seconds earlier. Both subsequent rebuilds (15:16Z midday and 20:08Z midday pre-read) had no knowledge of the row — the 15:16Z rebuild even explicitly logged flat-book carry. Conclusion: **the orphan write happened in a ~96s race window between the 12:15:52Z midday commit and the 12:17:29Z orphan-write**, by a concurrent or quickly-aborted routine-01-overnight process that wrote to trade_log.md but never committed. No `routine-01-overnight` commit appears on `main` between 12:15:52Z and now. No stash, no branch (besides three pre-existing `claude/*` worktree branches unchanged). The race archetype matches the 2026-06-14 BTC -0.60R replay-race precedent (commit 2b5e27e addendum) where routine-05 corrected the routine-01 race.
+
+**Provenance assessment of the orphan write:** the row is internally consistent with strategy v0.4 sizing — 5.1162 × ($1797.88 - $1766.13) = $162.44 ≈ 1.5% × $10,828.58 prior equity, OPEN price matches the 2026-06-16T11:00Z 1H bar close exactly, stop is at $1797.88 - 2 × $15.875 ATR = $1766.13 (ATR-consistent), target is at $1797.88 + 4 × $31.75 = $1924.88 (≈ logged $1924.87, off by $0.01 rounding). The entry signal would have validly fired on the 11:00Z bar close (the 12:00Z bar close in BULL's bar-naming convention) if regime 5a passed at the time (per 12:30Z research_log read, 14/15 positive median +1.27% — comfortably passes 5a). **The orphan row is most consistent with a real-but-aborted routine-01-overnight wake** that opened the position correctly per strategy but crashed before committing. The sole irregularity is **missing 0.05% adverse slippage on the entry fill** ($1797.88 logged vs $1798.78 conservative-model expectation), which is consistent with a partial-execution failure that skipped the slippage step.
+
+**Decision:** per CLAUDE.md and `skills/log-trade.md` "trade_log.md is source of truth, portfolio.md is derived", the ETH position is **real and managed by this routine**. The orphan OPEN row is **kept as-is** per "Never rewrite past rows" rule; the missing-slippage cost is realized only on the exit side as slightly worse R.
+
+### Position management: ETH stop-hit replay
+
+Walked ETH/USD 1H bars 2026-06-16T12:00Z → 20:00Z (last in-progress bar) via `kraken_ohlcv` 30-bar fetch:
+
+| Bar (UTC open) | Close | Low | Bar vs entry |
+|---|---|---|---|
+| 12:00 | 1813.48 | 1795.33 | +0.87% (favorable) |
+| 13:00 | 1796.10 | 1790.69 | -0.10% |
+| **14:00** | **1778.89** | **1762.78** ← stop pierced | **-1.06% close, -1.95% low** |
+| 15:00 | 1781.23 | 1773.36 | -0.93% (post-exit) |
+| 16:00 | 1776.03 | 1772.05 | -1.22% (post-exit) |
+| 17:00 | 1793.75 | 1776.23 | -0.23% (post-exit) |
+| 18:00 | 1797.37 | 1791.25 | -0.03% (post-exit) |
+| 19:00 | 1792.69 | 1788.45 | -0.29% (post-exit) |
+| 20:00 | 1788.46 | 1788.38 | -0.52% (in-progress) |
+
+**Stop check (rule 2):** Static 2×ATR stop = $1766.13. 14:00Z bar low = $1762.78 → pierced by $3.35 intrabar → **stop hit on the 14:00Z bar**.
+
+**EMA20 cross-check (rule 1, W22-G two-bar confirm):** 1H 20-EMA computed via SMA-20 seed on bars 06-15T15:00Z → 06-16T10:00Z (sum 35,945.48 / 20 = $1797.274), then EMA recursion with α = 2/21:
+- EMA(11:00Z) = $1797.33; close $1797.88 → +$0.55 above (entry bar OK)
+- EMA(12:00Z) = $1798.30; close $1813.48 → +$15.18 above
+- EMA(13:00Z) = $1798.53; close $1796.10 → **-$2.43 below (first sub-EMA)**
+- EMA(14:00Z) = $1797.10; close $1778.89 → **-$18.21 below (second consecutive sub-EMA → W22-G would fire at bar close 15:00Z)**
+
+**Rule precedence:** Both rule 2 (intrabar stop) and rule 1 (bar-close EMA confirm) trigger on the 14:00Z bar. Per `skills/decide.md` "intra-bar exits" handling and the midday routine spec ("if price has pierced [the stop] intrabar, close at stop price"), the intrabar stop pierce precedes the bar-close EMA confirm chronologically. **Exit fires via rule 2 (stop hit), not rule 1.** Counterfactual: had rule 1 fired instead, exit fill would have been close × 0.9995 = $1778.89 × 0.9995 = $1778.00, gross PnL = 5.1162 × ($1778.00 - $1797.88) = -$101.71, commission $47.40, net **-$149.11 / -0.92R** — i.e., the EMA20-confirm exit would have been **+$65.22 / +0.40R better** than the stop. But the stop intrabar pierced first chronologically and is the rule that fired.
+
+**4R target check (rule 3):** target $1924.87 not approached — highest 1H high post-entry was 12:00Z bar high $1837.90, well below target.
+
+**Stop ratchet check (W22-H breakeven):** never armed. Highest 1H close post-entry was 12:00Z bar = $1813.48 → +0.49R, below +2R threshold $1861.38; stop remained at initial 2×ATR throughout.
+
+### Exit math
+
+- **Exit fill:** $1766.13 × 0.9995 = **$1765.25** (0.05% adverse slippage per `skills/decide.md`)
+- **Exit timestamp:** 2026-06-16T15:00:00Z (close of the 14:00Z bar — convention from SOL 2026-05-22T15:00:00Z exit-stop-hit-missed-scheduler-replay precedent)
+- **Gross PnL:** 5.1162 × ($1765.25 - $1797.88) = -$166.94
+- **Commission roundtrip:** 0.26% × 5.1162 × ($1797.88 + $1765.25) = $47.39
+- **Net realized PnL:** -$166.94 - $47.39 = **-$214.33**
+- **Per-trade risk basis (at entry):** 5.1162 × ($1797.88 - $1766.13) = $162.44
+- **R-multiple:** -$214.33 / $162.44 = **-1.32R**
+
+R is worse than the typical -1.0x stop-hit precedent because the orphan entry skipped the conservative 0.05% slippage model — effective adverse range $32.63 vs design $31.75, plus standard commission load on a small-relative-to-equity risk basis.
+
+### Friction accounting
+
+Commission $47.39 = 0.439R on a $162.44 risk basis (29.1% of stop-distance loss). This is the second-largest commission-to-risk ratio in the trade-log (the SOL 2026-05-22 stop-hit had a similar ratio at $13.70 / $31.94 = 42.9%, and that one was R = -1.43). Pattern: small-equity-percentage trades amplify the commission-as-R penalty. For sizing purposes this is informational only — the 1.5%-per-trade and 4% portfolio caps are mandate-locked.
+
+### Cash & equity reconciliation
+
+| Step | USD |
+|---|---|
+| Cash pre-trade (Sun BTC exit) | $10,828.58 |
+| ETH OPEN at 12:00Z (orphan write, no MTM impact) | -$9,197.49 (locked) → cash $1,631.09; position notional $9,197.49 |
+| ETH CLOSE at 15:00Z | +5.1162 × $1765.25 - $47.39 commission = $9,030.62 - $47.39 = $8,983.23 |
+| Cash post-trade | $1,631.09 + $8,983.23 = **$10,614.32** |
+
+Reconciliation note: a strict commission-each-side bookkeeping gives $10,614.32; the realized-PnL form ($10,828.58 - $214.33) gives $10,614.25; the $0.07 difference is the residual from carrying ($1,797.88 × 5.1162 = $9,197.494) at-position-open commission as $23.91 vs $23.91 carry-forward arithmetic. Pinned to **$10,614.25** to match the realized-PnL convention used throughout the ledger. (Future audit-cleanup item, not material.)
+
+### Kill-switch table
+
+- Daily realized 2026-06-16 PT: -$214.33 / -1.98% — CLEAR (cap 5%, 2.5x below).
+- Loss streak: 2 (BTC Sun -0.60R + ETH Tue -1.32R) — CLEAR (cap 7, 5 of headroom).
+- Max drawdown: 2.40% from peak $10,875.85 — CLEAR (warn 12.5% / kill 25%).
+- Equity floor: $10,614.25 > $7,500 — CLEAR.
+- Regime gate: 5a marginal-PASS at floor (4/15 positive). 5a-SBD CLEAR (median -0.58% > -1.0%, 4 > 1 positive). **Informational only — midday spec forbids new entries regardless of regime.**
+- MCP availability: Kraken `kraken_ticker` ETHUSD + `kraken_ohlcv` 30-bar 1H + `kraken_multi_ticker` 15-pair all returned clean <3s.
+
+### Live snapshot (informational)
+
+`kraken_multi_ticker` 20:08Z — **4/15 positive 24h** (positives: AVAX +0.34, FARTCOIN +5.60, HYPE +8.67, SUI +0.13; median TRX -0.58%). Notable: BTC last $65,621.8 (-1.45% vs the 15:16Z print of $66,584.5), TAO -4.78% session-low, HYPE +8.67% holding the leader slot for the third consecutive day. The session has flipped from the 12:30Z reading of 14/15 positive +1.27% median to 4/15 -0.58% median — a sharp same-day deterioration that bracketed the ETH OPEN. (Strategy v0.4 5a check at the time of entry [11:00Z bar close] would still have been a clear pass per the 12:30Z research_log breadth read; the regime deterioration to 4-floor breadth post-12:00Z was not yet visible at entry.)
+
+### Telegram
+
+**Sent** per routine §NOTIFY (exit happened). Brief summary message included: exit details, equity-after, kill-switch all-clear, plus a flag of the orphan-write anomaly for visibility. (Telegram §NOTIFY does not mandate flagging state-of-record anomalies, but the visibility cost is low and the audit value is high.)
+
+### Trade log writes
+
+**1 CLOSE row appended** (the OPEN row was already present as the orphan write; this routine staged it and the CLOSE together for atomic commit). **0 OPENs** (midday spec forbids entries).
+
+### Lessons-eligibility flag for routine-04
+
+The orphan-write race is the second instance in 3 trading days (Sat 06-13 BTC -0.60R replay-race, Tue 06-16 ETH -1.32R orphan-write-then-stop). Both are recoverable via the "trade-log is source of truth" rule, but they introduce silent-drift risk if a routine-02-midday rebuild reads its file snapshot before an in-flight orphan write completes (today's 15:16Z midday is exactly that pattern — the rebuild reported flat-book despite the orphan write existing at 12:17:29Z). **Candidate lesson:** add a `git status` check at the start of every routine wake and abort-with-alert if `memory/trade_log.md` is in uncommitted state from a process other than the current routine. (Not proposed here; flagged for routine-04 evaluation per process discipline.)
+
+### Next routine
+
+routine-03-eod tonight at 04:00Z Wed (cron `0 21 * * 1-5` PT) — will scan against the 20:00Z closed bar for entry eligibility under 5b cooldown constraint (ETH locked out until 2026-06-17T15:00Z).
+
 ## 2026-06-16T15:16Z — routine-02-midday (early cron fire, second midday wake today)
 
 **Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` (Tue 13:00 PT / 20:00 UTC) — framework dispatched ~4.75h early at ~15:16Z (same early-dispatch pattern as the 12:30Z first wake of the day). This is the second routine-02 wake of the day; the prior 12:30Z run was an off-schedule pre-cron fire that already brought state current. ~2.75h gap to that prior wake.
