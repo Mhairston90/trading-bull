@@ -5,6 +5,22 @@
 >
 2026-06-15T03:16:45Z | idea-scan | day-gate | not Friday, skipping | no action
 
+## 2026-06-16T12:30Z — routine-02-midday (off-schedule fire ~7h pre-cron, first wake since 2026-06-14T17:14Z)
+
+**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` (Tue 13:00 PT / 20:00 UTC) — framework dispatched ~7h early at ~12:30Z. ~43h gap since the prior routine wake (Sun 17:14Z routine-01-overnight); no Mon 06-15 routines appear to have fired (no Mon commits in `git log`, no Mon entries in this log). Account state has been frozen at flat-book since the Sun BTC EMA20-confirm exit.
+
+**Position management:** zero open positions → zero exit checks, zero MTM updates. Equity $10,828.58 (cash). Peak $10,875.85 unchanged. Drawdown 0.43%. All kill switches CLEAR (daily realized $0, loss streak 1, equity floor ~$10.8k vs $7.5k floor, regime gate 14/15 positive via live ticker — would PASS 5a if midday permitted entries, but it does not).
+
+**Live market snapshot (informational, no entry impact):** Kraken `kraken_multi_ticker` 12:30Z — 14/15 positive 24h (only TRX -0.31), median +1.27%, leaders HYPE +6.01 / NEAR +11.2 / TAO +3.88 / XRP +3.47 / ETH +2.05. BTC last $66,166.5 (24h range $63,643 — $66,330) = +3.00% above Sun exit fill of $64,240.66. Last closed 1H bar 2026-06-16T11:00Z @ $66,434.4.
+
+**Post-hoc note on the W22-G exit (not a strategy proposal):** the BTC exit at -0.60R on Sun 06-14 closed at $64,240.66; the carry between exit and now would have been roughly +0.168 × ($66,166.5 - $64,188.10) = +$332.45 gross had the position stayed open. Per `feedback-perf-analysis-framing`, this is not a critique of the rule — W22-G's two-bar EMA20 confirmation is designed for the commission-drag archetype (tight ranges that round-trip to small net losses), and the Sun 12:00/13:00 sub-EMA20 pair was the rule firing as specified. The subsequent rally was a separate regime shift (5a fell from 15/15 to 3/15 by 16:00Z Sun, then re-expanded to 14/15 by Tue mid-session). The cross-rule audit in the routine-01 log already noted the stop at $63,720.62 would have triggered intrabar at 17:00Z 06-14 (low $63,665.0) had the EMA20 exit not fired first — so the optionality preserved by skipping the EMA20 exit would have been narrower than the headline cash gap suggests (-1.07R stop vs -0.60R EMA, i.e., the EMA20 exit was -0.47R better than the alternative-exit-of-record). **Logging this for routine-04 lessons evaluation, no proposal at this time.**
+
+**Entry scan:** skipped per midday spec. Will be re-evaluated at next overnight or EOD wake.
+
+**Telegram:** silent (no exits, no kill switches, no drawdown threshold crossed). **Trade log writes: 0.**
+
+**Next routine:** depending on framework rethread, expected routine-01-overnight Wed 06-17T13:00Z if Mon/Tue overnight slots remain skipped; if Mon catch-up dispatches resume, this routine-02 may be paired with a routine-03-eod fire later today.
+
 ## 2026-06-14T17:14Z — routine-01-overnight (**Sun off-schedule fire**, cron `0 6 * * 1-5` would not have fired today)
 
 **Slot identity confirmed `bull-01-overnight`.** Fourth consecutive off-schedule weekend dispatch (Sat AM/midday/EOD + this Sun AM). Open question for next routine #4 remains: codify whether weekend framework dispatches should run-as-designed (current behavior — caught today's missed exit ~4h late) or hard-gate to the Mon-Fri cron.
