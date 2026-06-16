@@ -5,6 +5,28 @@
 >
 2026-06-15T03:16:45Z | idea-scan | day-gate | not Friday, skipping | no action
 
+## 2026-06-16T20:00Z — routine-02-midday (on-schedule cron fire, second midday wake today)
+
+**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` (Tue 13:00 PT / 20:00 UTC) — fired on time. This is the second routine-02 wake of the day; the prior 12:30Z run was an off-schedule pre-cron fire that already brought state current. ~7.5h gap to that prior wake.
+
+**Position management:** zero open positions → zero exit checks, zero MTM updates. Equity $10,828.58 (cash, unchanged). Peak $10,875.85 unchanged. Drawdown 0.43%. All kill switches CLEAR.
+
+**Live market snapshot (informational, no entry impact):** Kraken `kraken_multi_ticker` 20:00Z — **12/15 positive 24h** (negatives TAO -0.64 / LTC -0.33 / TRX -0.35), **median +0.9%**, leaders HYPE +13.11 / FARTCOIN +5.68 / AVAX +1.59 / NEAR +1.52 / SOL +1.33 / ETH +1.28 / LINK +1.22. BTC last **$66,584.5** (+0.45% 24h, +0.63% vs the 12:30Z print of $66,166.5). 5a would PASS if midday permitted entries (12 > 4 floor); SBD CLEAR. HYPE breadth concentration noteworthy (+13.11% session, second straight day above the median).
+
+**Kill-switch table:**
+- Daily realized 2026-06-16 PT: $0.00 / 0.00% — CLEAR (cap 5%).
+- Loss streak: 1 (carry from Sun BTC scratch) — CLEAR (cap 7).
+- Max drawdown: 0.43% from peak — CLEAR (warn 12.5% / kill 25%).
+- Equity floor: $10,828.58 > $7,500 — CLEAR.
+- Regime gate: 5a PASS / SBD CLEAR (informational; midday spec forbids entries regardless).
+- MCP availability: Kraken `kraken_multi_ticker` returned full 15-pair payload <2s, clean.
+
+**Entry scan:** skipped per midday spec (entry responsibility belongs to routine-01-overnight and routine-03-eod).
+
+**Telegram:** silent (no exits, no kill switches, no drawdown threshold crossed). **Trade log writes: 0.**
+
+**Next routine:** routine-03-eod scheduled tonight (cron `0 21 * * 1-5` PT = 04:00 UTC Wed), which will run the post-bar EOD entry scan against the 20:00 UTC closed bar.
+
 ## 2026-06-16T12:30Z — routine-02-midday (off-schedule fire ~7h pre-cron, first wake since 2026-06-14T17:14Z)
 
 **Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` (Tue 13:00 PT / 20:00 UTC) — framework dispatched ~7h early at ~12:30Z. ~43h gap since the prior routine wake (Sun 17:14Z routine-01-overnight); no Mon 06-15 routines appear to have fired (no Mon commits in `git log`, no Mon entries in this log). Account state has been frozen at flat-book since the Sun BTC EMA20-confirm exit.
@@ -3268,3 +3290,6 @@ Today's events screened against the routine's three lesson prompts:
 2026-06-15T03:13:15Z | allocation | W24 review | momentum 100% retained (only active bucket; 30d +2.48R / +75.85 / -2.07R / WR 23%); vs BTC-hold all evaluable windows positive (7d +11.73pts, 30d +24.86pts, since-inception +24.65pts); 90d non-evaluable until 2026-07-19; no Ring 2 proposal pending application; allocation change: no | telegram digest sent
 2026-06-15T03:13:15Z | allocation | W24 review | momentum 100% retained (only active bucket; 30d +2.48R / +$617.78 / WR 20%; since-inception +$875.85 / -2.07R / WR 23%); vs BTC-hold all evaluable windows positive (7d +11.73pts, 30d +24.86pts, since-inception +24.65pts); 90d non-evaluable until 2026-07-19; no Ring 2 proposal pending application; allocation change: no | telegram digest sent
 2026-06-15T03:18:30Z | allocation | W24 addendum | timing-race correction: routine-01 commit e2c7ab0 replayed BTC -0.60R close (2026-06-14T13:00Z) ~2min after routine-05 wrote its tables; corrected 30d +1.88R / +$570.51 n=11 (vs pre-replay +2.48R / +$617.78 n=10); since-inception -2.67R / +$828.58 n=27; equity flat-book $10,828.58 / +8.29% inception; allocation decision unchanged (no proposal); not re-sending telegram (content materially same)
+
+2026-06-16T15:16:21Z | allocation | day-gate | not Sunday, skipping | no action
+2026-06-16T15:16:37Z | idea-scan | day-gate | not Friday, skipping | no action
