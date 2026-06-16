@@ -3295,3 +3295,10 @@ Today's events screened against the routine's three lesson prompts:
 2026-06-16T15:16:37Z | idea-scan | day-gate | not Friday, skipping | no action
 
 2026-06-16T15:16:21Z | allocation | day-gate | not Sunday, skipping | no action
+
+### 2026-06-16T20:15Z | interactive | contest scoring rule change (user-directed) — pre-registration repealed
+
+User found BULL v0 + Basket Breakout Aggressive v1 missing from the leaderboard "top strategies" (Contest Scoreboard) while $0 / -$25.55 rows showed. Root cause (NOT a cache/registration-coverage bug): the 2026-06-10 pre-registration model scored each camp on a fixed pre-picked 5 and EXCLUDED remote (bull-github) + sheet sources at registration time. OPUS's June 5 had two Crypto MR picks at $0 forward (live_start 05-28 postdates their last real trade) + one -$25.55, while BULL v0 (remote, excluded) and Aggressive v1 (not top-5 on 06-10, since done a +20% run) sat in research-only.
+**Resolution (Marcus directive):** repeal pre-registration. New rule = top-5 by FORWARD PnL per camp; only backtested/pre-live-start trades excluded; every forward strategy eligible regardless of source. Applied SYMMETRICALLY to OPUS/CODEX/FABLE (integrity: not an OPUS-only change). Verified against live data — Opus/BULL top-5 now: Basket BO Aggressive v1 $1998, BULL v0 $495, BULL v0.12 $491, Stocks MR v2 RSI<15 $404, Stocks MR v2 $132 = $3520; CODEX $4063 (leads by ~$542); FABLE $99. Files: strategy-leaderboard scoring_registrations.js (emptied; June regs preserved in HISTORICAL_REGISTRATIONS_REPEALED), lib/contest.js, lib/contest.test.js (174/174 green), data/hermes/decisions.md. Pushed cb8170c.
+**To see it:** relaunch the leaderboard via Open Leaderboard.bat (cache-buster) — the served contest.js/scoring_registrations.js update on next load.
+**Tradeoff on record:** top-5-of-all rewards breadth (more variants = more lottery tickets); revisit if a camp games it by spawning variants.
