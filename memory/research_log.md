@@ -5,13 +5,13 @@
 >
 2026-06-15T03:16:45Z | idea-scan | day-gate | not Friday, skipping | no action
 
-## 2026-06-16T20:00Z — routine-02-midday (on-schedule cron fire, second midday wake today)
+## 2026-06-16T15:16Z — routine-02-midday (early cron fire, second midday wake today)
 
-**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` (Tue 13:00 PT / 20:00 UTC) — fired on time. This is the second routine-02 wake of the day; the prior 12:30Z run was an off-schedule pre-cron fire that already brought state current. ~7.5h gap to that prior wake.
+**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` (Tue 13:00 PT / 20:00 UTC) — framework dispatched ~4.75h early at ~15:16Z (same early-dispatch pattern as the 12:30Z first wake of the day). This is the second routine-02 wake of the day; the prior 12:30Z run was an off-schedule pre-cron fire that already brought state current. ~2.75h gap to that prior wake.
 
 **Position management:** zero open positions → zero exit checks, zero MTM updates. Equity $10,828.58 (cash, unchanged). Peak $10,875.85 unchanged. Drawdown 0.43%. All kill switches CLEAR.
 
-**Live market snapshot (informational, no entry impact):** Kraken `kraken_multi_ticker` 20:00Z — **12/15 positive 24h** (negatives TAO -0.64 / LTC -0.33 / TRX -0.35), **median +0.9%**, leaders HYPE +13.11 / FARTCOIN +5.68 / AVAX +1.59 / NEAR +1.52 / SOL +1.33 / ETH +1.28 / LINK +1.22. BTC last **$66,584.5** (+0.45% 24h, +0.63% vs the 12:30Z print of $66,166.5). 5a would PASS if midday permitted entries (12 > 4 floor); SBD CLEAR. HYPE breadth concentration noteworthy (+13.11% session, second straight day above the median).
+**Live market snapshot (informational, no entry impact):** Kraken `kraken_multi_ticker` 15:16Z — **12/15 positive 24h** (negatives TAO -0.64 / LTC -0.33 / TRX -0.35), **median +0.9%**, leaders HYPE +13.11 / FARTCOIN +5.68 / AVAX +1.59 / NEAR +1.52 / SOL +1.33 / ETH +1.28 / LINK +1.22. BTC last **$66,584.5** (+0.45% 24h, +0.63% vs the 12:30Z print of $66,166.5). 5a would PASS if midday permitted entries (12 > 4 floor); SBD CLEAR. HYPE breadth concentration noteworthy (+13.11% session, second straight day above the median).
 
 **Kill-switch table:**
 - Daily realized 2026-06-16 PT: $0.00 / 0.00% — CLEAR (cap 5%).
@@ -3293,3 +3293,5 @@ Today's events screened against the routine's three lesson prompts:
 
 2026-06-16T15:16:21Z | allocation | day-gate | not Sunday, skipping | no action
 2026-06-16T15:16:37Z | idea-scan | day-gate | not Friday, skipping | no action
+
+2026-06-16T15:16:21Z | allocation | day-gate | not Sunday, skipping | no action
