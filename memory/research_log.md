@@ -4,6 +4,7 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 2026-06-15T03:16:45Z | idea-scan | day-gate | not Friday, skipping | no action
+2026-06-16T17:06:37Z | harness | day-gate | not Saturday, skipping | no action
 
 ## 2026-06-16T15:16Z — routine-02-midday (early cron fire, second midday wake today)
 
