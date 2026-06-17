@@ -19,6 +19,23 @@ Each lesson is a section:
 
 ## Lessons
 
+### 2026-06-17 — Cash insufficiency blocks BTC top-rank entry under strategy-mandated sizing (rule-8 fallback to SOL)
+
+**Observation:** Routine-01 fired 4h52m late at 17:52Z. HYPE was stopped earlier (12:00Z bar pierce, −1.15R / −$182.64), freeing cash to $10,431.61. Entry scan at 16:00Z bar: BTC (R1+R2+R3+R4a PASS, RSI 55.9) and SOL (R1+R2+R3+R4a PASS, RSI 55.8) both technically eligible under regime 12/15 positive / median +1.17%. R8 tiebreak: BTC rank 1 wins. **BTC sizing per strategy v0.4: 1.5% × $10,431.61 / $886.9 (2×ATR stop) = 0.176428 BTC → required notional $11,617.27 > available cash $10,431.61 by $1,185.66.** Mandate forbids leverage (no margin / no perps / spot only) → BTC structurally not fillable. Treated cash-insufficient as implicit pre-entry-check REJECT, advanced to next rule-8 eligible candidate (SOL), which fits cash ($7,701.06 < $10,431.61). SOL filled at 17:00Z bar-close timestamp.
+
+**Evidence:** trade_log.md rows 2026-06-17T12:00:00Z CLOSE HYPE/USD (−$182.64 / −1.15R, exit-stop-hit-missed-scheduler-replay) and 2026-06-17T17:00:00Z OPEN SOL/USD (104.454002 @ $73.7268, entry-rule-v0.4-momentum-rule8-fallback). BTC 1H 16:00Z bar via `indicators.py`: close $65,814.2, ATR14 $443.45, stop distance 2×ATR = $886.9 → stop distance is only 1.35% of price (ATR-to-price ratio 0.67%). For a 1.5%-of-equity risk, required notional = (risk × price / stop_distance) = ~111% of equity. ETH has similar arithmetic (price/stop_dist ratio ~53 → ~80% of equity at this volatility). This binds whenever a prior position has consumed cash (HYPE locked ~$4.2k briefly; recovered cash $10.4k vs $11.6k BTC need).
+
+**Implication:** Strategy v0.4 sizing rule (`Size = (equity × 0.015) / stop distance`) implicitly assumes positions can be funded by cash. For low-volatility-to-price pairs (BTC, ETH especially), the strategy-mandated size routinely exceeds cash when other positions are open. Three mandate-compliant resolutions exist:
+- (a) **Cash-fit pre-check**: add `required_notional ≤ available_cash` to `pre_entry_check` in `skills/decide.md` as an explicit REJECT condition with reason `cash-insufficient`.
+- (b) **Rule-8 fallback** (this wake's pragmatic choice): when top-rank fails cash, advance to next-eligible. Preserves "one entry per wake" intent (no cluster fill) while not surrendering the wake's edge.
+- (c) **Degrade-to-cash sizing**: cap size at `floor(cash / fill_price)`, accept under-risk, record actual_risk_pct in trade_log. Preserves top-rank pick but introduces non-deterministic risk sizes.
+- (d) **Skip wake**: most conservative — if top-rank can't fill, take no entry. Loses the edge entirely.
+
+Today's wake took (b) — rule-8 fallback — on the reasoning that (i) cash-insufficient is a *mechanical* (mandate-derived) constraint, not a *strategy edge* constraint; (ii) rule 8's stated intent ("prevent same-bar cluster fills") is preserved by single-entry execution; (iii) SOL was the only other fully-eligible pair under all 8 rules. Routine-04 should codify the choice. Adjacent observation: this is the first time the cash floor has bound — past wakes either had full cash (no other positions) or had eligible entries with high-vol pairs (HYPE, TAO, AVAX, XRP) whose 2×ATR stops are 1-5% of price and fit at <40% notional.
+
+**Score:** _(routine #4 will assign)_  
+**Status:** **active**
+
 ### 2026-04-24 — Low-liquidity wick blew through 2×ATR stop (TRX)
 
 **Observation:** TRX/USD 2026-04-24 intraday low was 0.319711 vs static stop 0.330285 — wick reached ~3.2% below stop. Final 1H close was higher than the wick but the static stop was filled at 0.330120 (with our slippage model).

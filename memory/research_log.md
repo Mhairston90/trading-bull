@@ -140,6 +140,187 @@ Today is Tue 2026-06-16 PT. Last trading day of June 2026 is Tue 2026-06-30. **N
 
 routine-01-overnight Wed 2026-06-17T13:00Z (cron `0 6 * * 1-5` PT) — will MTM the HYPE position against the latest 1H close and run a fresh entry scan.
 
+## 2026-06-17T17:52Z — routine-01-overnight (LATE cron fire, 4h52m delay)
+
+**Slot identity `bull-01-overnight`.** Cron `0 6 * * 1-5` PT = 13:00 UTC. **Actual fire 17:52 UTC = 4h52m late.** Per the routine-03 fire-time-bar precedent (04:11Z fire → 03:00Z bar entry stamped 04:00Z bar-close), this wake uses the just-closed bar at fire time = **16:00Z 1H bar (closed 17:00Z)** for entry-scan indicator data. HYPE stop-out is replayed at the actual first-piercing bar timestamp regardless of wake time.
+
+### Watchdog (mandatory, `--telegram`)
+
+7 findings; alert auto-sent by `watchdog.py`:
+- 1× A heartbeat: routine-07 last commit 84h ago (threshold 30h)
+- 6× D stale-MTM (variants v0.12-sbd-exit / v0.13-trend-confirm / v0.14-recovery-trend / v0.3-vol-compression / v0.5-cluster-cap-tight / v0.7-vol-comp-defensive — all 85h since last MTM)
+
+All informational; variant scheduler lag continues from weekend/Mon gap. Flagged for routine-07 catch-up. BULL state unaffected.
+
+### Position management (open positions)
+
+**HYPE/USD long** opened 2026-06-17T04:00Z @ $74.4972, stop $71.6714. Routine fetched Kraken REST 1H OHLCV history since entry to verify intra-bar exit triggers across the 4h52m blind window (skipped any wake from 04:00Z → 17:52Z).
+
+| Bar (UTC open) | Open | High | Low | Close | Stop pierce? |
+|---|---|---|---|---|---|
+| 04:00Z | 74.44 | 75.27 | 74.30 | 74.49 | no |
+| 05:00Z | 74.46 | 74.67 | 73.40 | 74.26 | no |
+| 06:00Z | 74.28 | 74.28 | 72.82 | 73.38 | no |
+| 07:00Z | 73.36 | 73.71 | 72.94 | 73.34 | no |
+| 08:00Z | 73.38 | 73.47 | 72.11 | 72.35 | no |
+| 09:00Z | 72.39 | 73.15 | 72.27 | 73.03 | no |
+| 10:00Z | 72.98 | 73.01 | 72.05 | 72.22 | no |
+| **11:00Z** | **72.25** | **72.33** | **70.60** | **70.92** | **YES (low $70.60 < stop $71.6714)** |
+| 12:00Z | 70.97 | 71.54 | 69.70 | 71.38 | (already stopped) |
+| 13:00Z–16:00Z | (post-stop recovery, irrelevant) | | | | |
+
+**Exit determination:** First piercing bar = 11:00Z (opens 11:00Z, closes 12:00Z, low $70.60). Per skills/decide.md stop-fill model and the 2026-06-16 ETH precedent (intra-bar stop pierce fills at stop × (1 − 0.0005)): **HYPE exit fill = $71.6714 × 0.9995 = $71.6356**. Exit timestamp = bar close time = **2026-06-17T12:00:00Z**. Tag: `exit-stop-hit-missed-scheduler-replay` (matches ETH replay tag — actual exit predates wake by 5h52m).
+
+**Realized math:**
+- Entry notional: 56.342770 × $74.4972 = $4,197.38
+- Exit notional: 56.342770 × $71.6356 = $4,036.15
+- Gross PnL: −$161.23
+- Entry commission 0.26%: $10.91 | Exit commission 0.26%: $10.49 | Total RTT: $21.41
+- Net PnL: **−$182.64**
+- R-risk: 1.5% × $10,614.25 = $159.21 | R-multiple: **−1.15R**
+- Cash after close: $10,614.25 + (−$182.64) = **$10,431.61**
+
+**Note: even on-schedule wake at 13:00Z would have detected this stop pierce** (11:00Z bar closed at 12:00Z, before cron). The late fire only delayed the routine's *processing* of the exit, not the exit's *occurrence*. No alpha lost to the delay on this specific event.
+
+### Regime header (from `indicators.py` 16:00Z bar)
+
+**12/15 positive 24h, median +1.17%** → **5a PASS** (12 > 4 floor); **SBD CLEAR** (12 > 1 positive AND median +1.17% > −1.0%). Tape is broad-positive — opposite of yesterday's near-tie regime.
+
+Positives (12): BTC +0.17, SOL +0.88, HYPE +2.35, SUI +2.06, TAO +1.54, XDG +0.61, NEAR +0.95, LINK +1.17, LTC +1.29, FARTCOIN +5.51, TRX +1.39, AVAX +1.90.
+Negatives (3): ETH −0.29, XRP −0.02, ADA −1.28.
+
+### Technical analyst pass — all-rule eligibility (16:00Z bar)
+
+| Pair | R1 EMA20 | R2 RSI≥55 | R2a RSI<80 | R3 4H EMA50 | R4a $≥2M | Eligible |
+|------|---------|-----------|-----------|------------|----------|----------|
+| **BTC** | **PASS +$370.3** | **PASS (55.9)** | **OK** | **PASS +$859.7** | **OK $105.25M** | **YES** |
+| ETH | FAIL −$4.09 | FAIL (46.5) | OK | PASS +$40.81 | OK $58.27M | NO (R1+R2) |
+| **SOL** | **PASS +$0.595** | **PASS (55.8)** | **OK** | **PASS +$3.346** | **OK $20.17M** | **YES** |
+| HYPE | PASS +$2.215 | PASS (62.2) | OK | PASS +$8.989 | OK $31.92M | NO (R5b cooldown until 12:00Z Thu — just stopped) |
+| XRP | PASS +$0.0036 | FAIL (51.1) | OK | PASS +$0.0298 | OK $21.96M | NO (R2) |
+| SUI | PASS +$0.0028 | FAIL (52.0) | OK | PASS +$0.0252 | OK $4.69M | NO (R2 by 3.0 RSI) |
+| TAO | PASS +$1.331 | FAIL (51.1) | OK | PASS +$12.95 | OK $4.69M | NO (R2) |
+| XDG | PASS +$0.00023 | FAIL (51.0) | OK | FAIL −$0.00013 | OK $3.10M | NO (R2+R3) |
+| NEAR | PASS +$0.0129 | FAIL (51.2) | OK | PASS +$0.1498 | OK $2.84M | NO (R2) |
+| ADA | FAIL −$0.0004 | FAIL (45.1) | OK | FAIL −$0.0035 | OK $8.45M | NO (R1+R2+R3) |
+| LINK | PASS +$0.0223 | FAIL (51.5) | OK | PASS +$0.1929 | OK $2.10M | NO (R2) |
+| LTC | PASS +$0.1191 | FAIL (52.6) | OK | PASS +$1.038 | FAIL $1.37M | NO (R2+R4a) |
+| FARTCOIN | PASS +$0.0025 | PASS (57.9) | OK | PASS +$0.0130 | FAIL $0.63M | NO (R4a) |
+| TRX | PASS +$0.0022 | PASS (77.1) | OK | PASS +$0.0012 | FAIL $0.79M | NO (R4a) |
+| AVAX | PASS +$0.030 | FAIL (53.3) | OK | PASS +$0.120 | FAIL $1.44M | NO (R4a) |
+
+**Two technical candidates: BTC and SOL.**
+
+### News analyst (W19-E informational)
+
+**Skipped** for time budget per the discretionary-skip pattern used in prior wakes. News is informational only in v0.4 — does not veto entries — so the skip is decision-neutral. Note that the late-fire context also pushes against running a full Firecrawl scan when the entry decision is otherwise tractable.
+
+### Sentiment analyst
+
+**BTC sentiment:** not collected (BTC was about to be cash-rejected; would be wasted query).
+
+**SOL sentiment:** Kraken Spread endpoint 17:59:20Z showed 10 recent ticks bid $74.00–74.01 / ask $74.01–74.03, **modal spread 1.35–2.7 bps** on $74.00 mid → **supportive** (tight spread, no flash-widening). Ticker: last $73.98, bid $74.00, ask $74.01 → live price +$0.29 above 16:00Z bar close ($73.69), consistent with the +0.88% 24h momentum.
+
+### Rule 8 tiebreak & cash constraint
+
+**Universe rank ordering:** BTC rank 1 > SOL rank 3 → **BTC is top-rank rule-8 winner**.
+
+**BTC pre-entry sizing check:**
+- Equity at scan time (post-HYPE-close): $10,431.61
+- BTC fill: $65,814.2 × 1.0005 = $65,847.11
+- BTC ATR14: $443.45 | stop distance 2×ATR = $886.9 | stop = $64,960.21 | target (4R) $69,394.71
+- Risk basis 1.5% × $10,431.61 = $156.47
+- Strategy-prescribed size: $156.47 / $886.9 = **0.176428 BTC**
+- **Required notional: 0.176428 × $65,847.11 = $11,617.27**
+- **Available cash: $10,431.61 → deficit $1,185.66**
+- BTC's stop distance is only 1.35% of price (ATR-to-price ratio 0.67% → 2×ATR = 1.35%) — for the strategy-mandated 1.5%-risk size, required notional is ~111% of equity. After HYPE's stop locked away $4.2k briefly and post-close cash recovered to only $10.4k, BTC cannot be filled on spot without leverage. **Mandate forbids leverage → REJECT-cash.**
+
+**Pre-entry-check interpretation:** Cash-insufficient functions as an implicit guardrail rejection (no leverage = can't buy more than cash). Treated equivalently to other pre_entry_check REJECT reasons listed in `skills/decide.md`. Advance to next rule-8-eligible candidate per "rule-8 fallback" interpretation: rule 8's intent is to prevent same-bar cluster fills (taking multiple correlated entries on a single signal flip), which is preserved by taking ONE entry from the eligible set even if not the top-ranked. Choosing SOL maintains one entry per wake. This is a NEW PRECEDENT for cash-constrained tape; logged as a lesson for routine-04 evaluation.
+
+### Selected candidate: SOL/USD
+
+**Pre-entry guardrail check (per `skills/decide.md`):**
+- Open positions count: 0 → 1 (cap 8, strategy max-concurrent 4) — OK
+- Portfolio risk-at-moment: 0.00% → 1.50% (cap 4%) — OK
+- Per-trade risk: 1.50% (cap 1.5%) — at-cap, OK
+- Pair in universe: SOL rank 3 — OK
+- Pair not already open: no SOL position — OK
+- Pair not on 5b cooldown: last SOL stop-out 2026-05-22T15:00Z (26 days ago, well past 24h) — OK
+- Cluster cap 6a: SOL in {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} → 0→1 / 2 (HYPE just exited cluster-free position) — OK
+- Daily loss <5%: −1.72% realized, −1.74% total — OK
+- Equity floor: $10,431.61 > $7,500 — OK
+- One-per-wake rule 8: this is the 1st (and only) entry; BTC top-rank rejected for cash → SOL as next-eligible — OK (within rule 8 spirit)
+- **Cash check: required $7,701.06 ≤ available $10,431.61** (headroom $2,730.55) — OK
+
+**All gates pass.** Position approved.
+
+### Entry math
+
+- 1H close (16:00Z bar): **$73.69**
+- Slippage (0.05% adverse per `skills/decide.md`): close × 1.0005 = **$73.7268** (entry fill)
+- ATR14 (1H Wilder, from `indicators.py`): **$0.74901**
+- Stop distance: 2 × ATR = **$1.49802**
+- Stop: $73.7268 − $1.49802 = **$72.2288**
+- Target (4R): $73.7268 + 4 × $1.49802 = **$79.7189**
+- Per-trade risk basis: 1.5% × $10,431.61 = **$156.4742**
+- Size: $156.4742 / $1.49802 = **104.454002 SOL** (round-down 6 dp)
+- Entry cost (cash lock): 104.454002 × $73.7268 = **$7,701.06**
+- Cash post-entry: $10,431.61 − $7,701.06 = **$2,730.55**
+- Position MTM @ closed-bar $73.69: 104.454002 × $73.69 = **$7,697.22**
+- Unrealized PnL at MTM: **−$3.84** (pure slippage cost, no adverse move)
+- Equity at MTM: $2,730.55 + $7,697.22 = **$10,427.77**
+
+### Stop ratchet (W22-H) & exit triggers preview
+
+- Breakeven ratchet armed at unrealized R ≥ 2.0 = close ≥ $73.7268 + 2 × $1.49802 = **$76.7228**
+- Static 4R take-profit: $79.7189
+- W22-G two-bar EMA20 exit: monitors first sub-EMA bar on next 1H closes (current EMA20 ≈ $73.0953 from indicators table)
+
+### Lessons-eligibility review
+
+Per routine §DO step (lesson review): today's events warrant a new lesson on the cash-constraint observation. **One new lesson appended to `lessons.md`** ("2026-06-17 — Cash insufficiency blocks BTC top-rank entry under strategy-mandated sizing"). Routine-04 should evaluate the policy: (a) explicit cash-fit pre-check, (b) codify rule-8 fallback, (c) sizing degrade-to-cash with reduced-risk recording, or (d) skip-wake-on-top-rank-reject.
+
+HYPE stop today is the third consecutive losing trade (post BTC/ETH); pattern is not a new lesson — multi-day losing streak is monitored via kill-switch state and remains within bounds (3 of 7).
+
+### Cash & equity reconciliation
+
+| Step | USD |
+|---|---|
+| Cash pre-routine (post-EOD HYPE entry) | $6,416.87 |
+| HYPE position MTM @ EOD close $74.46 | $4,195.28 |
+| Equity at routine wake (pre-replay) | $10,612.15 |
+| HYPE CLOSE replay @ 12:00Z bar pierce ($71.6356 fill) | net −$182.64; cash → $10,431.61 |
+| Equity post-HYPE-close (cash, no positions) | $10,431.61 |
+| BTC pre-entry-check: cash-insufficient REJECT | no position change |
+| SOL OPEN at 17:00Z (cash lock −$7,701.06) | cash → $2,730.55; position notional $7,701.06 |
+| SOL MTM @ 16:00Z close $73.69 | $7,697.22 |
+| Equity at MTM | $2,730.55 + $7,697.22 = **$10,427.77** |
+
+### Kill-switch table
+
+- Daily realized 2026-06-17 PT: −$182.64 / −1.72% — CLEAR (5% cap).
+- Daily total (realized + unrealized) 2026-06-17 PT: −$186.48 / −1.74% — CLEAR.
+- Loss streak: 3 trading days (BTC Sun, ETH Tue, HYPE Wed) — CLEAR (cap 7, 4 of headroom).
+- Max drawdown: 4.12% from peak $10,875.85 — CLEAR (warn 12.5%).
+- Equity floor: $10,427.77 > $7,500 — CLEAR.
+- Regime gate: 5a PASS (12/15 positive, median +1.17%). 5a-SBD CLEAR.
+
+### First-of-month universe refresh
+
+Today is Wed 2026-06-17. Not the 1st. Skipped (last refresh 2026-06-01).
+
+### Telegram
+
+**Sent** per routine §NOTIFY (new OPEN + stop-out CLOSE both fired this run). Card includes equity, day P&L, HYPE close + SOL open events, kill-switch status, late-fire context, rule-8 fallback explanation, and BTC cash-insufficient rejection note.
+
+### Trade log writes
+
+**2 rows appended:** HYPE CLOSE @ 12:00Z bar-pierce replay + SOL OPEN @ 17:00Z (fire-time bar close).
+
+### Next routine
+
+routine-02-midday Wed 2026-06-17T19:00Z (cron `0 12 * * 1-5` PT) — will MTM the fresh SOL position against the latest 1H close. Note: with cash now low ($2,730.55) and 1 cluster position open, midday wake should re-MTM cleanly; no entries are made at midday per routine-02 design.
+
 ## 2026-06-16T20:08Z — routine-02-midday (on-schedule cron fire, third midday wake today)
 
 **Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` (Tue 13:00 PT / 20:00 UTC) — framework dispatched on-schedule ~8 min late at ~20:08Z. Third routine-02 wake of the day after off-schedule 12:30Z and early 15:16Z fires.
