@@ -2,19 +2,17 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-16T20:08Z routine-02-midday (**on-schedule cron fire**, `0 13 * * 1-5` PT = 20:00 UTC). **MATERIAL EVENT — ETH/USD 5.1162 stop-out exit replay 2026-06-16T15:00Z.** **State-of-record anomaly detected at wake start:** trade_log.md had an uncommitted ETH OPEN row (12:00:00Z entry @ $1797.88, stop $1766.13, target $1924.87, tag `entry-rule-v0.4-momentum`) added at file mtime 12:17:29 UTC — **96 seconds after** the prior routine-02-midday flat-book commit `e5f89f6` at 12:15:52 UTC. No routine-01-overnight commit exists between then and now (cron `0 6 * * 1-5` PT was due to fire at 13:00 UTC but no commit appeared on `main`). Matches the known replay-race archetype (cf. 2b5e27e BTC -0.60R race correction 2026-06-14): a concurrent or aborted routine-01 wrote the OPEN row to trade_log.md but failed to commit. **Per CLAUDE.md / skills/log-trade.md, trade_log is canonical source of truth — position is real, this routine processes it.** Entry sizing math is internally consistent with strategy v0.4 (5.1162 × $31.75 stop-distance = $162.44 risk = 1.5% × $10,828.58 prior equity). **Sole irregularity:** the orphan OPEN row used the bar close $1797.88 with no 0.05% adverse slippage applied (conservative model would have logged $1798.78). The row is canonical-as-logged per "Never rewrite past rows" rule; the unfavorable consequence is recorded only on the exit side. Static 2×ATR stop $1766.13 was pierced intrabar on the 2026-06-16T14:00Z 1H bar (low $1762.78, $3.35 below stop) **before** the W22-G two-bar EMA20 confirmation would have fired on that same bar close (both rule 1 and rule 2 triggered on the 14:00Z bar; rule 2 stop intrabar pierce precedes rule 1 bar-close confirm). Exit fill = stop × 0.9995 = **$1765.25** with 0.05% adverse slippage per `skills/decide.md`. Realized PnL: 5.1162 × ($1765.25 - $1797.88) gross = -$166.94, commission 0.26% × 5.1162 × ($1797.88 + $1765.25) = $47.39, **net -$214.33 / -1.32R**. (R is worse than typical -1.0x stop-hit precedent because the orphan entry skipped slippage — effective adverse range $32.63 vs design $31.75, plus commission load on small-relative-to-equity risk.) **Equity:** $10,614.25 (cash). **Peak unchanged.** **Drawdown 2.40%** — CLEAR. **Kill switches all CLEAR.** **Telegram: exit-event notify sent** per routine-02 NOTIFY rule (exit happened). **Live breadth (informational):** **4/15 positive 24h** via `kraken_multi_ticker` 20:08Z (positives AVAX +0.34 / FARTCOIN +5.60 / HYPE +8.67 / SUI +0.13; median TRX -0.58%); 5a marginal-PASS at exactly the 4-floor, SBD CLEAR. Note material session move: BTC last $65,621.8 (-1.45% vs 15:16Z print $66,584.5), 24h -1.0%, sharper than the 12:30Z/15:16Z reads. Next routine: routine-03-eod tonight at 04:00Z Wed (cron `0 21 * * 1-5` PT).
+> **Last rebuild:** 2026-06-17T04:11Z routine-03-eod (PT label 2026-06-16, **on-schedule cron fire** `0 21 * * 1-5` PT). **EOD entry scan executed:** HYPE/USD opened long. Indicators table (720-bar converged): HYPE R1 PASS (close $74.46 > EMA20 by +$1.245), R2 PASS (RSI14 59.8 = +4.85 over 55 floor), R2a OK (RSI 59.8 < 80), R3 PASS (4H close > 4H 50-EMA by +$10.04 / +15.6% margin), R4 OK (720 bars history both 1H/4H), R4a OK ($38.08M 24h notional > $2.0M floor), R5 OK (no existing position), R5a PASS (6/15 positive 24h, median -0.11%), R5a-SBD CLEAR (6 > 1 positive AND median -0.11% > -1.0%), R5b OK (no recent HYPE stop; only ETH on 5b cooldown till 2026-06-17T15:00Z), R6 OK (0/4 open), R6a OK (HYPE not in BTC-correlated cluster), R7 OK (1.50% per-trade vs 4% portfolio cap), R8 OK (1 entry this wake). News: skipped per time budget — informational only, does not veto in v0.4. Sentiment: Kraken `kraken_spread` 04:11:58Z shows tight 1-3¢ spread on $75.13 = ~2.7 bps — supportive. Entry fill = 1H close $74.46 × 1.0005 = **$74.4972** (0.05% adverse slippage per `skills/decide.md`); ATR14 = $1.4129; stop distance = 2×ATR = $2.8258; stop = **$71.6714**; target = entry + 4 × stop distance = **$85.8004**. Size = 1.5% × $10,614.25 / $2.8258 = **56.342770 units**. R-risk = $159.21. Cash post-entry = $10,614.25 - 56.342770 × $74.4972 = **$6,416.87**. Position MTM @ 03:00Z bar close $74.46 = $4,195.28; unrealized PnL = **-$2.10** (entry slippage only, position not yet moved adversely). Day P&L vs prior day close $10,828.58 = **-$216.43 / -2.00%** (ETH realized -$214.33 + HYPE unrealized -$2.10). **Equity:** $10,612.15. **Peak unchanged.** **Drawdown 2.42%** — CLEAR. **Watchdog (this wake):** 7 informational findings — A heartbeat (routine-07 70h vs 30h threshold) + 6 D stale-MTM on variants (v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive — all 71h since last MTM, due to weekend/Monday scheduler gap). Telegram alert auto-sent by watchdog. Variant lag is not a BULL-state issue; flagged for routine-07 catch-up. All kill switches CLEAR. **Telegram: EOD card sent** per routine §NOTIFY (mandatory daily). Next routine: routine-01-overnight Wed 06-17T13:00Z (cron `0 6 * * 1-5` PT).
 
-> **Prior rebuild (Tue midday, second wake — early cron fire):** 2026-06-16T15:16Z routine-02-midday (early fire ~4.75h before scheduled 20:00Z slot). Flat-book carry forward. Equity $10,828.58, DD 0.43%. No writes, Telegram silent. **[This rebuild did NOT see the ETH OPEN, which was added to trade_log.md at 12:17:29Z — chronologically *before* the 15:16Z rebuild yet the rebuild reported flat book. This is the central evidence the orphan write happened in the narrow seconds-window between the 12:15:52Z commit and the 15:16Z rebuild's read, with the rebuild having loaded its file snapshot pre-write. The orphan write was thus invisible to two subsequent rebuilds (15:16Z midday and this 20:08Z midday's pre-read) until this routine's read at session start.]**
+> **Prior rebuild:** 2026-06-16T20:08Z routine-02-midday. ETH/USD 5.1162 stop-out exit replay 2026-06-16T15:00Z via Exit rule 2 (intrabar stop pierce). Orphan-write entry @ 12:00Z handled per source-of-truth rule. Realized -1.32R / -$214.33 net. Equity $10,614.25, DD 2.40%, loss streak 1→2.
 
-> **Prior rebuild (Tue midday pre-cron):** 2026-06-16T12:30Z routine-02-midday (off-schedule fire ~7h pre-cron). Flat book carry forward from Sun BTC exit. Equity $10,828.58, DD 0.43%, breadth 14/15 +1.27% median. No writes, no exits, Telegram silent.
-
-> **Prior rebuild (Sun AM):** 2026-06-14T17:14Z routine-01-overnight (**Sun off-schedule fire**). BTC/USD 0.168 stop-out exit replay 2026-06-14T13:00Z via Exit rule 1 (W22-G two-bar EMA20 confirm). Realized -0.60R / -$47.27 net. Equity $10,828.58, DD 0.43%, loss streak 0→1.
+> **Prior rebuild (Sun AM):** 2026-06-14T17:14Z routine-01-overnight. BTC/USD 0.168 stop-out exit replay 2026-06-14T13:00Z via Exit rule 1 (W22-G two-bar EMA20 confirm). Realized -0.60R / -$47.27 net. Equity $10,828.58, DD 0.43%, loss streak 0→1.
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,614.25** (was $10,828.58; -$214.33 from ETH stop close)
-- Realized PnL (all-time): **+$614.25** (was +$828.58; -$214.33 on ETH stop)
+- Cash: **$6,416.87** (was $10,614.25; -$4,197.38 entry cost for HYPE)
+- Realized PnL (all-time): **+$614.25** (unchanged this wake — HYPE entry only)
   - [archived earlier rows trimmed for brevity — full ledger preserved in trade_log.md]
   - HYPE −$58.18 (exit-stop-hit 2026-05-06T15:00Z, −1.02R)
   - BTC +$1.42 (exit-ema-cross 2026-05-06T19:00Z, +0.06R)
@@ -33,46 +31,49 @@
   - XRP −$101.40 (missed-scheduler replay exit-ema20-confirm 2026-05-30T23:00Z, −0.65R)
   - TAO +$621.22 (missed-scheduler replay exit-4R-target 2026-06-13T09:00Z, +4.04R)
   - BTC −$47.27 (missed-scheduler replay exit-ema20-confirm 2026-06-14T13:00Z, −0.60R)
-  - **ETH −$214.33 (missed-scheduler replay exit-stop-hit 2026-06-16T15:00Z, −1.32R)** — new this wake
-- Unrealized PnL (open positions): **$0.00** (no open positions)
-- Position values (MTM): **$0.00**
-- Current equity (cash + positions MTM): **$10,614.25**
+  - ETH −$214.33 (missed-scheduler replay exit-stop-hit 2026-06-16T15:00Z, −1.32R)
+- Unrealized PnL (open positions): **−$2.10** (HYPE @ MTM $74.46)
+- Position values (MTM): **$4,195.28** (HYPE 56.342770 × $74.46)
+- Current equity (cash + positions MTM): **$10,612.15**
 - Equity peak: **$10,875.85** (set 2026-06-13T09:00Z at TAO 4R close — unchanged)
-- Drawdown from peak: **2.40%** ($261.60 below peak)
-- Since-inception return: **+6.14%** ($10,614.25 / $10,000 − 1)
+- Drawdown from peak: **2.42%** ($263.70 below peak)
+- Since-inception return: **+6.12%** ($10,612.15 / $10,000 − 1)
 
 ## Open positions
 
-*(none — ETH closed at stop this wake)*
+| Pair | Side | Size | Entry | Stop | Target | Unrealized PnL | R-risk | Opened |
+|------|------|------|-------|------|--------|----------------|--------|--------|
+| HYPE/USD | long | 56.342770 | $74.4972 | $71.6714 | $85.8004 | −$2.10 (MTM $74.46) | $159.21 (1.50% eq) | 2026-06-17T04:00Z |
 
-Portfolio risk-at-moment: **0.00%** of equity (cap 4%).
-Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 0/2).
+Portfolio risk-at-moment: **1.50%** of equity (cap 4%, 2.5% headroom).
+Open positions: **1 / 8** (strategy v0.4 max-concurrent 4 → 1/4 used; cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 0/2 — HYPE not in cluster).
 
-## Day summary — 2026-06-16 PT (Tue, this wake)
+## Day summary — 2026-06-16 PT (Tue, EOD)
 
 | Metric | Value |
 |---|---|
-| Day realized PnL | **-$214.33** (ETH stop-hit replay) |
-| Day realized % | **-1.98%** (on day-open equity $10,828.58) |
-| Day MTM PnL | **-$214.33** (no other positions) |
-| Trades opened today | **1** (ETH/USD orphan-write entry, logged 12:17:29Z by uncommitted routine-01) |
-| Trades closed today | **1** (ETH/USD 5.1162 long @ 14:00Z UTC bar via intrabar stop pierce) |
-| Win rate today | **0%** (0/1) |
-| Equity at this wake | **$10,614.25** (cash, no positions) |
+| Day realized PnL | **−$214.33** (ETH stop-hit replay) |
+| Day unrealized PnL | **−$2.10** (HYPE entry slippage, no adverse move yet) |
+| Day total PnL | **−$216.43** |
+| Day % (vs $10,828.58 prior-day close) | **−2.00%** |
+| Trades opened today | **2** (ETH 12:00Z orphan-write entry; HYPE 04:00Z Wed UTC EOD entry — PT date 06-16) |
+| Trades closed today | **1** (ETH 5.1162 long @ 14:00Z bar via intrabar stop pierce) |
+| Win rate today | **0%** (0/1 closed) |
+| Equity at EOD | **$10,612.15** |
 | Equity peak (realized) | **$10,875.85** (unchanged) |
-| Drawdown from peak | **2.40%** |
-| Loss streak | **2** (BTC Sun -0.60R + ETH Tue -1.32R, two consecutive losing trade-days — but only one trade per day so loss-streak-by-day is also 2) |
+| Drawdown from peak | **2.42%** |
+| Loss streak | **2** trading days (BTC Sun −0.60R, ETH Tue −1.32R) |
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-16 PT: **-$214.33 / -1.98%** — loss cap 5% (2.5x below), CLEAR.
-- Consecutive losing trading days: **2** (BTC Sun -0.60R, ETH Tue -1.32R; cap 7, 5 trades of headroom).
-- Max drawdown: **2.40%** from peak $10,875.85 (cap 25%, warn 12.5%) — CLEAR.
-- Equity floor: $10,614.25 > $7,500 floor — CLEAR.
-- Regime gate (rule 5a) — **live 24h via `kraken_multi_ticker` 20:08Z**: **4/15 positive (AVAX/FARTCOIN/HYPE/SUI), median -0.58%** → **5a marginal-PASS at floor** (4 == 4 floor). **5a-SBD CLEAR** (4 > 1 positive AND median -0.58% > -1.0% threshold; either condition alone clears SBD).
-- Active 5b cooldowns: **ETH 2026-06-16T15:00Z exit-stop-hit — 5b active until 2026-06-17T15:00Z** (24h same-pair re-entry cooldown applies; stop-out tag → rule 5b APPLICABLE — first active 5b cooldown since 2026-05-25 BTC stop).
-- **Watchdog:** not run this wake (routine-02 spec doesn't require it; the pre-existing trade-log mtime mismatch was caught manually via diff inspection).
-- **All clear (kill switches).** routine-02-midday 2026-06-16T20:08Z (Tue 13:08 PT — on-schedule cron fire ~8 min late): **1 CLOSE** (ETH stop replay), **0 OPENs** (midday spec forbids entries). Kraken MCP AVAILABLE (`kraken_ticker` ETHUSD + `kraken_ohlcv` 30-bar 1H + `kraken_multi_ticker` 15-pair all clean <3s). **Telegram: exit-event notify sent** per routine §NOTIFY (CLOSE event triggers brief summary; orphan-write anomaly also flagged in the message body for visibility, not because routine §NOTIFY mandates it — discretionary inclusion given the state-of-record concern).
+- Daily realized 2026-06-16 PT: **−$214.33 / −1.98%** — loss cap 5% (2.5x below), CLEAR.
+- Consecutive losing trading days: **2** (BTC Sun, ETH Tue; cap 7, 5 of headroom).
+- Max drawdown: **2.42%** from peak $10,875.85 (cap 25%, warn 12.5%) — CLEAR.
+- Equity floor: $10,612.15 > $7,500 floor — CLEAR.
+- Regime gate (rule 5a) — closed-bar 03:00Z snapshot via `indicators.py`: **6/15 positive, median −0.11%** → 5a PASS (6 > 4 floor); SBD CLEAR (median −0.11% > −1.0%, 6 > 1 positive).
+- Active 5b cooldowns: **ETH 2026-06-16T15:00Z exit-stop-hit — 5b active until 2026-06-17T15:00Z**.
+- **Watchdog (this wake, run with --telegram):** 7 findings — 1× A heartbeat (routine-07 70h late vs 30h threshold), 6× D stale-MTM (variants v0.12-sbd-exit / v0.13-trend-confirm / v0.14-recovery-trend / v0.3-vol-compression / v0.5-cluster-cap-tight / v0.7-vol-comp-defensive — all 71h since last MTM). Informational; variant lag does not affect BULL state. Telegram alert auto-sent by watchdog process.
+- **All clear (kill switches).** routine-03-eod 2026-06-17T04:11Z (Tue 21:11 PT — on-schedule cron fire): **1 OPEN** (HYPE EOD entry), **1 CLOSE day-total** (ETH stop, processed earlier at midday). Kraken MCP AVAILABLE (`kraken_ticker` HYPEUSD + `kraken_spread` HYPEUSD clean <2s; full 15-pair indicator scan via `indicators.py` clean). **Telegram: EOD card sent** per routine §NOTIFY (mandatory daily).
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -99,14 +100,16 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 
 ## Pending exit triggers
 
-*(none — flat after ETH stop close)*
+| Pair | Next check | Trigger |
+|------|------------|---------|
+| HYPE/USD | next 1H close (04:00Z+1h = 05:00Z Wed) | Exit 1 W22-G (2× 1H close < 20-EMA — first sub-EMA bar would be flagged) / Exit 2 stop $71.6714 / Exit 3 target $85.8004 / W22-H breakeven ratchet armed at unrealized R ≥ 2.0 (price ≥ $80.1488) |
 
 ## Rolling performance
 
 | Window | BULL return | BTC-hold return | Delta | Result |
 |--------|-------------|-----------------|-------|--------|
-| 7d | ≈ +3.60% realized (TAO +4.04R / +6.21%, BTC -0.60R / -0.43%, ETH -1.32R / -1.98%) | ≈ +3.8% (BTC ~$63.2k → $65.6k over 7d) | ≈ -0.2% | BULL roughly tied on 7d (slight underperformance from today's ETH stop give-back; the TAO 4R win is no longer a clean dominator) |
-| 30d | ≈ +6.14% (inception $10k 2026-04-20; window fully computable) | ≈ −19.3% (BTC 2026-05-13 ~$81.3k → today $65.6k) | ≈ +25.4% | BULL well ahead |
-| 90d | — | — | — | not computable (BULL inception 2026-04-20 = 57 days ago; window first computable ~2026-07-19) |
+| 7d | ≈ +3.58% realized (TAO +4.04R / +6.21%, BTC −0.60R / −0.43%, ETH −1.32R / −1.98%) + −0.02% unrealized | ≈ +4.1% (BTC ~$63.2k → $65.8k over 7d) | ≈ −0.5% | BULL roughly tied on 7d (slight underperformance from today's ETH stop give-back; HYPE entry not yet contributing) |
+| 30d | ≈ +6.12% (inception $10k 2026-04-20; window fully computable) | ≈ −19.1% (BTC 2026-05-13 ~$81.3k → today $65.8k) | ≈ +25.2% | BULL well ahead |
+| 90d | — | — | — | not computable (BULL inception 2026-04-20 = 58 days ago; window first computable ~2026-07-19) |
 
-(7d / 30d figures approximate; BTC reference $65,621.8 spot this wake. The ETH stop today is a clean illustration of the loss-cap mechanism doing its job in a sub-$10 adverse intrabar move — the 14:00Z bar low $1762.78 was only $3.35 below the stop $1766.13, and the stop fill at $1765.25 captured roughly the design adverse range. **Caveat:** the orphan-write entry skipped the conservative 0.05% slippage model on the entry side, which is the proximate cause of -1.32R rather than the typical -1.05R-to-1.10R stop-hit R. Documented in research_log for routine-04 lesson-eligibility evaluation. Inception-to-date return slipped from +9.30% peak to +6.14% — a -3.16% retracement, second-worst since strategy launch, but well inside drawdown caps and consistent with the long-only-strategy-in-bearish-tape archetype.)
+(7d / 30d figures approximate; BTC closed-bar reference $65,781.5 this wake via `indicators.py`. HYPE entry $74.4972 is mid-day-3 of an 8-day run from $51 base; entry RSI 59.8 is non-climactic with comfortable headroom to the 80 cap; 4H +15.6% over EMA50 is the strongest R3 margin of the eligible set. The ETH stop today reduces 7d delta vs BTC to a near-tie; the +25.2% 30d outperformance remains the dominant figure, all attributable to BULL avoiding the May breakdown via 5a/5a-SBD gates while BTC-hold ate the full move.)

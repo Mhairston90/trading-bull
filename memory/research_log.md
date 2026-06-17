@@ -7,6 +7,139 @@
 2026-06-16T17:06:37Z | harness | day-gate | not Saturday, skipping | no action
 2026-06-17T01:02:38Z | idea-scan | day-gate | not Friday, skipping | no action
 
+## 2026-06-17T04:11Z — routine-03-eod (PT label 2026-06-16, on-schedule cron fire)
+
+**Slot identity `bull-03-eod`.** Cron `0 21 * * 1-5` (Tue 21:00 PT / 04:00 UTC Wed) — framework dispatched on-schedule ~11 min late at ~04:11Z. Per the routine-03 date-labeling guard, this wake is labeled with the **PT calendar date at fire time = 2026-06-16**. UTC entry timestamp = 2026-06-17T04:00Z (the closing time of the 03:00Z 1H bar, which is the just-closed bar at fire time).
+
+### Watchdog (mandatory, `--telegram`)
+
+7 findings; alert auto-sent by `watchdog.py`:
+- 1× A heartbeat: routine-07 last commit 70h ago (threshold 30h)
+- 6× D stale-MTM (variants v0.12-sbd-exit / v0.13-trend-confirm / v0.14-recovery-trend / v0.3-vol-compression / v0.5-cluster-cap-tight / v0.7-vol-comp-defensive — all 71h since last MTM)
+
+All informational; variant lag attributable to weekend/Mon scheduler gap, does not affect BULL state. Flagged for routine-07 catch-up.
+
+### Position management (open positions)
+
+Zero open positions at wake start (ETH closed at stop earlier today). Zero exit checks needed.
+
+### EOD entry scan (W19-E analyst-role split)
+
+Per the 2026-06-12 amendment, indicator computation delegated to `python scripts/indicators.py` (authoritative table over in-context arithmetic). Just-closed 1H bar = 03:00Z 2026-06-17.
+
+**Regime header (from indicators.py):** 6/15 positive 24h, median −0.11% → **5a PASS** (6 > 4 floor); **SBD CLEAR** (median > −1.0% AND positives > 1).
+
+**Technical analyst pass — all-rule eligibility:**
+
+| Pair | R1 EMA20 | R2 RSI≥55 | R2a RSI<80 | R3 4H EMA50 | R4a $≥2M | Eligible |
+|------|---------|-----------|-----------|------------|----------|----------|
+| BTC | FAIL | FAIL (47.1) | OK | PASS +1.54% | OK $114.07M | NO (R1+R2) |
+| ETH | PASS +0.06% | FAIL (52.3) | OK | PASS +3.82% | OK $60.00M | NO (R2) — also R5b cooldown active until 15:00Z Wed |
+| SOL | FAIL | FAIL (49.5) | OK | PASS +5.03% | OK $21.96M | NO (R1+R2) |
+| **HYPE** | **PASS +1.70%** | **PASS (59.8)** | **OK** | **PASS +15.59%** | **OK $38.08M** | **YES** |
+| XRP | FAIL | FAIL (45.2) | OK | PASS +2.97% | OK $22.37M | NO (R1+R2) |
+| **SUI** | **PASS +0.97%** | **PASS (56.2)** | **OK** | **PASS +3.69%** | **OK $5.21M** | **YES** |
+| TAO | FAIL | FAIL (45.0) | OK | PASS +4.99% | OK $6.04M | NO (R1+R2) |
+| XDG | FAIL | FAIL (47.5) | OK | FAIL −0.06% | OK $4.04M | NO (R1+R2+R3) |
+| NEAR | FAIL | FAIL (42.7) | OK | PASS +4.07% | OK $4.93M | NO (R1+R2) |
+| ADA | FAIL | FAIL (41.5) | OK | FAIL −1.33% | OK $9.18M | NO (R1+R2+R3) |
+| LINK | PASS +0.51% | FAIL (54.5) | OK | PASS +3.22% | OK $2.82M | NO (R2 by 0.5 RSI) |
+| LTC | PASS +0.16% | FAIL (52.4) | OK | PASS +2.53% | OK $2.40M | NO (R2) |
+| FARTCOIN | PASS +1.79% | PASS (57.5) | OK | PASS +10.71% | **FAIL $0.63M** | NO (R4a) |
+| TRX | PASS +0.01% | FAIL (48.3) | OK | FAIL −0.90% | **FAIL $1.26M** | NO (R2+R3+R4a) |
+| AVAX | PASS +0.71% | PASS (55.9) | OK | PASS +1.57% | **FAIL $1.99M** | NO (R4a by $0.01M, marginal) |
+
+**Two technical candidates: HYPE and SUI.**
+
+**Rule 8 (W18-C) tiebreak:** max 1 entry per wake; prefer highest 30d notional rank from universe.md. **HYPE rank 4, SUI rank 6 → HYPE selected.** SUI re-evaluated next wake.
+
+**Selected candidate: HYPE/USD**
+
+**News analyst (W19-E informational):** **Skipped** for time budget per the discretionary-skip pattern used in prior wakes. News is informational only in v0.4 — does not veto entries — so the skip is decision-neutral. (Routine-04 may revisit whether the EOD news pass should be mandatory; no proposal here.)
+
+**Sentiment analyst:** `kraken_spread` HYPEUSD 04:11:58Z shows last $75.13, 10-tick recent spreads 1–3¢, modal spread 2¢ on $75.13 = **~2.7 bps** → **supportive** (tight spread, no flash widening). Live price ($75.13) +$0.67 above closed-bar reference ($74.46), consistent with the +6.91% daily momentum — directionally supportive of the technical signal.
+
+**Decision: ENTER HYPE/USD long.**
+
+### Pre-entry guardrail check (per `skills/decide.md`)
+
+- Open positions count: 0 → 1 (cap 8, strategy max-concurrent 4) — OK
+- Portfolio risk-at-moment: 0.00% → 1.50% (cap 4%) — OK
+- Per-trade risk: 1.50% (cap 1.5%) — at-cap, OK
+- Pair in universe: HYPE rank 4 — OK
+- Pair not already open: no HYPE position — OK
+- Pair not on 5b cooldown: no recent HYPE stop — OK (only ETH on cooldown)
+- Cluster cap 6a: HYPE not in {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} → 0/2 — OK
+- Daily loss <5%: −1.98% — OK
+- Equity floor: $10,614.25 > $7,500 — OK
+- One-per-wake rule 8: this is the 1st (and only) entry — OK
+
+**All gates pass.** Position approved.
+
+### Entry math
+
+- 1H close (03:00Z bar): **$74.46**
+- Slippage (0.05% adverse per `skills/decide.md`): close × 1.0005 = **$74.4972** (entry fill)
+- ATR14 (1H Wilder, from indicators.py): **$1.4129**
+- Stop distance: 2 × ATR = **$2.8258**
+- Stop: $74.4972 − $2.8258 = **$71.6714**
+- Target (4R): $74.4972 + 4 × $2.8258 = **$85.8004**
+- Per-trade risk basis: 1.5% × $10,614.25 = **$159.21**
+- Size: $159.21 / $2.8258 = **56.342770 units** (round-down to 6 dp, matching prior HYPE/TAO/XRP precision)
+- Entry cost (cash lock): 56.342770 × $74.4972 = **$4,197.38**
+- Cash post-entry: $10,614.25 − $4,197.38 = **$6,416.87**
+- Position MTM @ closed-bar $74.46: 56.342770 × $74.46 = **$4,195.28**
+- Unrealized PnL at MTM: −$2.10 (pure slippage cost, no adverse move)
+- Equity at EOD MTM: $6,416.87 + $4,195.28 = **$10,612.15**
+
+### Stop ratchet (W22-H) & exit triggers preview
+
+- Breakeven ratchet armed at unrealized R ≥ 2.0 = close ≥ $74.4972 + 2 × $2.8258 = **$80.1488**
+- Static 4R take-profit: $85.8004
+- W22-G two-bar EMA20 exit: monitors first sub-EMA bar on next 1H closes
+
+### Lessons-eligibility review
+
+Per routine §DO step 4: review today's trades for lessons (gap risk / target placement / immediate-reversal).
+- **ETH stop today:** not a gap (intrabar $3.35 below stop on the 14:00Z bar; designed adverse range). The orphan-write race is already flagged for routine-04 evaluation in the midday research log (recommendation: `git status` check at routine wake start). No new lesson row added today — the pattern is already captured.
+- **HYPE entry today:** not yet evaluable (single-bar position).
+
+No new lessons appended this wake.
+
+### Cash & equity reconciliation
+
+| Step | USD |
+|---|---|
+| Cash pre-routine (post-ETH stop) | $10,614.25 |
+| HYPE OPEN at 04:00Z (cash lock) | −$4,197.38 → cash $6,416.87; position notional $4,197.38 |
+| HYPE MTM @ 03:00Z close $74.46 | $4,195.28 |
+| Equity at EOD | $6,416.87 + $4,195.28 = **$10,612.15** |
+
+### Kill-switch table
+
+- Daily realized 2026-06-16 PT: −$214.33 / −1.98% — CLEAR.
+- Daily total (realized + unrealized) 2026-06-16 PT: −$216.43 / −2.00% — CLEAR (5% cap).
+- Loss streak: 2 trading days — CLEAR (cap 7, 5 of headroom).
+- Max drawdown: 2.42% from peak $10,875.85 — CLEAR (warn 12.5%).
+- Equity floor: $10,612.15 > $7,500 — CLEAR.
+- Regime gate: 5a PASS (6/15). 5a-SBD CLEAR.
+
+### Monthly archive check
+
+Today is Tue 2026-06-16 PT. Last trading day of June 2026 is Tue 2026-06-30. **Not today** — archive sweep deferred.
+
+### Telegram
+
+**Sent** per routine §NOTIFY (mandatory daily EOD card). Card includes equity, day PnL, ETH close + HYPE open events, kill-switch status, BULL vs BTC-hold rolling 30d, and notes (regime, watchdog summary, 5b cooldown).
+
+### Trade log writes
+
+**1 OPEN row appended** (HYPE/USD). ETH OPEN+CLOSE rows already present from this morning's midday routine.
+
+### Next routine
+
+routine-01-overnight Wed 2026-06-17T13:00Z (cron `0 6 * * 1-5` PT) — will MTM the HYPE position against the latest 1H close and run a fresh entry scan.
+
 ## 2026-06-16T20:08Z — routine-02-midday (on-schedule cron fire, third midday wake today)
 
 **Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` (Tue 13:00 PT / 20:00 UTC) — framework dispatched on-schedule ~8 min late at ~20:08Z. Third routine-02 wake of the day after off-schedule 12:30Z and early 15:16Z fires.

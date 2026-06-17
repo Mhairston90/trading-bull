@@ -48,3 +48,4 @@
 | 2026-06-14T13:00:00Z | CLOSE | BTC/USD | long | 0.168 | 64240.66 | — | — | -0.60 | -47.27 | exit-ema20-confirm-missed-scheduler-replay |
 | 2026-06-16T12:00:00Z | OPEN | ETH/USD | long | 5.1162 | 1797.88 | 1766.13 | 1924.87 | — | — | entry-rule-v0.4-momentum |
 | 2026-06-16T15:00:00Z | CLOSE | ETH/USD | long | 5.1162 | 1765.25 | — | — | -1.32 | -214.33 | exit-stop-hit-missed-scheduler-replay |
+| 2026-06-17T04:00:00Z | OPEN | HYPE/USD | long | 56.342770 | 74.4972 | 71.6714 | 85.8004 | — | — | entry-rule-v0.4-momentum |
