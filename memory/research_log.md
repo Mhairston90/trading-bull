@@ -3542,3 +3542,5 @@ User found BULL v0 + Basket Breakout Aggressive v1 missing from the leaderboard 
 **Tradeoff on record:** top-5-of-all rewards breadth (more variants = more lottery tickets); revisit if a camp games it by spawning variants.
 2026-06-16T17:40:09Z | allocation | day-gate | not Sunday, skipping | no action
 2026-06-17T17:51:32Z | allocation | day-gate | not Sunday, skipping | no action
+
+2026-06-17T17:51:26Z | harness | day-gate | not Saturday, skipping | no action
