@@ -3541,3 +3541,4 @@ User found BULL v0 + Basket Breakout Aggressive v1 missing from the leaderboard 
 **To see it:** relaunch the leaderboard via Open Leaderboard.bat (cache-buster) — the served contest.js/scoring_registrations.js update on next load.
 **Tradeoff on record:** top-5-of-all rewards breadth (more variants = more lottery tickets); revisit if a camp games it by spawning variants.
 2026-06-16T17:40:09Z | allocation | day-gate | not Sunday, skipping | no action
+2026-06-17T17:51:32Z | allocation | day-gate | not Sunday, skipping | no action
