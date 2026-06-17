@@ -2,17 +2,17 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-17T17:52Z routine-01-overnight (PT label 2026-06-17, **late cron fire** — cron `0 6 * * 1-5` PT = 13:00 UTC, actual fire 17:52 UTC, **4h52m delay**). Two events processed: (1) **HYPE stop-out replay** detected via Kraken 1H OHLCV history — stop pierce on 11:00Z bar (low $70.60 < stop $71.6714), fill at stop × 0.9995 = $71.6356, CLOSE timestamp 12:00Z (bar close); realized -$182.64 / -1.15R net. (2) **Entry scan on fire-time 16:00Z bar via `indicators.py`** identified BTC and SOL as both technically eligible (regime 12/15 positive 24h, median +1.17% → 5a PASS / SBD CLEAR). **R8 tiebreak:** BTC rank 1 wins on notional but sizing 0.176428 BTC × $65,847.11 = **$11,617.27 required notional exceeds available cash $10,431.61** by $1,185.66 — BTC could not be filled on spot (mandate forbids leverage). Treated cash-insufficient as pre-entry-check REJECT, advanced to next rule-8 eligible per "rule-8 fallback" interpretation (mandate-compliant: still one entry per wake, no cluster fill). SOL/USD opened at 17:00Z (close of 16:00Z bar): entry $73.7268 (0.05% adverse slippage on $73.69 close), ATR14 = $0.74901, stop distance 2×ATR = $1.49802, stop **$72.2288**, target (4R) **$79.7189**. Size = 1.5% × $10,431.61 / $1.49802 = **104.454002 SOL**, cost $7,701.06, cash post-entry **$2,730.55**. Position MTM @ 16:00Z close $73.69 = $7,697.22; unrealized PnL = **-$3.84** (slippage only). Day P&L for 2026-06-17 PT (vs prior EOD $10,612.15): realized -$182.64 (HYPE stop) + unrealized -$3.84 (SOL slippage) = **-$186.48 / -1.74%**. **Equity:** $10,427.77. **Peak unchanged $10,875.85.** **Drawdown 4.12%** — CLEAR (warn 12.5%). **Loss streak: 3 trading days** (BTC Sun -0.60R, ETH Tue -1.32R, HYPE Wed -1.15R; cap 7, 4 of headroom). **Watchdog (this wake, `--telegram`):** 7 findings — 1× A heartbeat (routine-07 84h late vs 30h threshold) + 6× D stale-MTM (variants v0.12-sbd-exit / v0.13-trend-confirm / v0.14-recovery-trend / v0.3-vol-compression / v0.5-cluster-cap-tight / v0.7-vol-comp-defensive — all 85h since last MTM, scheduler gap). Auto-alerted via Telegram; informational only, BULL state unaffected. **Lessons:** one new lesson appended on cash-constraint blocking BTC top-rank entry (rule-8 fallback policy for routine-04 evaluation). All kill switches CLEAR. **Telegram: late-fire overnight digest sent** per routine §NOTIFY (new OPEN + stop-out CLOSE both fired this run). Next routine: routine-02-midday Wed 06-17T19:00Z (cron `0 12 * * 1-5` PT).
+> **Last rebuild:** 2026-06-17T20:10Z routine-02-midday (PT label 2026-06-17, on-schedule cron fire — cron `0 13 * * 1-5` PT = 20:00 UTC PDT, fire ~13:00 PT). **One exit processed:** SOL/USD intrabar stop-out on the 18:00Z 1H bar — bar low $72.15 < stop $72.2288, fill at stop × 0.9995 = **$72.1927**, CLOSE timestamp 2026-06-17T18:00:00Z (per intra-bar pierce convention used for ETH 06-16 and HYPE 06-17 replays). Net realized **-$199.87 / -1.28R**. SOL position fully flat. Per routine-02 mandate, **no new entries scanned** (midday is position-management only). Equity drops to **$10,231.74**, drawdown **5.92%** (peak unchanged $10,875.85, warn threshold 12.5% — 6.58% headroom). Day P&L 2026-06-17 PT (vs prior EOD $10,612.15): two realized losses — HYPE -$182.64 + SOL -$199.87 = **-$382.51 / -3.60%**. **Loss streak: 3 trading days** (BTC Sun, ETH Tue, HYPE+SOL Wed — Wed counted once). All kill switches CLEAR (daily-loss 1.4% headroom, DD 19.08% to halt, loss-day 4 of headroom). New 5b cooldown: SOL active until 2026-06-18T18:00:00Z; HYPE cooldown still active until 2026-06-18T12:00:00Z. **Telegram alert sent** per routine §NOTIFY (exit triggered intrabar — qualifies).
 
-> **Prior rebuild:** 2026-06-17T04:11Z routine-03-eod. HYPE EOD entry @ $74.4972 56.342770 units, stop $71.6714, target $85.8004 (post-ETH-stop equity $10,614.25, day -2.00%, DD 2.42%, loss streak 2).
+> **Prior rebuild:** 2026-06-17T17:52Z routine-01-overnight. SOL OPEN @ $73.7268, 104.454002 units, stop $72.2288, target $79.7189 (rule-8 fallback after BTC cash-insufficient REJECT). HYPE stop-out replay -$182.64 / -1.15R.
 
-> **Prior rebuild (06-16 midday):** 2026-06-16T20:08Z routine-02-midday. ETH/USD 5.1162 stop-out exit replay 2026-06-16T15:00Z via Exit rule 2 (intrabar stop pierce). Orphan-write entry @ 12:00Z handled per source-of-truth rule. Realized -1.32R / -$214.33 net.
+> **Prior rebuild (06-17 EOD label 06-16):** 2026-06-17T04:11Z routine-03-eod. HYPE EOD entry @ $74.4972 56.342770 units, stop $71.6714, target $85.8004.
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$2,730.55** (was $10,614.25; net flow: -$182.64 HYPE realized loss, -$7,701.06 SOL entry cost)
-- Realized PnL (all-time): **+$431.61** ($614.25 prior + -$182.64 HYPE today)
+- Cash: **$10,231.74** (was $2,730.55; SOL stop-out: +$7,540.82 gross proceeds, -$39.63 round-trip commission = net flow -$199.87)
+- Realized PnL (all-time): **+$231.74** ($431.61 prior + -$199.87 SOL today)
   - [archived earlier rows trimmed for brevity — full ledger preserved in trade_log.md]
   - HYPE −$58.18 (exit-stop-hit 2026-05-06T15:00Z, −1.02R)
   - BTC +$1.42 (exit-ema-cross 2026-05-06T19:00Z, +0.06R)
@@ -33,49 +33,47 @@
   - BTC −$47.27 (missed-scheduler replay exit-ema20-confirm 2026-06-14T13:00Z, −0.60R)
   - ETH −$214.33 (missed-scheduler replay exit-stop-hit 2026-06-16T15:00Z, −1.32R)
   - HYPE −$182.64 (missed-scheduler replay exit-stop-hit 2026-06-17T12:00Z, −1.15R)
-- Unrealized PnL (open positions): **−$3.84** (SOL @ MTM $73.69)
-- Position values (MTM): **$7,697.22** (SOL 104.454002 × $73.69)
-- Current equity (cash + positions MTM): **$10,427.77**
+  - SOL −$199.87 (exit-stop-hit intrabar replay 2026-06-17T18:00Z, −1.28R)
+- Unrealized PnL (open positions): **$0.00** (no open positions)
+- Position values (MTM): **$0.00**
+- Current equity (cash + positions MTM): **$10,231.74**
 - Equity peak: **$10,875.85** (set 2026-06-13T09:00Z at TAO 4R close — unchanged)
-- Drawdown from peak: **4.12%** ($448.08 below peak)
-- Since-inception return: **+4.28%** ($10,427.77 / $10,000 − 1)
+- Drawdown from peak: **5.92%** ($644.11 below peak)
+- Since-inception return: **+2.32%** ($10,231.74 / $10,000 − 1)
 
 ## Open positions
 
-| Pair | Side | Size | Entry | Stop | Target | Unrealized PnL | R-risk | Opened |
-|------|------|------|-------|------|--------|----------------|--------|--------|
-| SOL/USD | long | 104.454002 | $73.7268 | $72.2288 | $79.7189 | −$3.84 (MTM $73.69) | $156.47 (1.50% eq) | 2026-06-17T17:00Z |
+(none)
 
-Portfolio risk-at-moment: **1.50%** of equity (cap 4%, 2.5% headroom).
-Open positions: **1 / 8** (strategy v0.4 max-concurrent 4 → 1/4 used; cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 1/2 — SOL in cluster).
+Portfolio risk-at-moment: **0.00%** of equity (cap 4%, full 4% headroom).
+Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 0/2).
 
-## Day summary — 2026-06-17 PT (Wed, morning routine)
+## Day summary — 2026-06-17 PT (Wed)
 
 | Metric | Value |
 |---|---|
-| Day realized PnL | **−$182.64** (HYPE stop-hit replay) |
-| Day unrealized PnL | **−$3.84** (SOL entry slippage only) |
-| Day total PnL | **−$186.48** |
-| Day % (vs $10,612.15 prior-day close) | **−1.74%** |
-| Trades opened today | **1** (SOL/USD long @ 17:00Z bar close) |
-| Trades closed today | **1** (HYPE/USD long stop-out @ 12:00Z bar pierce) |
-| Win rate today | **0%** (0/1 closed) |
-| Equity (current) | **$10,427.77** |
+| Day realized PnL | **−$382.51** (HYPE stop -$182.64 + SOL stop -$199.87) |
+| Day unrealized PnL | **$0.00** (flat) |
+| Day total PnL | **−$382.51** |
+| Day % (vs $10,612.15 prior-day close) | **−3.60%** |
+| Trades opened today | **1** (SOL/USD long @ 17:00Z bar close, stopped same session) |
+| Trades closed today | **2** (HYPE/USD stop-out @ 12:00Z; SOL/USD stop-out @ 18:00Z bar) |
+| Win rate today | **0%** (0/2 closed) |
+| Equity (current) | **$10,231.74** |
 | Equity peak (realized) | **$10,875.85** (unchanged) |
-| Drawdown from peak | **4.12%** |
-| Loss streak | **3** trading days (BTC Sun, ETH Tue, HYPE Wed) |
+| Drawdown from peak | **5.92%** |
+| Loss streak | **3** trading days (BTC Sun, ETH Tue, Wed [HYPE+SOL]) |
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-17 PT: **−$182.64 / −1.72%** — loss cap 5% (2.9x below), CLEAR.
-- Daily total (realized + unrealized) 2026-06-17 PT: **−$186.48 / −1.74%** — CLEAR.
-- Consecutive losing trading days: **3** (BTC Sun, ETH Tue, HYPE Wed; cap 7, 4 of headroom).
-- Max drawdown: **4.12%** from peak $10,875.85 (cap 25%, warn 12.5%) — CLEAR.
-- Equity floor: $10,427.77 > $7,500 floor — CLEAR.
-- Regime gate (rule 5a) — closed-bar 16:00Z snapshot via `indicators.py`: **12/15 positive, median +1.17%** → 5a PASS (12 > 4 floor); SBD CLEAR (median +1.17% > −1.0%, 12 > 1 positive).
-- Active 5b cooldowns: **HYPE 2026-06-17T12:00Z exit-stop-hit — 5b active until 2026-06-18T12:00Z**.
-- **Watchdog (this wake, run with --telegram):** 7 findings — 1× A heartbeat (routine-07 84h late vs 30h threshold), 6× D stale-MTM (variants v0.12-sbd-exit / v0.13-trend-confirm / v0.14-recovery-trend / v0.3-vol-compression / v0.5-cluster-cap-tight / v0.7-vol-comp-defensive — all 85h since last MTM). Informational; variant lag does not affect BULL state. Telegram alert auto-sent by watchdog process.
-- **All clear (kill switches).** routine-01-overnight 2026-06-17T17:52Z (Wed 10:52 PT — **4h52m late cron fire**, cron `0 6 * * 1-5` PT): **1 OPEN** (SOL fire-time-bar entry with rule-8 fallback after BTC cash-insufficient REJECT), **1 CLOSE** (HYPE stop-out replay at first piercing bar 11:00Z closed 12:00Z). Kraken REST clean (full 15-pair `indicators.py` scan + HYPE 1H history + SOL spread/ticker queries all <5s each). **Telegram: overnight digest sent** per routine §NOTIFY (new OPEN + stop-out CLOSE).
+- Daily realized 2026-06-17 PT: **−$382.51 / −3.60%** — loss cap 5% (1.40% headroom), CLEAR.
+- Daily total (realized + unrealized) 2026-06-17 PT: **−$382.51 / −3.60%** — CLEAR.
+- Consecutive losing trading days: **3** (BTC Sun, ETH Tue, Wed; cap 7, 4 of headroom).
+- Max drawdown: **5.92%** from peak $10,875.85 (cap 25%, warn 12.5%, 6.58% to warn) — CLEAR.
+- Equity floor: $10,231.74 > $7,500 floor — CLEAR.
+- Regime gate (rule 5a): **NOT EVALUATED THIS WAKE** — routine-02 midday does not run entry scans (position management only per CLAUDE.md routine spec).
+- Active 5b cooldowns: **SOL 2026-06-17T18:00Z exit-stop-hit — 5b active until 2026-06-18T18:00Z**; **HYPE 2026-06-17T12:00Z exit-stop-hit — 5b active until 2026-06-18T12:00Z**.
+- **All clear (kill switches).** routine-02-midday 2026-06-17T20:10Z (Wed 13:10 PT, on-schedule fire): **0 OPEN**, **1 CLOSE** (SOL intrabar stop pierce on 18:00Z bar, fill at stop × 0.9995 = $72.1927). Kraken REST clean (1× ticker + 1× 1H OHLCV both <2s). **Telegram: midday exit alert sent** per routine §NOTIFY.
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -102,16 +100,16 @@ Open positions: **1 / 8** (strategy v0.4 max-concurrent 4 → 1/4 used; cluster 
 
 ## Pending exit triggers
 
-| Pair | Next check | Trigger |
-|------|------------|---------|
-| SOL/USD | next 1H close (17:00Z+1h = 18:00Z Wed) | Exit 1 W22-G (2× 1H close < 20-EMA — first sub-EMA bar would be flagged) / Exit 2 stop $72.2288 / Exit 3 target $79.7189 / W22-H breakeven ratchet armed at unrealized R ≥ 2.0 (price ≥ $76.7228) |
+(no open positions — none active)
+
+Next entry-eligible scan: routine-03-eod Wed 2026-06-17T21:00 PT (= 2026-06-18T04:00Z cron).
 
 ## Rolling performance
 
 | Window | BULL return | BTC-hold return | Delta | Result |
 |--------|-------------|-----------------|-------|--------|
-| 7d | ≈ +1.43% realized (TAO +4.04R / +6.21%, BTC −0.60R / −0.43%, ETH −1.32R / −1.98%, HYPE −1.15R / −1.72%) + −0.04% unrealized | ≈ +4.0% (BTC ~$63.3k → $65.8k over 7d) | ≈ −2.6% | BULL underperforms 7d (today's HYPE stop compounds prior week's losses; SOL entry not yet contributing) |
-| 30d | ≈ +4.28% (inception $10k 2026-04-20; window fully computable) | ≈ −19.1% (BTC 2026-05-13 ~$81.3k → today $65.8k) | ≈ +23.4% | BULL well ahead |
+| 7d | ≈ −0.74% realized (TAO +4.04R / +6.21%, BTC −0.60R / −0.43%, ETH −1.32R / −1.98%, HYPE −1.15R / −1.72%, SOL −1.28R / −1.91%) | ≈ +4.0% (BTC ~$63.3k → $65.8k over 7d) | ≈ −4.7% | BULL underperforms 7d (today's double stop-out compounds prior week's losses) |
+| 30d | ≈ +2.32% (inception $10k 2026-04-20; window fully computable) | ≈ −19.1% (BTC 2026-05-13 ~$81.3k → today $65.8k) | ≈ +21.4% | BULL well ahead |
 | 90d | — | — | — | not computable (BULL inception 2026-04-20 = 58 days ago; window first computable ~2026-07-19) |
 
-(7d / 30d figures approximate; BTC closed-bar reference $65,814.2 this wake via `indicators.py`. The 7d delta has slipped to −2.6% from yesterday's near-tie, reflecting HYPE's −1.15R stop. The +23.4% 30d outperformance remains dominant, attributable to BULL avoiding the May breakdown via 5a/5a-SBD gates while BTC-hold ate the full move. SOL entry at $73.7268 puts BULL back in market exposure; 4R target $79.7189 ~+8.1% from entry.)
+(7d / 30d figures approximate. 30d outperformance compressed from yesterday's +23.4% by today's −3.60% day vs roughly flat BTC; still dominant +21.4%. Today's full reversal of the SOL entry — opened and stopped within ~2 hours of the entry-bar close — is the key event for the lessons file: the rule-8 cash-fallback entry got knocked out same-session by an SBD-shaped intraday selloff that wasn't visible on the 16:00Z entry-scan bar.)
