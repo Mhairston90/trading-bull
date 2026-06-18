@@ -3829,3 +3829,5 @@ User found BULL v0 + Basket Breakout Aggressive v1 missing from the leaderboard 
 2026-06-17T17:51:32Z | allocation | day-gate | not Sunday, skipping | no action
 
 2026-06-17T17:51:26Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-06-18T17:07:34Z | harness | day-gate | not Saturday, skipping | no action
