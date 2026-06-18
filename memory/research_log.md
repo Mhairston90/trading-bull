@@ -6,6 +6,7 @@
 2026-06-15T03:16:45Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-16T17:06:37Z | harness | day-gate | not Saturday, skipping | no action
 2026-06-17T01:02:38Z | idea-scan | day-gate | not Friday, skipping | no action
+2026-06-17T22:00Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-17T20:10Z | midday | SOL stop-out intrabar replay on 18:00Z bar (low $72.15 < stop $72.2288), fill $72.1927 (stop × 0.9995), CLOSE ts 18:00Z per pierce-bar convention. Net -$199.87 / -1.28R. Equity $10,231.74, DD 5.92% (warn 12.5%, 6.58% headroom), day -3.60% (warn 5%, 1.40% headroom). Loss streak 3 (cap 7, 4 headroom). All kill switches CLEAR. Cash 100% (0 open, 0/4 strategy cap, 0/8 portfolio). 5b cooldowns: SOL→2026-06-18T18:00Z, HYPE→2026-06-18T12:00Z. Telegram exit-alert sent.
 
 ## 2026-06-17T04:11Z — routine-03-eod (PT label 2026-06-16, on-schedule cron fire)
