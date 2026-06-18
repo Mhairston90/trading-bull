@@ -3,6 +3,70 @@
 > **Append-only.** News and external research notes per routine run.
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
+
+## 2026-06-18T14:05Z — routine-01-overnight (PT label 2026-06-18 Thu, on-schedule cron fire)
+
+**Slot identity `bull-01-overnight`.** Cron `0 6 * * 1-5` (Thu 06:00 PT / 13:00 UTC) — framework dispatched ~05 min late at ~14:05Z. Just-closed 1H bar = 13:00Z 2026-06-18.
+
+### Watchdog (mandatory, `--telegram`)
+
+7 findings; alert auto-sent by `watchdog.py`:
+- 1× A heartbeat: routine-07 last commit 104h ago (threshold 30h)
+- 6× D stale-MTM (variants v0.12-sbd-exit / v0.13-trend-confirm / v0.14-recovery-trend / v0.3-vol-compression / v0.5-cluster-cap-tight / v0.7-vol-comp-defensive — all 105h since last MTM)
+
+Same set as prior wake (now lagged by routine spacing). Informational; variant lag attributable to routine-07 scheduler gap, does not affect BULL state. Flagged for routine-07 catch-up.
+
+### Position management (open positions)
+
+Zero open positions at wake start. Zero exit checks needed.
+
+### Entry scan (W19-E analyst-role split)
+
+Per the 2026-06-12 amendment, indicator computation delegated to `python scripts/indicators.py` (authoritative table). Just-closed 1H bar = 13:00Z 2026-06-18.
+
+**Regime header (from indicators.py):** **0/15 positive 24h, median −2.26%** → **5a FAIL** (0 < 4 floor) **AND 5a-SBD ACTIVE** (positives ≤ 1 AND median ≤ −1.0%). All new entries rejected this wake. SBD-tightened exit (two-bar 9-EMA) would apply to any open positions, but BULL is flat. SBD persists from prior wake (EOD 04:11Z) — second consecutive wake under SBD.
+
+**Technical analyst pass:** Cascade deepened from EOD wake. Zero pairs are positive on 24h; median dropped from −3.37% (EOD) to −2.26% (now). Per-pair Pass/Fail at 13:00Z bar:
+
+| Pair | R1 EMA20 | R2 RSI≥55 | R2a RSI<80 | R3 4H EMA50 | R4a $≥2M | Eligible |
+|------|---------|-----------|-----------|------------|----------|----------|
+| BTC | FAIL −454.7 | FAIL (40.2) | OK | FAIL −825.1 | OK $151.59M | NO |
+| ETH | FAIL −13.75 | FAIL (40.9) | OK | PASS +8.19 | OK $32.61M | NO |
+| SOL | FAIL −0.86 | FAIL (40.0) | OK | PASS +0.25 | OK $32.04M | NO (also R5b active until 18:00Z) |
+| HYPE | FAIL −1.10 | FAIL (43.8) | OK | PASS +4.44 | OK $33.11M | NO (R5b cleared 12:00Z) |
+| XRP | FAIL −0.018 | FAIL (33.8) | OK | FAIL −0.018 | OK $25.92M | NO |
+| SUI | FAIL −0.024 | FAIL (30.2) | OK | FAIL −0.030 | OK $5.55M | NO |
+| TAO | FAIL −4.81 | FAIL (36.3) | OK | FAIL −6.58 | OK $6.25M | NO |
+| XDG | FAIL −0.0013 | FAIL (34.3) | OK | FAIL −0.0025 | OK $4.17M | NO |
+| NEAR | PASS +0.021 | FAIL (51.8) | OK | FAIL −0.028 | OK $4.35M | NO (R2 by 3.2 RSI, R3) |
+| ADA | FAIL −0.0023 | FAIL (38.5) | OK | FAIL −0.0082 | OK $7.28M | NO |
+| LINK | FAIL −0.056 | FAIL (43.2) | OK | FAIL −0.099 | FAIL $1.99M | NO |
+| LTC | FAIL −0.58 | FAIL (32.3) | OK | FAIL −0.63 | FAIL $1.28M | NO |
+| FARTCOIN | FAIL −0.0029 | FAIL (39.4) | OK | PASS +0.0012 | FAIL $0.51M | NO |
+| TRX | FAIL −0.0008 | FAIL (43.3) | OK | FAIL −0.0006 | FAIL $0.94M | NO |
+| AVAX | FAIL −0.099 | FAIL (37.0) | OK | FAIL −0.21 | FAIL $1.06M | NO |
+
+**Zero technical candidates** — no pair passes R1+R2 simultaneously this wake. NEAR is the only pair with R1 PASS but fails R2 (51.8 vs 55 floor) and R3. Regime gate moot since no candidate would advance regardless.
+
+**News pass:** Skipped — no technical candidates to screen. Informational only in v0.4.
+
+**Sentiment pass:** Skipped — no technical candidates to screen.
+
+**Decision:** **NO ENTRIES.** Regime 5a FAIL + SBD ACTIVE + zero technical candidates (R1+R2 simultaneous). Cascade deepened from EOD wake (0/15 positive now vs 1/15 EOD).
+
+### Estimated SBD avoided give-back (per 5a-SBD logging obligation)
+
+BULL holds no open positions. SBD avoided-give-back ledger = $0 this wake. SBD's defensive value not exercised since there is nothing open to defend. Second consecutive wake under SBD (activated EOD 04:11Z, still active).
+
+### Cooldown ledger
+
+- HYPE/USD 5b: cleared at 2026-06-18T12:00Z (re-eligible from a 5b standpoint; technicals still fail R1+R2 anyway).
+- SOL/USD 5b: active until 2026-06-18T18:00Z (~4h from now).
+
+### Universe refresh
+
+Not first of month (today is 06-18). No action.
+
 2026-06-15T03:16:45Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-16T17:06:37Z | harness | day-gate | not Saturday, skipping | no action
 2026-06-17T01:02:38Z | idea-scan | day-gate | not Friday, skipping | no action
