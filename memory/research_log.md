@@ -4,6 +4,63 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-06-18T20:07Z — routine-02-midday (PT label 2026-06-18 Thu, on-schedule cron fire)
+
+**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` PT = 20:00 UTC; framework dispatched ~07 min late at 20:07Z.
+
+### Position management
+
+Flat at wake (0 open positions, $10,231.74 cash). No MTM, no exit checks, no stop monitoring. Per routine spec, **no new entries permitted at midday** — entry responsibility belongs to routines #1 / #3.
+
+### Kraken multi-ticker (regime sweep)
+
+Snapshot at ~20:07Z across the 15-pair universe (24h % change):
+
+| Pair | last | 24h % |
+|------|-----:|------:|
+| NEAR | 2.2064 | **+1.21** |
+| TRX | 0.3197 | −0.61 |
+| LINK | 7.9485 | −1.70 |
+| ADA | 0.16338 | −2.00 |
+| BTC | 63079.7 | −2.13 |
+| ETH | 1709.99 | −2.23 |
+| LTC | 43.59 | −2.94 |
+| SOL | 69.67 | −3.21 |
+| XRP | 1.14676 | −3.26 |
+| HYPE | 68.78 | −3.28 |
+| XDG | 0.083133 | −3.39 |
+| TAO | 237.2538 | −3.81 |
+| FARTCOIN | 0.1248 | −5.10 |
+| SUI | 0.7249 | −5.43 |
+| AVAX | 6.363 | −5.98 |
+
+**Regime header:** **1/15 positive 24h (NEAR only), median −3.21%** → **5a FAIL** (1 < 4 floor) **AND 5a-SBD ACTIVE** (positives ≤ 1 AND median ≤ −1.0%). Third consecutive wake under SBD (activated 2026-06-18T04:11Z EOD, persisted through 14:05Z overnight, now). Conditions deepened mildly from overnight (median −2.26% → −3.21%; positives went from 0 to 1 but median dipped further).
+
+**Routine spec moots regime gate for midday** — no entries permitted regardless. Recorded for continuity.
+
+### Kill-switch verification
+
+- Daily realized 2026-06-18 PT: **$0.00 / 0.00%** (no closes today) — cap 5%, CLEAR.
+- Daily total (realized + unrealized): **$0.00 / 0.00%** — CLEAR.
+- Drawdown: **5.92%** from peak $10,875.85 — cap 25%, warn 12.5%, **6.58% to warn** — CLEAR.
+- Equity: **$10,231.74** > $7,500 floor — CLEAR.
+- Loss streak: **3 trading days** — cap 7, headroom 4 — CLEAR.
+- All clear; no kill-switch action.
+
+### Avoided-give-back ledger (SBD)
+
+This wake: **$0.00** (no open positions; SBD's tightened 9-EMA exit had no surface to act on).
+
+### Telegram
+
+Silent per routine spec: no kill-switch trip, no exit, no DD threshold cross (warn 12.5% not breached).
+
+### Summary
+
+0 OPEN, 0 CLOSE, 0 NEW ENTRIES (routine bars all entries at midday). Regime 5a FAIL + SBD ACTIVE persists into third wake. Next entry-eligible scan = routine-03-eod (Thu 2026-06-18T21:11Z PT 14:11 PT cron `11 14 * * 1-5`).
+
+---
+
 ## 2026-06-18T14:05Z — routine-01-overnight (PT label 2026-06-18 Thu, on-schedule cron fire)
 
 **Slot identity `bull-01-overnight`.** Cron `0 6 * * 1-5` (Thu 06:00 PT / 13:00 UTC) — framework dispatched ~05 min late at ~14:05Z. Just-closed 1H bar = 13:00Z 2026-06-18.

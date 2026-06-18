@@ -2,9 +2,9 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-18T14:05Z routine-01-overnight (PT label 2026-06-18 Thu, on-schedule cron fire — cron `0 6 * * 1-5` PT = 13:00 UTC). **No entries, no exits this wake** — flat into Thursday session. Entry scan: regime **5a FAIL** (0/15 positive 24h, median −2.26%) **AND 5a-SBD ACTIVE** (positives ≤1, median ≤ −1.0%) — second consecutive wake under SBD. Zero technical candidates (no pair passes R1+R2 simultaneously); regime gate moot. State unchanged from EOD: equity **$10,231.74**, drawdown **5.92%**, loss streak **3 trading days** (cap 7). Day 2026-06-18 PT starts flat. 5b cooldowns: HYPE cleared 12:00Z, SOL active until 18:00Z.
+> **Last rebuild:** 2026-06-18T20:07Z routine-02-midday (PT label 2026-06-18 Thu, on-schedule cron fire — cron `0 13 * * 1-5` PT = 20:00 UTC). **No entries, no exits this wake** — midday spec forbids entries; portfolio is flat so no MTM/exit work. Regime sweep (Kraken multi-ticker @ ~20:07Z): **5a FAIL** (1/15 positive — NEAR +1.21% — median −3.21%) **AND 5a-SBD ACTIVE** (positives ≤1, median ≤ −1.0%) — third consecutive wake under SBD. State unchanged: equity **$10,231.74**, drawdown **5.92%**, loss streak **3 trading days** (cap 7). All kill switches CLEAR. 5b cooldowns: HYPE cleared 12:00Z, SOL clears 18:00Z (cleared at midday wake start).
 
-> **Prior rebuild:** 2026-06-18T04:11Z routine-03-eod (PT label 2026-06-17). EOD scan: regime 5a FAIL + SBD ACTIVE. Day 06-17 close: −$382.51 / −3.60% (HYPE stop −$182.64 + SOL stop −$199.87). Equity $10,231.74, DD 5.92%, loss streak 3.
+> **Prior rebuild:** 2026-06-18T14:05Z routine-01-overnight. Regime 5a FAIL + SBD ACTIVE (0/15 positive, median −2.26%). 0 entries, 0 exits.
 
 ## Account
 
@@ -69,10 +69,10 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 - Consecutive losing trading days: **3** (BTC Sun, ETH Tue, Wed; cap 7, 4 of headroom). Thu starts flat — streak holds at 3 unless realized loss accrues by EOD.
 - Max drawdown: **5.92%** from peak $10,875.85 (cap 25%, warn 12.5%, 6.58% to warn) — CLEAR.
 - Equity floor: $10,231.74 > $7,500 floor — CLEAR.
-- Regime gate (rule 5a): **FAIL** — 0/15 positive 24h, median −2.26% (< 4/15 floor). All new entries rejected this wake.
-- Regime sub-state (rule 5a-SBD): **ACTIVE** — positives ≤1 AND median ≤ −1.0% (0/15 positive, median −2.26%). Second consecutive wake under SBD (activated 2026-06-18T04:11Z EOD). Exit 1-SBD (two-bar 9-EMA tightening) would apply to any open positions; BULL is flat so no defensive impact this wake. Avoided-give-back ledger this wake = $0 (no open positions).
-- Active 5b cooldowns: **HYPE cleared 2026-06-18T12:00Z**; **SOL 2026-06-17T18:00Z exit-stop-hit — 5b active until 2026-06-18T18:00Z** (~4h remaining at wake time).
-- **All clear (kill switches).** routine-01-overnight 2026-06-18T14:05Z (Thu 07:05 PT, on-schedule fire): **0 OPEN**, **0 CLOSE**, **0 NEW ENTRIES** (regime 5a FAIL + SBD ACTIVE; zero technical candidates regardless — no pair passes R1+R2 simultaneously). Kraken REST clean via `scripts/indicators.py` (15 pairs × 720 1H bars + 720 4H bars converged). Watchdog 7 informational findings (1× heartbeat routine-07 104h, 6× variant stale-MTM 105h) — auto-alerted by `watchdog.py --telegram`, does not affect BULL state.
+- Regime gate (rule 5a): **FAIL** — 1/15 positive 24h (NEAR +1.21%), median −3.21% (< 4/15 floor). Entries N/A at midday per routine spec.
+- Regime sub-state (rule 5a-SBD): **ACTIVE** — positives ≤1 AND median ≤ −1.0% (1/15 positive, median −3.21%). Third consecutive wake under SBD (activated 2026-06-18T04:11Z EOD, persisted through 14:05Z overnight, now). Conditions deepened mildly from overnight (median −2.26% → −3.21%). Exit 1-SBD would apply to open positions; BULL is flat, no defensive impact. Avoided-give-back ledger this wake = $0.
+- Active 5b cooldowns: **HYPE cleared 2026-06-18T12:00Z**; **SOL cleared 2026-06-18T18:00Z** (both cleared by midday wake; no cooldowns active).
+- **All clear (kill switches).** routine-02-midday 2026-06-18T20:07Z (Thu 13:07 PT, on-schedule fire): **0 OPEN**, **0 CLOSE**, **0 NEW ENTRIES** (midday spec). Kraken multi-ticker clean (15/15 pairs returned).
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -101,7 +101,7 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 
 (no open positions — none active)
 
-Next entry-eligible scan: routine-02-midday Thu 2026-06-18T12:00 PT (= 2026-06-18T19:00Z cron). 5b cooldown for SOL clears at 18:00Z (overlap with midday wake — eligible at midday). Regime 5a/SBD re-evaluated each wake — SBD may persist if cascade continues, or clear if any rally lifts positives ≥2 OR median above −1.0%.
+Next entry-eligible scan: routine-03-eod Thu 2026-06-18T14:11 PT (= 2026-06-18T21:11Z cron `11 14 * * 1-5`). All 5b cooldowns cleared. Regime 5a/SBD re-evaluated each wake — SBD may persist if cascade continues, or clear if any rally lifts positives ≥2 OR median above −1.0%.
 
 ## Rolling performance
 
