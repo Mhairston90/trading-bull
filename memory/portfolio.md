@@ -2,9 +2,9 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-17T20:10Z routine-02-midday (PT label 2026-06-17, on-schedule cron fire — cron `0 13 * * 1-5` PT = 20:00 UTC PDT, fire ~13:00 PT). **One exit processed:** SOL/USD intrabar stop-out on the 18:00Z 1H bar — bar low $72.15 < stop $72.2288, fill at stop × 0.9995 = **$72.1927**, CLOSE timestamp 2026-06-17T18:00:00Z (per intra-bar pierce convention used for ETH 06-16 and HYPE 06-17 replays). Net realized **-$199.87 / -1.28R**. SOL position fully flat. Per routine-02 mandate, **no new entries scanned** (midday is position-management only). Equity drops to **$10,231.74**, drawdown **5.92%** (peak unchanged $10,875.85, warn threshold 12.5% — 6.58% headroom). Day P&L 2026-06-17 PT (vs prior EOD $10,612.15): two realized losses — HYPE -$182.64 + SOL -$199.87 = **-$382.51 / -3.60%**. **Loss streak: 3 trading days** (BTC Sun, ETH Tue, HYPE+SOL Wed — Wed counted once). All kill switches CLEAR (daily-loss 1.4% headroom, DD 19.08% to halt, loss-day 4 of headroom). New 5b cooldown: SOL active until 2026-06-18T18:00:00Z; HYPE cooldown still active until 2026-06-18T12:00:00Z. **Telegram alert sent** per routine §NOTIFY (exit triggered intrabar — qualifies).
+> **Last rebuild:** 2026-06-18T04:11Z routine-03-eod (PT label 2026-06-17 Wed, on-schedule cron fire — cron `0 21 * * 1-5` PT = 04:00 UTC). **No entries, no exits this wake** — flat into close. EOD entry scan: regime **5a FAIL** (1/15 positive 24h, median −3.37%) **AND 5a-SBD ACTIVE** (positives ≤1, median ≤ −1.0%). All new entries rejected by regime gate; technical pass would have left only TRX (R4a-failed sub-$2M), so net entries = 0 regardless. State unchanged from midday: equity **$10,231.74**, day **−3.60%**, drawdown **5.92%**, loss streak **3 trading days** (cap 7). 5b cooldowns active: SOL→2026-06-18T18:00Z, HYPE→2026-06-18T12:00Z. **Mandatory EOD Telegram card sent** per routine §NOTIFY.
 
-> **Prior rebuild:** 2026-06-17T17:52Z routine-01-overnight. SOL OPEN @ $73.7268, 104.454002 units, stop $72.2288, target $79.7189 (rule-8 fallback after BTC cash-insufficient REJECT). HYPE stop-out replay -$182.64 / -1.15R.
+> **Prior rebuild:** 2026-06-17T20:10Z routine-02-midday. SOL stop-out intrabar replay on 18:00Z bar (fill $72.1927). Net −$199.87 / −1.28R. Equity to $10,231.74, DD 5.92%, day −3.60%.
 
 > **Prior rebuild (06-17 EOD label 06-16):** 2026-06-17T04:11Z routine-03-eod. HYPE EOD entry @ $74.4972 56.342770 units, stop $71.6714, target $85.8004.
 
@@ -71,9 +71,10 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 - Consecutive losing trading days: **3** (BTC Sun, ETH Tue, Wed; cap 7, 4 of headroom).
 - Max drawdown: **5.92%** from peak $10,875.85 (cap 25%, warn 12.5%, 6.58% to warn) — CLEAR.
 - Equity floor: $10,231.74 > $7,500 floor — CLEAR.
-- Regime gate (rule 5a): **NOT EVALUATED THIS WAKE** — routine-02 midday does not run entry scans (position management only per CLAUDE.md routine spec).
+- Regime gate (rule 5a): **FAIL** — 1/15 positive 24h, median −3.37% (< 4/15 floor). All new entries rejected this wake.
+- Regime sub-state (rule 5a-SBD): **ACTIVE** — positives ≤1 AND median ≤ −1.0%. Exit 1-SBD (two-bar 9-EMA tightening) would apply to any open positions; BULL is flat so no defensive impact this wake. Per 5a-SBD instrumentation requirement, avoided-give-back = $0 (no open positions). First SBD activation since 2026-05-19 archive period.
 - Active 5b cooldowns: **SOL 2026-06-17T18:00Z exit-stop-hit — 5b active until 2026-06-18T18:00Z**; **HYPE 2026-06-17T12:00Z exit-stop-hit — 5b active until 2026-06-18T12:00Z**.
-- **All clear (kill switches).** routine-02-midday 2026-06-17T20:10Z (Wed 13:10 PT, on-schedule fire): **0 OPEN**, **1 CLOSE** (SOL intrabar stop pierce on 18:00Z bar, fill at stop × 0.9995 = $72.1927). Kraken REST clean (1× ticker + 1× 1H OHLCV both <2s). **Telegram: midday exit alert sent** per routine §NOTIFY.
+- **All clear (kill switches).** routine-03-eod 2026-06-18T04:11Z (Wed 21:11 PT, on-schedule fire — PT label 2026-06-17): **0 OPEN**, **0 CLOSE**, **0 NEW ENTRIES** (regime 5a FAIL + SBD ACTIVE). Kraken REST clean via `scripts/indicators.py` (15 pairs × 720 1H bars + 720 4H bars converged). Watchdog 7 informational findings (1× heartbeat routine-07 94h, 6× variant stale-MTM 95h) — auto-alerted by `watchdog.py --telegram`, does not affect BULL state. **Telegram: mandatory EOD card sent** per routine §NOTIFY.
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -102,7 +103,7 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 
 (no open positions — none active)
 
-Next entry-eligible scan: routine-03-eod Wed 2026-06-17T21:00 PT (= 2026-06-18T04:00Z cron).
+Next entry-eligible scan: routine-01-overnight Thu 2026-06-18T05:00 PT (= 2026-06-18T12:00Z cron). 5b cooldowns clear in order: HYPE at 12:00Z (overlap with overnight wake — eligible at exact bar), SOL at 18:00Z (clear by midday wake). Regime 5a/SBD re-evaluated each wake — may persist if cascade continues.
 
 ## Rolling performance
 

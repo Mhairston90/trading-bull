@@ -9,6 +9,44 @@
 2026-06-17T22:00Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-17T20:10Z | midday | SOL stop-out intrabar replay on 18:00Z bar (low $72.15 < stop $72.2288), fill $72.1927 (stop × 0.9995), CLOSE ts 18:00Z per pierce-bar convention. Net -$199.87 / -1.28R. Equity $10,231.74, DD 5.92% (warn 12.5%, 6.58% headroom), day -3.60% (warn 5%, 1.40% headroom). Loss streak 3 (cap 7, 4 headroom). All kill switches CLEAR. Cash 100% (0 open, 0/4 strategy cap, 0/8 portfolio). 5b cooldowns: SOL→2026-06-18T18:00Z, HYPE→2026-06-18T12:00Z. Telegram exit-alert sent.
 
+## 2026-06-18T04:11Z — routine-03-eod (PT label 2026-06-17, on-schedule cron fire)
+
+**Slot identity `bull-03-eod`.** Cron `0 21 * * 1-5` (Wed 21:00 PT / 04:00 UTC Thu) — framework dispatched on-schedule ~11 min late at ~04:11Z. Per the routine-03 date-labeling guard, this wake is labeled with the **PT calendar date at fire time = 2026-06-17**. Just-closed 1H bar = 03:00Z 2026-06-18.
+
+### Watchdog (mandatory, `--telegram`)
+
+7 findings; alert auto-sent by `watchdog.py`:
+- 1× A heartbeat: routine-07 last commit 94h ago (threshold 30h)
+- 6× D stale-MTM (variants v0.12-sbd-exit / v0.13-trend-confirm / v0.14-recovery-trend / v0.3-vol-compression / v0.5-cluster-cap-tight / v0.7-vol-comp-defensive — all 95h since last MTM)
+
+Informational; same set as the 04:11Z prior-day EOD and the 20:10Z midday wakes. Variant lag attributable to scheduler gap, does not affect BULL state. Flagged for routine-07 catch-up.
+
+### Position management (open positions)
+
+Zero open positions at wake start (SOL closed at stop at midday 20:10Z replay; HYPE closed earlier at 12:00Z replay). Zero exit checks needed.
+
+### EOD entry scan (W19-E analyst-role split)
+
+Per the 2026-06-12 amendment, indicator computation delegated to `python scripts/indicators.py` (authoritative table). Just-closed 1H bar = 03:00Z 2026-06-18.
+
+**Regime header (from indicators.py):** **1/15 positive 24h, median −3.37%** → **5a FAIL** (1 < 4 floor) **AND 5a-SBD ACTIVE** (positives ≤ 1 AND median ≤ −1.0%). All new entries rejected this wake. SBD-tightened exit (two-bar 9-EMA) would apply to any open positions, but BULL is flat.
+
+**Technical analyst pass:** Only TRX/USD passes rules 1, 2, 2a, 3 (close $0.320753 > 20-EMA $0.320311, RSI14 57.6, 4H >50-EMA +0.000662). However TRX fails R4a ($0.97M < $2M floor) and would be regime-blocked under 5a anyway. Every other pair fails R1 (sub-EMA20) and/or R2 (RSI < 55) under broad cascade. The regime-rejection halts both news and sentiment passes (informational in v0.2 anyway).
+
+**Decision:** **NO ENTRIES.** Regime 5a FAIL + SBD ACTIVE — first SBD activation in this routine since 2026-05-19 archive period. Eligible-on-technicals pairs after regime gate would have been zero regardless (TRX-only and TRX is sub-liquidity).
+
+### Estimated SBD avoided give-back (per 5a-SBD logging obligation)
+
+BULL holds no open positions at SBD activation, so the avoided-give-back ledger is $0 this wake. SBD's defensive value (Exit 1-SBD = two-bar 9-EMA tightening) is not exercised since there is nothing open to defend. Recording the classification per the rule's instrumentation requirement.
+
+### Day summary 2026-06-17 PT (Wed, EOD)
+
+Trades opened today: 1 (SOL 17:00Z). Trades closed today: 2 (HYPE 12:00Z stop-out, SOL 18:00Z intrabar stop-out). Day PnL **−$382.51 / −3.60%**. Equity close **$10,231.74** (−5.92% from peak $10,875.85). Loss streak **3** trading days (BTC Sun, ETH Tue, Wed [HYPE+SOL]). All kill switches **CLEAR** (daily-loss 1.40% headroom to 5% cap; DD 6.58% to 12.5% warn / 19.08% to 25% halt; loss-streak 4 of 7 headroom). 5b cooldowns active: SOL→2026-06-18T18:00Z, HYPE→2026-06-18T12:00Z.
+
+Rolling: 7d BULL ≈ −0.74% vs BTC ≈ +4.0% → BULL −4.7% trailing. 30d BULL ≈ +2.32% vs BTC ≈ −19.1% → BULL +21.4% ahead.
+
+Telegram: mandatory EOD card sent.
+
 ## 2026-06-17T04:11Z — routine-03-eod (PT label 2026-06-16, on-schedule cron fire)
 
 **Slot identity `bull-03-eod`.** Cron `0 21 * * 1-5` (Tue 21:00 PT / 04:00 UTC Wed) — framework dispatched on-schedule ~11 min late at ~04:11Z. Per the routine-03 date-labeling guard, this wake is labeled with the **PT calendar date at fire time = 2026-06-16**. UTC entry timestamp = 2026-06-17T04:00Z (the closing time of the 03:00Z 1H bar, which is the just-closed bar at fire time).

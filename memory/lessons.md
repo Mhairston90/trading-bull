@@ -19,6 +19,22 @@ Each lesson is a section:
 
 ## Lessons
 
+### 2026-06-17 — SBD crystallized within 11h of a rule-8 fallback entry that didn't see it coming (SOL same-session stop-out)
+
+**Observation:** At the 16:00Z entry-scan (overnight routine fired late at 17:52Z), regime was 12/15 positive 24h with median +1.17% — solidly 5a PASS, SBD CLEAR. SOL was opened at 17:00Z bar-close ($73.7268, R-fallback after BTC cash-insufficient REJECT) under those regime conditions. By the 18:00Z 1H bar (just 1h later), SOL had pierced its 2×ATR stop intrabar (low $72.15 < stop $72.2288) for −1.28R / −$199.87. By the EOD 03:00Z scan (~10h later), regime had **collapsed to 1/15 positive / median −3.37%** — full 5a-SBD activation under both the ≤1 positive AND ≤−1.0% median conditions. The same-session SOL stop-out was the leading edge of a market-wide rotation that the 16:00Z snapshot did not yet show.
+
+**Evidence:** trade_log.md 2026-06-17T17:00:00Z OPEN SOL/USD entry-rule-v0.4-momentum-rule8-fallback; 2026-06-17T18:00:00Z CLOSE SOL/USD exit-stop-hit (−1.28R / −$199.87). research_log.md 2026-06-17T17:52Z entry-scan regime header (12/15 positive, median +1.17%) vs 2026-06-18T04:11Z EOD regime header (1/15 positive, median −3.37%) — both produced by `scripts/indicators.py`, same methodology, ~10h apart. Earlier today's ETH stop-out (06-16) and the HYPE 12:00Z stop-out also fit the same deteriorating-tape pattern but were locally diagnosed as individual stop-outs rather than regime cascade.
+
+**Implication:** Rule 5a is computed as a *point-in-time snapshot* at the entry-scan bar close. There is no rule that examines the *rate-of-change* of regime (e.g., "is the percentage of positive pairs collapsing across the last 2–4 hours?") to anticipate SBD activation before it triggers. The 16:00Z scan saw +1.17% median; by 18:00Z (when SOL stopped) and 03:00Z (when SBD activated), the median had fallen ~4.5 percentage points. Three mandate-compliant resolutions for routine #4 to evaluate:
+- (a) **SBD-leading-edge filter:** reject new entries when median 24h % change has fallen >X percentage points in the last 4h *and* current median is approaching the SBD threshold (e.g., median between −0.5% and −1.0%). Anticipates SBD by one wake.
+- (b) **Loss-streak coupling:** during a ≥3-day loss streak, require a stricter 5a floor (e.g., ≥6/15 positive instead of ≥4/15) to avoid stacking entries into a deteriorating tape. Today's wake would have been blocked at 16:00Z (12/15 OK under stricter floor) — but other recent entries on shakier regime would have been suppressed.
+- (c) **Same-session stop-loss reaction:** when a same-session stop-out occurs within 2h of a fresh entry (today: SOL opened 17:00Z, stopped 18:00Z), treat as a leading SBD signal and engage 5a-SBD posture (no new entries, tightened exits) for the next 24h regardless of headline regime numbers. This is a *behavior-based* SBD trigger to complement the *price-based* one.
+
+Today's wake is now flat with no open positions, so the SBD activation has no defensive impact. The lesson is forward-looking — for the next wake where SBD activates *during* the holding period, the 9-EMA two-bar tightening (exit rule 1-SBD) should fire materially earlier than the 20-EMA two-bar exit, and that quantitative delta is the success metric.
+
+**Score:** _(routine #4 will assign)_  
+**Status:** **active**
+
 ### 2026-06-17 — Cash insufficiency blocks BTC top-rank entry under strategy-mandated sizing (rule-8 fallback to SOL)
 
 **Observation:** Routine-01 fired 4h52m late at 17:52Z. HYPE was stopped earlier (12:00Z bar pierce, −1.15R / −$182.64), freeing cash to $10,431.61. Entry scan at 16:00Z bar: BTC (R1+R2+R3+R4a PASS, RSI 55.9) and SOL (R1+R2+R3+R4a PASS, RSI 55.8) both technically eligible under regime 12/15 positive / median +1.17%. R8 tiebreak: BTC rank 1 wins. **BTC sizing per strategy v0.4: 1.5% × $10,431.61 / $886.9 (2×ATR stop) = 0.176428 BTC → required notional $11,617.27 > available cash $10,431.61 by $1,185.66.** Mandate forbids leverage (no margin / no perps / spot only) → BTC structurally not fillable. Treated cash-insufficient as implicit pre-entry-check REJECT, advanced to next rule-8 eligible candidate (SOL), which fits cash ($7,701.06 < $10,431.61). SOL filled at 17:00Z bar-close timestamp.
