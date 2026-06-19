@@ -3965,3 +3965,87 @@ Mandatory daily EOD card sent (see commit body).
 ### Summary
 
 0 OPEN, 0 CLOSE, 0 NEW ENTRIES. Day flat. Equity unchanged at $10,231.74. Drawdown holds at 5.92%. Loss streak holds at 3. Regime 5a FAIL + SBD ACTIVE persists into **fourth consecutive wake** but conditions partially recovered (median −3.21% → −1.71%). Next entry-eligible scan = routine-01-overnight Fri 2026-06-19T14:00Z.
+
+## 2026-06-19T15:39Z — routine-01-overnight (PT label 2026-06-19 Fri, scheduler fired ~08:39 PT)
+
+**Slot identity `bull-01-overnight`** (verified: prompt body references overnight slot). Cron `0 6 * * 1-5` PT = 13:00Z UTC (DST PT = UTC-7); framework dispatched ~99 min late at 15:39Z (still PT 2026-06-19 08:39 — same calendar day, no date-label issue).
+
+### Position management
+
+Flat at wake (0 open positions, $10,231.74 cash). No MTM, no exit checks, no stop monitoring. No closes this routine.
+
+### Watchdog
+
+`python scripts/watchdog.py --telegram` → 7 findings, all informational:
+- A heartbeat: routine-07 last committed 130h ago (threshold 30h) — scheduler/MCP concern, not actionable from overnight.
+- D stale-MTM: 6 variant portfolios (v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive, v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend) have open positions but last rebuild 131h ago — variant-track is independent of main, processed by separate harness.
+
+Watchdog auto-sent its own Telegram alert.
+
+### Indicators sweep (scripts/indicators.py — authoritative per W22 amendment 2026-06-12)
+
+Full closed-bar Kraken REST sweep (720×1H + 720×4H per pair). Regime header from script:
+
+> **Regime: 2/15 positive 24h, median −1.86% → 5a FAIL; SBD CLEAR**
+
+Per-pair (sorted by 24h %):
+
+| Pair | 24h % | R1 (1H>EMA20) | R2 (RSI≥55) | R2a (<80) | R3 (4H>EMA50) | R4a notional |
+|------|------:|---|---|---|---|---|
+| TRX | +0.34 | FAIL | FAIL 49.8 | OK | PASS | OK $2.03M |
+| LTC | +0.23 | PASS | **PASS 57.7** | OK | FAIL | FAIL $1.32M |
+| HYPE | −0.64 | PASS | FAIL 53.0 | OK | PASS | OK $22.25M |
+| BTC | −0.95 | PASS | FAIL 52.4 | OK | FAIL | OK $155.56M |
+| XDG | −0.99 | PASS | FAIL 48.4 | OK | FAIL | OK $5.63M |
+| LINK | −1.47 | PASS | FAIL 48.2 | OK | FAIL | FAIL $1.46M |
+| ADA | −1.79 | FAIL | FAIL 47.0 | OK | FAIL | OK $6.15M |
+| ETH | −1.86 | PASS | FAIL 49.6 | OK | FAIL | OK $30.83M |
+| XRP | −2.04 | FAIL | FAIL 44.6 | OK | FAIL | OK $20.29M |
+| SOL | −2.72 | PASS | FAIL 47.2 | OK | FAIL | OK $32.37M |
+| SUI | −3.58 | FAIL | FAIL 40.7 | OK | FAIL | OK $6.68M |
+| NEAR | −5.09 | FAIL | FAIL 47.0 | OK | FAIL | OK $3.81M |
+| TAO | −5.76 | FAIL | FAIL 35.0 | OK | FAIL | OK $4.89M |
+| FARTCOIN | −5.95 | FAIL | FAIL 43.0 | OK | FAIL | FAIL $0.63M |
+| AVAX | −7.21 | FAIL | FAIL 39.4 | OK | FAIL | OK $3.52M |
+
+**Regime headline:** 2/15 positive (LTC +0.23%, TRX +0.34%), median −1.86%, mean ≈ −2.55%.
+
+- **5a (rule):** **FAIL** — 2 < 4 floor. All new entries rejected this wake.
+- **5a-SBD (sub-state):** **CLEAR** — positives = 2 (> 1 ceiling). **SBD clears after 4 consecutive wakes** (activated 2026-06-18T04:11Z EOD; persisted through 14:05Z overnight + 20:07Z midday + 05:16Z EOD; now lifted at 15:39Z). Exit 1-SBD (9-EMA two-bar) reverts to default Exit 1 (20-EMA two-bar) — irrelevant this wake since BULL is flat.
+
+### Entry scan (W19-E analyst-role split)
+
+- **Technical:** Rule 5a FAIL blocks all new entries this wake — no per-pair candidate proceeds to news/sentiment. Closest near-PASS = LTC (R1 PASS, R2 PASS RSI 57.7, R2a OK, R3 FAIL by −0.91 vs 4H EMA50 44.37, R4a FAIL notional $1.32M < $2.0M floor). Even with 5a lifted LTC would be rejected on rules 3 + 4a. No other pair clears rules 1 + 2 simultaneously.
+- **News:** N/A — no technical-PASS candidates.
+- **Sentiment:** N/A — no technical-PASS candidates.
+- **Decision:** **0 entries**. Rule-8 fallback not invoked (no pair passed rules 1–7).
+
+### SBD clearance — observation (informational)
+
+5a-SBD just cleared after 4 wakes of active state. Defensive Exit 1-SBD had **no surface to act on this episode** (BULL was flat throughout the 4-wake window). The SBD episode therefore contributed $0 to the avoided-give-back ledger; its value, if any, is in the gated-block of would-be entries (a counterfactual not directly measurable). This is the second clean SBD episode (first: 2026-05-19 → 05-20) where BULL happened to be flat during the window. The data point is logged; no rule change implied.
+
+### Kill-switch verification
+
+- Daily realized 2026-06-19 PT: **$0.00 / 0.00%** (no closes today) — cap 5%, CLEAR.
+- Daily total (realized + unrealized): **$0.00 / 0.00%** — CLEAR.
+- Drawdown: **5.92%** from peak $10,875.85 (cap 25%, warn 12.5%, 6.58% to warn) — CLEAR.
+- Equity: **$10,231.74** > $7,500 floor — CLEAR.
+- Loss streak: **3 trading days** (cap 7, headroom 4) — CLEAR. Fri opens flat; streak hold until first close today.
+- Active 5b cooldowns: none.
+- All clear; no kill-switch action.
+
+### First-of-month universe refresh
+
+Today is the 19th — not first weekday of month. Universe refresh skipped. Last refresh 2026-06-01 (top 15 stable). Next refresh trigger 2026-07-01.
+
+### Lessons
+
+No new lesson today. Day starts flat, no trades; SBD clearance is logged as research-log observation, not a lesson candidate.
+
+### Telegram
+
+Silent. NOTIFY criteria (Ring 3 trip / new OPEN / new CLOSE / news ACTIONABLE / universe refresh) all unmet. Watchdog sent its own alert independently.
+
+### Summary
+
+0 OPEN, 0 CLOSE, 0 NEW ENTRIES. 5a FAIL blocks all entries; SBD clears after 4-wake episode (informational). LTC is the closest near-PASS but fails R3 + R4a. Equity unchanged at $10,231.74. Drawdown 5.92%. Loss streak 3. Next entry-eligible scan = routine-02-midday Fri 2026-06-19 (read-only) → routine-03-eod Fri 2026-06-19T04:00Z UTC for next entry pass.
