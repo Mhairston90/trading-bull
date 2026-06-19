@@ -4049,3 +4049,4 @@ Silent. NOTIFY criteria (Ring 3 trip / new OPEN / new CLOSE / news ACTIONABLE / 
 ### Summary
 
 0 OPEN, 0 CLOSE, 0 NEW ENTRIES. 5a FAIL blocks all entries; SBD clears after 4-wake episode (informational). LTC is the closest near-PASS but fails R3 + R4a. Equity unchanged at $10,231.74. Drawdown 5.92%. Loss streak 3. Next entry-eligible scan = routine-02-midday Fri 2026-06-19 (read-only) → routine-03-eod Fri 2026-06-19T04:00Z UTC for next entry pass.
+2026-06-19T17:06:52Z | harness | day-gate | not Saturday, skipping | no action
