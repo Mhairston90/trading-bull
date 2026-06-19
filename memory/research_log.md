@@ -3890,3 +3890,78 @@ User found BULL v0 + Basket Breakout Aggressive v1 missing from the leaderboard 
 2026-06-18T17:07:34Z | harness | day-gate | not Saturday, skipping | no action
 2026-06-18T17:40:52Z | allocation | day-gate | not Sunday, skipping | no action
 2026-06-19T01:03:02Z | idea-scan | day-gate | not Friday, skipping | no action
+
+## 2026-06-19T05:16Z — routine-03-eod (PT label 2026-06-18 Thu, scheduler fired ~22:16 PT)
+
+**Slot identity `bull-03-eod`** (verified: prompt body references EOD slot, not overnight). Cron `0 21 * * 1-5` PT = 04:00Z UTC; framework dispatched ~76 min late at 05:16Z (still PT 2026-06-18 22:16 — same calendar day, no date-label issue).
+
+### Position management
+
+Flat at wake (0 open positions, $10,231.74 cash). No MTM, no exit checks, no stop monitoring. No closes today.
+
+### Kraken multi-ticker (EOD regime sweep)
+
+Snapshot at ~05:16Z across the 15-pair universe (24h % change, sorted):
+
+| Pair | last | 24h % |
+|------|-----:|------:|
+| TRX | 0.320518 | **+0.06** |
+| BTC | 62554.10 | −0.53 |
+| ETH | 1694.45 | −0.85 |
+| LTC | 43.42 | −0.91 |
+| XDG | 0.082473 | −1.18 |
+| XRP | 1.12896 | −1.39 |
+| SOL | 68.54 | −1.58 |
+| LINK | 7.86978 | −1.71 |
+| ADA | 0.160546 | −1.79 |
+| SUI | 0.7118 | −2.33 |
+| HYPE | 66.19 | −3.02 |
+| FARTCOIN | 0.1205 | −3.06 |
+| TAO | 227.8737 | −3.40 |
+| AVAX | 6.061 | −3.93 |
+| NEAR | 2.1219 | −5.07 |
+
+**Regime header:** **1/15 positive 24h (TRX only at +0.06%), median −1.71%** → **5a FAIL** (1 < 4 floor) **AND 5a-SBD ACTIVE** (positives ≤ 1 AND median ≤ −1.0%). **Fourth consecutive wake under SBD** (activated 2026-06-18T04:11Z EOD; persisted through 14:05Z overnight, 20:07Z midday, now). Conditions partially recovered from midday (median −3.21% → −1.71%; positives held at 1) but the SBD threshold still breaches on both axes.
+
+### EOD entry scan (W19-E analyst-role split)
+
+Rule 5a blocks all new entries this wake. Per `strategy.md` rule 5a, if positives < 4 of 15 the entry-scan rejects all candidates. No technical / news / sentiment passes warranted — the gate is universal and predates per-pair evaluation.
+
+- **Technical:** N/A — gated by 5a FAIL.
+- **News:** N/A — no candidates.
+- **Sentiment:** N/A — no candidates.
+- **Decision:** **0 entries**. Rule-8 fallback not invoked (no pair passed rules 1–7).
+
+### Kill-switch verification
+
+- Daily realized 2026-06-18 PT: **$0.00 / 0.00%** (no closes today) — cap 5%, CLEAR.
+- Daily total (realized + unrealized): **$0.00 / 0.00%** — CLEAR.
+- Drawdown: **5.92%** from peak $10,875.85 — cap 25%, warn 12.5%, **6.58% to warn** — CLEAR.
+- Equity: **$10,231.74** > $7,500 floor — CLEAR.
+- Loss streak: **3 trading days** — cap 7, headroom 4 — CLEAR. Thu closes flat; streak holds at 3 (no new realized loss).
+- All clear; no kill-switch action.
+
+### Avoided-give-back ledger (SBD)
+
+This wake: **$0.00** (no open positions; SBD's tightened 9-EMA exit had no surface to act on).
+
+### Watchdog
+
+`python scripts/watchdog.py --telegram` returned 7 findings, all informational stale-state alerts (not actionable from EOD routine):
+
+- A heartbeat: routine-07 last committed 119h ago (threshold 30h) — scheduler/MCP concern; not in this routine's scope.
+- D stale-MTM: 6 variant portfolios (v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive, v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend) have open positions with last rebuild 120h ago — variant-track is independent of main and processed by separate harness; not actionable from EOD.
+
+Watchdog auto-sent its own Telegram alert with these findings.
+
+### Lessons
+
+No new lessons. Day was flat (no trades); the SBD-leading-edge observation from 2026-06-17 still stands and is the most recent active lesson. Avoiding lessons-bloat per the cap.
+
+### Telegram
+
+Mandatory daily EOD card sent (see commit body).
+
+### Summary
+
+0 OPEN, 0 CLOSE, 0 NEW ENTRIES. Day flat. Equity unchanged at $10,231.74. Drawdown holds at 5.92%. Loss streak holds at 3. Regime 5a FAIL + SBD ACTIVE persists into **fourth consecutive wake** but conditions partially recovered (median −3.21% → −1.71%). Next entry-eligible scan = routine-01-overnight Fri 2026-06-19T14:00Z.
