@@ -2,9 +2,9 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-19T15:39Z routine-01-overnight (PT label 2026-06-19 Fri, scheduler fired ~08:39 PT — cron `0 6 * * 1-5` PT, ~99 min late). **No entries, no exits this wake** — portfolio flat at wake (no MTM/exit work). Regime sweep (scripts/indicators.py — 720-bar 1H+4H Kraken REST authoritative): **5a FAIL** (2/15 positive — LTC +0.23%, TRX +0.34% — median −1.86%) **but 5a-SBD CLEAR** (positives = 2, > 1 ceiling). **SBD clears after 4 consecutive wakes** (2026-06-18T04:11Z EOD → 14:05Z overnight → 20:07Z midday → 05:16Z EOD; lifted now). Closest near-PASS = LTC (R1 PASS, R2 PASS RSI 57.7, R3 FAIL by −0.91 vs 4H EMA50, R4a FAIL notional $1.32M < $2.0M). State unchanged: equity **$10,231.74**, drawdown **5.92%**, loss streak **3 trading days** (cap 7 — Fri opens flat). All kill switches CLEAR. 5b cooldowns: all clear.
+> **Last rebuild:** 2026-06-19T20:07Z routine-02-midday (PT label 2026-06-19 Fri, scheduler fired ~07 min late at 20:07Z — cron `0 13 * * 1-5` PT = 20:00 UTC). **Position management only — no entries permitted per routine spec.** Portfolio flat at wake; **MTM and exit-check skipped (no open positions to evaluate)**. Equity **$10,231.74** (unchanged), drawdown **5.92%** (unchanged — flat for 4 consecutive wakes since SOL stop-out 2026-06-17T18:00Z), loss streak **3 trading days** (cap 7; Fri flat through midday, streak holds). All kill switches CLEAR. Regime gate 5a/SBD not re-evaluated (no entry decision at midday); next re-check at routine-03-eod Fri 21:00 PT = Sat 04:00 UTC.
 
-> **Prior rebuild:** 2026-06-19T05:16Z routine-03-eod. Regime 5a FAIL + SBD ACTIVE (1/15 positive — TRX — median −1.71%, fourth SBD wake). 0 entries, 0 exits.
+> **Prior rebuild:** 2026-06-19T15:39Z routine-01-overnight. Regime 5a FAIL (2/15 positive, median −1.86%) + SBD CLEAR (positives = 2 > 1 ceiling; SBD lifted after 4-wake episode). 0 entries, 0 exits.
 
 ## Account
 
@@ -72,7 +72,7 @@ Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster 
 - Regime gate (rule 5a): **FAIL** — 2/15 positive 24h (LTC +0.23%, TRX +0.34%), median −1.86% (< 4/15 floor). No entries at overnight scan.
 - Regime sub-state (rule 5a-SBD): **CLEAR** — positives = 2 (> 1 ceiling). **SBD lifted after 4 consecutive wakes** (2026-06-18T04:11Z EOD → 14:05Z overnight → 20:07Z midday → 05:16Z EOD; clear now at 15:39Z). Exit 1 reverts from 9-EMA two-bar (SBD) to 20-EMA two-bar (default). No open positions affected.
 - Active 5b cooldowns: none.
-- **All clear (kill switches).** routine-01-overnight 2026-06-19T15:39Z (Fri 08:39 PT): **0 OPEN**, **0 CLOSE**, **0 NEW ENTRIES** (5a FAIL bars all entries; SBD clears). Indicators script clean (15/15 pairs with 720 4H bars). Watchdog: 7 stale findings (routine-07 heartbeat 130h, six variant portfolios MTM stale — informational, not actionable).
+- **All clear (kill switches).** routine-02-midday 2026-06-19T20:07Z (Fri 13:07 PT): **0 OPEN**, **0 CLOSE**, **0 MTM action** (flat — no positions to mark or exit-check). Regime gate not re-evaluated at midday (entry decision belongs to routines #1/#3). Drawdown trajectory: 5.92% × 4 consecutive wakes (no movement since SOL stop-out 2026-06-17T18:00Z). Halfway-to-warn ($9,516.37) is $715.37 below current cash.
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 

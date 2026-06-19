@@ -4051,3 +4051,48 @@ Silent. NOTIFY criteria (Ring 3 trip / new OPEN / new CLOSE / news ACTIONABLE / 
 0 OPEN, 0 CLOSE, 0 NEW ENTRIES. 5a FAIL blocks all entries; SBD clears after 4-wake episode (informational). LTC is the closest near-PASS but fails R3 + R4a. Equity unchanged at $10,231.74. Drawdown 5.92%. Loss streak 3. Next entry-eligible scan = routine-02-midday Fri 2026-06-19 (read-only) → routine-03-eod Fri 2026-06-19T04:00Z UTC for next entry pass.
 2026-06-19T17:06:52Z | harness | day-gate | not Saturday, skipping | no action
 2026-06-19T17:40:29Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-06-19T20:07Z — routine-02-midday (PT label 2026-06-19 Fri, on-schedule cron fire)
+
+**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` PT = 20:00 UTC; framework dispatched ~07 min late at 20:07Z. **Position management only — no entries permitted per routine spec.**
+
+### State at wake
+
+Portfolio **flat** (0 open positions, carried forward from routine-01-overnight 2026-06-19T15:39Z). Cash $10,231.74. Equity $10,231.74. Drawdown 5.92% from peak $10,875.85. Loss streak 3 trading days (BTC Sun, ETH Tue, Wed [HYPE+SOL]; Thu flat, Fri flat through midday).
+
+### MTM + exits
+
+**Skipped — no open positions to mark or evaluate.** No `kraken_multi_ticker` call needed; routine spec scopes MTM to "pairs with open positions". Strategy v0.4 Exit rules 1/1-SBD/2/3 have no surface to act on.
+
+### Kill-switch verification
+
+- Daily realized 2026-06-19 PT: **$0.00 / 0.00%** (no closes today) — cap 5%, CLEAR.
+- Daily total (realized + unrealized): **$0.00 / 0.00%** (no positions) — CLEAR.
+- Drawdown: **5.92%** from peak $10,875.85 — cap 25%, warn 12.5%, **6.58% headroom to warn**. CLEAR.
+- Equity: **$10,231.74** > $7,500 floor (headroom $2,731.74 / 27.32%) — CLEAR.
+- Loss streak: **3 trading days** (cap 7, headroom 4) — CLEAR. Fri midday: still flat, streak holds.
+- Active 5b cooldowns: none (no recent stop-outs within 24h).
+- **All clear (Ring 3).** No alerts.
+
+### Entry scan
+
+**Suppressed per routine spec.** Routine-02-midday is position management only — "DO NOT OPEN NEW POSITIONS IN MIDDAY". Entry responsibility belongs to routines #1 (overnight) and #3 (EOD). Regime 5a/SBD state not re-evaluated this wake (no entry decision to gate); will be re-checked at routine-03-eod tonight (Fri 2026-06-19T04:00Z UTC = Fri 21:00 PT scheduler fire).
+
+### Drawdown trajectory (informational)
+
+| Wake | Equity | DD from peak | Δ |
+|---|---|---|---|
+| 2026-06-18T20:07Z midday | $10,231.74 | 5.92% | — |
+| 2026-06-19T05:16Z eod | $10,231.74 | 5.92% | flat |
+| 2026-06-19T15:39Z overnight | $10,231.74 | 5.92% | flat |
+| 2026-06-19T20:07Z midday | $10,231.74 | 5.92% | flat |
+
+Four consecutive wakes flat at DD 5.92% — peak hasn't moved (last set 2026-06-13T09:00Z TAO 4R), realized PnL hasn't moved since the SOL stop-out 2026-06-17T18:00Z. Halfway-to-warn threshold (12.5% / equity ≤ $9,516.37) is $715.37 below current cash.
+
+### Telegram
+
+Silent. NOTIFY criteria all unmet: no Ring 3 trip, no exit happened (none possible — flat), no drawdown threshold crossed (5.92% well below 12.5% warn).
+
+### Summary
+
+0 OPEN, 0 CLOSE, 0 MTM action (flat). Equity unchanged at $10,231.74. Drawdown 5.92%. Loss streak 3. Next position management = routine-03-eod Fri 21:00 PT (= Sat 04:00 UTC). Midday silent.
