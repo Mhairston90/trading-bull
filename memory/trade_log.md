@@ -52,3 +52,4 @@
 | 2026-06-17T12:00:00Z | CLOSE | HYPE/USD | long | 56.342770 | 71.6356 | — | — | -1.15 | -182.64 | exit-stop-hit-missed-scheduler-replay |
 | 2026-06-17T17:00:00Z | OPEN | SOL/USD | long | 104.454002 | 73.7268 | 72.2288 | 79.7189 | — | — | entry-rule-v0.4-momentum-rule8-fallback |
 | 2026-06-17T18:00:00Z | CLOSE | SOL/USD | long | 104.454002 | 72.1927 | — | — | -1.28 | -199.87 | exit-stop-hit |
+| 2026-06-20T13:00:00Z | OPEN | SOL/USD | long | 121.5347 | 71.17 | 69.9072 | 76.2212 | — | — | entry-rule-v0.4-momentum |

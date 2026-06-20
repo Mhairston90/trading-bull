@@ -4096,3 +4096,102 @@ Silent. NOTIFY criteria all unmet: no Ring 3 trip, no exit happened (none possib
 ### Summary
 
 0 OPEN, 0 CLOSE, 0 MTM action (flat). Equity unchanged at $10,231.74. Drawdown 5.92%. Loss streak 3. Next position management = routine-03-eod Fri 21:00 PT (= Sat 04:00 UTC). Midday silent.
+
+## 2026-06-20T14:42Z — routine-03-eod (PT label 2026-06-19 Fri EOD, scheduler fired ~10h42m late at Sat 07:42 PT)
+
+**Slot identity `bull-03-eod`.** Cron `0 21 * * 1-5` PT = Fri 21:00 PT = Sat 04:00 UTC. Actual fire Sat 14:42Z = Sat 07:42 PT — late by ~10h42m (harness drift; root cause for routine-07 not investigated this wake — flagged by watchdog separately, see Watchdog section). Routine continues with freshest 1H signal-bar 13:00Z, not the original-fire 04:00Z bar. Date label per the date-labeling guard: **2026-06-19 PT** (the trading day this EOD closes), not the UTC date 06-20.
+
+### Watchdog
+
+`python scripts/watchdog.py --telegram` ran at routine open. **7 findings**:
+- A heartbeat: routine-07 last committed 149h ago (threshold 30h) — note for next routine-04 review.
+- D stale-MTM ×6: variants v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive all have open positions with last rebuild 150h ago (threshold 30h).
+Telegram alert sent independently by watchdog. **Not actioned this wake** — primary BULL paper account is the priority; variant maintenance is a separate concern.
+
+### State at wake
+
+Portfolio entered the wake **flat** (carried forward from routine-02-midday 2026-06-19T20:07Z: cash $10,231.74, DD 5.92%, loss streak 3). Equity peak unchanged at $10,875.85 (2026-06-13T09:00Z TAO 4R). Equity floor headroom 27.32% to $7,500.
+
+### MTM + exits
+
+**No positions at wake → MTM/exit-check skipped before entry.** Post-entry MTM applies to SOL only (see below).
+
+### Kill-switch verification (pre-entry)
+
+- Daily realized 2026-06-19 PT: **$0.00 / 0.00%** — CLEAR (cap 5%).
+- Daily total (realized + unrealized): **$0.00 / 0.00%** at wake — CLEAR.
+- Drawdown: **5.92%** at wake — CLEAR (cap 25%, warn 12.5%, 6.58% headroom to warn).
+- Equity: **$10,231.74** > $7,500 floor — CLEAR.
+- Loss streak: **3 trading days** (cap 7, headroom 4) — CLEAR.
+- Active 5b cooldowns: none (last stop-out SOL 2026-06-17T18:00Z = 68h ago, well past 24h re-entry block).
+- All clear; proceed to entry scan.
+
+### Entry scan — W19-E analyst-role split
+
+Indicators run twice this wake (initial 11:17Z snapshot was 3h25m stale by the time downstream tool calls completed; re-ran fresh at 14:42Z). Both snapshots logged here for the leading-edge regime observation (see Lessons section).
+
+**Snapshot A — 11:17Z (stale by entry time):**
+Regime **15/15 positive, median +1.96%** → 5a PASS, SBD CLEAR (strong-confirmation tape). Full-PASS candidates: ETH (R2 RSI 61.1), SOL (R2 RSI 65.1), HYPE (R2 RSI 58.5). Rule 8 top-rank ETH; cash-fit check FAIL (ETH required notional $14.2k > cash $10.2k — same constraint as lesson 2026-06-17 BTC). Rule-8 fallback would have picked SOL.
+
+**Snapshot B — 14:42Z (used for entry decision):**
+Regime **9/15 positive, median +0.13%** → 5a PASS, SBD CLEAR (weakened −6 positives, −1.83pp median in 3h25m — flagged as leading-edge pattern in Lessons). Full-PASS candidates:
+- **SOL/USD** — R1 PASS +0.4766 (close $71.17 > EMA20 $70.6934 by 0.67%), R2 PASS RSI 58.0 (+3.0 over floor), R2a OK (RSI < 80), R3 PASS +1.51 (close > 4H EMA50 $70.2302 by 2.15%, 720 bars converged), R3-20 PASS, R4a OK ($18.57M notional). Margins all non-borderline. **ELIGIBLE.**
+- ETH dropped between snapshots (RSI 61.1 → 52.0, R2 FAIL).
+- HYPE dropped between snapshots (R1 PASS → FAIL, R2 PASS → FAIL).
+- TRX R1+R2+R3 PASS but R4a FAIL ($0.76M < $2.0M).
+
+**Single eligible candidate: SOL.** Rule 8 (top-rank) trivially satisfied. Rule 6a cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK}: 0→1, cap 2 ✓. Rule 6 max-concurrent: 0→1, cap 4 ✓. Rule 5b: SOL last stop-out 2026-06-17T18:00Z = 68h ago, past 24h ✓.
+
+**Cash-fit pre-check** (per lesson 2026-06-17): SOL stop dist $1.2628, size = (0.015 × $10,231.74) / $1.2628 = **121.5347 SOL**. Notional = 121.5347 × $71.17 = **$8,649.62 < cash $10,231.74** ✓ FITS.
+
+**Technical decision (Snapshot B):** ENTER SOL/USD long, size 121.5347, entry $71.17 (13:00Z bar-close), initial stop $69.9072 (2×ATR), target $76.2212 (+4R), risk $153.48 = 1.500% of equity.
+
+### News scan — SOL (W19-E, informational only)
+
+**Skipped this wake** due to late-fire context and to keep the routine focused on getting the entry recorded promptly. Per strategy v0.2: news scan does NOT veto entries; it is purely informational. Flagged for next overnight routine if SOL is still open.
+
+### Sentiment — SOL (W19-E, informational only)
+
+Live Kraken ticker @ 14:42Z: SOL bid $70.93 / ask $70.94 / spread 1.41 bps. Spread is tight (well under 10 bp warning threshold). 24h volume notional $17.94M (deep). **Supportive sentiment proxy — no warning.**
+
+### Entry execution
+
+trade_log.md row appended:
+`| 2026-06-20T13:00:00Z | OPEN | SOL/USD | long | 121.5347 | 71.17 | 69.9072 | 76.2212 | — | — | entry-rule-v0.4-momentum |`
+
+Post-entry state:
+- Cash: $10,231.74 − $8,649.62 = **$1,582.12**
+- Position MTM @ last $70.92: 121.5347 × $70.92 = **$8,619.24**
+- Unrealized: 121.5347 × ($70.92 − $71.17) = **−$30.38** = **−0.198R**
+- Equity: $1,582.12 + $8,619.24 = **$10,201.36**
+- Drawdown: ($10,875.85 − $10,201.36) / $10,875.85 = **6.20%** (was 5.92%; +0.28pp from SOL slip)
+
+### Post-entry kill-switch verification
+
+- Daily realized: $0.00 / 0.00% — CLEAR.
+- Daily total (realized + unrealized): **−$30.38 / −0.30%** — CLEAR (cap 5%, headroom 4.70%).
+- Drawdown: **6.20%** — CLEAR (cap 25%, warn 12.5%, **6.30% to warn**).
+- Equity: $10,201.36 > $7,500 floor — CLEAR.
+- Portfolio risk-at-moment: **1.50%** (SOL only) — CLEAR (cap 4%, headroom 2.50%).
+- All clear (Ring 3). No alerts.
+
+### First-of-month universe refresh
+
+Today is the 19th (PT label) / 20th (UTC) — not first weekday of month. Universe refresh skipped. Last refresh 2026-06-01 (top 15 stable). Next refresh trigger 2026-07-01.
+
+### Monthly archive
+
+Today PT (Fri 06-19) is not last trading day of June (will be Mon 06-30 or whichever weekday is last). Archive skipped.
+
+### Lessons (this wake)
+
+1 candidate evaluated, **0 appended** to lessons.md:
+- **Regime-deterioration during stale-signal window** (candidate): Between 11:17Z snapshot (15/15 positive, median +1.96%) and 14:42Z re-snapshot (9/15 positive, median +0.13%), regime weakened −6 positives and −1.83pp median in 3h25m. The 11:17Z snapshot fed an entry decision tree (ETH top-rank → cash-blocked → SOL fallback) that became moot by 14:42Z (ETH and HYPE both dropped out). This is a fresh instance of the same dynamic in lesson 2026-06-17 (SBD-leading-edge pattern). **Not promoted to a new lessons.md entry** because (i) lesson 2026-06-17 already captures the recommendation set (a/b/c — SBD-leading-edge filter, loss-streak coupling, same-session stop-loss reaction) and is still **active** awaiting routine-04 codification; (ii) this wake's pattern adds an instance count but not new mechanism. **Reinforces lesson 2026-06-17 score.** Routine-04 should now have 2 instances (06-17 SOL + 06-20 regime-decline-during-stale-signal) when scoring.
+
+### Telegram
+
+EOD card sent — see NOTIFY commit. Watchdog also sent an independent alert at routine open.
+
+### Summary
+
+**1 OPEN (SOL/USD 121.5347 @ $71.17), 0 CLOSE, 0 lessons appended.** Equity $10,201.36 (DD 6.20%, +0.28pp from prior). Late-fire ~10h42m beyond scheduled 21:00 PT — used freshest 1H signal-bar (13:00Z). Regime PASS/SBD CLEAR but weakening (15/15→9/15 in 3.5h). Loss streak 3 (no new realized loss). Next position management = routine-01-overnight Sat 2026-06-20 04:00 PT (= Sat 11:00Z).
