@@ -4,6 +4,35 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-06-20T17:09Z — routine-04-harness (PT label 2026-06-20 Sat, on-schedule day-gate PASS)
+
+**Slot identity `bull-04-harness`.** Cron `0 10 * * 6` PT. Day-gate PASS (today IS Saturday). Routine-04 proceeded with full reduced-scope harness (TV blocker, 6th consecutive week).
+
+### Harness summary
+
+- **Verification:** `tv_health_check` → CDP connection failed after 5 attempts (TV Desktop not running, 6th consecutive harness). Kraken MCP smoke test OK (BTC/USD $63,870.8, spread 0.1, vwap $63,506.14).
+- **W25 closes (2026-06-15 → 2026-06-20):** 3 stop-outs, 0% WR, net **−$596.84 / −3.75R**. ETH −1.32R / −$214.33 (06-16), HYPE −1.15R / −$182.64 (06-17), SOL −1.28R / −$199.87 (06-17 intra-bar same-session fallback entry).
+- **Equity:** $10,329.73 (was $10,875.85 peak set W24 TAO 4R) — DD 5.02%, intra-week peak DD was 6.20%. Open SOL (entered today 13:00Z @ $71.17) recovered partially to +0.626R unrealized.
+- **Lessons scored:** 2 new (2026-06-17 SBD-leading-edge = 7; 2026-06-17 cash-insufficiency = 7). Active count now 9; cap 50; no prune.
+- **Variants tested:** 0 TV backtests (TV blocker). Rack at 10/10 (7 hypothesis + 3 sweep); no spin-ups, no retirements. Routine-07 lag (~5 days stale MTM) noted.
+- **Idea bank:** unchanged. IDEA-12 (ETF flows) still queued #1, still pending external feed wiring across 6 weeks.
+- **Competitor:** BULL +3.30% / Codex v0 −5.34% / Codex Aggro +6.43%. **Lead-flip vs Aggro** (was +3.35 lead W24 → −3.13 deficit W25). T-11 days to 2026-07-01 deadline.
+- **vs BTC-hold:** 7d −4.85 pts (first material BTC-hold underperformance since inception), 30d +22.77 pts, since-inception +19.09 pts. 90d non-evaluable (matures 2026-07-19).
+- **Proposal:** NONE — current strategy retained. 3 backlog items logged (SBD-leading-edge filter, cash-fit pre-check, cash-aware rule-8 tiebreaker). Detailed rationale in `weekly_memos/2026-W25.md` §Proposal.
+- **TV escalation re-flagged** in Open Questions (6th memo with no user reply on install OR paper-paper-evidence authorization).
+
+### Telegram notification
+
+Sent short retention note per routine spec ("no proposal → short retention note" template). Body included W25 P&L summary, lead-flip vs Aggro alert, and re-flag of TV blocker.
+
+### Files written this routine
+
+- `memory/weekly_memos/2026-W25.md` (new)
+- `memory/lessons.md` (2 lessons scored 7+7)
+- `memory/research_log.md` (this row)
+
+---
+
 ## 2026-06-18T20:07Z — routine-02-midday (PT label 2026-06-18 Thu, on-schedule cron fire)
 
 **Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` PT = 20:00 UTC; framework dispatched ~07 min late at 20:07Z.
