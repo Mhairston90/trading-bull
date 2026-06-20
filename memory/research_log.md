@@ -4195,3 +4195,107 @@ EOD card sent — see NOTIFY commit. Watchdog also sent an independent alert at 
 ### Summary
 
 **1 OPEN (SOL/USD 121.5347 @ $71.17), 0 CLOSE, 0 lessons appended.** Equity $10,201.36 (DD 6.20%, +0.28pp from prior). Late-fire ~10h42m beyond scheduled 21:00 PT — used freshest 1H signal-bar (13:00Z). Regime PASS/SBD CLEAR but weakening (15/15→9/15 in 3.5h). Loss streak 3 (no new realized loss). Next position management = routine-01-overnight Sat 2026-06-20 04:00 PT (= Sat 11:00Z).
+
+## 2026-06-20T14:48Z — routine-01-overnight (Sat 07:48 PT)
+
+**Slot identity `bull-01-overnight`.** Cron `0 6 * * 1-5` PT — fired on Sat (not in cron window). Routine continues normally; logging the day-of-week anomaly here. Date label: **2026-06-20 Sat** (UTC and PT agree on calendar date). Position management only — no fresh schedule violation since routine has no day-gate logic.
+
+### Watchdog
+
+`python scripts/watchdog.py --telegram` ran at routine open. **7 findings (same as prior 2 wakes):** A heartbeat routine-07 153h-stale; D stale-MTM ×6 variants (v0.12/v0.13/v0.14/v0.3/v0.5/v0.7) 154h-stale. Telegram alerted independently. Not actioned — primary account focus.
+
+### State at wake
+
+Entered with **1 open position** (SOL/USD 121.5347 @ $71.17 from 2026-06-20T13:00:00Z entry, prior wake). Cash $1,582.12, MTM equity $10,201.36 carried forward, DD 6.20%, loss streak 3.
+
+### MTM + exit check (SOL)
+
+- Live ticker @ 14:48Z: SOL last $71.96, bid $71.90, ask $71.93, spread 0.04% (3 bps). 24h +3.29%.
+- Latest closed 1H bar close (per indicators): $71.17 — same as entry bar; intra-bar tape has moved up to $71.96.
+- Unrealized: 121.5347 × ($71.96 − $71.17) = **+$96.01 = +0.626R**.
+- Active stop $69.9072 (initial 2×ATR). Distance to stop: ($71.96 − $69.9072) / $71.96 = +2.85% above stop. **NO STOP-OUT.**
+- 20-EMA (1H): $70.6934 (latest converged). Close $71.17 > EMA20 → **NO EMA cross.** No prior below-EMA bar in this trade → confirmation counter at 0.
+- Take-profit $76.2212. Unrealized R +0.626 < +4.0 → **NO TARGET HIT.**
+- Breakeven ratchet (W22-H-partial): needs unrealized R ≥ +2.0 at 1H close. Latest 1H close gave R = 0.0 (filled at $71.17 = current closed-bar close). Ratchet **idle, stop unchanged at $69.9072.**
+- **Hold SOL.** No exit action.
+
+### Kill-switch verification
+
+- Daily realized 2026-06-20 PT: **$0.00 / 0.00%** — CLEAR (cap 5%).
+- Daily total (realized + unrealized) 2026-06-20 PT: **+$96.01 / +0.94%** — CLEAR.
+- Drawdown: ($10,875.85 − $10,329.73) / $10,875.85 = **5.02%** (improved 1.18pp from 6.20% prior wake on SOL favorable move) — CLEAR (cap 25%, warn 12.5%, 7.48pp headroom to warn).
+- Equity floor: $10,329.73 > $7,500 — CLEAR.
+- Loss streak: **3** (no new closed loss this wake; cap 7, headroom 4) — CLEAR.
+- Regime gate (5a): 9/15 positive, median +0.13% → **PASS** (≥ 4/15 floor).
+- Regime sub-state (5a-SBD): 9 positives > 1 ceiling AND median +0.13% > −1.0% → **CLEAR**. Default 20-EMA two-bar exit applies.
+- Active 5b cooldowns: SOL stop-out 2026-06-17T18:00Z = 92h ago, well past 24h re-entry guard.
+- **All clear.** No ALERT.
+
+### Entry scan (Technical analyst, W19-E)
+
+Indicators source: `python scripts/indicators.py` @ 14:48Z (single run, no staleness concern this wake — only ~6 minutes elapsed from script to entry-decision).
+
+Regime: **9/15 positive 24h, median +0.13% → 5a PASS, SBD CLEAR.**
+
+Per-pair Technical decisions:
+
+| Pair | R1 EMA20 | R2 RSI≥55 | R2a RSI≤80 | R3 4H EMA50 | R4a $2M | R5 not-open | Decision | Failing rule |
+|---|---|---|---|---|---|---|---|---|
+| BTC | FAIL | FAIL | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| ETH | PASS | FAIL (52.0) | OK | PASS | OK | OK | REJECT | R2 |
+| SOL | PASS | PASS (58.0) | OK | PASS | OK | **FAIL (open)** | REJECT | R5 (already open since 13:00Z bar) |
+| HYPE | FAIL | FAIL | OK | PASS | OK | OK | REJECT | R1, R2 |
+| XRP | FAIL | FAIL | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| SUI | FAIL | FAIL | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| TAO | PASS | FAIL (49.8) | OK | FAIL | OK | OK | REJECT | R2, R3 |
+| XDG | FAIL | FAIL | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| NEAR | FAIL | FAIL | OK | FAIL | FAIL ($1.79M) | OK | REJECT | R1, R2, R3, R4a |
+| ADA | FAIL | FAIL | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| LINK | FAIL | FAIL | OK | FAIL | FAIL ($0.90M) | OK | REJECT | R1, R2, R3, R4a |
+| LTC | PASS | FAIL | OK | FAIL | FAIL ($1.47M) | OK | REJECT | R2, R3, R4a |
+| FARTCOIN | FAIL | FAIL | OK | FAIL | FAIL ($0.28M) | OK | REJECT | R1, R2, R3, R4a |
+| TRX | PASS | PASS (75.5) | OK | PASS | **FAIL ($0.76M)** | OK | REJECT | R4a (liquidity) |
+| AVAX | PASS | FAIL (52.9) | OK | FAIL | OK | OK | REJECT | R2, R3 |
+
+**0 eligible candidates** for new entry. Closest miss: TRX/USD (3/3 momentum criteria PASS, blocked solely by R4a liquidity floor — same archetype as universe lesson 2026-04-24).
+
+### News scan (W19-E, informational)
+
+**N/A — no technical-PASS candidates** for entry (SOL technical-PASS but already open; TRX blocked at R4a before news matters). Skipped per strategy.md scope.
+
+### Sentiment scan (W19-E, informational)
+
+**Open position SOL/USD live read** (spread/depth health check on existing position):
+- Spread: 3 bps (very tight, well under 10 bps warning threshold).
+- 24h notional: $18.5M (deep liquidity, well above $2.0M floor).
+- Tape supportive (+3.29% 24h on visible momentum bar).
+
+No sentiment flags for held position.
+
+### Stop management (W22-H-partial breakeven ratchet)
+
+At the just-closed 1H bar close ($71.17 ≈ entry $71.17), unrealized R = 0.0. **+2.0R threshold not met → no ratchet action.** Active stop remains $69.9072. Will re-evaluate at next 1H close (next routine).
+
+### First-of-month universe refresh
+
+Today is the 20th — not first weekday of June. **Skipped.** Last refresh 2026-06-01; next trigger 2026-07-01.
+
+### Lessons (this wake)
+
+No new entries → no new lessons triggered. Notable observations:
+- Regime continuity: 9/15 positive holds steady from prior wake's snapshot B (14:42Z). The "leading-edge regime deterioration" pattern logged in prior wake did **not** continue into a hard SBD transition — regime stabilized rather than deteriorated further. This is one data point toward the SBD-leading-edge filter recommendation (lesson 2026-06-17 rec a); does not yet justify either codifying or dismissing the filter.
+- SOL fill ($71.17) coincided with intra-wake low-ish prints, and tape has since moved +$0.79 to $71.96 (+0.626R). Friendly entry timing this round, but n=1 — not lesson-promotable on its own.
+
+### Telegram
+
+Silent. NOTIFY criteria all unmet:
+- No Ring 3 kill switch tripped.
+- 0 new OPEN, 0 CLOSE.
+- No actionable news flagged (none scanned — no PASS candidate).
+- No universe refresh.
+
+Watchdog sent its own independent alert at routine open (telegram: sent), but routine-level Telegram is silent per spec.
+
+### Summary
+
+**0 OPEN, 0 CLOSE.** Held 1 position (SOL). Equity $10,329.73 (+$128.37 from $10,201.36 prior wake on SOL favorable move), DD 5.02% (improved 1.18pp), loss streak 3. Regime 5a PASS / SBD CLEAR (stable, not deteriorating). 0 candidates eligible — closest miss TRX (R4a liquidity). Next wake = routine-02-midday Sat 12:00 PT (= Sat 19:00Z) if cron permits Sat firings; otherwise Mon 06:00 PT routine-01.
