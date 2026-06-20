@@ -4299,3 +4299,9 @@ Watchdog sent its own independent alert at routine open (telegram: sent), but ro
 ### Summary
 
 **0 OPEN, 0 CLOSE.** Held 1 position (SOL). Equity $10,329.73 (+$128.37 from $10,201.36 prior wake on SOL favorable move), DD 5.02% (improved 1.18pp), loss streak 3. Regime 5a PASS / SBD CLEAR (stable, not deteriorating). 0 candidates eligible — closest miss TRX (R4a liquidity). Next wake = routine-02-midday Sat 12:00 PT (= Sat 19:00Z) if cron permits Sat firings; otherwise Mon 06:00 PT routine-01.
+
+### 2026-06-20T16:20Z | interactive | leaderboard display bug — "$2026.00" open-trade P&L (user-reported)
+
+User saw BULL SOL/USD showing +$2026.00 on the leaderboard's open-positions/command-center view. Diagnosed: `lib/command_center.js` parsePortfolioOpenPositions destructured columns by FIXED POSITION, hard-coded to the CODEX 9-col layout. BULL's portfolio.md uses an 11-col layout, so fields shifted — the "Entry ts (UTC)" value ("2026-06-20T...") landed in the P&L column and moneyOrNull() rendered the YEAR as "$2026.00" (with a bogus % from target-vs-stop). Same bug on all bull-github rows (twin, v0.14). Real SOL P&L verified +$96.01 (+1.1%) against live Kraken $71.90.
+Fix (strategy-leaderboard 2d441d5): header-AWARE parsing — match columns by name, scoped to the Open positions section. Handles CODEX (Unrealized PnL), BULL (Unrealized $), FABLE (PnL/Mark); computes exposure=size×mark for BULL (no Exposure col). Regression test added for the 11-col BULL layout. 175/175 green. Re-verified live: BULL $96.01, CODEX v0 + FABLE Snapback unchanged/correct.
+Note: the underlying SOL TRADE itself was verified legit earlier (all v0.4 rules pass, rule 3 +1.51 on converged EMA) — this was purely a display-layer parsing bug, not a trade problem. (Separately still open: the Saturday/late off-cron scheduler fires + entry-timestamp-vs-priced-bar mismatch, queued for routine-04.)
