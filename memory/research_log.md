@@ -4753,3 +4753,4 @@ Per routine NOTIFY criteria:
 ### Summary
 
 **0 OPEN, 0 CLOSE.** Equity unchanged at **$10,413.87** (cash only, flat). DD 4.25%. Loss streak 0. Regime collapsed overnight: **5a FAIL (1/15 positive AVAX only, median -4.91%); 5a-SBD ACTIVE** (both conditions met — ≤1 positive AND ≤-1.0% median). All 15 universe pairs REJECT — no pair passes R1+R2+R3 jointly; AVAX (closest miss, fails R3 by $0.028) is the only positive 24h pair. SBD defensive value this wake = **0R avoided** (flat going in; SOL exited 06-22 ahead of breakdown — favorable W22-G validation). Late fire 3h11m after cron; routine-07 + variant MTMs + 2 uncommitted scripts/replay_cache files flagged by watchdog (routine-04 territory).
+2026-06-23T17:07:00Z | harness | day-gate | not Saturday, skipping | no action
