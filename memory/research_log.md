@@ -4756,3 +4756,72 @@ Per routine NOTIFY criteria:
 2026-06-23T17:07:00Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-06-23T17:40:23Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-06-23T20:07Z — routine-02-midday (Tue 13:07 PT, on cron)
+
+**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` PT. Fire on time (07m drift).
+
+### State going in
+
+- Equity **$10,413.87** (cash only, **0 open positions** — flat since SOL exit 2026-06-22T15:00Z).
+- DD **4.25%** from peak $10,875.85 (unchanged — flat).
+- Loss streak **0**.
+- SOL 5b cooldown expired 2026-06-23T15:00Z (5h ago).
+
+### Mark-to-market
+
+No open positions → nothing to MTM. Equity unchanged at $10,413.87.
+
+### Exit check
+
+No open positions → no exit evaluation required.
+
+### Drawdown / kill-switch check (Kraken multi_ticker snapshot)
+
+15-pair 24h % change (sorted asc):
+
+| Rank | Pair | 24h % | Last |
+|---|---|---|---|
+| 1 | HYPE | −5.97% | 62.26 |
+| 2 | LTC | −5.86% | 41.90 |
+| 3 | ADA | −5.09% | 0.15028 |
+| 4 | XDG | −4.60% | 0.0785779 |
+| 5 | SOL | −4.22% | 68.85 |
+| 6 | NEAR | −3.83% | 1.986 |
+| 7 | TAO | −3.77% | 219.19 |
+| 8 | ETH | −3.68% | 1662.61 |
+| 9 | LINK | −3.65% | 7.576 |
+| 10 | FARTCOIN | −2.86% | 0.1257 |
+| 11 | SUI | −2.81% | 0.6984 |
+| 12 | XBT | −2.45% | 62384.4 |
+| 13 | XRP | −2.27% | 1.10272 |
+| 14 | TRX | −1.56% | 0.328651 |
+| 15 | AVAX | **+2.15%** | 6.364 |
+
+- **Positives: 1/15** (AVAX only).
+- **Median 24h: −3.77%** (TAO, 8th item).
+- **5a regime gate: FAIL** (1 < 4 floor — entries rejected). Moot anyway: midday routine forbids new entries.
+- **5a-SBD sub-state: ACTIVE** (≤1 positive AND median ≤ −1.0%). Still active from overnight wake (was median −4.91% then; tape stabilized 1.14pp at the median but remains synchronized-breakdown by the 5a-SBD definition). Default 20-EMA exit replaced by 9-EMA exit *if any position existed* — none exists, so this is informational only.
+- Daily loss cap: **N/A** (no realized PnL today; SOL exit was Mon 06-22 PT). CLEAR.
+- Consecutive losing days: **0** (cap 7). CLEAR.
+- Max drawdown: **4.25%** (cap 25%, warn 12.5%; 8.25pp to warn). CLEAR.
+- Equity floor: $10,413.87 > $7,500. CLEAR.
+- BTC vs prior-wake reference ($64,238 at 06-23 overnight) → now $62,384 = −2.9% intraday on BTC. BULL flat, so 0 mark exposure. **This is exactly the scenario the SOL EMA20-confirm exit at 06-22T15:00Z protected against** — second confirmation of W22-G value in a real breakdown window.
+
+### Entries
+
+**Skipped by routine design** (midday is management-only). For audit: even if midday entries were permitted, 5a FAIL would reject all candidates; AVAX is the only positive 24h pair but fails the 4/15 regime floor.
+
+### Telegram NOTIFY
+
+Per routine NOTIFY criteria:
+- Ring 3 kill switch tripped? **No** — all clear.
+- Any exit happened? **No** — no positions to exit.
+- DD crossed 12.5% warning? **No** — still 4.25%.
+
+**Silent.**
+
+### Summary
+
+**0 MTM events, 0 exits.** Flat into a continuing synchronized-breakdown tape; BULL has no exposure to defend. SBD still ACTIVE 1/15 positive AVAX +2.15%, median −3.77% (stabilized 1.14pp at the median vs overnight but no escape from SBD definition). DD unchanged 4.25%. SOL 5b cooldown cleared 5h ago, but 5a FAIL blocks all entries until regime recovers ≥4/15 positive. Next entry-eligible window: routine-01-overnight Wed 2026-06-24 06:00 PT (= 13:00Z) if regime improves.
+
