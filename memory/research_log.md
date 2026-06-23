@@ -4,6 +4,60 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-06-23T16:07Z — routine-03-eod (DUPLICATE LATE-FIRE of Mon 21:00 PT slot)
+
+**Slot identity `bull-03-eod`.** Cron `0 21 * * 1-5` PT (Mon 21:00 PT = 04:00Z Tue 06-23). Framework dispatched ~12h late at 16:07Z Tue 06-23 (09:07 PT Tue). The Mon EOD work was already completed by the on-time-early fire at 01:50Z 06-23 (PT 18:50 Mon 06-22) — see prior research_log row at line 4526 and commit `132a2fc`. This is a duplicate late-fire of the same cron slot.
+
+### Date-labeling guard check
+
+Per routines/03-eod.md guard: "the label date must equal today's PT date" at fire time. PT date at fire time = **2026-06-23 Tue**. The trading day 2026-06-23 is NOT over (it's 09:07 PT, ~12h until Tue 21:00 PT EOD slot). Therefore this fire cannot legitimately produce a "Tue 06-23 EOD" journal. The slot it represents — Mon 21:00 PT — was already executed and committed. **No new EOD journal written this fire; no duplicate Telegram EOD card sent.**
+
+### Pre-flight verification (kill switches, since last fire ~14h ago)
+
+No new trade events since commit `132a2fc` (verified `git log -- memory/trade_log.md` matches; last row is SOL correction-previous-row at 2026-06-22T16:00:00Z). Portfolio state unchanged from last rebuild:
+- Equity: **$10,413.87** (cash only, 0 open positions)
+- Drawdown: **4.25%** from peak $10,875.85 — CLEAR (cap 25%, warn 12.5%)
+- Loss streak: **0 trading days** — CLEAR
+- Equity floor: $10,413.87 > $7,500 — CLEAR
+- 5b cooldowns: SOL/USD cleared at 2026-06-23T15:00Z (exit was EMA20-confirm not stop-hit, so 5b strict-by-letter doesn't bind; informational only).
+- All Ring 3 kill switches: **CLEAR.**
+
+### Watchdog (mandatory, `--telegram`)
+
+Ran `python scripts/watchdog.py --telegram`. 8 findings, alert auto-sent:
+- 1× A heartbeat: routine-07 last commit **226h** stale (was 212h prior wake; gap continues widening; ~9.4 days now). Flag for routine-04.
+- 1× C dirty-tree: 2 uncommitted scripts in `scripts/` (`replay_cache_20260622/`, `routine07_replay_20260622.py`) — stranded artifacts from a prior session. Not modified this fire; flagged for routine-04 housekeeping.
+- 6× D stale-MTM: variant portfolios v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive — all 227h stale (continuing gap). Routine-04 territory.
+
+### Decision
+
+**No-op for journal/trade work.** Per the duplicate-fire detection above:
+- trade_log: no new events (no fresh wake-rebuild needed)
+- portfolio: state unchanged since `132a2fc` rebuild
+- lessons: Mon EOD already extracted (0 lessons appended)
+- monthly archive: today is 2026-06-23 (Tue), not last trading day of June (~06-30 Tue)
+
+### Telegram — silence rationale
+
+Per `bull-03-eod/SKILL.md`: "Silence is a failure mode — if you reach the end of the routine without sending the EOD card, append a row to memory/research_log.md explaining why." **No new EOD card sent because:**
+1. The Mon 06-22 EOD card was sent on-time by the 18:50 PT Mon early fire (commit `132a2fc`).
+2. Re-sending the same Mon card 14h later would (a) duplicate the user's notification, (b) misleadingly imply a fresh end-of-day with no new data behind it, (c) violate the date-labeling guard which requires label = PT date at fire time but the trading day labeled in such a card cannot be Tue 06-23 (premature) and cannot be Mon 06-22 (already sent).
+3. Sending a "Tue 06-23 EOD" card now would be premature (Tue 21:00 PT EOD is ~12h away) and would also be a duplicate-fire risk for the next on-time Tue cron.
+4. Watchdog alert was sent independently this fire (separate from EOD card).
+
+This explicit explanation is what the SKILL guard requires when an EOD card is omitted.
+
+### Routine race observation (routine-04 backlog)
+
+This is the 2nd duplicate-fire event in 14h: the midday cron (`0 13 * * 1-5` PT) also late-fired at ~01:50Z 06-23 racing on trade_log writes with routine-01-overnight. Cron scheduler skew is accumulating; multiple slots are now late-firing into the next-PT-day window. Recommend routine-04 evaluate (a) framework-level cron skew root cause, (b) idempotency guard on EOD slot (detect "already committed today" → no-op cleanly without manual research_log row), (c) trade_log write arbitration if races recur.
+
+### Files written this routine
+
+- `memory/research_log.md` (this row only)
+- No trade_log, no portfolio.md, no lessons.md changes.
+
+---
+
 ## 2026-06-23T01:50Z — routine-02-midday (PT label 2026-06-22 Mon, late fire ~05h behind 13:00 PT cron)
 
 **Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` PT = 20:00Z; framework dispatched ~05h late, executed at ~01:50Z next-UTC-day. Concurrent automation also fired this wake labeling itself routine-03-eod and racing on trade_log/portfolio writes. Final state now consistent.
