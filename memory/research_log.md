@@ -4,6 +4,51 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-06-23T01:50Z — routine-02-midday (PT label 2026-06-22 Mon, late fire ~05h behind 13:00 PT cron)
+
+**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` PT = 20:00Z; framework dispatched ~05h late, executed at ~01:50Z next-UTC-day. Concurrent automation also fired this wake labeling itself routine-03-eod and racing on trade_log/portfolio writes. Final state now consistent.
+
+### Position management
+
+- **SOL/USD EMA20 two-bar exit confirmed.** Computed 1H EMA20 over last 50 bars (SMA-seed bars 1–20, EMA from bar 21):
+  - Bar 2026-06-22T13:00Z close 74.88 vs EMA 73.83 → above (last above)
+  - Bar 14:00Z close 73.37 vs EMA 73.79 → **1st below**
+  - Bar 15:00Z close 73.08 vs EMA 73.73 → **2nd consecutive below — Exit rule 1 (W22-G) fires at this bar's close = 2026-06-22T16:00:00Z**
+  - Bars 16:00–23:00Z all continued below EMA (price drifted 73.08 → 71.88), confirming the exit signal in retrospect.
+- Static 2×ATR stop $69.9072 never touched (24h low $71.33, ~$1.42 above stop).
+- Exit fill model: bar close 73.08 × 0.9995 = $73.0435 (conservative 0.05% slippage on exit per `skills/decide.md`). Round-trip commission $45.57 (0.26%/side on $8,649.62 entry + $8,877.32 exit notional). Net realized **+$182.13 / +1.19R net**.
+
+### Correction event
+
+A concurrent process (self-labeled routine-03-eod) appended an EMA-exit CLOSE row to `trade_log.md` at 2026-06-22T15:00:00Z with raw-close $73.08, gross R +1.51, realized +$232.13 — i.e., **no slippage applied and no commission deducted**, inconsistent with the convention used on every prior EMA-cross/stop-hit close in this ledger (e.g., SOL stop-hit 2026-06-17T18:00:00Z @ 72.1927 with entry $73.7268 × 0.9995 slip + round-trip 0.26%/side commission netted to −$199.87/−1.28R net). I appended a `correction-previous-row` at 2026-06-22T16:00:00Z (bar-close timestamp aligned to "exit fires at the close of the second below-EMA bar" per strategy v0.4) restoring slippage + commission. Portfolio.md was then rewritten by the concurrent automation to honor the correction; final equity = **$10,413.87**, all-time realized = **+$413.87**.
+
+### Kill-switch state
+
+- DD 4.25% (improved 0.77pp from 5.02% prior wake), 8.25pp headroom to 12.5% warn.
+- Loss streak reset 3 → 0 by winning exit.
+- Equity floor $10,413.87 >> $7,500.
+- No daily-loss/halt triggers (today is a gain, +1.76% on realized).
+- 5b cooldown not triggered (EMA-cross exit, not stop-hit).
+- All Ring 3 kill switches CLEAR.
+
+### Notes
+
+- **W22-H ratchet near-engagement (first observed).** Peak SOL 1H close $74.88 at 13:00Z = +2.94R unrealized. The W22-H breakeven ratchet would have armed at that close (moving stop $69.9072 → $71.17 entry), but the EMA20 two-bar exit fired one bar later at $73.08 (well above breakeven) so the ratchet did not bind. Logged as a precedent — first time since W22 deployment that the ratchet path was nearly engaged on a fresh trade.
+- **4R target proximity:** target $76.2212 was $1.34 above the intraday 24h high $74.91 — not reached. The W22-G exit locked in a clean +1.19R net winner where the prior chop-take-back archetype (cf. XRP 2026-05-14 round-trip) could have applied if the original 20-EMA single-bar rule were still in force.
+- **Routine race observation.** Two routines firing concurrently on the same wake produced inconsistent trade_log writes that required an append-only correction. Worth flagging for routine-04 harness review: cron skew (midday late-fire encroaching on EOD window) created the race; trade_log/portfolio writes should arbitrate on a single owner.
+
+### Files written this routine
+
+- `memory/trade_log.md` (correction-previous-row appended at 2026-06-22T16:00:00Z; auto-row at 15:00:00Z preserved as historical record)
+- `memory/portfolio.md` (rewritten by concurrent process with corrected accounting; verified consistent)
+- `memory/research_log.md` (this row)
+
+### Telegram
+
+Exit notification sent per routine spec (exit happened this wake).
+
+---
+
 ## 2026-06-20T17:09Z — routine-04-harness (PT label 2026-06-20 Sat, on-schedule day-gate PASS)
 
 **Slot identity `bull-04-harness`.** Cron `0 10 * * 6` PT. Day-gate PASS (today IS Saturday). Routine-04 proceeded with full reduced-scope harness (TV blocker, 6th consecutive week).
