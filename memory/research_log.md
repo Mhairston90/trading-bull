@@ -4476,3 +4476,4 @@ Sending brief summary via `scripts/telegram_send.py`.
 **0 OPEN, 1 CLOSE.** SOL/USD closed at 2026-06-22T15:00Z @ $73.08 (exit-ema20-confirm, missed-scheduler replay) for +$232.13 / +1.51R. Now flat. Equity $10,463.87 (was $10,329.73 prior wake mark + $134.14 day total). DD 3.79% (improved 1.66pp). Loss streak reset to 0. Regime 6/15 / -0.25% / 5a PASS / SBD CLEAR. 0 entry-eligible — TRX closest miss (R4a $0.95M) for second wake. SOL 5b cooldown until 2026-06-23T15:00Z. Late fire 12.5h after cron 06:00 PT slot.
 
 2026-06-23T01:47Z | harness | day-gate | not Saturday, skipping | no action
+2026-06-23T01:48Z | allocation | day-gate | not Sunday, skipping | no action
