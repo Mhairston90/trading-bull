@@ -4335,3 +4335,142 @@ User saw BULL SOL/USD showing +$2026.00 on the leaderboard's open-positions/comm
 Fix (strategy-leaderboard 2d441d5): header-AWARE parsing — match columns by name, scoped to the Open positions section. Handles CODEX (Unrealized PnL), BULL (Unrealized $), FABLE (PnL/Mark); computes exposure=size×mark for BULL (no Exposure col). Regression test added for the 11-col BULL layout. 175/175 green. Re-verified live: BULL $96.01, CODEX v0 + FABLE Snapback unchanged/correct.
 Note: the underlying SOL TRADE itself was verified legit earlier (all v0.4 rules pass, rule 3 +1.51 on converged EMA) — this was purely a display-layer parsing bug, not a trade problem. (Separately still open: the Saturday/late off-cron scheduler fires + entry-timestamp-vs-priced-bar mismatch, queued for routine-04.)
 2026-06-20T17:40:45Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-06-23T01:40Z | routine-01-overnight | Mon 18:40 PT (late fire vs 06:00 cron)
+
+**Fire-time anomaly:** cron is `0 6 * * 1-5` = 06:00 PT Mon-Fri. This fire is at 18:40 PT — within day-of-week window (Mon), but ~12.5h late vs scheduled hour. Watchdog flagged: routine-07 last 212h, stale-MTM on portfolio.md (59h) and 6 variant portfolios. Watchdog telegram: sent. Findings noted, routine proceeds.
+
+**Entered with 1 open position** (SOL/USD 121.5347 @ $71.17 from 2026-06-20T13:00:00Z entry). Carrying $10,329.73 MTM from prior wake (SOL @ $71.96), DD 5.02%, loss streak 3.
+
+### MTM + exit check (SOL)
+
+- Live ticker @ 01:40Z: SOL last $71.59, bid $71.64, ask $71.66, spread 0.03% (~2-3 bps). 24h -0.40%. 24h high $74.91, low $71.33.
+- Latest closed 1H bar close (per indicators): **$71.80**. EMA20: **$72.926** (R1 FAIL -1.126 = close below EMA20).
+- Prior wake's 1H close was $71.17 > EMA20 $70.6934 (ABOVE). EMA has risen ($70.69 → $72.93) while price has stalled — **first below-EMA close** in this trade.
+- Per W22-G two-bar exit: **confirmation counter = 1/2; exit NOT triggered.** Next 1H close decides.
+- Unrealized (live): 121.5347 × ($71.59 − $71.17) = **+$51.04 = +0.332R** intra-bar.
+- Unrealized (last 1H close $71.80): 121.5347 × ($71.80 − $71.17) = **+$76.57 = +0.499R**.
+- Active stop $69.9072 (initial 2×ATR). Distance to stop: ($71.59 − $69.9072) / $71.59 = +2.35% above stop. **NO STOP-OUT.**
+- Take-profit $76.2212. Unrealized R +0.332 << +4.0 → **NO TARGET HIT.**
+- Breakeven ratchet (W22-H-partial): latest 1H close R = +0.499 < +2.0 → ratchet **idle, stop unchanged at $69.9072.**
+- **Hold SOL.** No exit action.
+
+### Kill-switch verification
+
+- Daily realized 2026-06-22 PT: **$0.00 / 0.00%** — CLEAR (cap 5%).
+- Daily total (realized + unrealized vs prior wake) 2026-06-22 PT: **-$46.57 / -0.45%** — CLEAR.
+- Drawdown: ($10,875.85 − $10,283.16) / $10,875.85 = **5.45%** (deteriorated 0.43pp from 5.02% prior on SOL pullback $71.96 → $71.59) — CLEAR (cap 25%, warn 12.5%, 7.05pp headroom to warn).
+- Equity floor: $10,283.16 > $7,500 — CLEAR.
+- Loss streak: **3** (no new closed loss this wake; cap 7, headroom 4) — CLEAR.
+- Regime gate (5a): **6/15 positive, median -0.25%** → PASS (>= 4/15 floor; softer than prior 9/15 / +0.13%).
+- Regime sub-state (5a-SBD): positives = 6 (> 1 ceiling) AND median -0.25% > -1.0% → **CLEAR**. Default 20-EMA two-bar exit applies.
+- Active 5b cooldowns: SOL stop-out 2026-06-17T18:00Z = 152h ago, well past 24h re-entry guard.
+- **All clear.** No ALERT.
+
+### Entry scan (Technical analyst, W19-E)
+
+Indicators source: `python scripts/indicators.py` @ 01:40Z (single run; freshness in spec).
+
+Regime: **6/15 positive 24h, median -0.25% -> 5a PASS, SBD CLEAR.** Regime soft but above floor.
+
+Per-pair Technical decisions:
+
+| Pair | R1 EMA20 | R2 RSI>=55 | R2a RSI<=80 | R3 4H EMA50 | R4a $2M | R5 not-open | Decision | Failing rule |
+|---|---|---|---|---|---|---|---|---|
+| BTC | FAIL (-212) | FAIL (46.4) | OK | FAIL (-166) | OK | OK | REJECT | R1, R2, R3 |
+| ETH | FAIL | FAIL (45.8) | OK | FAIL (-0.95) | OK | OK | REJECT | R1, R2, R3 |
+| SOL | FAIL (-1.13) | FAIL (35.8) | OK | PASS (+0.35) | OK | **FAIL (open)** | REJECT | R5 (already open) + R1, R2 |
+| HYPE | FAIL | FAIL (40.4) | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| XRP | FAIL | FAIL (44.3) | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| SUI | PASS (+0.0026) | FAIL (53.3) | OK | FAIL (-0.016) | OK | OK | REJECT | R2, R3 |
+| TAO | FAIL | FAIL (42.1) | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| XDG | FAIL | FAIL (40.7) | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| NEAR | FAIL | FAIL (33.9) | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| ADA | FAIL | FAIL (45.5) | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+| LINK | FAIL | FAIL (40.9) | OK | FAIL | FAIL ($1.99M) | OK | REJECT | R1, R2, R3, R4a |
+| LTC | FAIL | FAIL (42.6) | OK | FAIL | FAIL ($1.68M) | OK | REJECT | R1, R2, R3, R4a |
+| FARTCOIN | PASS (+0.00027) | FAIL (52.5) | OK | PASS (+0.0031) | FAIL ($0.72M) | OK | REJECT | R2, R4a |
+| TRX | PASS (+0.0021) | PASS (72.4) | OK | PASS (+0.0096) | **FAIL ($0.95M)** | OK | REJECT | R4a (liquidity) |
+| AVAX | FAIL | FAIL (49.9) | OK | FAIL | OK | OK | REJECT | R1, R2, R3 |
+
+**0 eligible candidates** for new entry. Closest miss: TRX/USD (3/3 momentum criteria PASS again, blocked solely by R4a liquidity floor — same archetype as the prior wake and the universe lesson 2026-04-24). TRX has now been the closest-miss for two consecutive wakes — pattern noted, not yet lesson-promotable.
+
+### News scan (W19-E, informational)
+
+**N/A — no technical-PASS candidates** for entry (SOL technical R3 PASS but already open and R1/R2 FAIL on momentum decay; TRX blocked at R4a before news matters). Skipped per strategy.md scope.
+
+### Sentiment scan (W19-E, informational)
+
+**Open position SOL/USD live read** (spread/depth health check on existing position):
+- Spread: ~2-3 bps (very tight, well under 10 bps warning threshold).
+- 24h notional: 290,746 SOL x ~$72.4 avg = ~$21M (deep liquidity, well above $2.0M floor).
+- Tape softening (-0.40% 24h; high $74.91 visible earlier, current price near 24h low $71.33).
+
+No sentiment flags for held position, but momentum visibly fading on SOL — already reflected in R1/R2 FAILs above and the first below-EMA close.
+
+### Stop management (W22-H-partial breakeven ratchet)
+
+At the just-closed 1H bar close ($71.80), unrealized R = +0.499 (using entry $71.17 and stop-distance $1.2628). **+2.0R threshold not met -> no ratchet action.** Active stop remains $69.9072.
+
+### First-of-month universe refresh
+
+Today is the 22nd — not first weekday of June (that was 2026-06-01, completed). **Skipped.** Next trigger 2026-07-01.
+
+### Lessons (this wake)
+
+No new entries -> no new lessons triggered. Notable observations:
+- **SOL momentum decay:** Entry was at $71.17 with EMA20 $70.69 (close +$0.48 above). Two days later, EMA20 has risen to $72.93 while price has stalled at $71.80. The two-bar EMA exit rule (W22-G) is precisely doing what it was designed for — granting one bar of tag-and-recover budget rather than firing on first cross. Next 1H close will determine whether SOL exits at modest profit (~+0.5R) or recovers.
+- **Regime decay continues but not into SBD:** 9->6 positives across two wakes, median +0.13% -> -0.25%. Floor still 4, ceiling for SBD still 1. The regime is loosely consistent with the "leading-edge deterioration" pattern flagged 2026-06-17 — a soft drift toward SBD without crossing it. Not yet promotable to filter codification.
+- **TRX repeat closest-miss:** Same pair, same blocking rule (R4a $0.95M) as prior wake. Two consecutive observations of TRX as the only momentum-pass candidate suggests this pair has structural edge that the liquidity floor consistently blocks. **Pattern noted for routine #4 backlog** — at what point does a recurring near-miss justify either (a) a per-pair tightened liquidity floor exception, or (b) a lower position-sizing-with-tighter-stop alternative on lower-liquidity high-momentum pairs? Not promotable on n=2.
+
+### Telegram
+
+Silent. NOTIFY criteria all unmet:
+- No Ring 3 kill switch tripped.
+- 0 new OPEN, 0 CLOSE.
+- No actionable news flagged (none scanned — no PASS candidate).
+- No universe refresh.
+
+Watchdog sent its own independent alert at routine open (telegram: sent, 8 findings — late-fire stale-MTMs and routine-07 heartbeat).
+
+### Summary
+
+**0 OPEN, 0 CLOSE.** Held 1 position (SOL). Equity $10,283.16 (-$46.57 from $10,329.73 prior on SOL $71.96 -> $71.59), DD 5.45% (deteriorated 0.43pp), loss streak 3. Regime 6/15 / -0.25% (softer but still 5a PASS / SBD CLEAR). 0 entry-eligible — TRX is closest miss (R4a $0.95M) for second wake. SOL on first below-EMA bar, confirmation counter 1/2 — next 1H close decides EMA-exit fire. Late fire 12.5h after cron; routine-07 + variant MTMs flagged stale by watchdog (separately).
+
+### ADDENDUM 2026-06-23T01:45Z — missed-scheduler replay reconciliation
+
+While this routine was executing, the missed-scheduler replay pipeline updated `memory/trade_log.md` and `memory/portfolio.md` to record a SOL/USD exit at 2026-06-22T15:00Z @ $73.08 via **exit-ema20-confirm** (+1.51R / +$232.13). The replay caught the two-bar EMA20 exit that fired during the cron gap between the 2026-06-20T14:48Z prior wake and this 01:40Z late fire.
+
+**Reconstructed exit chronology (per portfolio.md update):**
+- 2026-06-22T13:00Z bar: close ~$74.88 (peak; would-have-triggered breakeven ratchet at +2.94R close — ratchet path not bound because EMA exit followed)
+- 2026-06-22T14:00Z bar: close ~$73.37, ~$0.42 below 1H EMA20 = first below-EMA close
+- 2026-06-22T15:00Z bar: close $73.08, ~$0.65 below 1H EMA20 = second consecutive below-EMA close → **W22-G two-bar EMA exit fires**, paper exit at bar close $73.08
+- Realized PnL: 121.5347 × ($73.08 − $71.17) − round-trip friction → **+$232.13 net / +1.51R**
+
+**Corrections to this wake's earlier sections:**
+- ~~Hold SOL~~ → **SOL CLOSED** by missed-scheduler replay at 15:00Z bar @ $73.08
+- ~~Unrealized +$51.04~~ → **Realized +$232.13** (cash-only equity now)
+- ~~Equity $10,283.16 (MTM)~~ → **$10,463.87** (cash, no positions)
+- ~~DD 5.45%~~ → **DD 3.79%** (improved 1.66pp on the winning exit)
+- ~~Loss streak 3~~ → **Loss streak 0** (reset by SOL winner)
+- ~~Latest 1H close $71.80 = bar 1 below EMA, counter 1/2~~ → that $71.80 bar is **post-exit** (~10h after the 15:00Z exit fire); SOL position no longer exists, so the counter is moot
+- The "Hold SOL" MTM check, breakeven ratchet idle status, and the W22-G "next 1H close decides" call are all **superseded** by the replay-confirmed 15:00Z exit
+
+**Entry-scan implications:**
+- SOL/USD now triggers a **5b same-pair re-entry cooldown** until 2026-06-23T15:00Z (24h from the 15:00Z exit). Re-entry-eligible from 15:00Z bar onward. This wake's entry scan would have rejected SOL regardless (R1/R2 momentum FAIL), so the cooldown is non-binding for current decision but matters for next 1-2 wakes.
+- All other pairs' technical decisions in the Entry scan table above remain valid (their indicator values were independent of SOL's open/closed state).
+- **Net entry decision unchanged: 0 new entries.** TRX still closest miss on R4a $0.95M liquidity.
+
+**Wake outcome (corrected):**
+- **0 OPEN, 1 CLOSE** (SOL exit-ema20-confirm via missed-scheduler replay, +$232.13 / +1.51R).
+- Equity $10,463.87 (cash only, flat). DD 3.79%. Loss streak 0.
+- Notable: this is the second 4R-track winner since v0.4 — TAO 06-13 hit the 4R target +4.04R; SOL today peaked at $74.88 (+2.94R close) but the W22-G two-bar EMA exit fired at $73.08 = +1.51R before the 4R target $76.22 was reached. The breakeven ratchet would have fired at the 13:00Z peak close (moving stop from $69.91 to $71.17), but the EMA exit superseded the ratchet path. **First time the W22-H ratchet path was nearly engaged on a fresh post-W22 trade** — net result identical to actual EMA-confirm exit since exit price $73.08 > $71.17 breakeven.
+
+### Telegram (corrected)
+
+NOTIFY criteria now MET: **1 CLOSE this run** (SOL exit-ema20-confirm replay, +$232.13 / +1.51R).
+Sending brief summary via `scripts/telegram_send.py`.
+
+### Summary (corrected, supersedes earlier)
+
+**0 OPEN, 1 CLOSE.** SOL/USD closed at 2026-06-22T15:00Z @ $73.08 (exit-ema20-confirm, missed-scheduler replay) for +$232.13 / +1.51R. Now flat. Equity $10,463.87 (was $10,329.73 prior wake mark + $134.14 day total). DD 3.79% (improved 1.66pp). Loss streak reset to 0. Regime 6/15 / -0.25% / 5a PASS / SBD CLEAR. 0 entry-eligible — TRX closest miss (R4a $0.95M) for second wake. SOL 5b cooldown until 2026-06-23T15:00Z. Late fire 12.5h after cron 06:00 PT slot.

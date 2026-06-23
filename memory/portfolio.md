@@ -2,15 +2,15 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-20T14:48Z routine-01-overnight (Sat 07:48 PT — fired outside Mon–Fri cron window, day-of-week anomaly noted in research_log; routine has no day-gate so it proceeds normally). Regime **5a PASS** (9/15 positive, median +0.13% — unchanged from prior wake), SBD CLEAR. **0 OPEN, 0 CLOSE.** Held SOL/USD (entered 13:00Z @ $71.17). MTM @ last $71.96: **$10,329.73** (DD **5.02%**, improved 1.18pp from prior wake on SOL favorable move). All kill switches CLEAR.
+> **Last rebuild:** 2026-06-23T01:40Z routine-03-eod (PT label 2026-06-22 Mon EOD — fires at 18:40 PT, ~2h before cron 21:00 PT slot; treated as today's EOD). Regime **5a PASS** (6/15 positive, median −0.25%), SBD CLEAR. **0 OPEN, 1 CLOSE (missed-scheduler replay).** Exited SOL/USD 121.5347 @ $73.08 via exit-ema20-confirm at 2026-06-22T15:00Z bar close (second consecutive 1H close below 1H EMA20 — bar -0.65 below, prior bar -0.42 below; first below-bar was 14:00Z at $73.37). Realized **+$232.13 / +1.51R** — second 4R-track winner after the W22-G two-bar rule took the trend break before the breakeven ratchet could be tested (peak close $74.88 at 13:00Z = +2.94R). New equity **$10,463.87** (cash only, no open positions). DD **3.79%** from peak $10,875.85 (improved 1.23pp). Loss streak resets to **0** (was 3). All kill switches CLEAR.
 
-> **Prior rebuild:** 2026-06-20T14:42Z routine-03-eod (PT label 2026-06-19 Fri EOD — late fire). Opened SOL/USD 121.5347 @ $71.17. Equity $10,201.36, DD 6.20%. Regime 5a PASS, SBD CLEAR.
+> **Prior rebuild:** 2026-06-20T14:48Z routine-01-overnight (Sat 07:48 PT — held SOL favorable +0.626R MTM, equity $10,329.73, DD 5.02%).
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$1,582.12** (was $10,231.74; spent $8,649.62 on SOL entry 121.5347 × $71.17)
-- Realized PnL (all-time): **+$231.74** (unchanged; no closes this wake)
+- Cash: **$10,463.87** (= prior cash $1,582.12 + SOL exit proceeds $8,881.75 [121.5347 × $73.08])
+- Realized PnL (all-time): **+$463.87** (was +$231.74; +$232.13 from SOL exit this wake)
   - [archived earlier rows trimmed for brevity — full ledger preserved in trade_log.md]
   - HYPE −$58.18 (exit-stop-hit 2026-05-06T15:00Z, −1.02R)
   - BTC +$1.42 (exit-ema-cross 2026-05-06T19:00Z, +0.06R)
@@ -32,49 +32,48 @@
   - ETH −$214.33 (missed-scheduler replay exit-stop-hit 2026-06-16T15:00Z, −1.32R)
   - HYPE −$182.64 (missed-scheduler replay exit-stop-hit 2026-06-17T12:00Z, −1.15R)
   - SOL −$199.87 (exit-stop-hit intrabar replay 2026-06-17T18:00Z, −1.28R)
-- Unrealized PnL (open positions): **+$96.01** (SOL: 121.5347 × ($71.96 − $71.17) = +$96.01, +0.626R)
-- Position values (MTM @ last $71.96): **$8,747.61** (SOL)
-- Current equity (cash + positions MTM): **$10,329.73**
+  - **SOL +$232.13 (missed-scheduler replay exit-ema20-confirm 2026-06-22T15:00Z, +1.51R) ← THIS WAKE**
+- Unrealized PnL (open positions): **$0.00** (flat)
+- Position values (MTM): **$0.00**
+- Current equity (cash only): **$10,463.87**
 - Equity peak: **$10,875.85** (set 2026-06-13T09:00Z at TAO 4R close — unchanged)
-- Drawdown from peak: **5.02%** ($546.12 below peak; improved 1.18pp from prior wake's 6.20% as SOL moved from $70.92 → $71.96)
-- Since-inception return: **+3.30%** ($10,329.73 / $10,000 − 1; was +2.01%)
+- Drawdown from peak: **3.79%** ($411.98 below peak; improved 1.23pp from prior wake's 5.02% on SOL +1.51R winning exit)
+- Since-inception return: **+4.64%** ($10,463.87 / $10,000 − 1; was +3.30%)
 
 ## Open positions
 
-| Pair | Side | Size | Entry | Stop (initial 2×ATR) | Active stop | Target (4R) | Entry ts (UTC) | Last (MTM) | Unrealized R | Unrealized $ |
-|---|---|---|---|---|---|---|---|---|---|---|
-| SOL/USD | long | 121.5347 | 71.17 | 69.9072 | 69.9072 | 76.2212 | 2026-06-20T13:00:00Z | 71.96 | +0.626 | +96.01 |
+_None._
 
-Portfolio risk-at-moment: **1.49%** of equity (SOL stop-distance × size / equity = $153.48 / $10,329.73; cap 4%, headroom 2.51%).
-Open positions: **1 / 8** (strategy v0.4 max-concurrent 4 → 1/4 used; cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} 1/2 with SOL).
-Breakeven ratchet (W22-H-partial): not active (need unrealized R ≥ +2.0 at 1H close; current +0.626R; latest closed 1H bar gave R = 0.0).
+Portfolio risk-at-moment: **0.00%** of equity (no open positions; cap 4%, full headroom).
+Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster cap 0/2).
+Breakeven ratchet (W22-H-partial): n/a (no open position). Note: the closed SOL trade peaked at $74.88 close 2026-06-22T13:00Z = +2.94R — the ratchet **would have fired** at that close, moving stop from $69.9072 to $71.17 (entry). The EMA exit then fired at 15:00Z $73.08 (above breakeven), so the ratchet did not bind. Net is identical to the actual EMA-confirm path; first time the W22-H ratchet path was nearly engaged on a fresh trade.
 
-## Day summary — 2026-06-20 PT (Sat; routine-01-overnight fired 07:48 PT)
+## Day summary — 2026-06-22 PT (Mon EOD)
 
 | Metric | Value |
 |---|---|
-| Day realized PnL (PT Sat) | **$0.00** (no closes this wake) |
-| Day unrealized PnL change | **+$128.37** (SOL MTM moved $70.92 → $71.96 since prior wake) |
-| Day total PnL (vs prior wake) | **+$128.37** (+1.26% vs $10,201.36 prior) |
+| Day realized PnL (PT Mon) | **+$232.13** (SOL exit at 15:00Z = 08:00 PT 06-22) |
+| Day unrealized PnL change | **−$96.01** (SOL's prior-wake +$96.01 unrealized → converted to +$232.13 realized) |
+| Day total PnL (vs prior wake mark $10,329.73) | **+$134.14 (+1.30%)** |
 | Trades opened today | **0** |
-| Trades closed today | **0** |
-| Win rate today | n/a (no closes) |
-| Equity (current MTM) | **$10,329.73** |
-| Equity peak (realized) | **$10,875.85** (unchanged) |
-| Drawdown from peak | **5.02%** |
-| Loss streak | **3** trading days (no new realized loss; SOL open and favorable but not closed) |
+| Trades closed today | **1** (SOL exit-ema20-confirm) |
+| Win rate today | **100%** (1/1) |
+| Equity (current cash-only) | **$10,463.87** |
+| Equity peak (realized) | **$10,875.85** (unchanged; need +$411.98 to retake) |
+| Drawdown from peak | **3.79%** |
+| Loss streak | **0 trading days** (reset by winning SOL trade) |
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-20 PT: **$0.00 / 0.00%** — loss cap 5% (5.00% headroom), CLEAR.
-- Daily total (realized + unrealized vs prior wake) 2026-06-20 PT: **+$128.37 / +1.26%** — CLEAR.
-- Consecutive losing trading days: **3** (cap 7, headroom 4). CLEAR.
-- Max drawdown: **5.02%** from peak $10,875.85 (cap 25%, warn 12.5%, 7.48pp to warn) — CLEAR.
-- Equity floor: $10,329.73 > $7,500 floor — CLEAR.
-- Regime gate (rule 5a): **PASS** — 9/15 positive 24h, median +0.13% (≥ 4/15 floor). Entries enabled this wake.
-- Regime sub-state (rule 5a-SBD): **CLEAR** — positives = 9 (> 1 ceiling) AND median +0.13% > −1.0%. Default 20-EMA two-bar exit applies.
-- Active 5b cooldowns: none (SOL stop-out 2026-06-17T18:00Z = 92h ago, past 24h).
-- **All clear (kill switches).** routine-01-overnight 2026-06-20T14:48Z fire: **0 OPEN, 0 CLOSE**, SOL held with favorable MTM move. Regime stable at 9/15 positive (the leading-edge deterioration logged in prior wake did NOT continue into SBD).
+- Daily realized 2026-06-22 PT: **+$232.13 / +2.22%** of equity — loss cap not relevant (gain), CLEAR.
+- Daily total (vs prior wake) 2026-06-22 PT: **+$134.14 / +1.30%** — CLEAR.
+- Consecutive losing trading days: **0** (cap 7, full headroom; reset from 3 by today's winner). CLEAR.
+- Max drawdown: **3.79%** from peak $10,875.85 (cap 25%, warn 12.5%, 8.71pp to warn) — CLEAR.
+- Equity floor: $10,463.87 > $7,500 floor — CLEAR.
+- Regime gate (rule 5a): **PASS** — 6/15 positive 24h, median −0.25% (≥ 4/15 floor). Entries enabled this wake.
+- Regime sub-state (rule 5a-SBD): **CLEAR** — positives = 6 (> 1 ceiling) AND median −0.25% > −1.0%. Default 20-EMA two-bar exit applies.
+- Active 5b cooldowns: **SOL/USD** until 2026-06-23T15:00Z (just-exited; 24h re-entry guard active).
+- **All clear (kill switches).** routine-03-eod 2026-06-23T01:40Z fire: **0 OPEN, 1 CLOSE** (missed-scheduler replay of SOL EMA exit), now flat. Regime stable at 6/15 positive — borderline-comfortable but no SBD risk.
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -101,16 +100,16 @@ Breakeven ratchet (W22-H-partial): not active (need unrealized R ≥ +2.0 at 1H 
 
 ## Pending exit triggers
 
-- SOL: stop $69.9072 (2×ATR initial); target $76.2212 (+4R); EMA20 exit at two consecutive 1H closes below 20-EMA ($70.6934). Breakeven ratchet idle (need unrealized R ≥ +2.0 at 1H close; current intra-bar R +0.626).
+_None — no open positions._
 
-Next entry-eligible scan: routine-02-midday Sat 12:00 PT (= Sat 19:00Z) — position management only, no new entries. Routine-03-eod Sat 21:00 PT (= Sun 04:00Z) is next entry-eligible wake if cron permits Sat firing; otherwise routine-01 Mon 06:00 PT.
+Next entry-eligible scan: routine-01-overnight Tue 2026-06-23 06:00 PT (= 13:00Z) if cron permits — note the recurring missed-scheduler pattern. SOL 5b cooldown clears at 2026-06-23T15:00Z so SOL is re-entry-eligible from the 15:00Z bar onwards.
 
 ## Rolling performance
 
 | Window | BULL return | BTC-hold return | Delta | Result |
 |--------|-------------|-----------------|-------|--------|
-| 7d | ≈ +0.21% (−0.74% realized + +0.96% unrealized SOL) | ≈ +0.5% (BTC sideways near $63.3k) | ≈ −0.3% | BULL roughly even 7d |
-| 30d | ≈ +3.30% (inception $10k 2026-04-20; equity now $10,329.73) | ≈ −22% (BTC 2026-05-21 ~$81.0k → today ~$63.3k) | ≈ +25.3% | BULL well ahead |
-| 90d | — | — | — | not computable (BULL inception 2026-04-20 = 61 days ago; window first computable ~2026-07-19) |
+| 7d | ≈ −0.5% (net of SOL +$232 winner + earlier 06-16/-17 stop-outs) | ≈ −1% (BTC ~$64.4k → ~$64.0k) | ≈ +0.5% | BULL roughly even 7d |
+| 30d | ≈ +4.64% (inception $10k 2026-04-20; equity now $10,463.87) | ≈ −21% (BTC 2026-05-21 ~$81.0k → today ~$64.0k) | ≈ +25.6% | BULL well ahead |
+| 90d | — | — | — | not computable (BULL inception 2026-04-20 = 63 days ago; window first computable ~2026-07-19) |
 
-(7d/30d figures approximate. SOL position is +0.626R unrealized; W22 breakeven ratchet activates at +2.0R close — currently $1.42 above current price as the trigger.)
+(7d/30d figures approximate. The W22-G two-bar EMA exit took +1.51R on SOL today — second 4R-track winner since v0.4. TAO 06-13 hit the 4R target +4.04R; SOL today would have been the 3rd 4R-target had it kept trending after the 13:00Z $74.88 peak — the 4R target $76.22 was $1.34 above the bar high, not reached.)
