@@ -4477,3 +4477,64 @@ Sending brief summary via `scripts/telegram_send.py`.
 
 2026-06-23T01:47Z | harness | day-gate | not Saturday, skipping | no action
 2026-06-23T01:48Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-06-23T01:50Z | routine-03-eod | PT label 2026-06-22 Mon EOD | local fire 18:50 PT (~2h before cron 21:00 PT)
+
+**Slot identity confirmed:** routine-03-eod (not 01). Body references EOD journal per routines/03-eod.md.
+
+### Context: routine-01-overnight fired earlier this wake (~01:47Z)
+
+Routine-01 (commit `8b10397`) already logged the SOL exit and pushed before this routine started. Workflow split:
+- routine-01 handled: trade_log SOL close row, research_log entry-scan + exit replay summary, Telegram brief.
+- routine-03-eod (this entry) handles: EOD journal close-out, friction-adjusted equity restatement, lessons review, mandatory EOD Telegram card.
+
+### Friction correction (auto-applied post-routine-01)
+
+A `correction-previous-row` row at 2026-06-22T16:00:00Z auto-applied to trade_log after routine-01 wrote the SOL close:
+- Gross exit: +$232.13 / +1.51R @ $73.08
+- Friction adjustment: −$50.00 (≈ 2-side commission 0.26%/side + slippage 0.05%/side on $8.8k notional ≈ $54.56)
+- **Net realized: +$182.13 / +1.19R** (effective fill $73.0435)
+
+Routine-01's summary used the gross figures ($10,463.87 equity, 3.79% DD). **portfolio.md restated here to friction-adjusted ground truth: equity $10,413.87, DD 4.25%, since-inception +4.14%.**
+
+### EOD synthesis
+
+- **Day P&L (PT 06-22, net):** +$182.13 / +1.75% of equity. Best single-trade day in 9 days (since TAO +$621 / 06-13).
+- **Equity:** $10,413.87 (+0.81% vs prior wake mark; +4.14% inception).
+- **Drawdown:** 4.25% from peak $10,875.85 (need +$461.98 / +4.44% to retake; meaningful headroom from prior wake's 5.02%).
+- **Loss streak:** 0 (reset by today's winner; was 3 days).
+- **Open positions:** 0/8. **5b cooldown:** SOL exit was `exit-ema20-confirm`, not `exit-stop-hit` → 5b strict-by-letter does NOT bind. SOL re-entry-eligible immediately, but technicals fail anyway (R1+R2 FAIL post-pullback; RSI 35.8).
+- **Regime:** 5a PASS (6/15 positive, median −0.25%), SBD CLEAR. Borderline-comfortable on positives count.
+- **Entry candidates this wake:** 0. Closest miss TRX (R4a $0.95M liquidity, 2nd consecutive wake). SUI / FARTCOIN are the only other R1+R3 dual-pass; both fail R2 RSI.
+
+### Strategy-rule postmortem (W22-G + W22-H)
+
+The SOL trade exercised **both** W22 rules at the same close:
+- **W22-G (two-bar EMA confirm):** at 13:00Z $74.88 → 14:00Z $73.37 BELOW (1st) → 15:00Z $73.08 BELOW (2nd) → **EXIT FIRES**. Behaved exactly as designed; took the trend break promptly without being shaken by a single-bar tag.
+- **W22-H (breakeven ratchet at +2R close):** the 13:00Z close was +2.94R → would have ratcheted active stop from $69.9072 → $71.17 (entry). The EMA exit at $73.08 fires above the ratchet level, so the ratchet did not bind. **First near-engagement of W22-H on a fresh trade since the rule was added 2026-05-20.** Confirms: ratchet activates as designed; EMA exit dominates when both paths trigger and EMA fires first/higher. Forward question for routine-04: the ratchet's protective value materializes only on trades that reach +2R close AND then round-trip toward entry without an EMA exit firing first. So far on the v0.4 sample, 0 such trades have occurred — the ratchet remains untested in its binding regime.
+
+### Lessons extraction
+
+Reviewed today's single trade against the 3 lesson prompts:
+1. **Stop-gap?** No — exit was a clean EMA confirmation, not a stop-out, no gap involved.
+2. **4R-overshoot?** Trade peaked at +2.94R close, never crossed 4R ($76.22 target was $1.34 above the bar high $74.91). No overshoot lesson.
+3. **Immediate reversal?** No — trade ran for ~48h and produced +$182.13 net. Healthy outcome.
+
+**0 lessons appended.** Both candidate observations (W22-G first non-borderline win + W22-H first near-engagement) are routine-04 backlog items for telemetry, not lesson-promotable on n=1.
+
+### Watchdog findings
+
+8 findings from earlier `python scripts/watchdog.py --telegram`:
+- routine-07 heartbeat 212h stale (threshold 30h) — known gap; routine-07 is the secondary watchdog/health-check slot and has been silent for ~9 days. Flag for routine-04.
+- portfolio.md stale-MTM (59h) — RESOLVED by this rebuild.
+- 6 variant portfolio.md stale-MTM (213h each) — variants v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive. Routine-04 territory; not addressed by routine-03-eod scope.
+
+Watchdog's own Telegram alert: sent (independent of EOD card).
+
+### Monthly archive
+
+Today is 2026-06-22 (Mon, not last trading day of June). **Skipped.** Trigger expected ~2026-06-30 (Tue).
+
+### Summary
+
+**0 OPEN, 0 CLOSE this routine** (routine-01 handled the SOL exit earlier this wake). Net day result: **1 winning close +$182.13 / +1.19R** (gross +$232.13 / +1.51R, friction −$50). Equity **$10,413.87**, DD **4.25%**, loss streak **0**. Regime 5a PASS / SBD CLEAR. 0 new entry candidates. Sending mandatory EOD Telegram card next.
