@@ -5027,3 +5027,5 @@ Mandatory EOD card per routine NOTIFY. Sending next via `scripts/telegram_send.p
 
 
 2026-06-24T17:07:31Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-06-24T17:40Z | allocation | day-gate | not Sunday, skipping | no action
