@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB-SWEEP (parameter sweep of v0.4, RSI threshold 25 → 20)
-> **Last rebuild:** 2026-06-14T05:00Z (routine-07 wake 2026-06-13 22:00 PT — 0 entries; RSI far above mean-rev thresholds; 15/15 positive EOD)
+> **Last rebuild:** 2026-06-24T16:35Z (routine-07 wake 2026-06-24 PT — 0 entries across all 12 wakes in replay window; RSI 48-76 throughout, ultra-strict M2 RSI<20 not remotely approached; 0 closed trades lifetime)
 
 ## Account
 
@@ -34,8 +34,8 @@ All clear at $10,000 equity.
 ## Days live
 
 - Spin-up: 2026-05-16
-- As of last rebuild: **29 days**
-- Promotion-eligible: 2026-06-15
+- As of last rebuild: **39 days**
+- Promotion-eligible: 2026-06-15 (reached) — 0 closed trades lifetime (need ≥10 in rolling 30d) → NOT promotion-eligible; variant continues in LAB.
 
 ## Notes
 
@@ -52,3 +52,4 @@ Parameter sweep — RSI oversold threshold 20 (vs v0.4's 25, v0.8's 30). Bracket
 - **2026-06-11 22:00 PT (this wake)** — **EOD 2026-06-12T04:00Z (confirmed):** SBD CLEARED ✓; M3 PASSES (15/15 green ✓); M2 (RSI < 20 ultra-strict): BTC RSI 57.4 — nowhere near 20. **0 entries.** Ultra-strict RSI<20 threshold makes entries extremely rare; no pair remotely oversold in broad-positive tape. Kill switches clear at $10,000. Days live: **27**.
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **OVERNIGHT + EOD:** M2 (RSI < 20 ultra-strict): no pair anywhere near 20. **0 entries.** Kill switches all clear at $10,000. Days live: **28**.
 - **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). **OVERNIGHT + EOD:** 15/15 positive at EOD, SBD CLEAR. M3 PASSES. M2 (RSI < 20 ultra-strict): universe RSI 48-76, nowhere near 20. **0 entries.** Ultra-strict threshold; next entry requires a sharp crash-level sell-off. Kill switches all clear at $10,000. Days live: **29**.
+- **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days). **All 12 wakes assessed: 0 entries.** RSI<20 ultra-strict threshold not remotely approached at any wake in the 10-day rally window. The June 24 SBD morning decline (RSI falling from highs): even with the sell-off, estimated universe RSI still in 35-55 range — well above the <20 floor. A/B vs siblings: all 3 mean-rev variants uniformly inactive. **OVERNIGHT 2026-06-24T13:00Z:** SBD, red bars → M3 FAIL. Kill switches all clear at $10,000. Days live: **39**.

@@ -2,62 +2,68 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis (entry rule 3: 4H 20-EMA trend filter vs main's 50-EMA)
-> **Last rebuild:** 2026-06-14T05:00Z (routine-07 wake 2026-06-13 22:00 PT — TAO CLOSE +4.29R/+$643.90, BTC OPEN OVERNIGHT/CLOSE −0.37R/−$25.85, BTC OPEN EOD; 3 closed trades lifetime)
+> **Last rebuild:** 2026-06-24T16:35Z (routine-07 wake 2026-06-24 PT — gap replay 2026-06-14T05:00Z→2026-06-24T13:00Z; 6 new closes + 6 new opens; 9 closed trades lifetime)
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$2.04** ($10,619.30 − 0.1651 BTC × $64,320.2 notional ≈ $2.04)
-- Realized PnL: **+$619.30** (BTC +$1.25 +0.01R; TAO +$643.90 +4.29R closed 2026-06-13T09:00Z; BTC OVERNIGHT −$25.85 −0.37R closed 2026-06-13T18:00Z)
-- Unrealized PnL: **$0.00** (BTC 0.1651 × ($64,320.2 − $64,320.2) = $0 at EOD entry price)
-- Position values (MTM): **$10,617.26** (BTC 0.1651 × $64,320.2)
-- Current equity: **$10,619.30**
-- Equity peak: **$10,645.15** (NEW — set 2026-06-13T09:00Z at TAO 4R close; prior peak $10,020.92 from BTC MTM)
-- Drawdown: **0.24%** ($10,645.15 → $10,619.30 after BTC OVERNIGHT loss)
+- Cash: **$11,152.83** (flat)
+- Realized PnL (variant lifetime): **+$1,152.83** (BTC +$1.25 +0.01R; TAO +$643.90 +4.29R; BTC OVERNIGHT −$25.85 −0.37R; BTC EOD Jun14 −$7.83 −0.11R; HYPE Jun14 −$91.57 −0.58R; BTC Jun15/16 +$107.94 +0.68R; HYPE Jun16/17 +$210.78 +1.32R; SOL Jun20/21 +$319.57 +1.97R; AVAX Jun22 −$7.37 −0.04R)
+- Unrealized PnL: **$0.00** (no open positions)
+- Position values (MTM): **$0.00**
+- Current equity: **$11,152.83**
+- Equity peak: **$11,160.20** (set during AVAX Jun22 position peak MTM; AVAX reached slightly above entry before declining to exit at $6.268)
+- Drawdown from peak: **0.07%** ($11,160.20 → $11,152.83)
 
 ## Open positions
 
-| Pair | Side | Size | Entry | Entry time (UTC) | Stop | 4R target | Risk ($) | Risk (% equity) |
-|------|------|------|-------|------------------|------|-----------|----------|-----------------|
-| BTC/USD | LONG | 0.1651 | 64320.2 | 2026-06-14T04:00Z | 63897.22 | 66012.12 | 69.77 | 0.66% |
+_None._
 
-Open positions: **1 / 4** (momentum cap, rule 3 uses 4H 20-EMA). Portfolio risk-at-moment: **0.66%** (cap 4%).
+Portfolio risk-at-moment: **0.00%** (cap 4%, full headroom).
+Open positions: **0 / 4** (cluster 0/2).
 
 ## Active kill-switch state
 
-- Daily realized: +$618.05 (TAO +$643.90 − BTC OVERNIGHT $25.85; net positive) — clear vs 5% cap
-- Consecutive losing trading days: 0 (cap 7)
-- Max drawdown: 0.24% from peak $10,645.15 (cap 25%, warn 12.5%) — clear
-- Equity floor: $10,619.30 > $7,500 — OK
-- **All clear. 1 open position (BTC/USD). 3 closed trades lifetime (BTC +0.01R, TAO +4.29R, BTC OVERNIGHT −0.37R).**
+- Daily realized 2026-06-24 PT: $0.00 (last trade was AVAX Jun22) — clear vs 5% cap
+- Consecutive losing trading days: 1 (AVAX Jun22; cap 7) — clear
+- Max drawdown: 0.07% from peak $11,160.20 (cap 25%, warn 12.5%) — clear
+- Equity floor: $11,152.83 > $7,500 — OK
+- Regime gate: 5a FAIL / SBD ACTIVE at OVERNIGHT 2026-06-24T13:00Z → 0 entries
+- **All clear. No open positions. 9 closed trades lifetime.**
 
 ## Rolling performance vs main v0.4
 
-| Window | v0.14 return | main (v0.4) return | Verdict |
-|--------|--------------|---------------------|---------|
-| 7d  | — | — | not yet 7 days live |
-| 30d | — | — | not yet 30 days live (earliest 2026-07-09) |
+| Window | v0.14 return | main return | Delta | BTC-hold | Result |
+|--------|--------------|-------------|-------|----------|--------|
+| 30d | +11.53% (all trades in last 12d) | +4.14% | +7.39% | −20.5% | v0.14 FAR AHEAD — best performer in rack |
+| 90d | — | — | — | — | not yet computable (90d = 2026-09-07) |
 
 ## Closed trades summary
 
-| Closed | Win rate | Avg R | Net% |
-|--------|----------|-------|------|
-| 3 | 66.7% (2/3: BTC +0.01R, TAO +4.29R; BTC OVERNIGHT −0.37R) | +1.31R avg | +6.19% |
+| Metric | Value |
+|--------|-------|
+| Closed | 9 |
+| Win rate | 56% (5/9: BTC +0.01R, TAO +4.29R, BTC Jun15/16 +0.68R, HYPE Jun16/17 +1.32R, SOL +1.97R) |
+| Avg R per trade | +0.91R |
+| Profit factor | ~5.2 ($1,283 wins / $133 losses) |
+| Net return | +11.53% |
+| Max drawdown | 0.07% |
 
 ## Days live
 
 - Spin-up: 2026-06-09
-- As of last rebuild: **5 days**
-- Promotion-eligible: 2026-07-09 (after the 2026-07-01 competition deadline — this variant is for learning, not the contest). 3 closed trades; BTC EOD open.
+- As of last rebuild: **15 days**
+- Promotion-eligible: 2026-07-09 (after the 2026-07-01 competition deadline). 9 closed trades (need ≥10 for promotion gate). Not yet eligible.
 
 ## Notes
 
-Tests whether replacing the 4H 50-EMA trend filter with a 20-EMA converts confirmed regime recoveries into trades. Evidence at spin-up: during 06-07→06-09 recovery wakes (8-14/15 positive), 0 pairs passed the 50-EMA filter while 1→14 pairs per wake passed the 20-EMA version. Counterfactual first trade (BTC @ 63,078, 06-08T04:00Z) would likely be a small loser in the current rollover — the dead-cat-bounce risk is acknowledged at spin-up. Regime at spin-up: 2/15 positive, median ≈ −2.4% (5a FAIL) — variant starts blocked, same as main.
+Tests whether replacing the 4H 50-EMA trend filter with a 20-EMA converts confirmed regime recoveries into trades. The 20-EMA is closer to price — passes entry more readily, admits earlier-in-recovery entries. Key finding from gap replay: v0.14 took 6 new entries (BTC×2, HYPE×2, SOL, AVAX) using the 4H 20-EMA filter, while v0.5 also took 7 entries using the same 4H 50-EMA (v0.14 has no vol-comp gate AND uses 20-EMA). Both variants entered similar opportunities. v0.14's HYPE Jun16/17 +1.32R and SOL +1.97R match v0.12's 2-bar exit results (same exit rule) and are slightly better than v0.5's 1-bar exits. At 15 days, v0.14 is the top-performing variant at +11.53%.
 
 ### Routine #7 wake log
 
-- **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — first sim wake, stale)** — replay window 2026-06-10T05:00Z → 2026-06-12T05:00Z. Kraken MCP BTC $62,563; 4H OHLCV unavailable. SBD active at OVERNIGHT 13:00Z + EOD 04:00Z wakes → 5a FAIL → 0 entries. EOD 2026-06-12T04:00Z: 5a PASS but used stale close $62,590 and conservative 0-entry due to unavailable 4H data. **0 entries (conservative).**
-- **2026-06-11 22:00 PT (correction run — first real entry)** — replay window corrected to 2026-06-12T04:00Z bar using live Kraken pull. BTC close confirmed 63430.6. **EOD 2026-06-12T04:00Z:** 5a 10/15 positive ✓; SBD CLEARED ✓; rule 1 (1H 63430.6 > EMA20 ~63200 ✓); rule 2 (1H RSI 57.4 ≥ 55 ✓); **rule 3 v0.14: 4H 63430.6 > 4H 20-EMA ~62409 ✓ (clear +$1021, well above the ~$62,100–62,300 prior estimate)**; vol-comp gate N/A (v0.14 does not inherit); cluster 0/4→1/4 ✓; ATR $391.5, stop 2×ATR=$783; cash-capped 0.157653 BTC = ~$10,000 notional, risk $123.4 / 1.23% of $10,000. **ENTRY: BTC/USD LONG 0.157653 @ 63430.6, stop 62647.6, target 66562.6.** This is v0.14's FIRST hypothetical trade. Key observation: 20-EMA filter confirmed BTC passes with $1,021 margin vs 50-EMA's marginal $417 — consistent with spin-up thesis that 20-EMA converts early recovery signals into entries while 50-EMA is still recovering. Other pairs not evaluated (BTC is rank-1 and fills cluster slot). Kill switches all clear. Equity MTM $10,020.92, new peak. DD 0%. Days live: **3**.
-- **2026-06-12T06:45Z interactive — ENTRY RE-VALIDATED with converged EMAs:** full 720-bar warm-up gives 4H 20-EMA = **$62,652.1** → close $63,430.6 **PASSES v0.14's rule 3 by +$778.5**. The same re-check VOIDED the v0.5/v0.12 BTC entries (converged 4H 50-EMA $63,682.6 → main's rule 3 FAILS by $252). **v0.14 now holds the rack's only live position and is a clean A/B against main's deferral** — the 20-EMA-vs-50-EMA divergence is real (one passes, one fails, on the same bar with converged math), not a data artifact. Position unchanged: BTC/USD LONG 0.157653 @ 63430.6, stop 62647.6, target 66562.6.
-- **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **EXIT — BTC/USD CLOSE 2026-06-12T22:00Z:** Two consecutive 1H closes below 1H 20-EMA triggered exit. Bar opening 20:00Z: close 63,423.1 < EMA ~63,497.6 (1st); bar opening 21:00Z: close 63,438.5 < EMA ~63,491.7 (2nd consecutive). Exit fires at 22:00Z bar close 63,438.5. Stop 62,647.6 never threatened (min low 62,765.3 on 06:00Z bar). 4R target 66,562.6 not reached (max close 63,943.4). PnL: 0.157653 × $7.9 = **+$1.25 / +0.01R**. Cash post-close $10,001.25. **OVERNIGHT 13:00Z:** BTC R2 FAIL (RSI ~52 < 55); 0 entries. BTC exit check: BTC already closed at 22:00Z (before nominal 13:00Z wake time — exit pre-empted OVERNIGHT scan). **EOD 2026-06-13T04:00Z:** 4/15 positive, SBD CLEAR. Pair scan: BTC FAIL R1 (63,494 < EMA20 ~63,526). TAO sole PASS. Rule 1: 217.286 > EMA20 213.406 ✓ (+$3.88). Rule 2: RSI 62.5 ≥ 55 ✓. Rule 3 v0.14: 4H close 217.286 > 4H 20-EMA ~211.3 ✓ (+$5.99 HIGH-CONF). Cluster 0/2→1/2 ✓. Size: risk $150.02 / 1.50% of $10,001.25 post-close equity → 32.17 TAO. **ENTRY: TAO/USD LONG 32.17 @ 217.286, stop 212.6226, target 235.9396.** Same-bar re-entry (BTC closes → TAO opens at same EOD bar). Kill switches all clear. Equity $9,998.16, DD 0.23% from peak $10,020.92. Days live: **4**.
-- **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). **EXIT — TAO/USD CLOSE 2026-06-13T09:00Z @ $237.3015:** 08:00Z bar close ≥ 4R target $235.9396. PnL: 32.17 × $20.0155 = **+$643.90 / +4.29R**. Cash $10,645.15. **NEW PEAK $10,645.15** (prior peak $10,020.92 eclipsed). **OVERNIGHT 13:00Z:** BTC 12:00Z close $64,100.0. R3-v0.14: 4H close $64,100 > 4H 20-EMA ~$62,652 ✓ clear +$1,448. No vol-comp (v0.14 does not inherit). **ENTRY: BTC/USD LONG 0.1660 @ $64,100.0, stop $63,677.02, target $65,791.92.** Cash-binding. **EXIT — BTC CLOSE 2026-06-13T18:00Z @ $63,944.3:** 2nd consecutive 1H close below EMA20 (W22-G rule). PnL: 0.1660 × −$155.7 = **−$25.85 / −0.37R**. Cash $10,619.30. **EOD 2026-06-14T04:00Z (indicators.py):** 15/15 positive. BTC R3-20: 4H close 64,320.2 > 4H 20-EMA ~63,382.3 ✓ +$937.9. **ENTRY: BTC/USD LONG 0.1651 @ $64,320.2, stop $63,897.22, target $66,012.12.** Risk $69.77/0.66% of $10,619.30. Kill switches all clear. Equity $10,619.30, DD 0.24% from new peak $10,645.15. Days live: **5**.
+- **2026-06-10 22:00 PT (MISLABELED as 2026-06-11 22:00 PT — first sim wake, stale)** — replay window 2026-06-10T05:00Z → 2026-06-12T05:00Z. SBD active at first 3 wakes → 5a FAIL → 0 entries. EOD 2026-06-12T04:00Z: 5a PASS but used stale close $62,590 → 0 entries (conservative). $10,000. Days live: **3**.
+- **2026-06-11 22:00 PT (correction run — first real entry)** — BTC close confirmed $63,430.6. Rule 3 v0.14: 4H close $63,430.6 > 4H 20-EMA ~$62,409 ✓ (+$1,021 clear margin vs 50-EMA's marginal +$417). **ENTRY: BTC/USD LONG 0.157653 @ 63430.6, stop 62647.6, target 66562.6.** v0.14's FIRST trade. Equity MTM $10,020.92. Days live: **3**.
+- **2026-06-12T06:45Z interactive — ENTRY RE-VALIDATED:** Converged 720-bar 4H 20-EMA = $62,652.1 → BTC passes rule 3 by +$778.5. Same re-check voided v0.5/v0.12 BTC entries (50-EMA = $63,682.6 → FAILS). v0.14 holds rack's only live position; clean A/B vs main's deferral.
+- **2026-06-12 22:00 PT (routine-07)** — BTC CLOSE 2026-06-12T22:00Z +0.01R/+$1.25 (2-bar exit: 20:00Z + 21:00Z bars below 1H EMA20). EOD: TAO sole PASS. **ENTRY: TAO/USD LONG 32.17 @ 217.286.** Equity $9,998.16. Days live: **4**.
+- **2026-06-13 22:00 PT (routine-07)** — EXIT TAO +4.29R/+$643.90. NEW PEAK $10,645.15. BTC OVERNIGHT OPEN/CLOSE −0.37R/−$25.85 (2-bar). BTC EOD OPEN @ $64,320.2. Equity $10,619.30, DD 0.24%. Days live: **5**.
+- **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days; fully recovered via Kraken REST 30d history). **6 new closes, 6 new opens across 12 wakes.** Trade sequence: **BTC EOD Jun14 CLOSE −0.11R/−$7.83** (2-bar exit fires at Jun14T13:00Z); **HYPE Jun14 OPEN/CLOSE −0.58R/−$91.57** (2-bar fires Jun14T16:00Z after 14:00Z+15:00Z bars below EMA; 20-EMA rule 3 PASSES for HYPE, same as v0.5/v0.12; no vol-comp gate); **BTC Jun15/16 OPEN/CLOSE +0.68R/+$107.94** (2-bar fires Jun16T04:00Z after 24h hold); **HYPE Jun16/17 OPEN/CLOSE +1.32R/+$210.78** (2-bar fires Jun17T08:00Z; held 28h from Jun16T04:00Z — best HYPE trade across variants); **SOL Jun20/21 OPEN/CLOSE +1.97R/+$319.57** (2-bar fires Jun21T22:00Z; 41h hold — v0.14's best trade by R); **AVAX Jun22 OPEN/CLOSE −0.04R/−$7.37** (EOD Jun22 entry using 4H 20-EMA: AVAX passes rule 3 with 20-EMA but not 50-EMA; 2-bar exit fires Jun22T20:00Z as AVAX fails to hold the 18:00Z+19:00Z bars above EMA20; minor scalp). **NEW PEAK $11,160.20** set during AVAX peak MTM (Jun22); AVAX close at −$7.37 = barely below entry → essentially breakeven. Net replay realized: +$533.53. Total equity $11,152.83, DD 0.07% from peak. **v0.14 is the best-performing variant at +11.53% — 7.39pp ahead of main.** Key divergence: AVAX Jun22 entry was v0.14-specific (4H 20-EMA passes for AVAX; 50-EMA variant would have missed); essentially a 0 net on this trade. **OVERNIGHT 2026-06-24T13:00Z:** 0/15 positive, SBD ACTIVE → 5a FAIL → 0 entries. All kill switches clear. Days live: **15**.

@@ -1,0 +1,1038 @@
+{
+  "wake_label": "2026-06-23 22:00 PT",
+  "replay_start": "2026-06-14T05:00:00+00:00",
+  "replay_end": "2026-06-24T01:00:00+00:00",
+  "regime_eod_0623": {
+    "positives": 4,
+    "median": -0.73,
+    "sbd": false
+  },
+  "regime_overnight_0623": {
+    "positives": 0,
+    "median": -6.35,
+    "sbd": true
+  },
+  "regime_current": {
+    "positives": 1,
+    "median": -2.87,
+    "sbd": true
+  },
+  "btc_current_close": 62733.0,
+  "total_wakes": 19,
+  "total_entries": 19,
+  "variants": {
+    "v0.3": {
+      "cash": 10586.64,
+      "realized": 586.64,
+      "peak": 10643.9,
+      "position": null,
+      "equity": 10586.64,
+      "dd_pct": 0.5379607098901739,
+      "new_trades": 1,
+      "trades_detail": [
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-14T05:00:00+00:00",
+          "pair": "SOL/USD",
+          "size": 155,
+          "entry": 68.49,
+          "exit": 68.24,
+          "pnl_r": -0.26881720430107525,
+          "pnl_usd": -38.75,
+          "reason": "exit-ema20-1bar"
+        }
+      ]
+    },
+    "v0.5": {
+      "cash": 10943.130083756976,
+      "realized": 942.2069837569757,
+      "peak": 11109.776734778656,
+      "position": null,
+      "equity": 10943.130083756976,
+      "dd_pct": 1.4999999999999982,
+      "new_trades": 13,
+      "trades_detail": [
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-14T12:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.1655,
+          "entry": 64320.2,
+          "exit": 64282.9,
+          "pnl_r": -0.08820045720816228,
+          "pnl_usd": -6.173149999999278,
+          "reason": "exit-ema20-1bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-14T13:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 110.58366837511433,
+          "price": 61.03,
+          "stop": 59.58690897584736,
+          "target": 66.80236409661057,
+          "risk_usd": 159.58229925
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-14T14:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 110.58366837511433,
+          "entry": 61.03,
+          "exit": 60.25,
+          "pnl_r": -0.5405064455015947,
+          "pnl_usd": -86.2552613325893,
+          "reason": "exit-ema20-1bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-15T04:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.21685728495197054,
+          "price": 65610.7,
+          "stop": 64880.77999585963,
+          "target": 68530.38001656145,
+          "risk_usd": 158.28847033001117
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-15T22:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.21685728495197054,
+          "entry": 65610.7,
+          "exit": 66165.0,
+          "pnl_r": 0.7593982859160114,
+          "pnl_usd": 120.2039930488779,
+          "reason": "exit-ema20-1bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-16T04:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 71.49636831165095,
+          "price": 70.38,
+          "stop": 68.14084388611307,
+          "target": 79.33662445554769,
+          "risk_usd": 160.09153022574432
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-16T19:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 71.49636831165095,
+          "entry": 70.38,
+          "exit": 72.37,
+          "pnl_r": 0.8887276718484783,
+          "pnl_usd": 142.27777294018605,
+          "reason": "exit-ema20-1bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-17T04:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 57.40819282317609,
+          "price": 74.49,
+          "stop": 71.6641716845273,
+          "target": 85.79331326189079,
+          "risk_usd": 162.22569681984712
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-17T06:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 57.40819282317609,
+          "entry": 74.49,
+          "exit": 73.38,
+          "pnl_r": -0.39280517996165804,
+          "pnl_usd": -63.723094033725424,
+          "reason": "exit-ema20-1bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-20T04:00:00+00:00",
+          "pair": "SOL/USD",
+          "size": 138.39898616058107,
+          "price": 70.77,
+          "stop": 69.6047468801381,
+          "target": 75.43101247944763,
+          "risk_usd": 161.26985040934125
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-21T20:00:00+00:00",
+          "pair": "SOL/USD",
+          "size": 138.39898616058107,
+          "entry": 70.77,
+          "exit": 73.36,
+          "pnl_r": 2.222693040553244,
+          "pnl_usd": 358.45337415590546,
+          "reason": "exit-ema20-1bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-22T13:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.2195281059327971,
+          "price": 65502.0,
+          "stop": 64742.886945598235,
+          "target": 68538.45221760705,
+          "risk_usd": 166.64665102167984
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-22T15:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.2195281059327971,
+          "entry": 65502.0,
+          "exit": 64742.886945598235,
+          "pnl_r": -1.0,
+          "pnl_usd": -166.64665102167984,
+          "reason": "exit-stop-hit"
+        }
+      ]
+    },
+    "v0.7": {
+      "cash": 10202.684813764774,
+      "realized": 202.68781376477463,
+      "peak": 10450.0471,
+      "position": null,
+      "equity": 10202.684813764774,
+      "dd_pct": 2.367092548656798,
+      "new_trades": 7,
+      "trades_detail": [
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-14T14:00:00+00:00",
+          "pair": "TAO/USD",
+          "size": 9,
+          "entry": 274.733,
+          "exit": 259.015,
+          "pnl_r": -1.0000141382723042,
+          "pnl_usd": -141.46200000000016,
+          "reason": "exit-stop-hit"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-15T04:00:00+00:00",
+          "pair": "ETH/USD",
+          "size": 6.6134351531200455,
+          "price": 1716.34,
+          "stop": 1693.979755803724,
+          "target": 1805.7809767851038,
+          "risk_usd": 147.87802499999998
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-15T13:00:00+00:00",
+          "pair": "ETH/USD",
+          "size": 6.6134351531200455,
+          "entry": 1716.34,
+          "exit": 1805.7809767851038,
+          "pnl_r": 4.0,
+          "pnl_usd": 591.5120999999999,
+          "reason": "exit-4R-target"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-21T04:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.3340285094692893,
+          "price": 64199.9,
+          "stop": 63730.62656358271,
+          "target": 66076.99374566917,
+          "risk_usd": 156.75070649999998
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-21T08:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.3340285094692893,
+          "entry": 64199.9,
+          "exit": 63924.5,
+          "pnl_r": -0.5868646691416525,
+          "pnl_usd": -91.99145150784275,
+          "reason": "exit-ema20-1bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-22T13:00:00+00:00",
+          "pair": "XDG/USD",
+          "size": 160044.2556637794,
+          "price": 0.0849219,
+          "stop": 0.08395110080397146,
+          "target": 0.08880509678411415,
+          "risk_usd": 155.37083472738234
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-22T14:00:00+00:00",
+          "pair": "XDG/USD",
+          "size": 160044.2556637794,
+          "entry": 0.0849219,
+          "exit": 0.08395110080397146,
+          "pnl_r": -1.0,
+          "pnl_usd": -155.37083472738234,
+          "reason": "exit-stop-hit"
+        }
+      ]
+    },
+    "v0.12": {
+      "cash": 10858.185418356956,
+      "realized": 858.2207983569568,
+      "peak": 11023.538495793864,
+      "position": null,
+      "equity": 10858.185418356956,
+      "dd_pct": 1.5000000000000029,
+      "new_trades": 11,
+      "trades_detail": [
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-14T13:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.1631,
+          "entry": 64320.2,
+          "exit": 64272.8,
+          "pnl_r": -0.11207509423019787,
+          "pnl_usd": -7.73093999999905,
+          "reason": "exit-ema20-2bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-14T13:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 108.96935991431027,
+          "price": 61.03,
+          "stop": 59.58690897584736,
+          "target": 66.80236409661057,
+          "risk_usd": 157.2527052
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-14T15:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 108.96935991431027,
+          "entry": 61.03,
+          "exit": 60.2,
+          "pnl_r": -0.5751542945722077,
+          "pnl_usd": -90.44456872887734,
+          "reason": "exit-ema20-2bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-15T04:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.2135796193894793,
+          "price": 65610.7,
+          "stop": 64880.77999585963,
+          "target": 68530.38001656145,
+          "risk_usd": 155.89603666906683
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-16T03:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.2135796193894793,
+          "entry": 65610.7,
+          "exit": 66109.9,
+          "pnl_r": 0.6839105616620398,
+          "pnl_usd": 106.61894599922745,
+          "reason": "exit-ema20-2bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-16T04:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 70.33690946437015,
+          "price": 70.38,
+          "stop": 68.14084388611307,
+          "target": 79.33662445554769,
+          "risk_usd": 157.49532085905525
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-17T07:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 70.33690946437015,
+          "entry": 70.38,
+          "exit": 73.34,
+          "pnl_r": 1.3219265872721058,
+          "pnl_usd": 208.19725201453622,
+          "reason": "exit-ema20-2bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-20T04:00:00+00:00",
+          "pair": "SOL/USD",
+          "size": 137.83981943623436,
+          "price": 70.77,
+          "stop": 69.6047468801381,
+          "target": 75.43101247944763,
+          "risk_usd": 160.61827963927328
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-21T21:00:00+00:00",
+          "pair": "SOL/USD",
+          "size": 137.83981943623436,
+          "entry": 70.77,
+          "exit": 73.06,
+          "pnl_r": 1.9652382482111719,
+          "pnl_usd": 315.65318650897757,
+          "reason": "exit-ema20-2bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-22T13:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.21782404673203506,
+          "price": 65502.0,
+          "stop": 64742.886945598235,
+          "target": 68538.45221760705,
+          "risk_usd": 165.35307743690797
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-22T15:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.21782404673203506,
+          "entry": 65502.0,
+          "exit": 64742.886945598235,
+          "pnl_r": -1.0,
+          "pnl_usd": -165.35307743690797,
+          "reason": "exit-stop-hit"
+        }
+      ]
+    },
+    "v0.13": {
+      "cash": 10568.45,
+      "realized": 568.450000000001,
+      "peak": 10643.9,
+      "position": null,
+      "equity": 10568.45,
+      "dd_pct": 0.7088567160533161,
+      "new_trades": 1,
+      "trades_detail": [
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-14T06:00:00+00:00",
+          "pair": "SOL/USD",
+          "size": 155,
+          "entry": 68.49,
+          "exit": 68.17,
+          "pnl_r": -0.344086021505369,
+          "pnl_usd": -49.59999999999894,
+          "reason": "exit-ema20-2bar"
+        }
+      ]
+    },
+    "v0.14": {
+      "cash": 11152.828882548034,
+      "realized": 1150.8238625480344,
+      "peak": 11160.198859719574,
+      "position": null,
+      "equity": 11152.828882548034,
+      "dd_pct": 0.06603804523717308,
+      "new_trades": 11,
+      "trades_detail": [
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-14T13:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.1651,
+          "entry": 64320.2,
+          "exit": 64272.8,
+          "pnl_r": -0.11216482728965227,
+          "pnl_usd": -7.825739999999039,
+          "reason": "exit-ema20-2bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-14T13:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 110.32026846226185,
+          "price": 61.03,
+          "stop": 59.58690897584736,
+          "target": 66.80236409661057,
+          "risk_usd": 159.20218920000002
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-14T15:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 110.32026846226185,
+          "entry": 61.03,
+          "exit": 60.2,
+          "pnl_r": -0.5751542945722077,
+          "pnl_usd": -91.56582282367715,
+          "reason": "exit-ema20-2bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-15T04:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.21622739610146866,
+          "price": 65610.7,
+          "stop": 64880.77999585963,
+          "target": 68530.38001656145,
+          "risk_usd": 157.82870185764486
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-16T03:00:00+00:00",
+          "pair": "BTC/USD",
+          "size": 0.21622739610146866,
+          "entry": 65610.7,
+          "exit": 66109.9,
+          "pnl_r": 0.6839105616620398,
+          "pnl_usd": 107.94071613385252,
+          "reason": "exit-ema20-2bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-16T04:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 71.20888606684478,
+          "price": 70.38,
+          "stop": 68.14084388611307,
+          "target": 79.33662445554769,
+          "risk_usd": 159.44781259965265
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-17T07:00:00+00:00",
+          "pair": "HYPE/USD",
+          "size": 71.20888606684478,
+          "entry": 70.38,
+          "exit": 73.34,
+          "pnl_r": 1.321926587272106,
+          "pnl_usd": 210.77830275786113,
+          "reason": "exit-ema20-2bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-20T04:00:00+00:00",
+          "pair": "SOL/USD",
+          "size": 139.54863914914213,
+          "price": 70.77,
+          "stop": 69.6047468801381,
+          "target": 75.43101247944763,
+          "risk_usd": 162.60948714102057
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-21T21:00:00+00:00",
+          "pair": "SOL/USD",
+          "size": 139.54863914914213,
+          "entry": 70.77,
+          "exit": 73.06,
+          "pnl_r": 1.9652382482111719,
+          "pnl_usd": 319.56638365153634,
+          "reason": "exit-ema20-2bar"
+        },
+        {
+          "type": "OPEN",
+          "ts": "2026-06-22T04:00:00+00:00",
+          "pair": "AVAX/USD",
+          "size": 1052.8538816483908,
+          "price": 6.275,
+          "stop": 6.116000744914669,
+          "target": 6.910997020341326,
+          "risk_usd": 167.4029828957936
+        },
+        {
+          "type": "CLOSE",
+          "ts": "2026-06-22T19:00:00+00:00",
+          "pair": "AVAX/USD",
+          "size": 1052.8538816483908,
+          "entry": 6.275,
+          "exit": 6.268,
+          "pnl_r": -0.04402536349144419,
+          "pnl_usd": -7.369977171539327,
+          "reason": "exit-ema20-2bar"
+        }
+      ]
+    },
+    "v0.4-mr": {
+      "cash": 10000.0,
+      "realized": 0.0,
+      "peak": 10000.0,
+      "position": null,
+      "equity": 10000.0,
+      "dd_pct": 0,
+      "new_trades": 0,
+      "trades_detail": []
+    },
+    "v0.8": {
+      "cash": 9850.0,
+      "realized": -150.0,
+      "peak": 10000.0,
+      "position": null,
+      "equity": 9850.0,
+      "dd_pct": 1.5,
+      "new_trades": 0,
+      "trades_detail": []
+    },
+    "v0.9": {
+      "cash": 10000.0,
+      "realized": 0.0,
+      "peak": 10000.0,
+      "position": null,
+      "equity": 10000.0,
+      "dd_pct": 0,
+      "new_trades": 0,
+      "trades_detail": []
+    },
+    "v0.15": {
+      "cash": 10000.0,
+      "realized": 0.0,
+      "peak": 10000.0,
+      "position": null,
+      "equity": 10000.0,
+      "dd_pct": 0,
+      "new_trades": 0,
+      "trades_detail": []
+    }
+  },
+  "events": [
+    {
+      "ts": "2026-06-14T05:00:00+00:00",
+      "variant": "v0.3",
+      "type": "CLOSE",
+      "pair": "SOL/USD",
+      "price": 68.24,
+      "pnl_r": -0.26881720430107525,
+      "pnl_usd": -38.75,
+      "note": "exit-ema20-1bar"
+    },
+    {
+      "ts": "2026-06-14T06:00:00+00:00",
+      "variant": "v0.13",
+      "type": "CLOSE",
+      "pair": "SOL/USD",
+      "price": 68.17,
+      "pnl_r": -0.344086021505369,
+      "pnl_usd": -49.59999999999894,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-14T12:00:00+00:00",
+      "variant": "v0.5",
+      "type": "CLOSE",
+      "pair": "BTC/USD",
+      "price": 64282.9,
+      "pnl_r": -0.08820045720816228,
+      "pnl_usd": -6.173149999999278,
+      "note": "exit-ema20-1bar"
+    },
+    {
+      "ts": "2026-06-14T13:00:00+00:00",
+      "variant": "v0.12",
+      "type": "CLOSE",
+      "pair": "BTC/USD",
+      "price": 64272.8,
+      "pnl_r": -0.11207509423019787,
+      "pnl_usd": -7.73093999999905,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-14T13:00:00+00:00",
+      "variant": "v0.14",
+      "type": "CLOSE",
+      "pair": "BTC/USD",
+      "price": 64272.8,
+      "pnl_r": -0.11216482728965227,
+      "pnl_usd": -7.825739999999039,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-14T13:00:00+00:00",
+      "variant": "v0.5",
+      "type": "OPEN",
+      "pair": "HYPE/USD",
+      "price": 61.03,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI59.7"
+    },
+    {
+      "ts": "2026-06-14T13:00:00+00:00",
+      "variant": "v0.12",
+      "type": "OPEN",
+      "pair": "HYPE/USD",
+      "price": 61.03,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI59.7"
+    },
+    {
+      "ts": "2026-06-14T13:00:00+00:00",
+      "variant": "v0.14",
+      "type": "OPEN",
+      "pair": "HYPE/USD",
+      "price": 61.03,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI59.7"
+    },
+    {
+      "ts": "2026-06-14T14:00:00+00:00",
+      "variant": "v0.5",
+      "type": "CLOSE",
+      "pair": "HYPE/USD",
+      "price": 60.25,
+      "pnl_r": -0.5405064455015947,
+      "pnl_usd": -86.2552613325893,
+      "note": "exit-ema20-1bar"
+    },
+    {
+      "ts": "2026-06-14T14:00:00+00:00",
+      "variant": "v0.7",
+      "type": "CLOSE",
+      "pair": "TAO/USD",
+      "price": 259.015,
+      "pnl_r": -1.0000141382723042,
+      "pnl_usd": -141.46200000000016,
+      "note": "exit-stop-hit"
+    },
+    {
+      "ts": "2026-06-14T15:00:00+00:00",
+      "variant": "v0.12",
+      "type": "CLOSE",
+      "pair": "HYPE/USD",
+      "price": 60.2,
+      "pnl_r": -0.5751542945722077,
+      "pnl_usd": -90.44456872887734,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-14T15:00:00+00:00",
+      "variant": "v0.14",
+      "type": "CLOSE",
+      "pair": "HYPE/USD",
+      "price": 60.2,
+      "pnl_r": -0.5751542945722077,
+      "pnl_usd": -91.56582282367715,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-15T04:00:00+00:00",
+      "variant": "v0.5",
+      "type": "OPEN",
+      "pair": "BTC/USD",
+      "price": 65610.7,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI66.0"
+    },
+    {
+      "ts": "2026-06-15T04:00:00+00:00",
+      "variant": "v0.7",
+      "type": "OPEN",
+      "pair": "ETH/USD",
+      "price": 1716.34,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI68.7"
+    },
+    {
+      "ts": "2026-06-15T04:00:00+00:00",
+      "variant": "v0.12",
+      "type": "OPEN",
+      "pair": "BTC/USD",
+      "price": 65610.7,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI66.0"
+    },
+    {
+      "ts": "2026-06-15T04:00:00+00:00",
+      "variant": "v0.14",
+      "type": "OPEN",
+      "pair": "BTC/USD",
+      "price": 65610.7,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI66.0"
+    },
+    {
+      "ts": "2026-06-15T13:00:00+00:00",
+      "variant": "v0.7",
+      "type": "CLOSE",
+      "pair": "ETH/USD",
+      "price": 1805.7809767851038,
+      "pnl_r": 4.0,
+      "pnl_usd": 591.5120999999999,
+      "note": "exit-4R-target"
+    },
+    {
+      "ts": "2026-06-15T22:00:00+00:00",
+      "variant": "v0.5",
+      "type": "CLOSE",
+      "pair": "BTC/USD",
+      "price": 66165.0,
+      "pnl_r": 0.7593982859160114,
+      "pnl_usd": 120.2039930488779,
+      "note": "exit-ema20-1bar"
+    },
+    {
+      "ts": "2026-06-16T03:00:00+00:00",
+      "variant": "v0.12",
+      "type": "CLOSE",
+      "pair": "BTC/USD",
+      "price": 66109.9,
+      "pnl_r": 0.6839105616620398,
+      "pnl_usd": 106.61894599922745,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-16T03:00:00+00:00",
+      "variant": "v0.14",
+      "type": "CLOSE",
+      "pair": "BTC/USD",
+      "price": 66109.9,
+      "pnl_r": 0.6839105616620398,
+      "pnl_usd": 107.94071613385252,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-16T04:00:00+00:00",
+      "variant": "v0.5",
+      "type": "OPEN",
+      "pair": "HYPE/USD",
+      "price": 70.38,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI72.7"
+    },
+    {
+      "ts": "2026-06-16T04:00:00+00:00",
+      "variant": "v0.12",
+      "type": "OPEN",
+      "pair": "HYPE/USD",
+      "price": 70.38,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI72.7"
+    },
+    {
+      "ts": "2026-06-16T04:00:00+00:00",
+      "variant": "v0.14",
+      "type": "OPEN",
+      "pair": "HYPE/USD",
+      "price": 70.38,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI72.7"
+    },
+    {
+      "ts": "2026-06-16T19:00:00+00:00",
+      "variant": "v0.5",
+      "type": "CLOSE",
+      "pair": "HYPE/USD",
+      "price": 72.37,
+      "pnl_r": 0.8887276718484783,
+      "pnl_usd": 142.27777294018605,
+      "note": "exit-ema20-1bar"
+    },
+    {
+      "ts": "2026-06-17T04:00:00+00:00",
+      "variant": "v0.5",
+      "type": "OPEN",
+      "pair": "HYPE/USD",
+      "price": 74.49,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI60.0"
+    },
+    {
+      "ts": "2026-06-17T06:00:00+00:00",
+      "variant": "v0.5",
+      "type": "CLOSE",
+      "pair": "HYPE/USD",
+      "price": 73.38,
+      "pnl_r": -0.39280517996165804,
+      "pnl_usd": -63.723094033725424,
+      "note": "exit-ema20-1bar"
+    },
+    {
+      "ts": "2026-06-17T07:00:00+00:00",
+      "variant": "v0.12",
+      "type": "CLOSE",
+      "pair": "HYPE/USD",
+      "price": 73.34,
+      "pnl_r": 1.3219265872721058,
+      "pnl_usd": 208.19725201453622,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-17T07:00:00+00:00",
+      "variant": "v0.14",
+      "type": "CLOSE",
+      "pair": "HYPE/USD",
+      "price": 73.34,
+      "pnl_r": 1.321926587272106,
+      "pnl_usd": 210.77830275786113,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-20T04:00:00+00:00",
+      "variant": "v0.5",
+      "type": "OPEN",
+      "pair": "SOL/USD",
+      "price": 70.77,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI64.4"
+    },
+    {
+      "ts": "2026-06-20T04:00:00+00:00",
+      "variant": "v0.12",
+      "type": "OPEN",
+      "pair": "SOL/USD",
+      "price": 70.77,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI64.4"
+    },
+    {
+      "ts": "2026-06-20T04:00:00+00:00",
+      "variant": "v0.14",
+      "type": "OPEN",
+      "pair": "SOL/USD",
+      "price": 70.77,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI64.4"
+    },
+    {
+      "ts": "2026-06-21T04:00:00+00:00",
+      "variant": "v0.7",
+      "type": "OPEN",
+      "pair": "BTC/USD",
+      "price": 64199.9,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI60.4"
+    },
+    {
+      "ts": "2026-06-21T08:00:00+00:00",
+      "variant": "v0.7",
+      "type": "CLOSE",
+      "pair": "BTC/USD",
+      "price": 63924.5,
+      "pnl_r": -0.5868646691416525,
+      "pnl_usd": -91.99145150784275,
+      "note": "exit-ema20-1bar"
+    },
+    {
+      "ts": "2026-06-21T20:00:00+00:00",
+      "variant": "v0.5",
+      "type": "CLOSE",
+      "pair": "SOL/USD",
+      "price": 73.36,
+      "pnl_r": 2.222693040553244,
+      "pnl_usd": 358.45337415590546,
+      "note": "exit-ema20-1bar"
+    },
+    {
+      "ts": "2026-06-21T21:00:00+00:00",
+      "variant": "v0.12",
+      "type": "CLOSE",
+      "pair": "SOL/USD",
+      "price": 73.06,
+      "pnl_r": 1.9652382482111719,
+      "pnl_usd": 315.65318650897757,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-21T21:00:00+00:00",
+      "variant": "v0.14",
+      "type": "CLOSE",
+      "pair": "SOL/USD",
+      "price": 73.06,
+      "pnl_r": 1.9652382482111719,
+      "pnl_usd": 319.56638365153634,
+      "note": "exit-ema20-2bar"
+    },
+    {
+      "ts": "2026-06-22T04:00:00+00:00",
+      "variant": "v0.14",
+      "type": "OPEN",
+      "pair": "AVAX/USD",
+      "price": 6.275,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI56.0"
+    },
+    {
+      "ts": "2026-06-22T13:00:00+00:00",
+      "variant": "v0.5",
+      "type": "OPEN",
+      "pair": "BTC/USD",
+      "price": 65502.0,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI71.2"
+    },
+    {
+      "ts": "2026-06-22T13:00:00+00:00",
+      "variant": "v0.7",
+      "type": "OPEN",
+      "pair": "XDG/USD",
+      "price": 0.0849219,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI69.3"
+    },
+    {
+      "ts": "2026-06-22T13:00:00+00:00",
+      "variant": "v0.12",
+      "type": "OPEN",
+      "pair": "BTC/USD",
+      "price": 65502.0,
+      "pnl_r": null,
+      "pnl_usd": null,
+      "note": "RSI71.2"
+    },
+    {
+      "ts": "2026-06-22T14:00:00+00:00",
+      "variant": "v0.7",
+      "type": "CLOSE",
+      "pair": "XDG/USD",
+      "price": 0.08395110080397146,
+      "pnl_r": -1.0,
+      "pnl_usd": -155.37083472738234,
+      "note": "exit-stop-hit"
+    },
+    {
+      "ts": "2026-06-22T15:00:00+00:00",
+      "variant": "v0.5",
+      "type": "CLOSE",
+      "pair": "BTC/USD",
+      "price": 64742.886945598235,
+      "pnl_r": -1.0,
+      "pnl_usd": -166.64665102167984,
+      "note": "exit-stop-hit"
+    },
+    {
+      "ts": "2026-06-22T15:00:00+00:00",
+      "variant": "v0.12",
+      "type": "CLOSE",
+      "pair": "BTC/USD",
+      "price": 64742.886945598235,
+      "pnl_r": -1.0,
+      "pnl_usd": -165.35307743690797,
+      "note": "exit-stop-hit"
+    },
+    {
+      "ts": "2026-06-22T19:00:00+00:00",
+      "variant": "v0.14",
+      "type": "CLOSE",
+      "pair": "AVAX/USD",
+      "price": 6.268,
+      "pnl_r": -0.04402536349144419,
+      "pnl_usd": -7.369977171539327,
+      "note": "exit-ema20-2bar"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB-SWEEP (parameter sweep of v0.4, RSI threshold 25 → 30)
-> **Last rebuild:** 2026-06-14T05:00Z (routine-07 wake 2026-06-13 22:00 PT — 0 entries; RSI far above mean-rev thresholds; 15/15 positive EOD)
+> **Last rebuild:** 2026-06-24T16:35Z (routine-07 wake 2026-06-24 PT — 0 entries across all 12 wakes in replay window; RSI 48-76 throughout, far above M2 RSI<30 threshold; 1 closed trade lifetime)
 
 ## Account
 
@@ -34,7 +34,7 @@ All clear at $9,850.00 equity. DD 1.50% well under caps.
 ## Days live
 
 - Spin-up: 2026-05-12
-- As of last rebuild: **33 days**
+- As of last rebuild: **43 days**
 - Promotion-eligible: **2026-06-11 (reached)** — 1 closed trade in rolling 30d (NEAR −1R) — below 10-trade minimum → NOT promotion-eligible; variant continues in LAB.
 
 ## Notes
@@ -52,3 +52,4 @@ Parameter sweep — RSI oversold threshold 30 (vs v0.4's 25). Tests whether v0.4
 - **2026-06-11 22:00 PT (this wake)** — **EOD 2026-06-12T04:00Z (confirmed):** SBD CLEARED ✓; M3 PASSES (15/15 green ✓); M2 (RSI < 30): BTC 1H RSI 57.4 >> 30; NEAR RSI elevated in bounce; no pair near oversold. M2 failure is the binding constraint. **0 entries.** A/B vs sibling v0.9/v0.4: all mean-rev variants uniformly 0-entry in broad-positive tape; next divergence will occur at a deeply oversold wake (RSI 20-30 range). Kill switches all clear at $9,850. Days live: **31**.
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **OVERNIGHT 2026-06-12T13:00Z:** M2 (RSI < 30): no pair near oversold. 0 entries. **EOD 2026-06-13T04:00Z:** 4/15 positive, SBD CLEAR. M3 PASSES. M2 (RSI < 30): TAO 1H RSI 62.5 >> 30; universe-wide RSI elevated. **0 entries.** Kill switches all clear at $9,850. Days live: **32**.
 - **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). **OVERNIGHT + EOD:** M3 PASSES (green bars across regime). M2 (RSI < 30): universe RSI 48-76 range across 15/15 positive tape — no pair approaching oversold at the 30 threshold; TAO RSI ~76, BTC RSI ~55 both well above 30. **0 entries.** A/B vs siblings v0.4 (RSI<25) and v0.9 (RSI<20): all mean-rev variants uniformly 0-entry in broad-rallying tape. Next divergence requires RSI<30 pull-back, likely in a reversal or ranging wake. Kill switches all clear at $9,850. Days live: **33**.
+- **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days). **All 12 wakes assessed: 0 entries.** June 14–22 broad-rally tape: universe RSI 48-76+ range throughout; M2 (RSI<30 relaxed threshold) failed at every wake. No pull-back below RSI 30 even at intraday lows. A/B vs v0.4 (RSI<25) and v0.9 (RSI<20): all three mean-rev variants uniformly 0-entry. **OVERNIGHT 2026-06-24T13:00Z:** SBD active, red bars → M3 FAIL → 0 entries. Kill switches all clear at $9,850. Days live: **43**.
