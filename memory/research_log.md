@@ -4,6 +4,8 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+2026-06-24T01:03:03Z | idea-scan | day-gate | not Friday, skipping | no action
+
 ## 2026-06-23T16:07Z — routine-03-eod (DUPLICATE LATE-FIRE of Mon 21:00 PT slot)
 
 **Slot identity `bull-03-eod`.** Cron `0 21 * * 1-5` PT (Mon 21:00 PT = 04:00Z Tue 06-23). Framework dispatched ~12h late at 16:07Z Tue 06-23 (09:07 PT Tue). The Mon EOD work was already completed by the on-time-early fire at 01:50Z 06-23 (PT 18:50 Mon 06-22) — see prior research_log row at line 4526 and commit `132a2fc`. This is a duplicate late-fire of the same cron slot.
