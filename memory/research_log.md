@@ -6,6 +6,99 @@
 
 2026-06-24T01:03:03Z | idea-scan | day-gate | not Friday, skipping | no action
 
+## 2026-06-24T16:33Z — routine-01-overnight (PT 09:33 Wed 06-24, fired ~3h33m behind 06:00 PT cron)
+
+**Slot identity `bull-01-overnight`.** Late fire of the Wed 06:00 PT cron. No concurrent automation observed. Universe + portfolio state verified clean before any work.
+
+### Pre-flight kill switches (READ portfolio.md → re-verify against current state)
+
+- Equity $10,413.87 (cash-only, 0 OPEN). DD 4.25% from peak $10,875.85 — CLEAR (cap 25%, warn 12.5%, 8.25pp to warn).
+- Loss streak 0 days — CLEAR.
+- Equity floor $10,413.87 > $7,500 — CLEAR.
+- 5b cooldowns: none active (last stop-out was 2026-06-17T18:00Z SOL — well past 24h; SOL/USD 2026-06-22 EMA-exit doesn't trigger 5b).
+- All Ring 3 kill switches: **CLEAR.**
+
+### Watchdog (mandatory, `--telegram`)
+
+`python scripts/watchdog.py --telegram` — **8 findings, all carry-over from prior wakes, Telegram alert auto-sent**:
+- 1× A heartbeat: routine-07 last commit **251h** stale (up from 226h yesterday; +25h continuing widening; ~10.5 days now). routine-04 territory.
+- 1× C dirty-tree: 5 uncommitted scripts in `scripts/` (`replay_cache_20260622/`, `replay_cache_20260623/`, `replay_result_20260623.json`, `routine07_replay_20260622.py`, `routine07_replay_20260623.py`) — 2 new vs prior wake (06-23 replay artifacts joined the 06-22 carryover). Not modified this fire; flagged for routine-04 housekeeping.
+- 6× D stale-MTM: variants v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive — all 252h stale (was 227h yesterday; +25h continuing gap). routine-04 territory.
+
+Findings continue widening the routine-07 + variant-MTM gap (~+25h since yesterday's overnight). Not a kill switch; logged for routine-04.
+
+### Position management
+
+**No open positions → no exit checks needed.** Last position closed 2026-06-22T16:00Z (SOL +1.19R EMA-exit, see prior research_log row at line 63+). Flat into this wake.
+
+### Entry scan — Technical (authoritative: `python scripts/indicators.py`)
+
+`indicators.py` ran successfully, 720 4H bars per pair (well above the 200-bar 4H-50-EMA convergence floor). Output dated 2026-06-24T16:33:54+00:00.
+
+**Regime gate (rule 5a):** **0/15 positive 24h, median −3.05%.** Strict 5a FAIL (< 4/15 positive floor). **No new entries this wake regardless of per-pair eligibility.**
+
+**Regime sub-state (rule 5a-SBD):** **ACTIVE** — positives = 0 (≤ 1 ceiling) AND median = −3.05% (≤ −1.0%). 9-EMA two-bar exit (Exit rule 1-SBD) would apply to any open position; **no open positions, so SBD defensive value this wake = 0 R avoided**. SBD has now been continuously active for ~36h (since overnight 06-23 fire; +24h continued).
+
+**Per-pair Technical PASS/FAIL summary** (per routine DO step 6, every REJECT recorded; full table available in stdout of `indicators.py`, condensed here):
+
+| Pair | R1 (close>EMA20) | R2 (RSI≥55) | R2a (RSI≤80) | R3 (4H>EMA50) | R4a ($2M) | Decision |
+|---|---|---|---|---|---|---|
+| BTC/USD | FAIL −1,998 | FAIL RSI 22.0 | OK | FAIL −3,380 | OK $173.53M | REJECT R1+R2+R3 + regime |
+| ETH/USD | FAIL −43.84 | FAIL RSI 25.9 | OK | FAIL −90.68 | OK $52.01M | REJECT R1+R2+R3 + regime |
+| SOL/USD | FAIL −1.912 | FAIL RSI 28.0 | OK | FAIL −3.544 | OK $25.16M | REJECT R1+R2+R3 + regime |
+| HYPE/USD | FAIL −1.989 | FAIL RSI 29.7 | OK | FAIL −6.054 | OK $16.06M | REJECT R1+R2+R3 + regime |
+| XRP/USD | FAIL −0.0346 | FAIL RSI 22.5 | OK | FAIL −0.0782 | OK $22.72M | REJECT R1+R2+R3 + regime |
+| SUI/USD | FAIL −0.0217 | FAIL RSI 30.7 | OK | FAIL −0.0492 | OK $4.22M | REJECT R1+R2+R3 + regime |
+| TAO/USD | FAIL −4.353 | FAIL RSI 38.2 | OK | FAIL −15.43 | OK $2.09M | REJECT R1+R2+R3 + regime |
+| XDG/USD | FAIL −0.0035 | FAIL RSI 17.9 | OK | FAIL −0.0078 | OK $3.91M | REJECT R1+R2+R3 + regime |
+| NEAR/USD | FAIL −0.0517 | FAIL RSI 28.3 | OK | FAIL −0.2024 | OK $3.04M | REJECT R1+R2+R3 + regime |
+| ADA/USD | FAIL −0.0055 | FAIL RSI 23.5 | OK | FAIL −0.0167 | OK $6.14M | REJECT R1+R2+R3 + regime |
+| LINK/USD | FAIL −0.211 | FAIL RSI 28.1 | OK | FAIL −0.496 | **FAIL $1.28M** | REJECT R1+R2+R3+R4a + regime |
+| LTC/USD | FAIL −1.342 | FAIL RSI 24.1 | OK | FAIL −3.173 | OK $2.50M | REJECT R1+R2+R3 + regime |
+| FARTCOIN/USD | FAIL −0.0028 | FAIL RSI 41.4 | OK | FAIL −0.0013 | **FAIL $0.49M** | REJECT R1+R2+R3+R4a + regime |
+| TRX/USD | FAIL −0.0027 | FAIL RSI 32.4 | OK | **PASS +0.0008** | **FAIL $0.86M** | REJECT R1+R2+R4a + regime (only R3 PASS, lone-rule in universe) |
+| AVAX/USD | FAIL −0.143 | FAIL RSI 35.6 | OK | FAIL −0.1621 | OK $2.21M | REJECT R1+R2+R3 + regime |
+
+**Decision: 0 entries this wake.** Every pair fails at least 3 of {R1, R2, R3} (14 of 15 fail all three; TRX has lone R3 PASS but fails R1+R2 + R4a). Even ignoring regime, no candidate would clear technical. Regime gate (5a FAIL) is the dispositive blocker — applies universally and would suppress entries even on a tape recovery.
+
+**Yesterday's lone TECH-PASS candidate (AVAX) deteriorated rapidly.** At Tue EOD (~16h ago) AVAX was the only R1+R2+R3+R4a PASS. Today: AVAX has flipped to R1+R2+R3 all FAIL with 24h change −2.16%. The tape continued breaking down overnight — every pair is now mechanically below EMA20 on 1H and below EMA50 on 4H. This is consistent with the SBD continuation noted yesterday.
+
+### Entry scan — News (skipped — gate fails)
+
+Per routine DO step 4: news scan runs **for each technical-PASS candidate**. **0 TECH-PASS candidates → no news scan executed this wake.** Firecrawl quota preserved. Not logging "Firecrawl unavailable" since this is a *no-target* skip, not a tool-failure skip.
+
+### Entry scan — Sentiment (skipped — gate fails)
+
+Per routine DO step 4a: sentiment scan runs **for each technical-PASS candidate**. **0 TECH-PASS candidates → no sentiment scan executed this wake.** No `kraken_spread` / `kraken_depth` calls made.
+
+### Decision
+
+**No entries. No exits.** Flat into Wed 06-24 13:00 PT midday slot. SBD continues into a ~36h+ active window; the only mandate-legal action is to remain flat and let SBD clear via regime recovery. No portfolio rebuild needed (no trade events; portfolio state unchanged since `routine-03-eod` 06-24T04:11Z rebuild).
+
+**Next entry-eligible scan:** routine-02-midday Wed 2026-06-24 13:00 PT (= 20:00Z) — entries gated by 5a regime recovery (≥4/15 positive). With every pair now structurally broken on 1H+4H trend, even a fast regime swing would still require trend repair before R1/R2/R3 can PASS; realistic next-entry path is multi-wake distance.
+
+### Universe refresh
+
+Today is **2026-06-24** (Wed), not 1st or first-weekday-of-month. **Skipped.** Next refresh: 2026-07-01 (Wed, on-cycle).
+
+### Telegram — silence rationale
+
+Per `skills/telegram.md` routine #1 silence policy: send only if (a) Ring 3 kill switch tripped, (b) new OPEN or stop-out CLOSE this run, (c) ACTIONABLE news item, or (d) universe refreshed.
+
+- (a) No kill switch tripped — all CLEAR.
+- (b) No new OPEN, no CLOSE this run.
+- (c) No news scan executed (no TECH-PASS candidates) → no ACTIONABLE classification possible.
+- (d) Universe not refreshed today.
+
+**No EOD-style card sent.** Watchdog alert was sent independently by `watchdog.py --telegram` (carries today's 8 findings) — that satisfies the "ops surveillance" notification path without overlapping the strategy-action channel.
+
+### Files written this routine
+
+- `memory/research_log.md` (this row only)
+- No trade_log, no portfolio.md, no lessons.md, no universe.md changes.
+
+---
+
 ## 2026-06-23T16:07Z — routine-03-eod (DUPLICATE LATE-FIRE of Mon 21:00 PT slot)
 
 **Slot identity `bull-03-eod`.** Cron `0 21 * * 1-5` PT (Mon 21:00 PT = 04:00Z Tue 06-23). Framework dispatched ~12h late at 16:07Z Tue 06-23 (09:07 PT Tue). The Mon EOD work was already completed by the on-time-early fire at 01:50Z 06-23 (PT 18:50 Mon 06-22) — see prior research_log row at line 4526 and commit `132a2fc`. This is a duplicate late-fire of the same cron slot.
