@@ -5025,3 +5025,5 @@ Mandatory EOD card per routine NOTIFY. Sending next via `scripts/telegram_send.p
 
 **0 OPEN, 0 CLOSE.** Pure read/health-check wake closing out a flat trading day. PT 2026-06-23 was the first full 3-wake day inside SBD (overnight + midday + EOD all rejected entries by 5a regime gate). Equity **$10,413.87** unchanged, DD **4.25%** unchanged, loss streak **0**. Regime 5a FAIL (1/15 positive AVAX +1.73%, median −3.68%), 5a-SBD ACTIVE ~12h continuous. AVAX is the lone TECH-PASS candidate but blocked by regime; flagged for re-check at next entry-eligible wake (routine-01 Wed 06-24 06:00 PT). Watchdog: 8 findings, all carry-over from prior wakes (routine-07 stale 238h + 6 variant MTM + 5 dirty-tree replay artifacts) — routine-04 backlog. 0 lessons appended (no trade events). No monthly archive (last trading day = 06-30). Mandatory EOD Telegram card sent.
 
+
+2026-06-24T17:07:31Z | harness | day-gate | not Saturday, skipping | no action
