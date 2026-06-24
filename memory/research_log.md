@@ -5029,3 +5029,68 @@ Mandatory EOD card per routine NOTIFY. Sending next via `scripts/telegram_send.p
 2026-06-24T17:07:31Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-06-24T17:40Z | allocation | day-gate | not Sunday, skipping | no action
+
+---
+
+## 2026-06-24T20:07Z — routine-02-midday (Wed 13:07 PT, on cron)
+
+### Mode
+
+Lean read/health-check wake. Position management only — no entry scan per routine spec. Portfolio flat (0 open positions); no MTM revalue and no exit checks needed. Re-verify kill switches + regime, append research_log row, rewrite portfolio.md, commit. Silent (no Telegram — no exits, no kill-switch trip, DD nowhere near 12.5% warn).
+
+### Kraken multi-ticker — all 15 universe pairs
+
+| Pair | last | 24h % |
+|------|------|-------|
+| BTC | 60580.3 | −3.30 |
+| ETH | 1605.28 | −3.59 |
+| SOL | 67.17 | −3.51 |
+| HYPE | 61.25 | −1.40 |
+| XRP | 1.06685 | −3.77 |
+| SUI | 0.6832 | −2.87 |
+| TAO | 216.2716 | −2.02 |
+| XDG | 0.0750637 | −4.74 |
+| NEAR | 1.934 | −2.37 |
+| ADA | 0.143444 | −5.21 |
+| LINK | 7.34321 | −3.70 |
+| LTC | 40.54 | −3.84 |
+| FARTCOIN | 0.1203 | −6.67 |
+| TRX | 0.325717 | −0.95 |
+| AVAX | 6.23 | −3.78 |
+
+**Positives: 0/15.** Sorted descending: TRX −0.95, HYPE −1.40, TAO −2.02, NEAR −2.37, SUI −2.87, BTC −3.30, SOL −3.51, **ETH −3.59 (median)**, LINK −3.70, XRP −3.77, AVAX −3.78, LTC −3.84, XDG −4.74, ADA −5.21, FARTCOIN −6.67.
+
+### Regime classification
+
+- **Rule 5a:** 0/15 positive < 4/15 floor → **FAIL** (entries would be rejected if midday could enter, which it cannot anyway).
+- **Rule 5a-SBD:** positives = 0 (≤ 1 ✓) AND median = −3.59% (≤ −1.0% ✓) → **SBD ACTIVE**.
+- Continuous SBD duration: ~24h (active since overnight 2026-06-23T13:00Z fire). AVAX, the lone TECH-PASS candidate at EOD with +1.73% 24h, has now collapsed to −3.78% — regime has *deteriorated* over the 12h since EOD, not improved.
+- SBD defensive value this wake: **0 R avoided** (no open positions to apply 9-EMA two-bar exit to).
+
+### Mark-to-market
+
+No open positions → no MTM line items. Equity = cash = $10,413.87 (unchanged since 2026-06-22T16:00 SOL correction row).
+
+### Exit check
+
+No open positions → no exits possible. n/a.
+
+### Drawdown / kill-switch state
+
+| Switch | Reading | Cap | Status |
+|---|---|---|---|
+| Daily realized + unrealized | $0.00 / 0.00% | 5% | CLEAR |
+| Loss streak | 0 days | 7 | CLEAR |
+| Max drawdown | 4.25% ($461.98 from peak $10,875.85) | 25% (warn 12.5%) | CLEAR — 8.25pp to warn |
+| Equity floor | $10,413.87 | $7,500 | CLEAR — $2,913.87 of headroom |
+| MCP availability | Kraken OK (multi-ticker returned all 15) | — | CLEAR |
+
+All clear. No alert.
+
+### Entry scan
+
+**Forbidden by routine spec** ("DO NOT OPEN NEW POSITIONS IN MIDDAY"). Skipped entirely. Next entry-eligible wake = routine-03-eod Wed 2026-06-24 ~21:00 PT (= Thu 04:00Z, aligned to 13:00Z UTC bar close). Entry still gated by 5a recovery (≥ 4/15 positive) — currently 0/15, so a swing of +4 pairs to positive in the next ~8h needed for any entry. With median sitting at −3.59% and the prior session's lone positive (AVAX) flipping negative, recovery looks remote heading into EOD.
+
+### Summary
+
+**0 MTM, 0 exits, 0 entries** (entries forbidden by routine). Flat portfolio held. Regime read deteriorated vs EOD 12h ago: positives 1 → 0, median −3.68% → −3.59% (slight median improvement but lost the lone positive). SBD now ~24h continuous. Equity $10,413.87, DD 4.25%, all kill switches CLEAR. Silent — no Telegram triggers (no exit, no kill switch, no DD warning crossed).

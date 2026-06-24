@@ -2,9 +2,9 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-24T04:11Z routine-03-eod (PT label 2026-06-23 Tue EOD, fired 21:10 PT on cron). Closes out PT 2026-06-23 flat: 0 OPEN, 0 CLOSE, equity unchanged at $10,413.87, DD 4.25%. All 3 wakes today (overnight, midday, EOD) rejected entries by 5a regime gate. Final regime read: **5a FAIL (1/15 positive AVAX +1.73%, median −3.68%); 5a-SBD ACTIVE** (~12h continuous). AVAX is the lone TECH-PASS candidate but blocked by regime; eligible for re-check at next entry-allowed wake (Wed 06-24 06:00 PT). All kill switches CLEAR. Watchdog: 8 findings, all carry-over (routine-07 238h stale + 6 variant MTM + 5 dirty-tree replay artifacts) — routine-04 backlog. Mandatory EOD Telegram card sent.
+> **Last rebuild:** 2026-06-24T20:07Z routine-02-midday (PT label 2026-06-24 Wed midday, fired 13:07 PT on cron). Flat read/health-check wake — 0 MTM events, 0 exits, 0 entries (midday cannot enter per routine spec). Equity unchanged at $10,413.87, DD 4.25%. Regime read deteriorated vs EOD 12h ago: **5a FAIL 0/15 positive (was 1/15 AVAX), median −3.59% (was −3.68%); 5a-SBD ACTIVE** (~24h continuous, AVAX flipped negative −3.78%). All kill switches CLEAR. Silent (no Telegram triggers).
 
-> **Prior rebuild:** 2026-06-23T20:07Z routine-02-midday (Tue 13:07 PT, on cron — flat, equity $10,413.87, DD 4.25%, 0 OPEN, 0 CLOSE; 5a FAIL median −3.77%, SBD ACTIVE).
+> **Prior rebuild:** 2026-06-24T04:11Z routine-03-eod (Tue 21:10 PT — closes out PT 2026-06-23 flat, equity $10,413.87, DD 4.25%, 0 OPEN, 0 CLOSE; 5a FAIL 1/15 positive AVAX +1.73%, median −3.68%, SBD ACTIVE ~12h).
 
 ## Account
 
@@ -49,32 +49,31 @@ Portfolio risk-at-moment: **0.00%** of equity (no open positions; cap 4%, full h
 Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster cap 0/2).
 Breakeven ratchet (W22-H-partial): n/a (no open position).
 
-## Day summary — 2026-06-23 PT (Tue, EOD close)
+## Midday snapshot — 2026-06-24 PT (Wed, 13:07 PT)
 
 | Metric | Value |
 |---|---|
-| Day realized PnL | **$0.00** (0 closes) |
-| Day unrealized PnL change | **$0.00** (flat all 3 wakes) |
-| Day total PnL | **$0.00 (0.00%)** |
-| Trades opened today | **0** (overnight rejected by 5a FAIL; midday forbidden; EOD rejected by 5a FAIL) |
-| Trades closed today | **0** |
-| Win rate today | n/a (0 trades) |
-| Equity (current cash-only) | **$10,413.87** |
-| Equity peak (realized) | **$10,875.85** (unchanged; need +$461.98 to retake) |
+| Wake type | routine-02-midday (position management only; cannot enter) |
+| Open positions MTM | $0.00 (flat) |
+| Exits triggered this wake | 0 |
+| Entries this wake | 0 (forbidden by routine spec) |
+| Equity (cash-only) | **$10,413.87** |
+| Equity peak | $10,875.85 (unchanged; need +$461.98 to retake) |
 | Drawdown from peak | **4.25%** |
-| Loss streak | **0 trading days** |
+| Loss streak | 0 trading days |
+| Day-to-date realized PnL (2026-06-24 PT) | $0.00 |
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-23 PT (EOD close): **$0.00 / 0.00%** of equity — CLEAR.
-- Daily total: **$0.00 / 0.00%** — CLEAR.
+- Daily realized + unrealized 2026-06-24 PT: **$0.00 / 0.00%** of equity — CLEAR.
 - Consecutive losing trading days: **0** (cap 7, full headroom). CLEAR.
 - Max drawdown: **4.25%** from peak $10,875.85 (cap 25%, warn 12.5%, 8.25pp to warn) — CLEAR.
 - Equity floor: $10,413.87 > $7,500 floor — CLEAR.
-- Regime gate (rule 5a): **FAIL** — 1/15 positive (AVAX +1.73% only), median −3.68% (< 4/15 floor). All entries rejected this wake (including AVAX TECH-PASS).
-- Regime sub-state (rule 5a-SBD): **ACTIVE** — positives = 1 (≤ 1 ceiling) AND median −3.68% (≤ −1.0%). 9-EMA two-bar exit would apply to any open position; **no open positions**, so SBD defensive value this wake = 0 R avoided. SBD has now been continuously active for ~12h (since overnight 06-23 fire).
-- Active 5b cooldowns: **None.** SOL/USD 5b expired 2026-06-23T15:00Z. No pair under same-pair re-entry guard.
-- **All clear (kill switches).** routine-03-eod 2026-06-24T04:11Z fire: **0 MTM events, 0 exits, 0 entries**. Closes out a flat trading day inside continuous SBD.
+- MCP availability: Kraken OK (multi-ticker returned all 15 universe pairs). CLEAR.
+- Regime gate (rule 5a): **FAIL** — **0/15** positive (was 1/15 AVAX at EOD 12h ago — AVAX has flipped to −3.78%), median −3.59% (< 4/15 floor). Entries would be blocked; midday cannot enter regardless.
+- Regime sub-state (rule 5a-SBD): **ACTIVE** — positives = 0 (≤ 1 ceiling) AND median −3.59% (≤ −1.0%). 9-EMA two-bar exit would apply to any open position; **no open positions**, so SBD defensive value this wake = 0 R avoided. SBD has now been continuously active for ~24h (since overnight 06-23T13:00Z fire).
+- Active 5b cooldowns: **None.** No pair under same-pair re-entry guard.
+- **All clear (kill switches).** routine-02-midday 2026-06-24T20:07Z fire: **0 MTM events, 0 exits, 0 entries**. Flat portfolio held into Wed afternoon inside continuously deteriorating SBD.
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -103,14 +102,14 @@ Breakeven ratchet (W22-H-partial): n/a (no open position).
 
 _None — no open positions._
 
-Next entry-eligible scan: routine-01-overnight Wed 2026-06-24 06:00 PT (= 13:00Z) — entries gated by 5a regime recovery (≥4/15 positive). AVAX is the only TECH-PASS candidate sitting at the threshold (R1+R2+R3 all PASS, R4a $2.81M OK) blocked solely by regime gate; re-check at next wake. SBD must clear before defensive-exit rule 1-SBD reverts to default 20-EMA two-bar exit.
+Next entry-eligible scan: routine-03-eod Wed 2026-06-24 ~21:00 PT (= Thu 04:00Z). Entries still gated by 5a regime recovery (≥ 4/15 positive). With 0/15 positive at midday and median deteriorating, recovery to 4/15 in the next ~8h looks remote. AVAX (prior lone TECH-PASS) has flipped negative; no obvious entry candidate sitting on the threshold.
 
 ## Rolling performance
 
 | Window | BULL return | BTC-hold return | Delta | Result |
 |--------|-------------|-----------------|-------|--------|
-| 7d | ≈ −2.1% (SOL +$182 winner offset by 06-16/-17 ETH/HYPE/SOL stop-outs; TAO +$621 has now rolled off the 7d window) | ≈ −3.85% (BTC ~$64.9k → $62.4k) | ≈ +1.75% | BULL ahead 7d |
-| 30d | ≈ +4.14% (inception $10k 2026-04-20; equity $10,413.87; window aligns with inception within rounding) | ≈ −20.0% (BTC 30d ago ~$78k → today $62.4k) | ≈ +24.1% | BULL well ahead |
+| 7d | ≈ −2.1% (SOL +$182 winner offset by 06-16/-17 ETH/HYPE/SOL stop-outs; TAO +$621 has now rolled off the 7d window) | ≈ −7.1% (BTC ~$65.2k → $60.6k) | ≈ +5.0% | BULL ahead 7d |
+| 30d | ≈ +4.14% (inception $10k 2026-04-20; equity $10,413.87; window aligns with inception within rounding) | ≈ −22.3% (BTC 30d ago ~$78k → today $60.6k) | ≈ +26.4% | BULL well ahead |
 | 90d | — | — | — | not computable (BULL inception 2026-04-20 = 65 days ago; window first computable ~2026-07-19) |
 
-(7d/30d figures approximate. SBD now active ~12h continuous; the W22-G two-bar EMA exit captured SOL +1.19R on 06-22 before the regime collapsed, so BULL went into SBD flat — a fortunate counterfactual the routine-04 review should examine.)
+(7d/30d figures approximate. BTC dropped further mid-day (~$62.4k → $60.6k) widening BULL's 7d lead. SBD persistence is helping relative performance — by sitting flat BULL avoids the broad-market bleed.)
