@@ -2,9 +2,9 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-25T16:20Z routine-01-overnight (PT label 2026-06-25 Thu, **OFF-CRON morning fire at 09:20 PT** — 3h20m past 06:00 PT cron window, fired ~3 min after the 09:17 PT routine-03-eod off-cron fire). Flat throughout — 0 stop-outs, 0 entries (5a FAIL gated, 0/15 positive). Equity unchanged at $10,413.87, DD 4.25%. Regime: **5a FAIL 0/15 positive (unchanged), median −2.32% (slightly improved from −2.49% EOD)**; **5a-SBD ACTIVE** (~46h continuous, 5th consecutive SBD wake). SUI closest to flipping (−0.51%). Watchdog ALL CLEAR. Silent (no Telegram triggers).
+> **Last rebuild:** 2026-06-25T20:00Z routine-02-midday (Thu 13:00 PT, on-schedule cron fire). Flat throughout — 0 exits, 0 entries (midday non-entering). Equity unchanged at $10,413.87, DD 4.25%. Regime: **5a FAIL 1/15 positive (HYPE +0.19%), median −3.11% (worsened from −2.32% overnight)**; **5a-SBD ACTIVE** (~50h continuous, 6th consecutive SBD wake). Silent (no Telegram triggers).
 
-> **Prior rebuild:** 2026-06-25T16:17Z routine-03-eod (Thu 09:17 PT, OFF-CRON — covered missed 06-24 EOD + post-midday; flat, 0/15 positive, median −2.49%, SBD ~44h).
+> **Prior rebuild:** 2026-06-25T16:20Z routine-01-overnight (Thu OFF-CRON 09:20 PT; flat, 0/15 positive, median −2.32%, SBD ~46h).
 
 ## Account
 
@@ -49,14 +49,14 @@ Portfolio risk-at-moment: **0.00%** of equity (no open positions; cap 4%, full h
 Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster cap 0/2).
 Breakeven ratchet (W22-H-partial): n/a (no open position).
 
-## Overnight snapshot — 2026-06-25 PT (Thu, OFF-CRON 09:20 PT morning fire)
+## Midday snapshot — 2026-06-25 PT (Thu, on-schedule 13:00 PT cron)
 
 | Metric | Value |
 |---|---|
-| Wake type | routine-01-overnight (off-cron — 3h20m past 06:00 PT cron window) |
+| Wake type | routine-02-midday (on-schedule cron fire) |
 | Open positions MTM | $0.00 (flat) |
-| Stop-outs this wake | 0 |
-| Entries this wake | 0 (5a FAIL gated, 0/15 positive) |
+| Exits this wake | 0 (no open positions to exit) |
+| Entries this wake | 0 (midday non-entering per routine spec) |
 | Equity (cash-only) | **$10,413.87** |
 | Equity peak | $10,875.85 (unchanged; need +$461.98 to retake) |
 | Drawdown from peak | **4.25%** |
@@ -70,11 +70,11 @@ Breakeven ratchet (W22-H-partial): n/a (no open position).
 - Max drawdown: **4.25%** from peak $10,875.85 (cap 25%, warn 12.5%, 8.25pp to warn) — CLEAR.
 - Equity floor: $10,413.87 > $7,500 floor — CLEAR.
 - MCP availability: Kraken OK (multi-ticker returned all 15 universe pairs). CLEAR.
-- Regime gate (rule 5a): **FAIL** — **0/15** positive (unchanged), median **−2.32%** (slightly improved from −2.49% EOD; < 4/15 floor). Entries rejected pre-technical.
-- Regime sub-state (rule 5a-SBD): **ACTIVE** — positives = 0 (≤ 1 ✓) AND median −2.32% (≤ −1.0% ✓). SBD continuously active ~46h (5th consecutive SBD wake, since overnight 06-23T13:00Z fire). Defensive value this wake = 0 R (flat).
+- Regime gate (rule 5a): **FAIL** — **1/15** positive (HYPE +0.19% only; up from 0/15 overnight), median **−3.11%** (worsened from −2.32% overnight; < 4/15 floor). Entries would be rejected pre-technical (midday is non-entering regardless).
+- Regime sub-state (rule 5a-SBD): **ACTIVE** — positives = 1 (≤ 1 ✓) AND median −3.11% (≤ −1.0% ✓). SBD continuously active ~50h (6th consecutive SBD wake, since overnight 06-23T13:00Z fire). Defensive value this wake = 0 R (flat).
 - Active 5b cooldowns: **None.** No pair under same-pair re-entry guard.
-- Watchdog: ALL CLEAR (`python scripts/watchdog.py --telegram`).
-- **All clear (kill switches).** routine-01-overnight 2026-06-25T16:20Z off-cron fire: **0 stop-outs, 0 entries**. Flat portfolio held into Thu mid-morning inside ~46h continuous SBD. SUI closest to flipping (−0.51%).
+- Watchdog: not re-run this routine (no carry-over change — last full run was overnight 16:20Z, ALL CLEAR).
+- **All clear (kill switches).** routine-02-midday 2026-06-25T20:00Z on-schedule fire: **0 exits, 0 entries**. Flat portfolio held into Thu midday inside ~50h continuous SBD. HYPE is the lone positive; broader median has deepened (−2.32% → −3.11%).
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -103,14 +103,14 @@ Breakeven ratchet (W22-H-partial): n/a (no open position).
 
 _None — no open positions._
 
-Next entry-eligible scan: routine-03-eod Thu 2026-06-25 ~21:00 PT (= Fri 04:00Z) — assuming the scheduler queue returns to normal cadence. Entries still gated by 5a regime recovery (≥ 4/15 positive). With 0/15 positive now and median modestly improving (−2.49% → −2.32% over 3h), SUI at −0.51% is the nearest-to-flip; needs 4 pairs to cross over the next ~11h for any entry to be eligible at EOD.
+Next entry-eligible scan: routine-03-eod Thu 2026-06-25 ~21:00 PT (= Fri 04:00Z). Entries still gated by 5a regime recovery (≥ 4/15 positive). With 1/15 positive now (HYPE only) and median deepened from −2.32% → −3.11% over the ~3h45m since overnight, the regime is moving further away from gate-PASS, not closer. Needs 3 additional pairs to flip positive over the next ~8h for any entry to be eligible at EOD.
 
 ## Rolling performance
 
 | Window | BULL return | BTC-hold return | Delta | Result |
 |--------|-------------|-----------------|-------|--------|
-| 7d | ≈ −1.6% (SOL +$182 winner offset by 06-16/-17 ETH/HYPE/SOL stop-outs; TAO +$621 rolled off) | ≈ −8.8% (BTC ~$65.4k → $59.68k) | ≈ +7.2% | BULL well ahead 7d |
-| 30d | ≈ +4.14% (inception $10k 2026-04-20; equity $10,413.87) | ≈ −23.5% (BTC 30d ago ~$78k → today $59.68k) | ≈ +27.6% | BULL well ahead |
+| 7d | ≈ −1.6% (SOL +$182 winner offset by 06-16/-17 ETH/HYPE/SOL stop-outs; TAO +$621 rolled off) | ≈ −8.9% (BTC ~$65.4k → $59.62k) | ≈ +7.3% | BULL well ahead 7d |
+| 30d | ≈ +4.14% (inception $10k 2026-04-20; equity $10,413.87) | ≈ −23.6% (BTC 30d ago ~$78k → today $59.62k) | ≈ +27.7% | BULL well ahead |
 | 90d | — | — | — | not computable (BULL inception 2026-04-20 = 66 days ago; window first computable ~2026-07-19) |
 
-(7d/30d figures approximate. BTC flat-to-slightly-up since EOD 3h ago ($59.6k → $59.68k); rolling figures essentially unchanged. SBD persistence is helping relative performance — by sitting flat BULL avoids the broad-market bleed.)
+(7d/30d figures approximate. BTC drifted slightly lower since overnight 3h45m ago ($59.68k → $59.62k, −0.10%); rolling deltas widen marginally in BULL's favor. SBD persistence continues to help relative performance — by sitting flat BULL avoids the broader 24h leg-down across 14/15 pairs.)

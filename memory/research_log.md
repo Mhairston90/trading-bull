@@ -5295,3 +5295,57 @@ Today is 2026-06-25 (Thu). Refresh trigger = 1st of month or first weekday if 1s
 2026-06-25T17:07:24Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-06-25T17:40:48Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-06-25T20:00Z — routine-02-midday (Thu 13:00 PT, on-schedule cron fire)
+
+**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` PT = 20:00Z; on-schedule.
+
+### Position management
+
+Flat at wake (0 open positions, $10,413.87 cash). No MTM, no stop-monitor, no exit checks. Per routine spec, **no new entries permitted at midday** — entry responsibility belongs to routines #1 / #3.
+
+### Kraken multi-ticker (regime sweep, 15-pair universe, 24h % change)
+
+| Pair | last | 24h % |
+|------|-----:|------:|
+| HYPE | 64.00 | **+0.19** |
+| LTC | 40.82 | −0.78 |
+| TRX | 0.3238 | −0.97 |
+| SUI | 0.6757 | −1.33 |
+| BTC | 59,623.6 | −2.23 |
+| SOL | 66.50 | −2.26 |
+| LINK | 7.20088 | −2.90 |
+| XDG | 0.0737053 | −3.11 |
+| XRP | 1.03725 | −3.24 |
+| ETH | 1,565.42 | −3.36 |
+| TAO | 211.4586 | −3.56 |
+| FARTCOIN | 0.1164 | −3.96 |
+| ADA | 0.141603 | −4.07 |
+| AVAX | 6.132 | −4.71 |
+| NEAR | 1.8331 | −6.66 |
+
+- **Positives:** 1/15 (HYPE only). Up from 0/15 at overnight 16:20Z, but still below the 4/15 floor.
+- **Median 24h % change:** **−3.11%** (worsened from −2.32% at overnight 16:20Z — ~0.8pp deeper into red).
+- **Regime gate (5a):** **FAIL** — 1/15 positive (< 4/15 floor). Entries would be rejected if midday were entry-eligible (it isn't).
+- **5a-SBD sub-state:** **ACTIVE** — positives 1 (≤ 1 ✓) AND median −3.11% (≤ −1.0% ✓). SBD continuously active ~50h (6th consecutive SBD wake, since overnight 06-23T13:00Z). Defensive value this wake = 0 R (flat).
+
+### Kill-switch state
+
+- **Daily realized + unrealized PnL (06-25 PT DTD):** $0.00 / 0.00% — CLEAR (cap 5%).
+- **Loss streak:** 0 trading days — CLEAR (cap 7).
+- **Max drawdown:** 4.25% from peak $10,875.85 — CLEAR (cap 25%, warn 12.5%, 8.25pp to warn).
+- **Equity floor:** $10,413.87 > $7,500 — CLEAR.
+- **MCP availability:** Kraken multi-ticker returned all 15 universe pairs — CLEAR.
+- **5b cooldowns:** none active.
+- **All Ring 3 kill switches: CLEAR.**
+
+### Stats
+
+- **Day P&L (06-25 PT DTD):** $0.00 / 0.00%.
+- **Trades opened:** 0 (midday non-entering). **Trades closed:** 0 (flat).
+- **New equity:** $10,413.87 unchanged. **Equity peak:** $10,875.85. **Drawdown:** 4.25% unchanged.
+
+### Summary
+
+**0 exits, 0 entries.** On-schedule midday cron fire with flat portfolio. Equity unchanged $10,413.87, DD 4.25% unchanged. Regime continues 5a FAIL — HYPE flipped positive (+0.19%) but the median deepened from −2.32% → −3.11% over the ~3h45m since overnight, so the underlying selling pressure is broader, not narrower; SBD now ~50h continuous (6th consecutive SBD wake). Silent — no Telegram triggers (no exits, no kill switch, no DD warn crossed). Next entry-eligible wake = routine-03-eod Thu 2026-06-25 ~21:00 PT (= Fri 04:00Z), still gated by 5a regime recovery (≥ 4/15 positive). Files written: `portfolio.md` (rewritten with fresh mark-to-market and regime snapshot), `research_log.md` (this row). `trade_log.md` untouched (no trade events).
+
