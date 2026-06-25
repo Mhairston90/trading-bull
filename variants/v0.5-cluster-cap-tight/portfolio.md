@@ -1,7 +1,7 @@
 # Variant v0.5-cluster-cap-tight — Synthetic Portfolio
 
 > **Paper-paper account.** Synthetic $10K starting equity.
-> **Last rebuild:** 2026-06-24T16:35Z (routine-07 wake 2026-06-24 PT — gap replay 2026-06-14T05:00Z→2026-06-24T13:00Z; 7 new closes + 6 new OPENs; 11 closed trades lifetime; **PROMOTION CANDIDATE**)
+> **Last rebuild:** 2026-06-25T19:19Z (routine-07 wake 2026-06-25 PT — off-cron 12:19 PT; 0 entries, 0 trades; SBD ACTIVE 5a FAIL; 11 closed trades lifetime; **PROMOTION CANDIDATE**)
 
 ## Account
 
@@ -23,7 +23,7 @@ Open positions: **0 / 4** (cluster 0/1).
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-24 PT: $0.00 (last trade was BTC Jun22) — clear vs 5% cap
+- Daily realized 2026-06-25 PT: $0.00 (last trade was BTC Jun22) — clear vs 5% cap
 - Consecutive losing trading days: 1 (BTC stop-out Jun22; cap 7) — clear
 - Max drawdown: 1.50% from peak $11,109.78 (cap 25%, warn 12.5%) — clear
 - Equity floor: $10,943.13 > $7,500 — OK
@@ -52,7 +52,7 @@ Open positions: **0 / 4** (cluster 0/1).
 ## Days live
 
 - Spin-up: 2026-04-29
-- As of last rebuild: **56 days**
+- As of last rebuild: **57 days**
 - **Promotion-eligible: YES** — gate opened; route to routine-04 for proposal draft.
 
 ## Notes
@@ -70,3 +70,4 @@ Tests whether tightening cluster cap from 2 to 1 (rule 6a) reduces cascade-event
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z. OVERNIGHT 13:00Z: BTC R2 FAIL (RSI ~52). EOD 2026-06-13T04:00Z: TAO sole PASS. ENTRY: TAO LONG 32.22 @ 217.286. Days live: **45**.
 - **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z. EXIT TAO +4.29R/+$644.90. OVERNIGHT BTC OPEN/CLOSE −0.26R/−$18.54. EOD BTC OPEN @ 64320.2. Equity $10,644.07, DD 0.17%. Days live: **46**.
 - **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days; fully recovered via Kraken REST 30d history). **7 new closes, 6 new opens across 12 wakes evaluated. New peak $11,109.78 set at SOL close Jun21.** Trade sequence: BTC EOD Jun14 CLOSE −0.09R/−$6.17 (12:00Z bar 1-bar EMA exit); HYPE OVERNIGHT Jun14 OPEN/CLOSE −0.54R/−$86.26 (whipsaw 2h); BTC EOD Jun15 OPEN/CLOSE +0.76R/+$120.20 (held ~18h); HYPE EOD Jun16 OPEN/CLOSE +0.89R/+$142.28 (held ~15h); HYPE EOD Jun17 OPEN/CLOSE −0.39R/−$63.72 (whipsaw 2h); SOL EOD Jun20 OPEN/CLOSE +2.22R/+$358.45 (held ~41h → BEST TRADE in replay); BTC OVERNIGHT Jun22 OPEN/CLOSE −1.00R/−$166.65 (stop hit ~2h after entry). Net new realized: +$298.13. Total realized +$942.21. **OVERNIGHT 2026-06-24T13:00Z:** 0/15 positive, SBD ACTIVE → 5a FAIL → 0 entries. **EOD 2026-06-24T04:00Z (elapsed):** 1/15 positive, SBD ACTIVE → 5a FAIL. **PROMOTION CANDIDATE: 56 days live, 10 effective closes, +9.43% return, DD 1.50%, PF ~3.76 — all gates pass.** All kill switches clear. Days live: **56**.
+- **2026-06-25 PT (routine-07, 2026-06-25T19:19Z — off-cron 12:19 PT)** — Watchdog ALL CLEAR. Kraken MCP OK ($59,407 BTC). Replay window: 2026-06-24T16:35Z → 2026-06-25T19:19Z (~26.7h). Wakes evaluated: **EOD 2026-06-25T04:00Z**: 0/15 positive, SBD ACTIVE, 5a FAIL → 0 entries. **OVERNIGHT 2026-06-25T13:00Z**: BTC crashed 61,146→58,218 −4.9%, SBD 5th consecutive wake, 0/15 positive, 5a FAIL → 0 entries. Book flat → no exit triggers. Kill switches all clear (equity $10,943.13 unchanged). **PROMOTION CANDIDATE status unchanged** (57d live, 10 effective closes, +9.43%, DD 1.50%). Days live: **57**.

@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity. Does NOT affect main BULL portfolio or any real broker.
 > **Rebuilt each routine #7 wake** from this variant's `trade_log.md`.
-> **Last rebuild:** 2026-06-24T16:35Z (routine-07 wake 2026-06-24 PT — gap replay 2026-06-14T05:00Z→2026-06-24T13:00Z; SOL CLOSE 2026-06-14T06:00Z −0.27R/−$38.75 (1-bar EMA exit); 0 new entries across 10-day replay (vol-comp gate 5c blocked all); 3 closed trades lifetime)
+> **Last rebuild:** 2026-06-25T19:19Z (routine-07 wake 2026-06-25 PT — off-cron 12:19 PT; 0 entries, 0 trades; SBD ACTIVE 5a FAIL at EOD 2026-06-25T04:00Z + OVERNIGHT 2026-06-25T13:00Z; 3 closed trades lifetime)
 
 ## Account
 
@@ -24,7 +24,7 @@ Open positions: **0 / 4** (cluster 0/2).
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-24 PT: $0.00 (last trade was SOL 2026-06-14) — clear vs 5% cap
+- Daily realized 2026-06-25 PT: $0.00 (last trade was SOL 2026-06-14) — clear vs 5% cap
 - Consecutive losing trading days: 0 (cap 7)
 - Max drawdown: 0.54% from peak $10,643.90 (cap 25%, warn 12.5%) — clear
 - Equity floor: $10,586.64 > $7,500 — OK
@@ -41,7 +41,7 @@ Open positions: **0 / 4** (cluster 0/2).
 ## Days live
 
 - Spin-up: 2026-04-29
-- As of last rebuild: **56 days**
+- As of last rebuild: **57 days**
 - Promotion-eligible date: **2026-05-29 (reached)** — 3 closed trades lifetime (need ≥10 in rolling 30d) → **NOT promotion-eligible.** Vol-comp gate 5c (0.5× threshold) is the binding constraint — blocked all 7 potential entries in the June 14–22 replay window (HYPE Jun14/16/17, BTC Jun15/22, SOL Jun20, XDG Jun22). Evidence of over-restriction accumulating.
 
 ## Notes
@@ -62,3 +62,4 @@ Tests whether a 0.5× ATR-compression entry gate improves net return / profit fa
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **OVERNIGHT 2026-06-12T13:00Z:** BTC 1H close ~63,406.6 → R1 PASS, but R2 FAIL (RSI ~52 < 55); SOL RSI < 55 pre-rally; 0 entries. **EOD 2026-06-13T04:00Z:** 4/15 positive, SBD CLEAR. TAO sole PASS: R1 ✓ (+$3.88), R2 RSI 62.5 ✓, R3 4H 50-EMA HIGH-CONF ✓ (+$3.22), vol $3.04M ✓. Vol-comp gate 5c: TAO ATR 2.4062, indicators `volcomp_05 = shut` (NOT compressed → rule 5c does NOT reject) → **ALLOWED**. Cluster 0/2→1/2 ✓. Risk $150.00/1.50% of $10,000. **ENTRY: TAO/USD LONG 32.17 @ 217.286, stop 212.6226, target 235.9396.** This is v0.3's FIRST hypothetical trade — 45 days to first qualifying entry. Kill switches all clear. Equity $9,996.91, DD 0.03%. Days live: **45**.
 - **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). EXIT TAO +4.29R/+$643.90. OVERNIGHT BTC OPEN @ 64100/CLOSE −0.26R/−$18.51 (1-bar EMA exit 17:00Z). EOD SOL OPEN @ 68.49. Kill switches all clear. Equity $10,625.39, DD 0.17% from peak $10,643.90. Days live: **46**.
 - **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule; date-guard: PT calendar 2026-06-24)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days; Kraken REST 30d history fully covers gap — no unrecoverable bars). **EXIT — SOL/USD CLOSE 2026-06-14T06:00Z @ $68.24:** 05:00Z bar close 68.24 < 1H EMA20 ~68.35 → single-bar v0.3 exit fires immediately after entry (entered EOD 06-13, exits on first bar of replay). PnL: 155×($68.24−$68.49) = **−$38.75/−0.27R**. Cash $10,586.64. DD 0.54% from peak $10,643.90. **Entry scans (12 wakes in replay window):** Vol-comp gate 5c (0.5× threshold) BLOCKED all 7 potential momentum entries — HYPE (Jun14 OVERNIGHT, Jun16 EOD, Jun17 EOD), BTC (Jun15 EOD, Jun22 OVERNIGHT), SOL (Jun20 EOD), XDG (Jun22 OVERNIGHT). All pairs were in active-rally ATR regime (BTC ATR $365-380 >> $206 threshold; HYPE ATR 0.72-1.4 above 0.5× mean; SOL ATR 0.58-0.93 elevated). Zero new entries across entire 10-day window. **A/B signal: v0.5 (no vol-comp gate) made 7 new trades +$298/+$298 net, returned +9.43%; v0.3 made 0 new trades, returned +5.87%. Vol-comp gate cost ~3.56pp in the replay window — strongest evidence to date of over-restriction.** v0.13 (vol-comp + 2-bar exit) same outcome: 0 new entries, 1 exit (SOL −0.34R). **OVERNIGHT 2026-06-24T13:00Z assessment:** 0/15 positive, median −3.05%, SBD ACTIVE → 5a FAIL → 0 entries (regime blocks before gate). **EOD 2026-06-24T04:00Z (already elapsed):** 1/15 positive (AVAX +1.73%), median −3.68% → 5a FAIL. All kill switches clear. Days live: **56**.
+- **2026-06-25 PT (routine-07, 2026-06-25T19:19Z — off-cron 12:19 PT)** — Watchdog ALL CLEAR. Kraken MCP OK ($59,407 BTC). Replay window: 2026-06-24T16:35Z → 2026-06-25T19:19Z (~26.7h). Wakes evaluated: **EOD 2026-06-25T04:00Z** (Jun 24 21:00 PT): 0/15 positive, SBD ACTIVE, 5a FAIL → 0 entries (confirmed by routine-03-eod off-cron rebuild 09:17 PT Jun 25). **OVERNIGHT 2026-06-25T13:00Z** (Jun 25 06:00 PT): BTC crashed 61,146→58,218 in 1h (−4.9%, vol 817 BTC), SBD extended to 5th consecutive wake, 0/15 positive, 5a FAIL → 0 entries. MIDDAY 20:00Z: default skip. Book flat → exit replay no-op. Kill switches all clear (equity $10,586.64 unchanged). Days live: **57**.

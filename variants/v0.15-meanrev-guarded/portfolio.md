@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis (mean-reversion: RSI<30 floor + SBD knife-catch guard; A/B vs v0.8)
-> **Last rebuild:** 2026-06-24T16:35Z (routine-07 wake 2026-06-24 PT — 0 entries across all 12 wakes in replay window; RSI 48-76 throughout, above M2 RSI<30 threshold; SBD guard active at several wakes; 0 closed trades lifetime)
+> **Last rebuild:** 2026-06-25T19:19Z (routine-07 wake 2026-06-25 PT — off-cron 12:19 PT; 0 entries; SBD ACTIVE 5a FAIL; SBD guard active at OVERNIGHT wake; 0 closed trades lifetime)
 
 ## Account
 
@@ -34,7 +34,7 @@ All clear at $10,000 equity.
 ## Days live
 
 - Spin-up: 2026-06-09
-- As of last rebuild: **15 days**
+- As of last rebuild: **16 days**
 - Promotion-eligible: 2026-07-09 (after the 2026-07-01 competition deadline — this variant is for learning, not the contest). 0 closed trades lifetime.
 
 ## Notes
@@ -49,3 +49,4 @@ Combines v0.8's relaxed RSI<30 with an SBD entry guard. The benchmark trade: v0.
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). **OVERNIGHT + EOD:** SBD CLEAR (guard inactive). M2 (RSI < 30): universe RSI elevated 48-65. **0 entries.** A/B vs v0.8: identical outcome (both 0). Kill switches all clear at $10,000. Days live: **4**.
 - **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). **OVERNIGHT + EOD:** SBD CLEARED throughout (15/15 positive at EOD) → SBD guard inactive. M3 PASSES. M2 (RSI < 30): universe RSI 48-76 — no pair near oversold. **0 entries.** A/B vs v0.8: identical outcome (both 0 — guard irrelevant when RSI far from threshold). Next meaningful A/B divergence requires RSI<30 during an active SBD wake. Kill switches all clear at $10,000. Days live: **5**.
 - **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days). **All 12 wakes assessed: 0 entries.** June 14–22 broad-rally tape: RSI 48-76+; M2 (RSI<30) failed at all wakes. The June 22 SBD wake (9/15+ positive → SBD borderline area) and June 24 SBD morning: v0.15 guard would have blocked even if RSI had approached the threshold, but RSI was still far above 30. **A/B vs v0.8: identical outcome — both 0 entries.** The SBD guard is not yet producing divergence data (would need RSI<30 in an SBD wake to diverge from v0.8). **OVERNIGHT 2026-06-24T13:00Z:** SBD active → v0.15 SBD guard blocks before M3/M2 checks. Kill switches all clear at $10,000. Days live: **15**.
+- **2026-06-25 PT (routine-07, 2026-06-25T19:19Z — off-cron 12:19 PT)** — Watchdog ALL CLEAR. Kraken MCP OK. Replay window: 2026-06-24T16:35Z → 2026-06-25T19:19Z (~26.7h). Wakes evaluated: **EOD 2026-06-25T04:00Z**: SBD ACTIVE → SBD guard blocks entry before M3/M2 checked (same outcome as v0.8). **OVERNIGHT 2026-06-25T13:00Z**: SBD ACTIVE → SBD guard blocks. Universe RSI 38-55 during sell-off — RSI<30 not met anyway. A/B vs v0.8: identical 0-entry outcome (guard irrelevant when RSI>30). Kill switches all clear at $10,000. Days live: **16**.

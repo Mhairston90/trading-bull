@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis (entry-quality filter: 2-bar EMA confirm + 4H RSI ≥ 50 vs main's single-bar entry)
-> **Last rebuild:** 2026-06-24T16:35Z (routine-07 wake 2026-06-24 PT — gap replay 2026-06-14T05:00Z→2026-06-24T13:00Z; SOL CLOSE −0.34R; 0 new entries (vol-comp gate blocked all); 3 closed trades lifetime)
+> **Last rebuild:** 2026-06-25T19:19Z (routine-07 wake 2026-06-25 PT — off-cron 12:19 PT; 0 entries, 0 trades; SBD ACTIVE 5a FAIL; 3 closed trades lifetime)
 
 ## Account
 
@@ -24,7 +24,7 @@ Open positions: **0 / 4** (cluster 0/2).
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-24 PT: $0.00 (last trade was SOL 2026-06-14) — clear vs 5% cap
+- Daily realized 2026-06-25 PT: $0.00 (last trade was SOL 2026-06-14) — clear vs 5% cap
 - Consecutive losing trading days: 0 (cap 7)
 - Max drawdown: 0.71% from peak $10,643.90 (cap 25%, warn 12.5%) — clear
 - Equity floor: $10,568.45 > $7,500 — OK
@@ -41,7 +41,7 @@ Open positions: **0 / 4** (cluster 0/2).
 ## Days live
 
 - Spin-up: 2026-05-20
-- As of last rebuild: **35 days**
+- As of last rebuild: **36 days**
 - Promotion-eligible: 2026-06-19 (reached) — 3 closed trades lifetime (need ≥10) → NOT promotion-eligible. Entry-quality filters (2-bar EMA + 4H RSI≥50) + vol-comp gate block nearly all entries. Very similar outcome to parent v0.3 (0 new entries in gap replay).
 
 ## Notes
@@ -57,3 +57,4 @@ Hypothesis variant targeting the whipsaw −1R bucket via tighter entry filters:
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). OVERNIGHT: BTC R2 FAIL. EOD: TAO sole PASS. 2-bar EMA confirm ✓; 4H RSI 62.5≥50 ✓. Vol-comp gate: TAO volcomp_05=shut → ALLOWED ✓. **ENTRY: TAO/USD LONG 32.17 @ 217.286.** Days live: **24**.
 - **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). EXIT TAO +4.29R/+$643.90. NEW PEAK $10,643.90. BTC OVERNIGHT OPEN/CLOSE −0.37R/−$25.85 (2-bar exit). SOL EOD OPEN @ $68.49. Kill switches clear. Equity $10,618.05, DD 0.24%. Days live: **25**.
 - **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days; fully recovered via Kraken REST 30d history). **EXIT — SOL/USD CLOSE 2026-06-14T07:00Z @ $68.17:** W22-G 2-bar exit: 05:00Z bar close below 1H EMA20 [1st]; 06:00Z bar close 68.17 < EMA20 ~68.33 [2nd consecutive] → fires 1 bar later than v0.3's single-bar exit (v0.3 exited at 06:00Z @ $68.24; v0.13 waits for 07:00Z @ $68.17). PnL: 155×($68.17−$68.49) = **−$49.60/−0.34R** (vs v0.3's −0.27R; 2-bar exit cost extra −0.07R on this SOL exit). Cash $10,568.45. **Entry scans (12 wakes in replay window):** Vol-comp gate 5c (0.5× threshold) BLOCKED all potential momentum entries — same as v0.3. HYPE (Jun14/16/17), BTC (Jun15/22), SOL (Jun20), XDG (Jun22) all blocked. The 2-bar EMA + 4H RSI≥50 entry quality filters were never evaluated (vol-comp gate is the upstream constraint). 0 new entries across 10-day replay. **Key A/B: v0.13 and v0.3 had identical entry outcomes (0 new entries), diverging only at SOL close (v0.13 −0.07R worse due to 2-bar exit). Cannot yet evaluate entry quality filters.** **OVERNIGHT 2026-06-24T13:00Z:** 0/15 positive, SBD ACTIVE → 5a FAIL → 0 entries. All kill switches clear. Days live: **35**.
+- **2026-06-25 PT (routine-07, 2026-06-25T19:19Z — off-cron 12:19 PT)** — Watchdog ALL CLEAR. Kraken MCP OK. Replay window: 2026-06-24T16:35Z → 2026-06-25T19:19Z (~26.7h). Wakes evaluated: **EOD 2026-06-25T04:00Z**: 0/15 positive, SBD ACTIVE, 5a FAIL → 0 entries. **OVERNIGHT 2026-06-25T13:00Z**: BTC crashed −4.9%, SBD 5th consecutive wake, 5a FAIL → 0 entries. Vol-comp gate + 2-bar entry filter: not evaluated (5a blocks first). Book flat. Kill switches all clear (equity $10,568.45 unchanged). Days live: **36**.

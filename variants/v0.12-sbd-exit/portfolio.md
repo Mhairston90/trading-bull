@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis / instrumented twin (SBD classifier + W22-G 2-bar exit vs v0.2 baseline)
-> **Last rebuild:** 2026-06-24T16:35Z (routine-07 wake 2026-06-24 PT — gap replay 2026-06-14T05:00Z→2026-06-24T13:00Z; 5 new closes + 5 new opens; 16 closed trades lifetime; **PROMOTION ELIGIBLE — confirmed**)
+> **Last rebuild:** 2026-06-25T19:19Z (routine-07 wake 2026-06-25 PT — off-cron 12:19 PT; 0 entries, 0 trades; SBD ACTIVE 5a FAIL; 16 closed trades lifetime; **PROMOTION ELIGIBLE — confirmed**)
 >
 > **LEADERBOARD-SOURCED — FORWARD PAPER-PAPER ONLY.** Rebuilt from this variant's
 > `trade_log.md`. The 2026-05-19→2026-05-29 trades were recovered on 2026-05-29
@@ -28,7 +28,7 @@ Open positions: **0 / 4** (cluster 0/2).
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-24 PT: $0.00 (last trade was BTC Jun22) — clear vs 5% cap
+- Daily realized 2026-06-25 PT: $0.00 (last trade was BTC Jun22) — clear vs 5% cap
 - Consecutive losing trading days: 1 (BTC Jun22; cap 7) — clear
 - Max drawdown: 1.50% from peak $11,023.54 (cap 25%, warn 12.5%) — clear
 - Equity floor: $10,858.19 > $7,500 — OK
@@ -65,7 +65,7 @@ Open positions: **0 / 4** (cluster 0/2).
 ## Days live
 
 - Spin-up: 2026-05-19
-- As of last rebuild: **36 days**
+- As of last rebuild: **37 days**
 - **Promotion-eligible: YES** — all gates pass. Route to routine-04 for proposal draft.
 
 ## Notes
@@ -83,3 +83,4 @@ Instrumented twin testing whether W22-G 2-bar exit rule (vs main's 1-bar exit) i
 - **2026-06-12 22:00 PT (routine-07)** — replay window 2026-06-12T06:45Z → 2026-06-13T05:00Z (~22h). OVERNIGHT: BTC R2 FAIL. EOD: TAO sole PASS. SBD CLEARED → W22-G 2-bar exit active. **ENTRY: TAO/USD LONG 31.78 @ 217.286.** Days live: **25**.
 - **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). EXIT TAO +4.29R/+$636.09. BTC OVERNIGHT OPEN/CLOSE −0.37R/−$25.55 (2-bar exit). BTC EOD OPEN @ 64320.2. **MILESTONE: 10 closed trades reached (promotion threshold).** Equity $10,491.28, DD 1.08% from peak $10,606. Days live: **26**.
 - **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days; fully recovered via Kraken REST 30d history). **6 new closes, 5 new opens across 12 wakes.** Trade sequence: **BTC CLOSE Jun14T13:00Z −0.11R/−$7.73** (2-bar W22-G: 11:00Z close + 12:00Z close both below EMA; fired quicker than expected vs entry Jun14); **HYPE Jun14 OPEN/CLOSE −0.58R/−$90.44** (2-bar: 14:00Z + 15:00Z below EMA → 2h whipsaw); **BTC Jun15/16 OPEN/CLOSE +0.68R/+$106.62** (2-bar fires Jun16T04:00Z after 02:00Z+03:00Z bars below EMA = held 24h vs v0.5's 18h); **HYPE Jun16/17 OPEN/CLOSE +1.32R/+$208.20** (**KEY**: 2-bar fires Jun17T08:00Z after 06:00Z+07:00Z bars below EMA — held from Jun16T04:00Z to Jun17T08:00Z; +1.32R vs v0.5's HYPE Jun16 +0.89R = extra 0.43R from 2-bar rule's patience); **SOL Jun20/21 OPEN/CLOSE +1.97R/+$315.65** (2-bar exits 2h later than v0.5; slightly lower exit = −0.25R vs v0.5); **BTC Jun22 OPEN/CLOSE −1.00R/−$165.35** (stop-hit; 2-bar irrelevant). **NEW PEAK $11,023.54** at SOL close (surpasses prior peak $10,606). Net replay: +$366.68 vs v0.5's +$298.13 in same window. Total equity $10,858.19, DD 1.50% from new peak. **OVERNIGHT 2026-06-24T13:00Z:** SBD ACTIVE → 5a FAIL → 0 entries. **CONFIRMED PROMOTION ELIGIBLE: 36d live, 16 trades, +8.58%, DD 1.50%.** All kill switches clear. Days live: **36**.
+- **2026-06-25 PT (routine-07, 2026-06-25T19:19Z — off-cron 12:19 PT)** — Watchdog ALL CLEAR. Kraken MCP OK ($59,407 BTC). Replay window: 2026-06-24T16:35Z → 2026-06-25T19:19Z (~26.7h). Wakes evaluated: **EOD 2026-06-25T04:00Z**: 0/15 positive, SBD ACTIVE, 5a FAIL → 0 entries. **OVERNIGHT 2026-06-25T13:00Z**: BTC crashed 61,146→58,218 −4.9%, SBD 5th consecutive wake, 0/15 positive, 5a FAIL → 0 entries (SBD → W22-G exit rule inactive for any new opens). Book flat. Kill switches all clear (equity $10,858.19 unchanged). **PROMOTION ELIGIBLE status confirmed** (37d live, 16 trades, +8.58%). Days live: **37**.
