@@ -5291,3 +5291,5 @@ Today is 2026-06-25 (Thu). Refresh trigger = 1st of month or first weekday if 1s
 ### Summary
 
 **0 OPEN, 0 CLOSE, 0 research items beyond the regime read.** Off-cron Thursday-morning fire (09:20 PT, ~3h20m past 06:00 PT cron window) following the 09:17 PT routine-03-eod morning fire. Portfolio flat, equity **$10,413.87** unchanged, DD **4.25%** unchanged, loss streak **0**. Regime 5a FAIL (0/15 positive, median −2.32%), 5a-SBD **ACTIVE** ~46h continuous (5th consecutive SBD wake). Selling pressure modestly easing (median −2.49% → −2.32% over 3h) but no pair has crossed back positive — SUI closest at −0.51%. Watchdog ALL CLEAR. Next entry-eligible wake = routine-02-midday Thu 2026-06-25 ~13:00 PT (midday is forbidden from entering — actually next eligible is routine-03-eod Thu 21:00 PT or routine-01-overnight Fri 06-26 06:00 PT). Silent — no Telegram triggers (no exit, no kill switch, no DD warn crossed).
+
+2026-06-25T17:07:24Z | harness | day-gate | not Saturday, skipping | no action
