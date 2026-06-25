@@ -5196,3 +5196,98 @@ Mandatory EOD card per routine NOTIFY. Sending next via `scripts/telegram_send.p
 ### Summary
 
 **0 OPEN, 0 CLOSE.** Off-cron morning fire (Thu 09:17 PT) covering the missed Wed 21:00 PT EOD slot AND the post-midday window. Portfolio flat throughout, equity **$10,413.87** unchanged, DD **4.25%** unchanged, loss streak **0**. Regime 5a FAIL (0/15 positive, median −2.49%), 5a-SBD **ACTIVE** ~44h continuous (4th consecutive SBD wake). Selling pressure easing modestly (median −3.59% → −2.49%) but no pair positive yet. Watchdog ALL CLEAR. No lessons appended (no trade events to extract from). No monthly archive (last trading day = 06-30). Mandatory EOD Telegram card sent.
+
+
+---
+
+## 2026-06-25T16:20Z — routine-01-overnight (Thu 09:20 PT, OFF-CRON morning fire)
+
+### Slot identity + timing anomaly
+
+**Slot:** `bull-01-overnight`. Cron expects `0 6 * * 1-5` PT. Actual fire: 2026-06-25 09:20 PT (Thu morning). The cron window (06:00 PT) was missed by ~3h20m. Notably, routine-03-eod also fired off-cron at 09:17 PT this morning — both 01-overnight and 03-eod (and the previously-missed 06-24 21:00 PT EOD slot) appear to have queued together and discharged in a single Thursday-morning batch. Watchdog `--telegram` returned ALL CLEAR despite this — its scheduler-flag check looks at marker file freshness, not the full per-routine cron schedule. Worth flagging in research_log; no kill-switch trip.
+
+**Coverage simplification:** routine-03-eod fired 3 minutes before this wake (09:17 PT) and already pulled identical kraken_multi_ticker data + classified regime + ran the kill-switch grid. Portfolio is flat (0 open) and no trade events occurred in the ~3-minute gap. This wake re-runs the regime read at 09:20 PT, confirms unchanged state, and processes per the overnight routine spec (which mandates an entry scan that the EOD routine had already short-circuited at the regime layer).
+
+### Watchdog
+
+`python scripts/watchdog.py --telegram` → **ALL CLEAR**. Heartbeats, timestamps, tree, MTM, scheduler flag, push state, MCP paths OK.
+
+### Kraken multi-ticker — all 15 universe pairs (09:20 PT)
+
+| Pair | last | 24h % |
+|------|------|-------|
+| BTC | 59681.9 | −2.14 |
+| ETH | 1573.59 | −2.86 |
+| SOL | 66.50 | −2.26 |
+| HYPE | 62.40 | −2.32 |
+| XRP | 1.03700 | −3.26 |
+| SUI | 0.6813 | −0.51 |
+| TAO | 214.2805 | −2.27 |
+| XDG | 0.073743 | −3.06 |
+| NEAR | 1.8809 | −4.23 |
+| ADA | 0.143815 | −2.57 |
+| LINK | 7.24427 | −2.32 |
+| LTC | 40.61 | −1.29 |
+| FARTCOIN | 0.1162 | −4.13 |
+| TRX | 0.323068 | −1.19 |
+| AVAX | 6.140 | −4.58 |
+
+**Positives: 0/15.** Sorted ascending: AVAX −4.58, NEAR −4.23, FARTCOIN −4.13, XRP −3.26, XDG −3.06, ETH −2.86, ADA −2.57, **HYPE −2.32 (median, tied with LINK at 8/15)**, LINK −2.32, TAO −2.27, SOL −2.26, BTC −2.14, LTC −1.29, TRX −1.19, SUI −0.51.
+
+### Regime classification
+
+- **Rule 5a:** 0/15 positive < 4/15 floor → **FAIL**. Entry scan rejects all candidates pre-technical.
+- **Rule 5a-SBD:** positives = 0 (≤ 1 ✓) AND median = −2.32% (≤ −1.0% ✓) → **SBD ACTIVE**.
+- Continuous SBD duration: ~46h (active since overnight 2026-06-23T13:00Z fire). **5th consecutive SBD wake** (overnight 06-23, EOD 06-23, midday 06-24, EOD 06-25 morning, overnight 06-25 morning).
+- Trend in regime vs EOD 3h ago: median improved slightly −2.49% → −2.32% (+0.17pp). SUI moved closer to flipping (−0.57 → −0.51, just 0.51% below zero) but still no positive pair. Top-of-tape thinning persists — selling pressure is unwinding gradually, not capitulating.
+- SBD defensive value this wake: **0 R avoided** (no open positions to apply 9-EMA two-bar exit to). Cumulative SBD-period defensive value remains 0 R (flat throughout 46h SBD window).
+
+### Overnight position check
+
+No open positions → no overnight stop-hit scan possible. n/a.
+
+### Mark-to-market
+
+No open positions → no MTM line items. Equity = cash = **$10,413.87** (unchanged since 2026-06-22T16:00Z SOL correction row, now 70h continuous flat).
+
+### Kill-switch state
+
+| Switch | Reading | Cap | Status |
+|---|---|---|---|
+| Daily realized + unrealized (2026-06-25 PT DTD) | $0.00 / 0.00% | 5% | CLEAR |
+| Loss streak | 0 days | 7 | CLEAR |
+| Max drawdown | 4.25% ($461.98 from peak $10,875.85) | 25% (warn 12.5%) | CLEAR — 8.25pp to warn |
+| Equity floor | $10,413.87 | $7,500 | CLEAR — $2,913.87 of headroom |
+| MCP availability | Kraken OK (all 15 pairs returned) | — | CLEAR |
+
+All clear. No alert.
+
+### Technical
+
+**Rule 5a fails (0/15 positive < 4/15 floor) — all entries rejected pre-technical.** Per `skills/decide.md` pre_entry_check ordering, the regime gate halts the scan before per-pair indicator evaluation. `scripts/indicators.py` not invoked this wake (no eligible candidate slot). All 15 universe pairs implicitly REJECT with reason `rule-5a-regime-gate` (0/15 positive, ≥ 4/15 required).
+
+### News
+
+Skipped — no technical-PASS candidates to scan headlines for. Firecrawl not invoked.
+
+### Sentiment
+
+Skipped — no technical-PASS candidates to query depth/spread for.
+
+### Decision
+
+**0 OPEN, 0 CLOSE.** Regime 5a FAIL gates all entries; no open positions to manage.
+
+### First-of-month universe refresh
+
+Today is 2026-06-25 (Thu). Refresh trigger = 1st of month or first weekday if 1st is weekend. **Skipped.** Next trigger expected 2026-07-01 (Wed). Universe unchanged from 2026-06-01 refresh.
+
+### Stats
+
+- **Day P&L (06-25 PT DTD):** $0.00 / 0.00%.
+- **Trades opened:** 0. **Trades closed:** 0.
+- **New equity:** $10,413.87. **Equity peak:** $10,875.85 (set 2026-06-13T09:00Z). **Drawdown:** 4.25%.
+
+### Summary
+
+**0 OPEN, 0 CLOSE, 0 research items beyond the regime read.** Off-cron Thursday-morning fire (09:20 PT, ~3h20m past 06:00 PT cron window) following the 09:17 PT routine-03-eod morning fire. Portfolio flat, equity **$10,413.87** unchanged, DD **4.25%** unchanged, loss streak **0**. Regime 5a FAIL (0/15 positive, median −2.32%), 5a-SBD **ACTIVE** ~46h continuous (5th consecutive SBD wake). Selling pressure modestly easing (median −2.49% → −2.32% over 3h) but no pair has crossed back positive — SUI closest at −0.51%. Watchdog ALL CLEAR. Next entry-eligible wake = routine-02-midday Thu 2026-06-25 ~13:00 PT (midday is forbidden from entering — actually next eligible is routine-03-eod Thu 21:00 PT or routine-01-overnight Fri 06-26 06:00 PT). Silent — no Telegram triggers (no exit, no kill switch, no DD warn crossed).
