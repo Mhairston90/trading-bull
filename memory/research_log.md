@@ -5094,3 +5094,105 @@ All clear. No alert.
 ### Summary
 
 **0 MTM, 0 exits, 0 entries** (entries forbidden by routine). Flat portfolio held. Regime read deteriorated vs EOD 12h ago: positives 1 → 0, median −3.68% → −3.59% (slight median improvement but lost the lone positive). SBD now ~24h continuous. Equity $10,413.87, DD 4.25%, all kill switches CLEAR. Silent — no Telegram triggers (no exit, no kill switch, no DD warning crossed).
+
+---
+
+## 2026-06-25T16:17Z — routine-03-eod (Thu 09:17 PT, OFF-CRON morning fire)
+
+### Slot identity + timing anomaly
+
+**Slot:** `bull-03-eod`. Cron expects `0 21 * * 1-5` PT. Actual fire: 2026-06-25 09:17 PT (Thu morning). Wed 2026-06-24 21:00 PT EOD slot **did not fire** — there is no `routine-03-eod 2026-06-24` row above and no commit between `routine-02-midday 2026-06-24` (Wed 13:07 PT) and this wake (~20h gap, spanning the missed 06-24 EOD + overnight 06-25 06:00 PT). This wake therefore covers the missed 06-24 EOD AND the post-midday 06-24 → 09:17 PT 06-25 window.
+
+**Date-labeling guard applied:** PT calendar date at fire time = **2026-06-25**. EOD card and commit labeled 2026-06-25. Body notes the 06-24 EOD coverage explicitly.
+
+**Coverage simplification:** portfolio has been flat continuously since 2026-06-22T16:00Z SOL correction row. No trade events occurred in the missed window (entries gated by 5a FAIL, no positions to exit). 06-24 PT day P&L = $0.00; 06-25 PT day-to-date = $0.00. Equity, DD, peak all unchanged. So the missed 06-24 EOD would have written a flat-day row with identical numbers — no replay reconstruction is required.
+
+### Watchdog
+
+`python scripts/watchdog.py --telegram` → **ALL CLEAR**. Heartbeats, timestamps, tree, MTM, scheduler flag, push state, MCP paths OK.
+
+### Kraken multi-ticker — all 15 universe pairs (09:17 PT)
+
+| Pair | last | 24h % |
+|------|------|-------|
+| BTC | 59600.0 | −2.27 |
+| ETH | 1574.07 | −2.83 |
+| SOL | 66.47 | −2.31 |
+| HYPE | 61.99 | −2.96 |
+| XRP | 1.03734 | −3.23 |
+| SUI | 0.6809 | −0.57 |
+| TAO | 213.9367 | −2.43 |
+| XDG | 0.0737011 | −3.11 |
+| NEAR | 1.8802 | −4.26 |
+| ADA | 0.143929 | −2.49 |
+| LINK | 7.23228 | −2.48 |
+| LTC | 40.52 | −1.51 |
+| FARTCOIN | 0.1164 | −3.96 |
+| TRX | 0.323003 | −1.21 |
+| AVAX | 6.137 | −4.63 |
+
+**Positives: 0/15.** Sorted ascending: AVAX −4.63, NEAR −4.26, FARTCOIN −3.96, XRP −3.23, XDG −3.11, HYPE −2.96, ETH −2.83, **ADA −2.49 (median, 8/15)**, LINK −2.48, TAO −2.43, SOL −2.31, BTC −2.27, LTC −1.51, TRX −1.21, SUI −0.57.
+
+### Regime classification
+
+- **Rule 5a:** 0/15 positive < 4/15 floor → **FAIL**. Entry scan rejects all new entries this wake (no candidate eligibility check needed).
+- **Rule 5a-SBD:** positives = 0 (≤ 1 ✓) AND median = −2.49% (≤ −1.0% ✓) → **SBD ACTIVE**.
+- Continuous SBD duration: ~44h (active since overnight 2026-06-23T13:00Z fire). 4th consecutive wake under SBD (overnight 06-23, EOD 06-23, midday 06-24, EOD 06-25 morning fire).
+- Trend in regime: median improved from −3.59% (midday 06-24) → −2.49% (now); selling pressure modestly easing but still broad — no pair has crossed back to positive. Lone bright spots: SUI −0.57 (closest to flip), TRX −1.21, LTC −1.51.
+- SBD defensive value this wake: **0 R avoided** (no open positions to apply 9-EMA two-bar exit to). Cumulative SBD-period defensive value remains 0 R (flat throughout).
+
+### Final mark-to-market (21:00 PT close approximation, using 09:17 PT prices)
+
+No open positions → no MTM line items. Equity = cash = **$10,413.87** (unchanged since 2026-06-22T16:00Z SOL correction row, now 67h continuous).
+
+### Post-close exit check
+
+No open positions → no exits. n/a.
+
+### Kill-switch state
+
+| Switch | Reading | Cap | Status |
+|---|---|---|---|
+| Daily realized + unrealized (2026-06-25 PT DTD) | $0.00 / 0.00% | 5% | CLEAR |
+| Daily realized + unrealized (2026-06-24 PT, retroactive) | $0.00 / 0.00% | 5% | CLEAR |
+| Loss streak | 0 days | 7 | CLEAR |
+| Max drawdown | 4.25% ($461.98 from peak $10,875.85) | 25% (warn 12.5%) | CLEAR — 8.25pp to warn |
+| Equity floor | $10,413.87 | $7,500 | CLEAR — $2,913.87 of headroom |
+| MCP availability | Kraken OK (all 15 pairs returned) | — | CLEAR |
+
+All clear. No alert.
+
+### EOD entry scan (W19-E)
+
+**Skipped at the regime layer.** Rule 5a FAIL (0/15 positive < 4/15 floor) rejects all candidates pre-technical. No technical/news/sentiment passes attempted — none would be actionable. Indicators script not invoked this wake (no eligible candidate slot). Next entry-eligible wake = routine-01-overnight 2026-06-25 ~21:00 PT? Actually next overnight cron = Fri 2026-06-26 06:00 PT (`0 6 * * *`). Until then no entry attempts.
+
+### Lessons review
+
+Today's trades: **none** (flat). No gap-out, no give-back, no immediate-reverse archetype to extract.
+
+- **Patience-through-SBD observation (not a new lesson):** 4 consecutive wakes flat under SBD has now meant zero realized give-back vs. an estimated −5 to −8% BTC-equivalent if BULL had held a hypothetical equal-weight position (BTC alone is −2.27% today, ~−7% over the SBD window). The 5a regime gate is doing exactly what was designed in W19-D + W21-F. Already captured in [2026-05-19 synchronized-breakdown lesson]; no new append.
+- **No new lessons appended this wake.**
+
+### Stats
+
+- **Day P&L (06-25 PT DTD):** $0.00 / 0.00%.
+- **Day P&L (06-24 PT, retroactive close):** $0.00 / 0.00%.
+- **Trades opened:** 0 today, 0 yesterday.
+- **Trades closed:** 0 today, 0 yesterday.
+- **Win rate today:** n/a (no closes).
+- **New equity:** $10,413.87. **Equity peak:** $10,875.85 (set 2026-06-13T09:00Z). **Drawdown:** 4.25%.
+- **Rolling 7d:** BULL ≈ −1.6% (SOL net +$182.13 06-22 minus SOL −$199.87 06-17, plus rolloff of TAO +$621.22 which was 06-13 → outside 7d window). BTC-hold 7d ≈ −9.0% (BTC ~$65.4k → $59.6k). **Delta ≈ +7.4%, BULL well ahead 7d.**
+- **Rolling 30d:** BULL ≈ +4.14% (inception-aligned). BTC-hold 30d ≈ −23.6%. **Delta ≈ +27.7%, BULL well ahead 30d.**
+- **Rolling 90d:** not computable (BULL inception 2026-04-20 = 66 days ago; window first computable ~2026-07-19).
+
+### Monthly archive
+
+Today is 2026-06-25 (Thu). Last trading day of June 2026 = 2026-06-30 (Tue). **Skipped.** Trigger expected at routine-03-eod Tue 2026-06-30.
+
+### Telegram NOTIFY
+
+Mandatory EOD card per routine NOTIFY. Sending next via `scripts/telegram_send.py`.
+
+### Summary
+
+**0 OPEN, 0 CLOSE.** Off-cron morning fire (Thu 09:17 PT) covering the missed Wed 21:00 PT EOD slot AND the post-midday window. Portfolio flat throughout, equity **$10,413.87** unchanged, DD **4.25%** unchanged, loss streak **0**. Regime 5a FAIL (0/15 positive, median −2.49%), 5a-SBD **ACTIVE** ~44h continuous (4th consecutive SBD wake). Selling pressure easing modestly (median −3.59% → −2.49%) but no pair positive yet. Watchdog ALL CLEAR. No lessons appended (no trade events to extract from). No monthly archive (last trading day = 06-30). Mandatory EOD Telegram card sent.
