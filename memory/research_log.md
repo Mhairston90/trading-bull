@@ -5515,3 +5515,4 @@ Flat at wake (0 open positions, $10,413.87 cash). No MTM, no stop-monitor, no ex
 
 
 | 2026-06-26T17:06:59Z | harness | day-gate | not Saturday, skipping | no action |
+2026-06-26T17:40:32Z | allocation | day-gate | not Sunday, skipping | no action
