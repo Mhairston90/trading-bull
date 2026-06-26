@@ -6,6 +6,95 @@
 
 2026-06-24T01:03:03Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-26T01:02:17Z | idea-scan | day-gate | not Friday, skipping | no action
+2026-06-26T04:11Z | routine-03-eod | PT Thu 2026-06-25 21:11 on-schedule | equity $10,413.87, day PnL $0.00 / 0.00%, 0 opens / 0 closes, DD 4.25%, regime 5a FAIL 2/15 positive (SOL +0.77%, HYPE +1.24%) median −2.84%, **5a-SBD CLEARED after ~50h continuous active**, no TECH-PASS candidates (R2 RSI floor binding: SOL 54.4, HYPE 53.7, LTC 52.6 closest), watchdog ALL CLEAR, EOD Telegram card sent | 0 trades
+
+## 2026-06-26T04:11Z — routine-03-eod (PT Thu 2026-06-25 21:11, on-schedule 21:00 PT cron)
+
+**Slot identity `bull-03-eod`.** On-schedule fire (no slippage). Mandatory daily Telegram EOD card sent at end of routine.
+
+### Pre-flight kill switches
+
+All Ring 3 kill switches **CLEAR** — equity $10,413.87 > $7,500 floor; DD 4.25% < 25% cap; loss streak 0 days; daily PnL $0; Kraken MCP returning. No 5b cooldowns active (last stop-out 2026-06-17T18:00Z SOL well past 24h).
+
+### Watchdog (mandatory, `--telegram`)
+
+`python scripts/watchdog.py --telegram` — **ALL CLEAR.** No findings. The 8 carry-over findings from yesterday's overnight wake (routine-07 + variant-MTM staleness, dirty-tree replay artifacts) have all cleared — variant snapshots and routine-07 paper sims caught up since.
+
+### Final mark-to-market & post-close exit check
+
+Flat portfolio (no open positions). No mark-to-market changes; no exits to evaluate.
+
+### Entry scan — Technical (authoritative: `python scripts/indicators.py`)
+
+`indicators.py` ran successfully, 720 4H bars per pair. Output dated 2026-06-26T04:10:21+00:00.
+
+**Regime gate (rule 5a):** **2/15 positive 24h, median −2.84%.** Strict 5a FAIL (< 4/15 positive floor). **No new entries this wake regardless of per-pair eligibility.**
+
+**Regime sub-state (rule 5a-SBD):** **CLEARED** — positives = 2 (> 1 ceiling, condition (i) FAILS). Median −2.84% would still satisfy condition (ii) ≤ −1.0%, but SBD requires both conditions. SBD was continuously active from overnight 06-23T13:00Z through midday 06-25T20:00Z (6 consecutive wakes, ~50h). With no open positions during the SBD spell, defensive value realized = 0 R avoided; opportunity cost vs flat = 0 (correct posture, broader tape was deeply red).
+
+**Per-pair Technical PASS/FAIL summary** (full table in `indicators.py` stdout):
+
+| Pair | R1 (>EMA20) | R2 (RSI≥55) | R3 (4H>EMA50) | R4a ($2M) | Decision |
+|---|---|---|---|---|---|
+| BTC/USD | PASS +110.1 | FAIL RSI 49.1 | FAIL −2,622 | OK $278.27M | REJECT R2+R3 + regime |
+| ETH/USD | FAIL −19.16 | FAIL RSI 42.2 | FAIL −117 | OK $69.71M | REJECT R1+R2+R3 + regime |
+| SOL/USD | PASS +0.9356 | FAIL RSI 54.4 (−0.62) | FAIL −1.681 | OK $30.85M | REJECT R2+R3 + regime |
+| HYPE/USD | PASS +0.8003 | FAIL RSI 53.7 (−1.27) | FAIL −1.276 | OK $24.09M | REJECT R2+R3 + regime |
+| XRP/USD | FAIL −0.0092 | FAIL RSI 43.4 | FAIL −0.0774 | OK $38.77M | REJECT R1+R2+R3 + regime |
+| SUI/USD | PASS +0.0002 | FAIL RSI 49.3 | FAIL −0.0321 | OK $5.82M | REJECT R2+R3 + regime |
+| TAO/USD | FAIL −1.324 | FAIL RSI 46.0 | FAIL −15.12 | OK $4.52M | REJECT R1+R2+R3 + regime |
+| XDG/USD | FAIL −5.8e-05 | FAIL RSI 48.1 | FAIL −0.00587 | OK $4.88M | REJECT R1+R2+R3 + regime |
+| NEAR/USD | FAIL −0.0224 | FAIL RSI 44.2 | FAIL −0.2211 | OK $2.19M | REJECT R1+R2+R3 + regime |
+| ADA/USD | FAIL −0.0009 | FAIL RSI 45.9 | FAIL −0.01309 | OK $9.13M | REJECT R1+R2+R3 + regime |
+| LINK/USD | FAIL −0.0527 | FAIL RSI 44.6 | FAIL −0.4989 | OK $2.21M | REJECT R1+R2+R3 + regime |
+| LTC/USD | PASS +0.3157 | FAIL RSI 52.6 (−2.40) | FAIL −1.742 | OK $2.67M | REJECT R2+R3 + regime |
+| FARTCOIN/USD | FAIL −6.2e-05 | FAIL RSI 48.8 | FAIL −0.00556 | **FAIL $1.03M** | REJECT R1+R2+R3+R4a + regime |
+| TRX/USD | FAIL −0.0025 | FAIL RSI 30.2 | FAIL −0.00415 | **FAIL $1.90M** | REJECT R1+R2+R3+R4a + regime |
+| AVAX/USD | FAIL −0.0649 | FAIL RSI 45.4 | FAIL −0.2135 | OK $2.25M | REJECT R1+R2+R3 + regime |
+
+**Decision: 0 entries this wake.** R2 (RSI ≥ 55) is the most-binding per-pair gate — 5 pairs (BTC, SOL, HYPE, SUI, LTC) PASS R1 but only SOL (54.4), HYPE (53.7), LTC (52.6) are within striking distance of the 55 floor on R2. None pass R3 (4H > 50-EMA), which would still require trend repair across multiple wakes. Regime gate (5a FAIL at 2/15) is the dispositive blocker — entries would be rejected pre-technical regardless.
+
+**Improvement signals vs midday (06-25T20:00Z, 1/15 positive median −3.11%):**
+- 1 → 2 positives (SOL joined HYPE; SOL +0.77%, HYPE +1.24%)
+- Median improved by +0.27pp (−3.11% → −2.84%)
+- SBD condition (i) cleared (≤1 → 2)
+- BTC ticked up +0.55% over 8h ($59.62k → $59.95k) and crossed its 1H EMA20 (R1 PASS), but R2 stalled at 49.1.
+
+### Entry scan — News (skipped — gate fails)
+
+Per routine DO step 4: news scan runs **for each technical-PASS candidate**. **0 TECH-PASS candidates → no news scan executed this wake.** Firecrawl quota preserved.
+
+### Entry scan — Sentiment (skipped — gate fails)
+
+Per routine DO step 4a: sentiment scan runs **for each technical-PASS candidate**. **0 TECH-PASS candidates → no sentiment scan executed this wake.** No `kraken_spread` / `kraken_depth` calls made.
+
+### Lesson extraction
+
+Per routine DO step 4: reviewed today's trades. **No trades today (entire 2026-06-25 PT calendar day was flat — overnight, midday, EOD all zero events).** No stop-outs to learn from, no winners to evaluate target placement, no entry-reversal pattern. No new lessons added to `lessons.md` this wake — pattern is well-covered by the existing 06-17 SBD-leading-edge lesson (the 50h SBD spell that just cleared is a continuation, not a new archetype).
+
+### Day's summary stats
+
+- **Day PnL:** $0.00 / 0.00% (flat)
+- **Trades opened today:** 0
+- **Trades closed today:** 0
+- **Win rate today:** N/A (no trades)
+- **Equity:** $10,413.87 (unchanged from prior wake)
+- **Equity peak:** $10,875.85 (unchanged; need +$461.98 to retake)
+- **Drawdown from peak:** 4.25%
+- **Rolling 7d BULL:** ≈ −1.6% (06-22 SOL +$182 winner offset by 06-16/-17 stop-outs)
+- **Rolling 7d BTC-hold:** ≈ −8.4% ($65.4k → $59.95k)
+- **Rolling 7d delta:** ≈ +6.8% (BULL ahead)
+- **Rolling 30d BULL:** ≈ +4.14% (inception 2026-04-20)
+- **Rolling 30d BTC-hold:** ≈ −23.1%
+- **Rolling 30d delta:** ≈ +27.2% (BULL well ahead)
+
+### Monthly archive
+
+Today is **2026-06-25 Thursday**. Last trading day of June 2026 is **Tue 2026-06-30**. Not last trading day of month → no archive sweep.
+
+### Decision
+
+**No entries. No exits.** Flat into Fri 2026-06-26 overnight slot. SBD posture released after ~50h continuous active. Regime gate still 5a FAIL but improved 1→2/15 positive and median +0.27pp; recovery trajectory continues to be the operative variable. Mandatory EOD Telegram card sent.
 
 ## 2026-06-24T16:33Z — routine-01-overnight (PT 09:33 Wed 06-24, fired ~3h33m behind 06:00 PT cron)
 
