@@ -7,6 +7,80 @@
 2026-06-24T01:03:03Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-26T01:02:17Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-26T04:11Z | routine-03-eod | PT Thu 2026-06-25 21:11 on-schedule | equity $10,413.87, day PnL $0.00 / 0.00%, 0 opens / 0 closes, DD 4.25%, regime 5a FAIL 2/15 positive (SOL +0.77%, HYPE +1.24%) median −2.84%, **5a-SBD CLEARED after ~50h continuous active**, no TECH-PASS candidates (R2 RSI floor binding: SOL 54.4, HYPE 53.7, LTC 52.6 closest), watchdog ALL CLEAR, EOD Telegram card sent | 0 trades
+2026-06-26T15:53Z | routine-01-overnight | PT Fri 2026-06-26 08:53 on-schedule | equity $10,413.87, 0 opens / 0 closes, DD 4.25%, **regime 5a PASS 11/15 positive median +1.21% (gate flip vs EOD 2/15 -2.84%)**, SBD CLEAR, no TECH-PASS candidates (R3 4H>EMA50 now binding — 0/15 pairs above 4H 50-EMA), watchdog ALL CLEAR, silent | 0 trades
+
+## 2026-06-26T15:53Z — routine-01-overnight (PT Fri 2026-06-26 08:53, on-schedule 06:00 PT cron, slot bull-01-overnight)
+
+**Slot identity confirmed `bull-01-overnight`.** On-schedule fire (no slippage).
+
+### Pre-flight kill switches
+
+All Ring 3 kill switches **CLEAR** — equity $10,413.87 > $7,500 floor; DD 4.25% < 25% cap; loss streak 0 days; daily PnL $0; Kraken MCP returning (720 4H bars/pair). No 5b cooldowns active (last stop-out 2026-06-17T18:00Z SOL, well past 24h).
+
+### Watchdog (mandatory)
+
+`python scripts/watchdog.py --telegram` — **ALL CLEAR.** No findings, no Telegram alert.
+
+### Overnight price pull & position check
+
+Flat portfolio — no open positions to mark-to-market or check against stops. Skip directly to entry scan.
+
+### Entry scan — Technical (authoritative: `python scripts/indicators.py`)
+
+`indicators.py` ran successfully, 720 4H bars per pair. Output dated 2026-06-26T15:53:33+00:00.
+
+**Regime gate (rule 5a): PASS — 11/15 positive 24h, median +1.21%.** Major flip from EOD 2026-06-25T04:11Z (2/15, −2.84%). Tape broadly green: SOL +6.26%, FARTCOIN +7.66%, HYPE +5.12% leaders; only ETH (−0.52%), TAO (−0.28%), NEAR (−4.00%), TRX (−1.26%) negative on 24h. Entries no longer pre-rejected by regime.
+
+**Regime sub-state (rule 5a-SBD): CLEAR.** Positives = 11 (≫ 1 ceiling); median +1.21% (≫ −1.0% floor). Both conditions fail comfortably; SBD remains lifted from EOD wake.
+
+**Per-pair Technical PASS/FAIL summary** (full table in `indicators.py` stdout):
+
+| Pair | R1 (>EMA20) | R2 (RSI≥55) | R3 (4H>EMA50) | R4a ($2M) | Decision |
+|---|---|---|---|---|---|
+| BTC/USD | FAIL −243.7 | FAIL RSI 46.7 | FAIL −3,031 | OK $224.42M | REJECT R1+R2+R3 |
+| ETH/USD | FAIL −3.485 | FAIL RSI 47.1 | FAIL −121 | OK $61.57M | REJECT R1+R2+R3 |
+| SOL/USD | PASS +1.724 | PASS +5.808 (RSI 60.8) | FAIL −1.275 (4H close 68.50 vs EMA 69.78) | OK $36.15M | REJECT R3 |
+| HYPE/USD | PASS +0.871 | FAIL RSI 53.9 (−1.1) | FAIL −2.894 | OK $26.03M | REJECT R2+R3 |
+| XRP/USD | PASS +0.0004 | FAIL RSI 48.4 | FAIL −0.0835 | OK $35.82M | REJECT R2+R3 |
+| SUI/USD | PASS +0.0021 | FAIL RSI 51.1 (−3.9) | FAIL −0.0329 | OK $3.98M | REJECT R2+R3 |
+| TAO/USD | FAIL −1.005 | FAIL RSI 47.2 | FAIL −16.32 | OK $2.70M | REJECT R1+R2+R3 |
+| XDG/USD | FAIL −0.0003 | FAIL RSI 47.0 | FAIL −0.0064 | OK $4.01M | REJECT R1+R2+R3 |
+| NEAR/USD | FAIL −0.0294 | FAIL RSI 42.0 | FAIL −0.2417 | OK $2.40M | REJECT R1+R2+R3 |
+| ADA/USD | PASS +0.0008 | FAIL RSI 51.6 (−3.4) | FAIL −0.0117 | OK $6.18M | REJECT R2+R3 |
+| LINK/USD | PASS +0.009 | FAIL RSI 49.3 | FAIL −0.514 | **FAIL $1.86M** | REJECT R2+R3+R4a |
+| LTC/USD | FAIL −0.092 | FAIL RSI 48.8 (−6.2) | FAIL −1.969 | OK $4.15M | REJECT R1+R2+R3 |
+| FARTCOIN/USD | PASS +0.0038 | PASS +2.907 (RSI 57.9) | FAIL −0.0053 | **FAIL $0.87M** | REJECT R3+R4a |
+| TRX/USD | FAIL −0.003 | FAIL RSI 23.1 | FAIL −0.0038 | **FAIL $1.92M** | REJECT R1+R2+R3+R4a |
+| AVAX/USD | PASS +0.036 | FAIL RSI 51.3 (−3.7) | FAIL −0.211 | OK $2.10M | REJECT R2+R3 |
+
+**Decision: 0 entries this wake.** With regime gate now PASSing, the dispositive blocker is **R3 (4H close > 4H 50-EMA): 0/15 pairs PASS.** A two-day downtrend has dragged every pair's 4H close below the 50-EMA. The 24h regime improvement (the underlying rally that flipped the gate) is real but has not yet propagated to the 4H timeframe. Closest R3 candidates: FARTCOIN −0.43% below EMA, HYPE −4.46% below, NEAR −11.93% below.
+
+Two pairs (SOL, FARTCOIN) pass both R1 and R2 — SOL is the only universe-eligible R1+R2 PASS on liquidity (FARTCOIN fails R4a at $0.87M < $2M). If SOL's 4H closes can push above 69.78 over the next several 4H bars, the gate could open at midday or EOD. SOL 4H close is currently ~68.50 (gap of ~1.85 / 2.6%).
+
+**Improvement signals vs EOD (06-26T04:11Z, 2/15 positive median −2.84%):**
+- 2 → 11 positives (+9 pairs flipped green)
+- Median improved by +4.05pp (−2.84% → +1.21%)
+- 5a regime gate flipped FAIL → PASS
+- R2 gate: 1 pair PASSes (SOL 60.8) vs 0 yesterday; FARTCOIN newly above floor (57.9 vs 48.8)
+- R3 gate: still 0/15 — needs further 4H-timeframe follow-through
+
+### News scan
+
+No TECH-PASS candidates → news scan skipped per routine spec.
+
+### Sentiment scan
+
+No TECH-PASS candidates → sentiment scan skipped per routine spec.
+
+### Decision
+
+**0 entries, 0 exits.** Flat portfolio held. Equity unchanged $10,413.87, DD 4.25%. Regime gate is now PASSing for the first time since the SBD spell began ~50h ago, but every per-pair R3 check still fails — the regime improvement has not yet repaired the 4H trend. Watching SOL (only R1+R2 PASS on liquid universe) for R3 PASS over the next 2-3 wakes.
+
+### Telegram NOTIFY
+
+Silent. No opens, no closes, no kill-switch trip, no news ACTIONABLE, no universe refresh (not 1st of month).
+
+---
 
 ## 2026-06-26T04:11Z — routine-03-eod (PT Thu 2026-06-25 21:11, on-schedule 21:00 PT cron)
 
