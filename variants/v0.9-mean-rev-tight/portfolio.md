@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB-SWEEP (parameter sweep of v0.4, RSI threshold 25 → 20)
-> **Last rebuild:** 2026-06-25T19:19Z (routine-07 wake 2026-06-25 PT — off-cron 12:19 PT; 0 entries; SBD ACTIVE 5a FAIL; RSI<20 not approached; 0 closed trades lifetime)
+> **Last rebuild:** 2026-06-26T05:06Z (routine-07 wake 2026-06-25 PT — 22:05 PT on-schedule cron fire; 0 entries; RSI<20 ultra-strict not approached; EOD M3/M2 FAIL; 0 closed trades lifetime)
 
 ## Account
 
@@ -54,3 +54,4 @@ Parameter sweep — RSI oversold threshold 20 (vs v0.4's 25, v0.8's 30). Bracket
 - **2026-06-13 22:00 PT (routine-07)** — replay window 2026-06-13T05:08Z → 2026-06-14T05:00Z (~23.87h). **OVERNIGHT + EOD:** 15/15 positive at EOD, SBD CLEAR. M3 PASSES. M2 (RSI < 20 ultra-strict): universe RSI 48-76, nowhere near 20. **0 entries.** Ultra-strict threshold; next entry requires a sharp crash-level sell-off. Kill switches all clear at $10,000. Days live: **29**.
 - **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days). **All 12 wakes assessed: 0 entries.** RSI<20 ultra-strict threshold not remotely approached at any wake in the 10-day rally window. The June 24 SBD morning decline (RSI falling from highs): even with the sell-off, estimated universe RSI still in 35-55 range — well above the <20 floor. A/B vs siblings: all 3 mean-rev variants uniformly inactive. **OVERNIGHT 2026-06-24T13:00Z:** SBD, red bars → M3 FAIL. Kill switches all clear at $10,000. Days live: **39**.
 - **2026-06-25 PT (routine-07, 2026-06-25T19:19Z — off-cron 12:19 PT)** — Watchdog ALL CLEAR. Kraken MCP OK. Replay window: 2026-06-24T16:35Z → 2026-06-25T19:19Z (~26.7h). Wakes evaluated: **EOD 2026-06-25T04:00Z**: 0/15 positive, SBD ACTIVE, M3 FAIL → 0 entries. **OVERNIGHT 2026-06-25T13:00Z**: BTC crashed −4.9%, SBD 5th consecutive wake, M3 FAIL → 0 entries. RSI<20 ultra-strict: universe RSI 38-55 during sell-off — nowhere near 20. Book flat. Kill switches all clear at $10,000. Days live: **40**.
+- **2026-06-25 PT (routine-07, 2026-06-26T05:06Z — 22:05 PT on-schedule cron fire)** — Watchdog ALL CLEAR. Kraken MCP OK ($59,766.5 BTC). Replay window: 2026-06-25T19:19Z → 2026-06-26T05:06Z (~9.8h). MIDDAY 20:00Z: default skip. **EOD 2026-06-26T04:00Z**: 2/15 positive (SOL, HYPE), SBD briefly CLEARED. M2 (RSI<20 ultra-strict): SOL RSI ~54.4, HYPE ~53.7 — nowhere near 20; negative pairs M3 FAIL. Deepest reading: TRX RSI ~29.6 at 05:00Z bar (still >>20). **0 entries.** A/B vs v0.8/v0.4: identical 0-entry outcome. Kill switches all clear at $10,000. Days live: **40**.
