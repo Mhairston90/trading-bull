@@ -8,6 +8,7 @@
 2026-06-26T01:02:17Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-26T04:11Z | routine-03-eod | PT Thu 2026-06-25 21:11 on-schedule | equity $10,413.87, day PnL $0.00 / 0.00%, 0 opens / 0 closes, DD 4.25%, regime 5a FAIL 2/15 positive (SOL +0.77%, HYPE +1.24%) median −2.84%, **5a-SBD CLEARED after ~50h continuous active**, no TECH-PASS candidates (R2 RSI floor binding: SOL 54.4, HYPE 53.7, LTC 52.6 closest), watchdog ALL CLEAR, EOD Telegram card sent | 0 trades
 2026-06-26T15:53Z | routine-01-overnight | PT Fri 2026-06-26 08:53 on-schedule | equity $10,413.87, 0 opens / 0 closes, DD 4.25%, **regime 5a PASS 11/15 positive median +1.21% (gate flip vs EOD 2/15 -2.84%)**, SBD CLEAR, no TECH-PASS candidates (R3 4H>EMA50 now binding — 0/15 pairs above 4H 50-EMA), watchdog ALL CLEAR, silent | 0 trades
+2026-06-26T20:00Z | routine-02-midday | PT Fri 2026-06-26 13:00 on-schedule | flat portfolio (0 positions) → no MTM/no exit checks; equity $10,413.87 cash-only, DD 4.25% (peak $10,875.85), loss streak 0, daily PnL $0/0.00%; regime 5a PASS 12/15 positive median +1.05% (negatives BTC −0.11%, NEAR −1.30%, TRX −1.00%); top movers SOL +8.09%, FARTCOIN +7.23%, ADA +3.03%; SBD CLEAR; midday rule prohibits new entries — no scan run; all Ring 3 kill switches CLEAR; silent (no Telegram) | 0 trades
 
 ## 2026-06-26T15:53Z — routine-01-overnight (PT Fri 2026-06-26 08:53, on-schedule 06:00 PT cron, slot bull-01-overnight)
 

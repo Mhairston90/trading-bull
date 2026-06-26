@@ -2,9 +2,9 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-26T15:53Z routine-01-overnight (PT Fri 2026-06-26 08:53, on-schedule cron fire). Flat throughout — 0 exits, 0 entries. Equity unchanged at $10,413.87, DD 4.25%. Regime: **5a PASS 11/15 positive median +1.21% (gate flipped from FAIL since EOD)**, SBD CLEAR. **No TECH-PASS candidates — R3 (4H>EMA50) now the binding gate, 0/15 pairs PASS.** Watchdog ALL CLEAR.
+> **Last rebuild:** 2026-06-26T20:00Z routine-02-midday (PT Fri 2026-06-26 13:00, on-schedule cron fire). Flat throughout — 0 exits, 0 entries (midday rule prohibits new entries). Equity unchanged at $10,413.87, DD 4.25%. Regime: **5a PASS 12/15 positive median +1.05%** (negatives BTC −0.11%, NEAR −1.30%, TRX −1.00%); top movers SOL +8.09%, FARTCOIN +7.23%, ADA +3.03%. SBD CLEAR. All Ring 3 kill switches CLEAR.
 
-> **Prior rebuilds:** 2026-06-26T04:11Z routine-03-eod (flat, 2/15 positive, median −2.84%, SBD cleared); 2026-06-25T20:00Z routine-02-midday (flat, 1/15 positive, median −3.11%, SBD active).
+> **Prior rebuilds:** 2026-06-26T15:53Z routine-01-overnight (flat, 11/15 positive, median +1.21%, regime flipped to PASS, R3 0/15 binding); 2026-06-26T04:11Z routine-03-eod (flat, 2/15 positive, median −2.84%, SBD cleared).
 
 ## Account
 
@@ -49,14 +49,14 @@ Portfolio risk-at-moment: **0.00%** of equity (no open positions; cap 4%, full h
 Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; cluster cap 0/2).
 Breakeven ratchet (W22-H-partial): n/a (no open position).
 
-## Overnight snapshot — 2026-06-26 PT (Fri, on-schedule 06:00 PT cron)
+## Midday snapshot — 2026-06-26 PT (Fri, on-schedule 13:00 PT cron)
 
 | Metric | Value |
 |---|---|
-| Wake type | routine-01-overnight (on-schedule cron fire) |
+| Wake type | routine-02-midday (on-schedule cron fire) |
 | Open positions MTM | $0.00 (flat) |
 | Exits this wake | 0 (no open positions to exit) |
-| Entries this wake | 0 (0 TECH-PASS candidates; regime now PASS but R3 0/15) |
+| Entries this wake | 0 (midday rule: no new entries) |
 | Equity (cash-only) | **$10,413.87** |
 | Equity peak | $10,875.85 (unchanged; need +$461.98 to retake) |
 | Drawdown from peak | **4.25%** |
@@ -69,12 +69,12 @@ Breakeven ratchet (W22-H-partial): n/a (no open position).
 - Consecutive losing trading days: **0** (cap 7, full headroom). CLEAR.
 - Max drawdown: **4.25%** from peak $10,875.85 (cap 25%, warn 12.5%, 8.25pp to warn) — CLEAR.
 - Equity floor: $10,413.87 > $7,500 floor — CLEAR.
-- MCP availability: Kraken OK (`indicators.py` 720 4H bars per pair, all 15 universe pairs). CLEAR.
-- Regime gate (rule 5a): **PASS** — **11/15** positive 24h, median **+1.21%** (major flip vs EOD's 2/15 / −2.84%). Top movers: FARTCOIN +7.66%, SOL +6.26%, HYPE +5.12%; negatives: NEAR −4.00%, TRX −1.26%, ETH −0.52%, TAO −0.28%. Entries are no longer pre-rejected by regime.
-- Regime sub-state (rule 5a-SBD): **CLEAR.** Positives = 11 (≫ 1 ceiling); median +1.21% (≫ −1.0% floor). Both conditions fail comfortably; SBD remains lifted from EOD wake.
+- MCP availability: Kraken OK (`kraken_multi_ticker` returned all 15 universe pairs cleanly). CLEAR.
+- Regime gate (rule 5a): **PASS** — **12/15** positive 24h, median **+1.05%**. Top movers: SOL +8.09%, FARTCOIN +7.23%, ADA +3.03%, AVAX +2.66%, LTC +2.42%; negatives: NEAR −1.30%, TRX −1.00%, BTC −0.11%. Entries continue to not be pre-rejected by regime (held PASS through midday; SOL leading the altcoin rally).
+- Regime sub-state (rule 5a-SBD): **CLEAR.** Positives = 12 (≫ 1 ceiling); median +1.05% (≫ −1.0% floor). Both conditions fail comfortably.
 - Active 5b cooldowns: **None.** No pair under same-pair re-entry guard.
-- Watchdog: `scripts/watchdog.py --telegram` ran 2026-06-26T15:53Z — **ALL CLEAR** (no findings, no Telegram alert).
-- **All clear (kill switches).** routine-01-overnight 2026-06-26T15:53Z on-schedule fire: **0 exits, 0 entries**. Flat portfolio held; regime gate flipped to PASS but R3 (4H>50-EMA) still 0/15 — no full TECH-PASS candidates.
+- Watchdog: not run this routine (midday is lean, no watchdog mandate).
+- **All clear (kill switches).** routine-02-midday 2026-06-26T20:00Z on-schedule fire: **0 exits, 0 entries** (midday rule prohibits new entries). Flat portfolio held; regime gate remains PASS for next entry-eligible wake (routine-03-EOD).
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -103,7 +103,7 @@ Breakeven ratchet (W22-H-partial): n/a (no open position).
 
 _None — no open positions._
 
-Next entry-eligible scan: routine-02-midday Fri 2026-06-26 ~12:00 PT (= 19:00Z). Regime gate now PASSes (11/15 positive, median +1.21%); the binding gate has shifted to **R3 (4H close > 4H 50-EMA), with 0/15 pairs currently above their 4H 50-EMA.** The overnight rally has not yet propagated to 4H closes — SOL is the closest candidate (4H close ~68.50 vs EMA 69.78, gap −2.6%) and is the only pair currently PASSing both R1 and R2 on a liquid universe pair (FARTCOIN also R1+R2 PASS but FAILs R4a at $0.87M). Watching SOL for R3 PASS over the next 2-3 wakes — would need 4H close above 69.78. R2 floor a secondary concern: HYPE 53.9, AVAX 51.3, SUI 51.1 are next nearest behind SOL.
+Next entry-eligible scan: routine-03-eod Fri 2026-06-26 ~21:11 PT (= 04:11Z Sat). Regime gate PASSes (12/15 positive, median +1.05%); SOL +8.09% on the day with last print $73.11 — vs the overnight estimated 4H 50-EMA ~69.78, SOL has now plausibly closed above its 4H 50-EMA (the next 4H bar close at 20:00Z will be authoritative). If SOL prints R3 PASS at 04:00Z 4H close and R1/R2 hold, it becomes the leading TECH-PASS candidate at EOD per rule 8 (highest-30d-rank). HYPE +0.98%, AVAX +2.66%, SUI +2.22% lag and are unlikely to clear R3 by EOD. Indicator authority remains `scripts/indicators.py` run at routine-03 wake.
 
 ## Rolling performance
 
