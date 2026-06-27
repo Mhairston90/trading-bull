@@ -49,8 +49,8 @@ Today's wake is now flat with no open positions, so the SBD activation has no de
 
 Today's wake took (b) — rule-8 fallback — on the reasoning that (i) cash-insufficient is a *mechanical* (mandate-derived) constraint, not a *strategy edge* constraint; (ii) rule 8's stated intent ("prevent same-bar cluster fills") is preserved by single-entry execution; (iii) SOL was the only other fully-eligible pair under all 8 rules. Routine-04 should codify the choice. Adjacent observation: this is the first time the cash floor has bound — past wakes either had full cash (no other positions) or had eligible entries with high-vol pairs (HYPE, TAO, AVAX, XRP) whose 2×ATR stops are 1-5% of price and fit at <40% notional. **Update routine #4 2026-W25:** this is now the 2nd cash-binding instance (W24 BTC sized 0.72% / W25 BTC structurally unfillable). Pattern is emerging — BTC's ~0.7% ATR/price ratio means 1.5%-equity-risk sizing requires ~111% notional whenever another position is open. The mandate-derived constraint binds more often than initially expected.
 
-**Score:** **7** (assigned routine #4 2026-W25 — 2 cash-binding instances now (W24 + W25), demonstrates recurring corner case; deterministic and mandate-derived, not edge-dependent; option (a) cash-fit pre-check is the most-proposable W25 candidate but choice between (a)/(b)/(c)/(d) is contested by W25 outcome alone — option (b) was used 06-17 and the resulting SOL trade lost; need 3+ instances before canonical-choice Ring-2 proposal)  
-**Status:** **active**
+**Score:** **8** (raised from 7 routine #4 2026-W26 — 3 new W26 reinforcement instances today (SUI/LTC/AVAX REJECT cluster, routine-03-eod 2026-06-27); cumulative 5 instances across W24/W25/W26; deterministic, mandate-derived, recurring at roughly 1 binding wake per 14 days. Crosses the 3+ instance threshold W25 §Proposal set for Ring-2 promotion. **Ring-2 proposal P-W26-CASHFIT drafted in W26 memo** — pending user `[Y/N]`.)  
+**Status:** **active** (will move to `addressed` if P-W26-CASHFIT applies)
 
 ### 2026-04-24 — Low-liquidity wick blew through 2×ATR stop (TRX)
 
