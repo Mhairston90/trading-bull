@@ -4,12 +4,122 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 2026-06-27T16:41:24Z | idea-scan | day-gate | not Friday, skipping | no action
+2026-06-27T16:45Z | routine-01-overnight | PT Sat 2026-06-27 09:45 OFF-SCHEDULE Saturday fire (M-F cron `0 6 * * 1-5` triggered Sat — routine markdown has no day-gate, executed) | equity pre-trade $10,413.87 → post-trade $10,382.26 mark, **1 OPEN** (SOL/USD 110.1608 @ $72.7364, stop $71.3184, target $78.4084, risk $156.21 = 1.50% portfolio) / 0 CLOSE, DD 4.54% (post-trade mark; was 4.25% pre), **regime 5a PASS 14/15 positive median +1.60%** (only HYPE −0.71% red), SBD CLEAR, **4 TECH-PASS candidates (SOL, SUI, LTC, AVAX)** with SOL winning rule-8 by 30d rank, watchdog 1 finding (routine-07 35h stale carry-over), Telegram entry notification sent | 1 trade
 
 2026-06-24T01:03:03Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-26T01:02:17Z | idea-scan | day-gate | not Friday, skipping | no action
 2026-06-26T04:11Z | routine-03-eod | PT Thu 2026-06-25 21:11 on-schedule | equity $10,413.87, day PnL $0.00 / 0.00%, 0 opens / 0 closes, DD 4.25%, regime 5a FAIL 2/15 positive (SOL +0.77%, HYPE +1.24%) median −2.84%, **5a-SBD CLEARED after ~50h continuous active**, no TECH-PASS candidates (R2 RSI floor binding: SOL 54.4, HYPE 53.7, LTC 52.6 closest), watchdog ALL CLEAR, EOD Telegram card sent | 0 trades
 2026-06-26T15:53Z | routine-01-overnight | PT Fri 2026-06-26 08:53 on-schedule | equity $10,413.87, 0 opens / 0 closes, DD 4.25%, **regime 5a PASS 11/15 positive median +1.21% (gate flip vs EOD 2/15 -2.84%)**, SBD CLEAR, no TECH-PASS candidates (R3 4H>EMA50 now binding — 0/15 pairs above 4H 50-EMA), watchdog ALL CLEAR, silent | 0 trades
 2026-06-26T20:00Z | routine-02-midday | PT Fri 2026-06-26 13:00 on-schedule | flat portfolio (0 positions) → no MTM/no exit checks; equity $10,413.87 cash-only, DD 4.25% (peak $10,875.85), loss streak 0, daily PnL $0/0.00%; regime 5a PASS 12/15 positive median +1.05% (negatives BTC −0.11%, NEAR −1.30%, TRX −1.00%); top movers SOL +8.09%, FARTCOIN +7.23%, ADA +3.03%; SBD CLEAR; midday rule prohibits new entries — no scan run; all Ring 3 kill switches CLEAR; silent (no Telegram) | 0 trades
+
+## 2026-06-27T16:45Z — routine-01-overnight (PT Sat 2026-06-27 09:45, OFF-SCHEDULE Saturday fire, slot bull-01-overnight)
+
+**Slot identity confirmed `bull-01-overnight`.** OFF-SCHEDULE fire: cron is `0 6 * * 1-5` (Mon–Fri) but harness fired this Saturday morning. Routine markdown has no day-gate (unlike routines #4 / #5 which self-gate by day-of-week), so per "follow it exactly" the routine was executed normally. Crypto markets are 24/7 so weekend entries are mandate-legal. Noting for routine-04 review whether a Sat/Sun gate is desirable for #1.
+
+### Pre-flight kill switches
+
+All Ring 3 kill switches **CLEAR** — equity $10,413.87 > $7,500 floor; DD 4.25% < 25% cap; loss streak 0 days; daily PnL $0; Kraken MCP returning (720 4H bars/pair). No 5b cooldowns active (last stop-out 2026-06-17T18:00Z SOL, well past 24h).
+
+### Watchdog (mandatory)
+
+`python scripts/watchdog.py --telegram` — **1 FINDING**, Telegram alert auto-sent:
+- 1× A heartbeat: routine-07 last commit **35h** stale (threshold 30h, +5h past). Carry-over class — routine-07 (variant-paper) is a routine-04 territory item; not a kill switch. No other findings (dirty-tree, variant MTM staleness, scheduler flag, unpushed commits all clean).
+
+### Overnight price pull & position check
+
+Flat portfolio at wake — no open positions to mark-to-market or check against stops. Proceed directly to entry scan.
+
+### Entry scan — Technical (authoritative: `python scripts/indicators.py`)
+
+`indicators.py` ran successfully, 720 4H bars per pair. Output dated 2026-06-27T16:42:27+00:00.
+
+**Regime gate (rule 5a): PASS — 14/15 positive 24h, median +1.60%.** Continued improvement from prior midday (12/15 +1.05%) and prior overnight (11/15 +1.21%). Only HYPE −0.71% negative; broad rally led by NEAR +4.95%, AVAX +4.23%, LTC +4.19%, FARTCOIN +3.06%, XRP +2.88%, SUI +2.69%, TAO had pushed back to +0.42%. Entries no longer pre-rejected by regime.
+
+**Regime sub-state (rule 5a-SBD): CLEAR.** Positives = 14 (≫ 1 ceiling); median +1.60% (≫ −1.0% floor). Continues lifted from EOD 2026-06-26T04:11Z.
+
+**Per-pair Technical PASS/FAIL summary** (full table in `indicators.py` stdout):
+
+| Pair | R1 (>EMA20) | R2 (RSI≥55) | R2a (<80) | R3 (4H>EMA50) | R4a ($2M) | Decision |
+|---|---|---|---|---|---|---|
+| BTC/USD | PASS +483.8 | PASS RSI 62.7 | OK | FAIL −1,107 (4H 60,739 vs EMA 61,847) | OK $80.66M | REJECT R3 |
+| ETH/USD | PASS +21.1 | PASS RSI 67.2 | OK | FAIL −40.91 (1,603 vs 1,644) | OK $30.57M | REJECT R3 |
+| **SOL/USD** | PASS +0.886 | PASS RSI 63.5 | OK | **PASS +2.332** (72.70 vs EMA 70.37) | OK $16.81M | **TECH PASS** |
+| HYPE/USD | PASS +0.721 | PASS RSI 56.9 | OK | FAIL −0.386 (64.36 vs 64.75) | OK $9.20M | REJECT R3 |
+| XRP/USD | PASS +0.017 | PASS RSI 69.6 | OK | FAIL −0.019 (1.074 vs 1.093) | OK $18.66M | REJECT R3 |
+| **SUI/USD** | PASS +0.0075 | PASS RSI 60.8 | OK | **PASS +0.0026** (0.7093 vs 0.7067) | OK $3.64M | **TECH PASS** |
+| TAO/USD | PASS +1.297 | PASS RSI 55.6 | OK | FAIL −7.728 (214 vs 222) | **FAIL $1.55M** | REJECT R3+R4a |
+| XDG/USD | PASS +0.0006 | PASS RSI 61.0 | OK | FAIL −0.0026 (0.0761 vs 0.0787) | OK $2.27M | REJECT R3 |
+| NEAR/USD | PASS +0.066 | PASS RSI 68.1 | OK | FAIL −0.086 (1.891 vs 1.976) | OK $2.37M | REJECT R3 |
+| ADA/USD | PASS +0.0012 | PASS RSI 60.5 | OK | FAIL −0.0044 (0.1486 vs 0.1531) | OK $3.82M | REJECT R3 |
+| LINK/USD | PASS +0.089 | PASS RSI 66.0 | OK | FAIL −0.135 (7.45 vs 7.58) | **FAIL $1.39M** | REJECT R3+R4a |
+| **LTC/USD** | PASS +0.684 | PASS RSI 66.3 | OK | **PASS +0.395** (43.06 vs 42.66) | OK $2.57M | **TECH PASS** |
+| FARTCOIN/USD | PASS +0.0020 | PASS RSI 60.3 | OK | PASS +0.0059 (0.1314 vs 0.1255) | **FAIL $0.92M** | REJECT R4a |
+| TRX/USD | FAIL −0.0002 | FAIL RSI 44.4 | OK | FAIL −0.0039 | **FAIL $0.77M** | REJECT R1+R2+R3+R4a |
+| **AVAX/USD** | PASS +0.113 | PASS RSI 62.2 | OK | **PASS +0.250** (6.633 vs 6.383) | OK $3.44M | **TECH PASS** |
+
+**Decision: 4 TECH-PASS candidates (SOL, SUI, LTC, AVAX).** First fully-cleared entry slate since SBD cleared. R3 finally repaired across 5 pairs (the four TECH-PASS + FARTCOIN, the latter blocked by R4a liquidity). R2 broadly green (13/15 RSI ≥ 55 — significant improvement from yesterday's 1/15).
+
+**Rule 8 winner: SOL (30d rank #3)** beats SUI (#6), LTC (#12), AVAX (#15). One entry slot per wake; SOL takes it.
+
+**Per-trade guardrail check on SOL:**
+- Position cap 8: 0 → 1 ✓
+- Strategy cap 4: 0 → 1 ✓
+- Cluster cap 2 (BTC-cluster, SOL in cluster): 0 → 1 ✓
+- 5b cooldown (last SOL stop-out 2026-06-17T18:00Z, 240h ago): cleared ✓
+- Portfolio risk: 0% + 1.5% = 1.5% (cap 4%) ✓
+- Per-trade risk: 1.5% (cap 1.5%) ✓
+- Universe: SOL rank #3 ✓
+- Daily loss & equity floor: clear ✓
+- pre_entry_check: **ACCEPT**
+
+**Improvement signals vs prior overnight (06-26T15:53Z, 11/15 positive median +1.21%):**
+- 11 → 14 positives (+3 pairs flipped green; HYPE only red now)
+- Median improved by +0.39pp (+1.21% → +1.60%)
+- R2 gate: 1 → 13 pairs PASS (huge jump as RSI rebuilt across alts)
+- R3 gate: **0 → 5** pairs PASS (the key gate that was binding for 50h+ has now opened — SOL, SUI, LTC, AVAX, FARTCOIN repair the 4H trend)
+- 4 entry-eligible candidates; rule-8 selects SOL
+
+### Entry scan — News (SOL only — sole rule-8 winner)
+
+Firecrawl quick search for "Solana SOL news" (last 24h via `tbs qdr:d`):
+
+| Source | Headline | Tag |
+|---|---|---|
+| cryptopotato.com | "Solana (SOL) Rebounds Above $70, Bitcoin (BTC) Fights for $60K Weekend Watch" | supportive |
+| cryptobriefing.com | "Solana's SOL rebounds to $72 amid declining onchain metrics" | supportive (price-action narrative; cautious on fundamentals — TVL drop to $4.8B, DEX volumes −31%) |
+| binance.com | "Solana Price Today | SOL +3.08%" | neutral (price snapshot) |
+| youtube.com | "Why Solana Could Surprise Us — SOL Crypto Analysis" | neutral (commentary) |
+| facebook.com (CoinMarketCap) | "Solana treasury company Upexi adds 2M+ SOL" (old/stale, references $166 price — not current) | neutral (stale data) |
+
+**Classification:** 0 ACTIONABLE items. Headlines reflect the price recovery already captured by indicators; no regulatory event, hack, listing/delisting, or partnership. The cryptobriefing piece is the only mildly contradictory note (declining TVL + DEX volume) but is observational, not a moving event. **Informational only per v0.4 (no news veto).** Continue with entry.
+
+### Entry scan — Sentiment (SOL only)
+
+`kraken_spread` SOLUSD: recent 10 spreads ranged $0.01–$0.02, mid $72.66, **spread ≈ 1.4–2.8 bps** — excellent depth-grade liquidity.
+`kraken_ticker` SOLUSD: last $72.64, 24h volume 201,557 SOL × VWAP $72.39 = **24h notional ≈ $14.6M** (well above $2M floor; also matches R4a check above at $16.81M).
+
+Sentiment: **supportive** — tight spread, robust volume, mid above 1H close. No depth/spread red flags. Informational only per v0.4 (no sentiment veto). Continue with entry.
+
+### Decision: 1 OPEN
+
+**SOL/USD long, 110.1608 units @ $72.7364** (1H close $72.70 × 1.0005 conservative slippage)
+- Stop: $71.3184 (= entry − 2×ATR14, where ATR14 = $0.709 → stop distance $1.418)
+- Target: $78.4084 (= entry + 4×stop distance = entry + $5.672)
+- Risk: $156.21 = 1.50% of $10,413.87 equity (= 1.5% strategy cap)
+- Entry commission: $20.83 (= cost basis × 0.0026 Kraken taker)
+- Cluster cap (BTC-cluster): 1/2 used after entry — 1 slot remaining for next wake
+- Breakeven ratchet (W22-H-partial): arms at unrealized R ≥ 2.0 on 1H close (price $75.57); not yet armed
+- Tag: `entry-rule-v0.4-momentum`
+
+### Lesson extraction
+
+No new lesson this wake — the SBD-clearing-into-R3-repair sequence we just traversed (5a FAIL 50h → 5a PASS but R3 binding 24h → R3 cleared today) is well-described by the existing v0.4 rule design (5a-SBD defensive, R3 trend confirmation). Watching this SOL trade's evolution as a test case for whether the W22 breakeven ratchet + 4R target combo captures upside on a regime-recovery entry.
+
+### Telegram NOTIFY
+
+Send entry summary card (new OPEN → routine spec triggers Telegram).
+
+---
 
 ## 2026-06-26T15:53Z — routine-01-overnight (PT Fri 2026-06-26 08:53, on-schedule 06:00 PT cron, slot bull-01-overnight)
 
