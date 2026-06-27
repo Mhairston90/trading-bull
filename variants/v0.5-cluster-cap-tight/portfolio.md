@@ -1,34 +1,36 @@
 # Variant v0.5-cluster-cap-tight — Synthetic Portfolio
 
 > **Paper-paper account.** Synthetic $10K starting equity.
-> **Last rebuild:** 2026-06-26T05:06Z (routine-07 wake 2026-06-25 PT — 22:05 PT on-schedule cron fire; 0 entries, 0 trades; EOD 5a FAIL / SBD briefly cleared then re-activated; 11 closed trades lifetime; **PROMOTION CANDIDATE**)
+> **Last rebuild:** 2026-06-27T16:43Z (routine-07 wake 2026-06-27 PT — 09:43 PT OFF-SCHEDULE Saturday fire; 1 entry SOL/USD; OVERNIGHT 13:00Z Jun 27: R3 repaired; 11 closed trades lifetime; **PROMOTION CANDIDATE**)
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,943.13** (flat)
+- Cash: **$2,560.05** (post-open: $10,943.13 − $8,361.34 cost basis − $21.74 entry commission)
 - Realized PnL (variant lifetime): **+$942.21** (HYPE +$17.71 +0.12R; void $0; TAO +$644.90 +4.29R; BTC OVERNIGHT −$18.54 −0.26R; BTC EOD Jun14 −$6.17 −0.09R; HYPE Jun14 −$86.26 −0.54R; BTC Jun15 +$120.20 +0.76R; HYPE Jun16 +$142.28 +0.89R; HYPE Jun17 −$63.72 −0.39R; SOL Jun20 +$358.45 +2.22R; BTC Jun22 −$166.65 −1.00R)
-- Unrealized PnL: **$0.00** (no open positions)
-- Position values (MTM): **$0.00**
-- Current equity: **$10,943.13**
-- Equity peak: **$11,109.78** (set 2026-06-21T21:00Z at SOL close +2.22R)
-- Drawdown from peak: **1.50%** ($11,109.78 → $10,943.13 after BTC Jun22 stop-out)
+- Unrealized PnL: **+$47.47** raw / **+$25.73** net of entry commission
+- Position values (MTM @ $72.64): **$8,408.81**
+- Current equity: **$10,968.86** (cash + MTM)
+- Equity peak: **$11,109.78** (set 2026-06-21T21:00Z at SOL close +2.22R; current below peak)
+- Drawdown from peak: **1.27%** ($11,109.78 → $10,968.86)
 
 ## Open positions
 
-_None._
+| Pair | Side | Size | Entry | Stop | Target | Entry time (UTC) | Stop dist | Risk ($) | Cluster | Last | MTM | Unrealized R |
+|------|------|-----:|------:|-----:|-------:|------------------|---------:|---------:|---------|-----:|----:|-------------:|
+| SOL/USD | long | 115.76 | 72.23 | 70.812 | 77.902 | 2026-06-27T13:00:00Z | 1.418 | $164.15 | BTC-cluster | 72.64 | $8,408.81 | +0.03R |
 
-Portfolio risk-at-moment: **0.00%** (cap 4%, full headroom).
-Open positions: **0 / 4** (cluster 0/1).
+Portfolio risk-at-moment: **1.50%** of equity. Cap 4% → 2.50pp headroom.
+Open positions: **1 / 4** (cluster 1/1 BTC-cluster — FULL, no further BTC-cluster entries).
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-25 PT: $0.00 (last trade was BTC Jun22) — clear vs 5% cap
-- Consecutive losing trading days: 1 (BTC stop-out Jun22; cap 7) — clear
-- Max drawdown: 1.50% from peak $11,109.78 (cap 25%, warn 12.5%) — clear
-- Equity floor: $10,943.13 > $7,500 — OK
-- Regime gate: 5a FAIL / SBD ACTIVE at OVERNIGHT 2026-06-24T13:00Z → 0 entries this wake
-- **All clear. No open positions. 11 closed trades lifetime (10 effective; 1 void $0).**
+- Daily realized 2026-06-27 PT: $0.00 — CLEAR vs 5% cap
+- Consecutive losing trading days: 1 (BTC Jun22; cap 7) — CLEAR
+- Max drawdown: 1.27% from peak $11,109.78 (cap 25%, warn 12.5%) — CLEAR
+- Equity floor: $10,968.86 > $7,500 — OK
+- Regime gate (5a): PASS — 14/15 positive 24h, median +1.60%, SBD CLEAR
+- **All clear. 1 open position. 11 closed trades lifetime (10 effective; 1 void $0).**
 
 ## Promotion assessment — **ELIGIBLE**
 
@@ -72,3 +74,4 @@ Tests whether tightening cluster cap from 2 to 1 (rule 6a) reduces cascade-event
 - **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days; fully recovered via Kraken REST 30d history). **7 new closes, 6 new opens across 12 wakes evaluated. New peak $11,109.78 set at SOL close Jun21.** Trade sequence: BTC EOD Jun14 CLOSE −0.09R/−$6.17 (12:00Z bar 1-bar EMA exit); HYPE OVERNIGHT Jun14 OPEN/CLOSE −0.54R/−$86.26 (whipsaw 2h); BTC EOD Jun15 OPEN/CLOSE +0.76R/+$120.20 (held ~18h); HYPE EOD Jun16 OPEN/CLOSE +0.89R/+$142.28 (held ~15h); HYPE EOD Jun17 OPEN/CLOSE −0.39R/−$63.72 (whipsaw 2h); SOL EOD Jun20 OPEN/CLOSE +2.22R/+$358.45 (held ~41h → BEST TRADE in replay); BTC OVERNIGHT Jun22 OPEN/CLOSE −1.00R/−$166.65 (stop hit ~2h after entry). Net new realized: +$298.13. Total realized +$942.21. **OVERNIGHT 2026-06-24T13:00Z:** 0/15 positive, SBD ACTIVE → 5a FAIL → 0 entries. **EOD 2026-06-24T04:00Z (elapsed):** 1/15 positive, SBD ACTIVE → 5a FAIL. **PROMOTION CANDIDATE: 56 days live, 10 effective closes, +9.43% return, DD 1.50%, PF ~3.76 — all gates pass.** All kill switches clear. Days live: **56**.
 - **2026-06-25 PT (routine-07, 2026-06-25T19:19Z — off-cron 12:19 PT)** — Watchdog ALL CLEAR. Kraken MCP OK ($59,407 BTC). Replay window: 2026-06-24T16:35Z → 2026-06-25T19:19Z (~26.7h). Wakes evaluated: **EOD 2026-06-25T04:00Z**: 0/15 positive, SBD ACTIVE, 5a FAIL → 0 entries. **OVERNIGHT 2026-06-25T13:00Z**: BTC crashed 61,146→58,218 −4.9%, SBD 5th consecutive wake, 0/15 positive, 5a FAIL → 0 entries. Book flat → no exit triggers. Kill switches all clear (equity $10,943.13 unchanged). **PROMOTION CANDIDATE status unchanged** (57d live, 10 effective closes, +9.43%, DD 1.50%). Days live: **57**.
 - **2026-06-25 PT (routine-07, 2026-06-26T05:06Z — 22:05 PT on-schedule cron fire)** — Watchdog ALL CLEAR. Kraken MCP OK ($59,766.5 BTC). Replay window: 2026-06-25T19:19Z → 2026-06-26T05:06Z (~9.8h). MIDDAY 20:00Z: default skip. **EOD 2026-06-26T04:00Z** (routine-03-eod confirmed 04:11Z): 2/15 positive (SOL +0.77%, HYPE +1.24%), median −2.84%, 5a-SBD briefly CLEARED (positives = 2 > 1 ceiling); 5a FAIL (2/15 < 4/15 floor) → 0 entries (no vol-comp gate check needed). Book flat → exit replay no-op. Post-EOD: SBD re-activated by 05:00Z (0/15 positive, median −3.88%). Kill switches all clear (equity $10,943.13 unchanged). **PROMOTION CANDIDATE** (57d, 10 eff closes, +9.43%, DD 1.50%). Days live: **57**.
+- **2026-06-27 PT (routine-07, 2026-06-27T16:43Z — 09:43 PT OFF-SCHEDULE Saturday fire)** — Watchdog 1 finding (self-resolving). Kraken MCP OK (14/15 positive, median +1.60%, SBD CLEAR). Replay window: 2026-06-26T05:06Z → 2026-06-27T16:43Z (~35.6h). Wakes: OVERNIGHT Jun26 13:00Z (R3 0/15 binding → 0 entries), EOD Jun27 04:00Z (R3 still binding → 0 entries), **OVERNIGHT Jun27 13:00Z: SOL R1/R2/R3/R4a/5a all PASS. No vol-comp gate (v0.5 has no gate). Cluster 0/1 → 1/1. ENTRY: SOL/USD LONG 115.76 @ $72.23, stop $70.812, target $77.902.** Cost $8,361.34, commission $21.74, cash $2,560.05. MTM @ $72.64: $8,408.81. Equity $10,968.86. Cluster now FULL (1/1). Kill switches all clear. **PROMOTION CANDIDATE status unchanged** (59d, 10 eff closes, +9.43% realized; current equity +10.69% MTM). Days live: **59**.

@@ -2,34 +2,36 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis (entry-quality filter: 2-bar EMA confirm + 4H RSI ≥ 50 vs main's single-bar entry)
-> **Last rebuild:** 2026-06-26T05:06Z (routine-07 wake 2026-06-25 PT — 22:05 PT on-schedule cron fire; 0 entries, 0 trades; EOD 5a FAIL / SBD briefly cleared then re-activated; 3 closed trades lifetime)
+> **Last rebuild:** 2026-06-27T16:43Z (routine-07 wake 2026-06-27 PT — 09:43 PT OFF-SCHEDULE Saturday fire; 1 entry SOL/USD; OVERNIGHT 13:00Z Jun 27: R3 repaired, 2-bar EMA confirm + 4H RSI≥50 PASS; vol-comp 0.5× shut; 3 closed trades lifetime)
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,568.45** (flat — SOL closed 2026-06-14T07:00Z)
+- Cash: **$2,472.14** (post-open: $10,568.45 − $8,075.31 cost basis − $21.00 entry commission)
 - Realized PnL (variant lifetime): **+$568.45** (TAO +$643.90 +4.29R; BTC −$25.85 −0.37R; SOL −$49.60 −0.34R)
-- Unrealized PnL: **$0.00** (no open positions)
-- Position values (MTM): **$0.00**
-- Current equity: **$10,568.45**
-- Equity peak: **$10,643.90** (set 2026-06-13T09:00Z at TAO 4R close; unchanged)
-- Drawdown from peak: **0.71%** ($10,643.90 → $10,568.45)
+- Unrealized PnL: **+$45.84** raw / **+$24.84** net of entry commission
+- Position values (MTM @ $72.64): **$8,121.15**
+- Current equity: **$10,593.29** (cash + MTM)
+- Equity peak: **$10,643.90** (set 2026-06-13T09:00Z at TAO 4R close; current below peak)
+- Drawdown from peak: **0.48%** ($10,643.90 → $10,593.29)
 
 ## Open positions
 
-_None._
+| Pair | Side | Size | Entry | Stop | Target | Entry time (UTC) | Stop dist | Risk ($) | Cluster | Last | MTM | Unrealized R |
+|------|------|-----:|------:|-----:|-------:|------------------|---------:|---------:|---------|-----:|----:|-------------:|
+| SOL/USD | long | 111.80 | 72.23 | 70.812 | 77.902 | 2026-06-27T13:00:00Z | 1.418 | $158.53 | BTC-cluster | 72.64 | $8,121.15 | +0.03R |
 
-Portfolio risk-at-moment: **0.00%** (cap 4%, full headroom).
-Open positions: **0 / 4** (cluster 0/2).
+Portfolio risk-at-moment: **1.50%** of equity. Cap 4% → 2.50pp headroom.
+Open positions: **1 / 4** (cluster 1/2 BTC-cluster).
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-25 PT: $0.00 (last trade was SOL 2026-06-14) — clear vs 5% cap
-- Consecutive losing trading days: 0 (cap 7)
-- Max drawdown: 0.71% from peak $10,643.90 (cap 25%, warn 12.5%) — clear
-- Equity floor: $10,568.45 > $7,500 — OK
-- Regime gate: 5a FAIL / SBD ACTIVE at OVERNIGHT 2026-06-24T13:00Z → 0 entries
-- **All clear. No open positions. 3 closed trades lifetime (TAO +4.29R, BTC −0.37R, SOL −0.34R).**
+- Daily realized 2026-06-27 PT: $0.00 — CLEAR vs 5% cap
+- Consecutive losing trading days: 0 (cap 7) — CLEAR
+- Max drawdown: 0.48% from peak $10,643.90 (cap 25%, warn 12.5%) — CLEAR
+- Equity floor: $10,593.29 > $7,500 — OK
+- Regime gate (5a): PASS — 14/15 positive 24h, median +1.60%, SBD CLEAR
+- **All clear. 1 open position. 3 closed trades lifetime (TAO +4.29R, BTC −0.37R, SOL −0.34R).**
 
 ## Rolling performance vs main v0.3 AND v0.5
 
@@ -59,3 +61,4 @@ Hypothesis variant targeting the whipsaw −1R bucket via tighter entry filters:
 - **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days; fully recovered via Kraken REST 30d history). **EXIT — SOL/USD CLOSE 2026-06-14T07:00Z @ $68.17:** W22-G 2-bar exit: 05:00Z bar close below 1H EMA20 [1st]; 06:00Z bar close 68.17 < EMA20 ~68.33 [2nd consecutive] → fires 1 bar later than v0.3's single-bar exit (v0.3 exited at 06:00Z @ $68.24; v0.13 waits for 07:00Z @ $68.17). PnL: 155×($68.17−$68.49) = **−$49.60/−0.34R** (vs v0.3's −0.27R; 2-bar exit cost extra −0.07R on this SOL exit). Cash $10,568.45. **Entry scans (12 wakes in replay window):** Vol-comp gate 5c (0.5× threshold) BLOCKED all potential momentum entries — same as v0.3. HYPE (Jun14/16/17), BTC (Jun15/22), SOL (Jun20), XDG (Jun22) all blocked. The 2-bar EMA + 4H RSI≥50 entry quality filters were never evaluated (vol-comp gate is the upstream constraint). 0 new entries across 10-day replay. **Key A/B: v0.13 and v0.3 had identical entry outcomes (0 new entries), diverging only at SOL close (v0.13 −0.07R worse due to 2-bar exit). Cannot yet evaluate entry quality filters.** **OVERNIGHT 2026-06-24T13:00Z:** 0/15 positive, SBD ACTIVE → 5a FAIL → 0 entries. All kill switches clear. Days live: **35**.
 - **2026-06-25 PT (routine-07, 2026-06-25T19:19Z — off-cron 12:19 PT)** — Watchdog ALL CLEAR. Kraken MCP OK. Replay window: 2026-06-24T16:35Z → 2026-06-25T19:19Z (~26.7h). Wakes evaluated: **EOD 2026-06-25T04:00Z**: 0/15 positive, SBD ACTIVE, 5a FAIL → 0 entries. **OVERNIGHT 2026-06-25T13:00Z**: BTC crashed −4.9%, SBD 5th consecutive wake, 5a FAIL → 0 entries. Vol-comp gate + 2-bar entry filter: not evaluated (5a blocks first). Book flat. Kill switches all clear (equity $10,568.45 unchanged). Days live: **36**.
 - **2026-06-25 PT (routine-07, 2026-06-26T05:06Z — 22:05 PT on-schedule cron fire)** — Watchdog ALL CLEAR. Kraken MCP OK ($59,766.5 BTC). Replay window: 2026-06-25T19:19Z → 2026-06-26T05:06Z (~9.8h). MIDDAY 20:00Z: default skip. **EOD 2026-06-26T04:00Z**: 2/15 positive (SOL +0.77%, HYPE +1.24%), median −2.84%, 5a-SBD briefly CLEARED; 5a FAIL (2/15 < 4/15 floor) → 0 entries. Vol-comp gate + 2-bar entry filter not reached (5a blocks first). Book flat → exit replay no-op. Post-EOD: SBD re-activated (0/15, −3.88%). Kill switches all clear (equity $10,568.45 unchanged). Days live: **36**.
+- **2026-06-27 PT (routine-07, 2026-06-27T16:43Z — 09:43 PT OFF-SCHEDULE Saturday fire)** — Watchdog 1 finding (self-resolving). Kraken MCP OK (14/15 positive, median +1.60%, SBD CLEAR). Replay window: 2026-06-26T05:06Z → 2026-06-27T16:43Z (~35.6h). Wakes: OVERNIGHT Jun26 13:00Z (R3 0/15 binding → 0 entries), EOD Jun27 04:00Z (R3 binding → 0 entries), **OVERNIGHT Jun27 13:00Z**: 14/15 positive, SBD CLEAR, 5a PASS. SOL: R1 PASS, R2 RSI 63.5 PASS, R3 PASS. **Entry quality filters: 2-bar EMA confirm** — SOL price above EMA20 for 2 consecutive 1H closes at 12:00Z + 13:00Z bars ✓. **4H RSI≥50** — SOL 4H RSI 62.5 >> 50 ✓. Vol-comp gate 5c (0.5× inherited): `volcomp_05=shut` for SOL → ALLOWED ✓. Cluster 0/2→1/2. **ENTRY: SOL/USD LONG 111.80 @ $72.23, stop $70.812, target $77.902 (W22-G 2-bar EMA exit).** Cost $8,075.31, commission $21.00, cash $2,472.14. MTM @ $72.64: $8,121.15. Equity $10,593.29. Kill switches all clear. A/B note: v0.13 entry identical to v0.3 here — both pass vol-comp and 2-bar confirm at same wake. Days live: **38**.

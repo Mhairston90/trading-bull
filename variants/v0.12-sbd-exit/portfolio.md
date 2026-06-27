@@ -2,7 +2,7 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB hypothesis / instrumented twin (SBD classifier + W22-G 2-bar exit vs v0.2 baseline)
-> **Last rebuild:** 2026-06-26T05:06Z (routine-07 wake 2026-06-25 PT — 22:05 PT on-schedule cron fire; 0 entries, 0 trades; EOD 5a FAIL / SBD briefly cleared then re-activated; 16 closed trades lifetime; **PROMOTION ELIGIBLE — confirmed**)
+> **Last rebuild:** 2026-06-27T16:43Z (routine-07 wake 2026-06-27 PT — 09:43 PT OFF-SCHEDULE Saturday fire; 1 entry SOL/USD; OVERNIGHT 13:00Z Jun 27: R3 repaired, SBD CLEAR (W22-G default exit reverts to 2-bar EMA20); 16 closed trades lifetime; **PROMOTION ELIGIBLE — confirmed**)
 >
 > **LEADERBOARD-SOURCED — FORWARD PAPER-PAPER ONLY.** Rebuilt from this variant's
 > `trade_log.md`. The 2026-05-19→2026-05-29 trades were recovered on 2026-05-29
@@ -11,29 +11,32 @@
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,858.19** (flat)
+- Cash: **$2,540.28** (post-open: $10,858.19 − $8,296.34 cost basis − $21.57 entry commission)
 - Realized PnL (variant lifetime): **+$858.19** (prior 10 trades net +$491.28; replay: BTC Jun14 −$7.73 −0.11R; HYPE Jun14 −$90.44 −0.58R; BTC Jun15/16 +$106.62 +0.68R; HYPE Jun16/17 +$208.20 +1.32R; SOL Jun20/21 +$315.65 +1.97R; BTC Jun22 −$165.35 −1.00R)
-- Unrealized PnL: **$0.00** (no open positions)
-- Position values (MTM): **$0.00**
-- Current equity: **$10,858.19**
-- Equity peak: **$11,023.54** (NEW record — set 2026-06-21T22:00Z at SOL close +1.97R; prior peak $10,606.00 from HYPE 4R backfill)
-- Drawdown from peak: **1.50%** ($11,023.54 → $10,858.19 after BTC Jun22 stop-out −1.00R)
+- Unrealized PnL: **+$47.09** raw / **+$25.52** net of entry commission
+- Position values (MTM @ $72.64): **$8,343.43**
+- Current equity: **$10,883.71** (cash + MTM)
+- Equity peak: **$11,023.54** (set 2026-06-21T22:00Z at SOL close +1.97R; current below peak)
+- Drawdown from peak: **1.27%** ($11,023.54 → $10,883.71)
 
 ## Open positions
 
-_None._
+| Pair | Side | Size | Entry | Stop | Target | Entry time (UTC) | Stop dist | Risk ($) | Cluster | Last | MTM | Unrealized R |
+|------|------|-----:|------:|-----:|-------:|------------------|---------:|---------:|---------|-----:|----:|-------------:|
+| SOL/USD | long | 114.86 | 72.23 | 70.812 | 77.902 | 2026-06-27T13:00:00Z | 1.418 | $162.87 | BTC-cluster | 72.64 | $8,343.43 | +0.03R |
 
-Portfolio risk-at-moment: **0.00%** (cap 4%, full headroom).
-Open positions: **0 / 4** (cluster 0/2).
+Portfolio risk-at-moment: **1.50%** of equity. Cap 4% → 2.50pp headroom.
+Open positions: **1 / 4** (cluster 1/2 BTC-cluster). Exit rule: W22-G 2-bar EMA20 exit (SBD CLEAR → default 2-bar mode; SBD exit accelerator inactive).
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-25 PT: $0.00 (last trade was BTC Jun22) — clear vs 5% cap
-- Consecutive losing trading days: 1 (BTC Jun22; cap 7) — clear
-- Max drawdown: 1.50% from peak $11,023.54 (cap 25%, warn 12.5%) — clear
-- Equity floor: $10,858.19 > $7,500 — OK
-- SBD state: ACTIVE at 2026-06-24T13:00Z → W22-G exit rule on any re-opened positions (none) → 0 entries
-- **All clear. No open positions. 16 closed trades lifetime.**
+- Daily realized 2026-06-27 PT: $0.00 — CLEAR vs 5% cap
+- Consecutive losing trading days: 1 (BTC Jun22; cap 7) — CLEAR
+- Max drawdown: 1.27% from peak $11,023.54 (cap 25%, warn 12.5%) — CLEAR
+- Equity floor: $10,883.71 > $7,500 — OK
+- SBD state: CLEAR (14/15 positive, median +1.60%) → W22-G 2-bar EMA20 default exit active
+- Regime gate (5a): PASS — 14/15 positive 24h, SBD CLEAR
+- **All clear. 1 open position. 16 closed trades lifetime.**
 
 ## Promotion assessment — **ELIGIBLE**
 
@@ -85,3 +88,4 @@ Instrumented twin testing whether W22-G 2-bar exit rule (vs main's 1-bar exit) i
 - **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days; fully recovered via Kraken REST 30d history). **6 new closes, 5 new opens across 12 wakes.** Trade sequence: **BTC CLOSE Jun14T13:00Z −0.11R/−$7.73** (2-bar W22-G: 11:00Z close + 12:00Z close both below EMA; fired quicker than expected vs entry Jun14); **HYPE Jun14 OPEN/CLOSE −0.58R/−$90.44** (2-bar: 14:00Z + 15:00Z below EMA → 2h whipsaw); **BTC Jun15/16 OPEN/CLOSE +0.68R/+$106.62** (2-bar fires Jun16T04:00Z after 02:00Z+03:00Z bars below EMA = held 24h vs v0.5's 18h); **HYPE Jun16/17 OPEN/CLOSE +1.32R/+$208.20** (**KEY**: 2-bar fires Jun17T08:00Z after 06:00Z+07:00Z bars below EMA — held from Jun16T04:00Z to Jun17T08:00Z; +1.32R vs v0.5's HYPE Jun16 +0.89R = extra 0.43R from 2-bar rule's patience); **SOL Jun20/21 OPEN/CLOSE +1.97R/+$315.65** (2-bar exits 2h later than v0.5; slightly lower exit = −0.25R vs v0.5); **BTC Jun22 OPEN/CLOSE −1.00R/−$165.35** (stop-hit; 2-bar irrelevant). **NEW PEAK $11,023.54** at SOL close (surpasses prior peak $10,606). Net replay: +$366.68 vs v0.5's +$298.13 in same window. Total equity $10,858.19, DD 1.50% from new peak. **OVERNIGHT 2026-06-24T13:00Z:** SBD ACTIVE → 5a FAIL → 0 entries. **CONFIRMED PROMOTION ELIGIBLE: 36d live, 16 trades, +8.58%, DD 1.50%.** All kill switches clear. Days live: **36**.
 - **2026-06-25 PT (routine-07, 2026-06-25T19:19Z — off-cron 12:19 PT)** — Watchdog ALL CLEAR. Kraken MCP OK ($59,407 BTC). Replay window: 2026-06-24T16:35Z → 2026-06-25T19:19Z (~26.7h). Wakes evaluated: **EOD 2026-06-25T04:00Z**: 0/15 positive, SBD ACTIVE, 5a FAIL → 0 entries. **OVERNIGHT 2026-06-25T13:00Z**: BTC crashed 61,146→58,218 −4.9%, SBD 5th consecutive wake, 0/15 positive, 5a FAIL → 0 entries (SBD → W22-G exit rule inactive for any new opens). Book flat. Kill switches all clear (equity $10,858.19 unchanged). **PROMOTION ELIGIBLE status confirmed** (37d live, 16 trades, +8.58%). Days live: **37**.
 - **2026-06-25 PT (routine-07, 2026-06-26T05:06Z — 22:05 PT on-schedule cron fire)** — Watchdog ALL CLEAR. Kraken MCP OK ($59,766.5 BTC). Replay window: 2026-06-25T19:19Z → 2026-06-26T05:06Z (~9.8h). MIDDAY 20:00Z: default skip. **EOD 2026-06-26T04:00Z** (routine-03-eod confirmed 04:11Z): 2/15 positive (SOL +0.77%, HYPE +1.24%), median −2.84%, 5a-SBD briefly CLEARED (positives = 2 > 1 ceiling); 5a FAIL → 0 entries. SBD cleared → W22-G default exit reverts to 20-EMA 2-bar (no active positions to apply). Book flat → exit replay no-op. Post-EOD: SBD re-activated by 05:00Z (0/15, −3.88%). Kill switches all clear (equity $10,858.19 unchanged). **PROMOTION ELIGIBLE** (37d, 16 trades, +8.58%, DD 1.50%). Days live: **37**.
+- **2026-06-27 PT (routine-07, 2026-06-27T16:43Z — 09:43 PT OFF-SCHEDULE Saturday fire)** — Watchdog 1 finding (self-resolving). Kraken MCP OK (14/15 positive, median +1.60%, SBD CLEAR → W22-G 2-bar EMA exit active). Replay window: 2026-06-26T05:06Z → 2026-06-27T16:43Z (~35.6h). Wakes: OVERNIGHT Jun26 13:00Z (R3 0/15 binding → 0 entries), EOD Jun27 04:00Z (R3 binding → 0 entries), **OVERNIGHT Jun27 13:00Z**: SOL R1/R2/R3/R4a/5a PASS. No vol-comp gate for v0.12. Cluster 0/2→1/2. **ENTRY: SOL/USD LONG 114.86 @ $72.23, stop $70.812, target $77.902 (W22-G 2-bar EMA20 exit; SBD exit accelerator inactive — SBD CLEAR).** Cost $8,296.34, commission $21.57, cash $2,540.28. MTM @ $72.64: $8,343.43. Equity $10,883.71. Kill switches all clear. **PROMOTION ELIGIBLE** (38d, 16 trades, +8.58% realized; equity $10,883.71 = +8.84% MTM). Days live: **38**.

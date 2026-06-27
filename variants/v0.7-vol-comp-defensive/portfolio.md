@@ -2,34 +2,36 @@
 
 > **Paper-paper account.** Synthetic $10K starting equity.
 > **Category:** LAB-SWEEP (parameter sweep of v0.3, threshold 0.5 → 0.7)
-> **Last rebuild:** 2026-06-26T05:06Z (routine-07 wake 2026-06-25 PT — 22:05 PT on-schedule cron fire; 0 entries, 0 trades; EOD 5a FAIL / SBD briefly cleared then re-activated; 4 closed trades lifetime)
+> **Last rebuild:** 2026-06-27T16:43Z (routine-07 wake 2026-06-27 PT — 09:43 PT OFF-SCHEDULE Saturday fire; 1 entry SOL/USD; OVERNIGHT 13:00Z Jun 27: SOL vol-comp 0.7× gate shut (ALLOWED); 4 closed trades lifetime)
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,202.68** (flat)
+- Cash: **$2,387.35** (post-open: $10,202.68 − $7,795.06 cost basis − $20.27 entry commission)
 - Realized PnL (variant lifetime): **+$202.69** (TAO stop-hit −$141.46 −1.00R; ETH +$591.51 +4.00R; BTC −$91.99 −0.59R; XDG stop-hit −$155.37 −1.00R)
-- Unrealized PnL: **$0.00** (no open positions)
-- Position values (MTM): **$0.00**
-- Current equity: **$10,202.68**
-- Equity peak: **$10,450.05** (set 2026-06-15T14:00Z at ETH 4R close)
-- Drawdown from peak: **2.37%** ($10,450.05 → $10,202.68 after BTC EMA exit + XDG stop-out)
+- Unrealized PnL: **+$44.25** raw / **+$23.98** net of entry commission
+- Position values (MTM @ $72.64): **$7,839.31**
+- Current equity: **$10,226.66** (cash + MTM)
+- Equity peak: **$10,450.05** (set 2026-06-15T14:00Z at ETH 4R close; current below peak)
+- Drawdown from peak: **2.13%** ($10,450.05 → $10,226.66)
 
 ## Open positions
 
-_None._
+| Pair | Side | Size | Entry | Stop | Target | Entry time (UTC) | Stop dist | Risk ($) | Cluster | Last | MTM | Unrealized R |
+|------|------|-----:|------:|-----:|-------:|------------------|---------:|---------:|---------|-----:|----:|-------------:|
+| SOL/USD | long | 107.92 | 72.23 | 70.812 | 77.902 | 2026-06-27T13:00:00Z | 1.418 | $153.04 | BTC-cluster | 72.64 | $7,839.31 | +0.03R |
 
-Portfolio risk-at-moment: **0.00%** (cap 4%, full headroom).
-Open positions: **0 / 4** (cluster 0/2).
+Portfolio risk-at-moment: **1.50%** of equity. Cap 4% → 2.50pp headroom.
+Open positions: **1 / 4** (cluster 1/2 BTC-cluster).
 
 ## Active kill-switch state
 
-- Daily realized 2026-06-25 PT: $0.00 (last trade was XDG Jun17) — clear vs 5% cap
-- Consecutive losing trading days: 2 (BTC Jun16, XDG Jun17; cap 7) — clear
-- Max drawdown: 2.37% from peak $10,450.05 (cap 25%, warn 12.5%) — clear
-- Equity floor: $10,202.68 > $7,500 — OK
-- Regime gate: 5a FAIL / SBD ACTIVE at OVERNIGHT 2026-06-24T13:00Z → 0 entries
-- **All clear. No open positions. 4 closed trades lifetime.**
+- Daily realized 2026-06-27 PT: $0.00 — CLEAR vs 5% cap
+- Consecutive losing trading days: 2 (BTC Jun16, XDG Jun17; cap 7) — CLEAR
+- Max drawdown: 2.13% from peak $10,450.05 (cap 25%, warn 12.5%) — CLEAR
+- Equity floor: $10,226.66 > $7,500 — OK
+- Regime gate (5a): PASS — 14/15 positive 24h, median +1.60%, SBD CLEAR
+- **All clear. 1 open position. 4 closed trades lifetime.**
 
 ## Rolling performance vs main v0.2 AND parent v0.3
 
@@ -62,3 +64,4 @@ Parameter sweep — `vol_compression_threshold = 0.7` (vs v0.3's 0.5). Key findi
 - **2026-06-24 PT (routine-07 — gap replay via routine07_replay_20260623.py; fired ~09:35 PT off-schedule)** — Replay window: **2026-06-14T05:00Z → 2026-06-24T13:00Z** (10.5 days; fully recovered via Kraken REST 30d history). **4 new closes, 3 new opens across 12 wakes.** Trade sequence: **TAO CLOSE 2026-06-14T06:00Z −1.00R/−$141.46** (stop 259.015 hit ~05:00Z next bar after OVERNIGHT Jun13 entry; 22h hold; TAO pulled back sharply); **ETH OPEN 2026-06-14T13:00Z + CLOSE 2026-06-15T14:00Z +4.00R/+$591.51** (0.7× gate ALLOWED ETH at OVERNIGHT Jun14: ATR compressed post-stable; ETH rallied cleanly from $2,480.2→$2,697.8 over 25h; 4R target fired at 13:00Z bar close — v0.7's BEST TRADE and the largest single trade of any variant in the replay); **BTC OPEN 2026-06-15T04:00Z + CLOSE 2026-06-15T23:00Z −0.59R/−$91.99** (EOD Jun15 BTC entered; 22:00Z bar below EMA20 → 1-bar exit; net unrealized gain then reversed); **XDG OPEN 2026-06-16T04:00Z + CLOSE 2026-06-16T21:00Z −1.00R/−$155.37** (EOD Jun16 XDG entered; Jun17 morning bar hit stop; quick reversal from EOD entry). **Entry scans Jun17–Jun24:** 0.7× gate BLOCKED HYPE (Jun17 ATR elevated post-rally), SOL (Jun20 ATR elevated), BTC (Jun22 OVERNIGHT ATR elevated). June 24 OVERNIGHT: SBD → 5a FAIL. **NEW PEAK $10,450.05** at ETH close (Jun15); subsequent BTC loss and XDG stop-out → DD 2.37%. **Key A/B: v0.7 (0.7× gate, 4 trades) vs v0.5 (no gate, 10 trades): v0.7's ETH +4.00R = 63% of ALL v0.5's realized PnL in 1 trade. But v0.7's 2 stop-hits (TAO, XDG) cost $296.83.** All kill switches clear. Days live: **43**.
 - **2026-06-25 PT (routine-07, 2026-06-25T19:19Z — off-cron 12:19 PT)** — Watchdog ALL CLEAR. Kraken MCP OK. Replay window: 2026-06-24T16:35Z → 2026-06-25T19:19Z (~26.7h). Wakes evaluated: **EOD 2026-06-25T04:00Z**: 0/15 positive, SBD ACTIVE, 5a FAIL → 0 entries. **OVERNIGHT 2026-06-25T13:00Z**: BTC crashed 61,146→58,218 −4.9%, SBD 5th consecutive wake, 5a FAIL → 0 entries. Vol-comp gate not reached (5a blocks first). Book flat. Kill switches all clear (equity $10,202.68 unchanged). Days live: **44**.
 - **2026-06-25 PT (routine-07, 2026-06-26T05:06Z — 22:05 PT on-schedule cron fire)** — Watchdog ALL CLEAR. Kraken MCP OK ($59,766.5 BTC). Replay window: 2026-06-25T19:19Z → 2026-06-26T05:06Z (~9.8h). MIDDAY 20:00Z: default skip. **EOD 2026-06-26T04:00Z**: 2/15 positive (SOL +0.77%, HYPE +1.24%), median −2.84%, 5a-SBD briefly CLEARED; 5a FAIL (2/15 < 4/15) → 0 entries. Vol-comp 0.7× gate not reached. Book flat → exit replay no-op. Post-EOD: SBD re-activated (0/15, −3.88%). Kill switches all clear (equity $10,202.68 unchanged). Days live: **44**.
+- **2026-06-27 PT (routine-07, 2026-06-27T16:43Z — 09:43 PT OFF-SCHEDULE Saturday fire)** — Watchdog 1 finding (self-resolving). Kraken MCP OK (14/15 positive, median +1.60%, SBD CLEAR). Replay window: 2026-06-26T05:06Z → 2026-06-27T16:43Z (~35.6h). Wakes evaluated: **OVERNIGHT Jun26 13:00Z**: R3 0/15 binding → 5a PASS but R3 blocks, 0 entries. **EOD Jun27 04:00Z**: R3 still binding → 0 entries. **OVERNIGHT Jun27 13:00Z**: 14/15 positive, 5a PASS. SOL: R1 PASS, R2 RSI 63.5 PASS, R3 PASS, R4a PASS. **Vol-comp 0.7× gate: indicators `volcomp_07=shut` for SOL** (ATR compressed at OVERNIGHT 13:00Z bar; SOL ATR 0.709, 0.7× mean ATR threshold — gate SHUT = NOT triggered = ENTRY ALLOWED). Cluster 0/2→1/2. **ENTRY: SOL/USD LONG 107.92 @ $72.23, stop $70.812, target $77.902.** Cost $7,795.06, commission $20.27, cash $2,387.35. MTM @ $72.64: $7,839.31. Equity $10,226.66. Kill switches all clear. Key note: 0.7× gate shut for SOL OVERNIGHT 13:00Z (same as main's entry conditions) — SUI OVERNIGHT reading was shut/OPEN (0.7× blocked), confirming SOL was uniquely compressed at that bar. Days live: **46**.
