@@ -5636,3 +5636,5 @@ Flat at wake (0 open positions, $10,413.87 cash). No MTM, no stop-monitor, no ex
 2026-06-26T17:40:32Z | allocation | day-gate | not Sunday, skipping | no action
 2026-06-27T17:35:08Z | allocation | day-gate | not Sunday, skipping | no action
 2026-06-28T17:07:16Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-06-28T17:40:32Z | allocation | W26-cycle | momentum 100% single-bucket, no shift (30d -1.06R / since-incep +0.71R = noise branch), P-W26-CASHFIT auto-rejected 24h timeout | no strategy edit
