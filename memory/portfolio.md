@@ -2,9 +2,9 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-27T21:30Z routine-02-midday (PT Sat 2026-06-27 14:30 — OFF-SCHEDULE Saturday fire vs M-F cron `0 13 * * 1-5`; routine markdown has no day-gate so executed normally). **1 EXIT: SOL/USD stop-out intrabar at 2026-06-27T19:00Z** (19:00Z bar low $70.82 pierced stop $71.3184; closed at stop with 0.05% slippage = $71.2827, net −$201.55 / −1.29R). Portfolio now FLAT. Regime gate still 5a PASS (per overnight read 14/15 positive); SBD CLEAR. Equity $10,212.32 (DD widened to 6.10% from 4.54%). All Ring 3 kill switches CLEAR. Daily PnL −1.93% well below 5% cap. Loss-streak day 1 (today's −$201.55 vs prior flat day).
+> **Last rebuild:** 2026-06-28T16:22Z routine-03-eod (PT Sun 2026-06-28 09:22 — OFF-SCHEDULE Sunday fire vs M-F cron `0 21 * * 1-5`; routine markdown has no day-gate so executed normally). **0 entries / 0 exits** — portfolio remains FLAT after yesterday's SOL stop-out. **Regime flipped 5a FAIL 1/15 positive median −1.92% → SBD ACTIVE** (synchronized-breakdown re-engaged within 24h of Sat overnight's 14/15 PASS). No entries possible regardless of regime since no candidate passed all technical rules anyway (only SOL and LTC TECH PASS but SOL blocked by 5b cooldown to 2026-06-28T19:00Z, and 5a/SBD blocks both). Equity unchanged $10,212.32; DD 6.10% (peak $10,875.85 unchanged). All Ring 3 kill switches CLEAR. Day-to-date PnL $0 (no trades on PT 2026-06-28). Loss-streak still 1 day (yesterday's SOL stop).
 
-> **Prior rebuilds:** 2026-06-27T16:45Z routine-01-overnight (OPEN SOL/USD 110.1608 @ $72.7364, 14/15 positive median +1.60% PASS); 2026-06-26T20:00Z routine-02-midday (flat, 12/15 positive median +1.05%, SBD CLEAR); 2026-06-26T15:53Z routine-01-overnight (flat, 11/15 positive median +1.21%, regime flipped to PASS but R3 binding 0/15).
+> **Prior rebuilds:** 2026-06-27T21:30Z routine-02-midday (SOL/USD stop-out intrabar −$201.55 / −1.29R); 2026-06-27T16:45Z routine-01-overnight (OPEN SOL/USD 110.1608 @ $72.7364, 14/15 PASS); 2026-06-26T20:00Z routine-02-midday (flat, 12/15 PASS); 2026-06-26T15:53Z routine-01-overnight (flat, 11/15 PASS, R3 0/15).
 
 ## Account
 
@@ -50,33 +50,33 @@ Portfolio risk-at-moment: **0.00%** of equity. Cap 4% → full 4pp headroom.
 Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; BTC-cluster 0/2 used).
 Breakeven ratchet (W22-H-partial): N/A — no open positions.
 
-## Midday snapshot — 2026-06-27 PT (Sat, OFF-SCHEDULE — M-F cron fired Sat)
+## EOD snapshot — 2026-06-28 PT (Sun, OFF-SCHEDULE — M-F cron fired Sun)
 
 | Metric | Value |
 |---|---|
-| Wake type | routine-02-midday (OFF-SCHEDULE Saturday — routine has no day-gate, executed) |
-| Open positions MTM | $0 (flat after SOL stop-out) |
-| Exits this wake | **1 (SOL/USD stop-out intrabar at 2026-06-27T19:00Z, −1.29R / −$201.55)** |
-| Entries this wake | 0 (midday is position management only) |
-| Equity (cash + MTM) | **$10,212.32** |
+| Wake type | routine-03-eod (OFF-SCHEDULE Sunday — routine has no day-gate, executed) |
+| Open positions MTM | $0 (flat — no positions since SOL stop yesterday) |
+| Exits this wake | 0 (flat coming in) |
+| Entries this wake | 0 (regime 5a FAIL + SBD ACTIVE blocks all entries; no TECH-PASS candidates qualify after gates anyway) |
+| Equity (cash + MTM) | **$10,212.32** (unchanged from Sat midday close) |
 | Equity peak | $10,875.85 (unchanged; need +$663.53 to retake) |
 | Drawdown from peak | **6.10%** |
-| Loss streak | 1 trading day (today's −$201.55) |
-| Day-to-date realized PnL (2026-06-27 PT) | **−$201.55 / −1.93%** |
+| Loss streak | 1 trading day (yesterday's −$201.55 SOL stop; today flat) |
+| Day-to-date realized PnL (2026-06-28 PT) | **$0 / 0.00%** |
 
 ## Active kill-switch state
 
-- Daily realized + unrealized 2026-06-27 PT: **−$201.55 / −1.93%** of equity — CLEAR (cap 5%, 3.07pp headroom).
-- Consecutive losing trading days: **1** (cap 7, 6 days headroom). CLEAR.
+- Daily realized + unrealized 2026-06-28 PT: **$0 / 0.00%** of equity — CLEAR (cap 5%, 5.00pp headroom).
+- Consecutive losing trading days: **1** (cap 7, 6 days headroom). CLEAR. Today flat so streak holds at 1.
 - Max drawdown: **6.10%** from peak $10,875.85 (cap 25%, warn 12.5%, 6.40pp to warn) — CLEAR.
 - Equity floor: $10,212.32 > $7,500 floor — CLEAR.
-- MCP availability: Kraken OK (`kraken_ohlcv` returned 50 1H SOL bars cleanly; `kraken_multi_ticker` rejected `SOLUSD` symbol, accepted `SOL/USD` form — convention noted). CLEAR.
-- Regime gate (rule 5a): **PASS** (per overnight read 14/15 positive median +1.60%). Midday is position management only — regime not re-scored this wake.
-- Regime sub-state (rule 5a-SBD): **CLEAR** (per overnight).
-- Active 5b cooldowns: **SOL/USD — 24h cooldown active until 2026-06-28T19:00Z** (just stopped out this wake).
+- MCP availability: Kraken OK (`indicators.py` pulled 720× 4H bars/pair cleanly). CLEAR.
+- Regime gate (rule 5a): **FAIL** — 1/15 positive 24h (only TRX +0.86%), median −1.92%. Flipped from Sat overnight 14/15 PASS within ~24h.
+- Regime sub-state (rule 5a-SBD): **ACTIVE** — both conditions met (≤1 positive AND median ≤ −1.0%). Defensive exit tightens to 9-EMA two-bar confirmation while active. No open positions to defend this wake.
+- Active 5b cooldowns: **SOL/USD — 24h cooldown active until 2026-06-28T19:00Z** (~10h remaining from this wake's 09:22 PT / 16:22Z fire).
 - Cluster cap (rule 6a, BTC-cluster): **0/2** used. Full headroom.
-- Watchdog: not re-run this wake (midday lean budget); routine-07 staleness carry-over from earlier (routine-04 territory).
-- **All Ring 3 kill switches CLEAR.** Routine-02-midday 2026-06-27T21:30Z (OFF-schedule Saturday fire): **1 exit, 0 entries**.
+- Watchdog: ALL CLEAR (routine-07 staleness from prior wakes resolved by routine-04 / Sat routine-07).
+- **All Ring 3 kill switches CLEAR.** Routine-03-eod 2026-06-28T16:22Z (OFF-schedule Sunday fire): **0 trades**.
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -105,14 +105,14 @@ Breakeven ratchet (W22-H-partial): N/A — no open positions.
 
 (none — flat)
 
-Next entry-eligible scan: routine-03-eod (PT Sat 2026-06-27 ~21:00 = Sun 04:00Z). SOL/USD specifically blocked by 5b re-entry cooldown until 2026-06-28T19:00Z.
+Next entry-eligible scan: routine-01-overnight (PT Mon 2026-06-29 ~06:00 = 13:00Z). SOL/USD specifically blocked by 5b re-entry cooldown until 2026-06-28T19:00Z (cleared by next wake). SBD-active state will be re-evaluated next wake; if it persists, all entries continue blocked regardless of technical scan.
 
 ## Rolling performance
 
 | Window | BULL return | BTC-hold return | Delta | Result |
 |--------|-------------|-----------------|-------|--------|
-| 7d | ≈ −2.0% (today's −$201.55 SOL stop reverses prior week's +$182 SOL winner; net 7d slightly negative) | ≈ −6.6% (BTC ~$65k → $60.74k) | ≈ +4.6% | BULL ahead 7d |
-| 30d | ≈ +2.12% (inception $10k 2026-04-20; equity $10,212.32 mark) | ≈ −22.2% (BTC 30d ago ~$78k → today $60.74k) | ≈ +24.3% | BULL well ahead |
-| 90d | — | — | — | not computable (BULL inception 2026-04-20 = 68 days ago; window first computable ~2026-07-19) |
+| 7d | ≈ −2.0% (SOL net ~−$19 across 06-20→06-27 cycle, equity $10,212.32 flat today) | ≈ −7.5% (BTC ~$64.6k → $59.8k) | ≈ +5.5% | BULL ahead 7d |
+| 30d | ≈ +2.12% (inception $10k 2026-04-20; equity $10,212.32 mark unchanged) | ≈ −23.4% (BTC 30d ago ~$78k → today $59,798.5) | ≈ +25.5% | BULL well ahead |
+| 90d | — | — | — | not computable (BULL inception 2026-04-20 = 69 days ago; window first computable ~2026-07-19) |
 
-(7d/30d figures approximate. SOL stop today erases the recent +$182 SOL win plus more — net SOL P&L across 2026-06-20 → 06-27 cycle: +$182 − $201 = −$19. Two consecutive same-pair stops within a week — pattern worth flagging in lessons if it repeats next cycle.)
+(7d/30d figures approximate. Today flat, no new contribution. SBD reactivation within 24h of yesterday's PASS underscores the Sat overnight regime-flip fragility — flagged as observation, not actionable from a flat book.)
