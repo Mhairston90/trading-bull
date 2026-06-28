@@ -2,9 +2,9 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-28T16:22Z routine-03-eod (PT Sun 2026-06-28 09:22 — OFF-SCHEDULE Sunday fire vs M-F cron `0 21 * * 1-5`; routine markdown has no day-gate so executed normally). **0 entries / 0 exits** — portfolio remains FLAT after yesterday's SOL stop-out. **Regime flipped 5a FAIL 1/15 positive median −1.92% → SBD ACTIVE** (synchronized-breakdown re-engaged within 24h of Sat overnight's 14/15 PASS). No entries possible regardless of regime since no candidate passed all technical rules anyway (only SOL and LTC TECH PASS but SOL blocked by 5b cooldown to 2026-06-28T19:00Z, and 5a/SBD blocks both). Equity unchanged $10,212.32; DD 6.10% (peak $10,875.85 unchanged). All Ring 3 kill switches CLEAR. Day-to-date PnL $0 (no trades on PT 2026-06-28). Loss-streak still 1 day (yesterday's SOL stop).
+> **Last rebuild:** 2026-06-28T20:00Z routine-02-midday (PT Sun 2026-06-28 13:00 — OFF-SCHEDULE Sunday fire vs M-F cron `0 13 * * 1-5`; routine markdown has no day-gate so executed normally). **0 entries / 0 exits** — portfolio FLAT (no open positions to mark-to-market, no exit checks possible, midday rule forbids new entries). Equity unchanged $10,212.32; DD 6.10% (peak $10,875.85 unchanged). All Ring 3 kill switches CLEAR. Day-to-date PnL $0 (no trades on PT 2026-06-28). Loss-streak still 1 day (yesterday's SOL stop). **SOL/USD 5b cooldown LAPSED at 2026-06-28T19:00Z (~1h before this wake) — SOL now re-entry-eligible at next entry-scan routine (overnight #1 or EOD #3).** Regime state not re-scored this wake (midday is position management only); last authoritative read = routine-03-eod 16:22Z showing 5a FAIL / SBD ACTIVE per `scripts/indicators.py`.
 
-> **Prior rebuilds:** 2026-06-27T21:30Z routine-02-midday (SOL/USD stop-out intrabar −$201.55 / −1.29R); 2026-06-27T16:45Z routine-01-overnight (OPEN SOL/USD 110.1608 @ $72.7364, 14/15 PASS); 2026-06-26T20:00Z routine-02-midday (flat, 12/15 PASS); 2026-06-26T15:53Z routine-01-overnight (flat, 11/15 PASS, R3 0/15).
+> **Prior rebuilds:** 2026-06-28T16:22Z routine-03-eod (flat, SBD ACTIVE re-engaged); 2026-06-27T21:30Z routine-02-midday (SOL/USD stop-out intrabar −$201.55 / −1.29R); 2026-06-27T16:45Z routine-01-overnight (OPEN SOL/USD 110.1608 @ $72.7364, 14/15 PASS); 2026-06-26T20:00Z routine-02-midday (flat, 12/15 PASS).
 
 ## Account
 
@@ -50,18 +50,18 @@ Portfolio risk-at-moment: **0.00%** of equity. Cap 4% → full 4pp headroom.
 Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; BTC-cluster 0/2 used).
 Breakeven ratchet (W22-H-partial): N/A — no open positions.
 
-## EOD snapshot — 2026-06-28 PT (Sun, OFF-SCHEDULE — M-F cron fired Sun)
+## Midday snapshot — 2026-06-28 PT (Sun, OFF-SCHEDULE — M-F cron fired Sun)
 
 | Metric | Value |
 |---|---|
-| Wake type | routine-03-eod (OFF-SCHEDULE Sunday — routine has no day-gate, executed) |
-| Open positions MTM | $0 (flat — no positions since SOL stop yesterday) |
-| Exits this wake | 0 (flat coming in) |
-| Entries this wake | 0 (regime 5a FAIL + SBD ACTIVE blocks all entries; no TECH-PASS candidates qualify after gates anyway) |
-| Equity (cash + MTM) | **$10,212.32** (unchanged from Sat midday close) |
+| Wake type | routine-02-midday (OFF-SCHEDULE Sunday — routine has no day-gate, executed) |
+| Open positions MTM | $0 (flat — no positions to mark) |
+| Exits this wake | 0 (no positions to exit) |
+| Entries this wake | 0 (routine forbids midday entries) |
+| Equity (cash + MTM) | **$10,212.32** (unchanged) |
 | Equity peak | $10,875.85 (unchanged; need +$663.53 to retake) |
 | Drawdown from peak | **6.10%** |
-| Loss streak | 1 trading day (yesterday's −$201.55 SOL stop; today flat) |
+| Loss streak | 1 trading day (yesterday's −$201.55 SOL stop) |
 | Day-to-date realized PnL (2026-06-28 PT) | **$0 / 0.00%** |
 
 ## Active kill-switch state
@@ -73,10 +73,11 @@ Breakeven ratchet (W22-H-partial): N/A — no open positions.
 - MCP availability: Kraken OK (`indicators.py` pulled 720× 4H bars/pair cleanly). CLEAR.
 - Regime gate (rule 5a): **FAIL** — 1/15 positive 24h (only TRX +0.86%), median −1.92%. Flipped from Sat overnight 14/15 PASS within ~24h.
 - Regime sub-state (rule 5a-SBD): **ACTIVE** — both conditions met (≤1 positive AND median ≤ −1.0%). Defensive exit tightens to 9-EMA two-bar confirmation while active. No open positions to defend this wake.
-- Active 5b cooldowns: **SOL/USD — 24h cooldown active until 2026-06-28T19:00Z** (~10h remaining from this wake's 09:22 PT / 16:22Z fire).
+- Active 5b cooldowns: **NONE** (SOL/USD cooldown LAPSED at 2026-06-28T19:00Z, ~1h before this wake; re-entry now permitted).
 - Cluster cap (rule 6a, BTC-cluster): **0/2** used. Full headroom.
-- Watchdog: ALL CLEAR (routine-07 staleness from prior wakes resolved by routine-04 / Sat routine-07).
-- **All Ring 3 kill switches CLEAR.** Routine-03-eod 2026-06-28T16:22Z (OFF-schedule Sunday fire): **0 trades**.
+- Watchdog: not run this wake (midday is lean / position management; carry-over status from prior wakes ALL CLEAR).
+- Regime gate (rule 5a) / SBD: not re-scored this wake (midday is position management only). Last authoritative read at routine-03-eod 16:22Z = 5a FAIL 1/15 positive, SBD ACTIVE — will be re-evaluated by next entry-scan routine.
+- **All Ring 3 kill switches CLEAR.** Routine-02-midday 2026-06-28T20:00Z (OFF-schedule Sunday fire): **0 trades**.
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -105,7 +106,7 @@ Breakeven ratchet (W22-H-partial): N/A — no open positions.
 
 (none — flat)
 
-Next entry-eligible scan: routine-01-overnight (PT Mon 2026-06-29 ~06:00 = 13:00Z). SOL/USD specifically blocked by 5b re-entry cooldown until 2026-06-28T19:00Z (cleared by next wake). SBD-active state will be re-evaluated next wake; if it persists, all entries continue blocked regardless of technical scan.
+Next entry-eligible scan: routine-01-overnight (PT Mon 2026-06-29 ~06:00 = 13:00Z). SOL/USD 5b cooldown has now lapsed (was 2026-06-28T19:00Z) — SOL is technically eligible for next-wake entry, subject to regime re-scoring (if SBD still ACTIVE then all entries remain blocked). LTC also on the recent TECH-PASS short list; same SBD-block applies if regime persists.
 
 ## Rolling performance
 
