@@ -57,3 +57,4 @@
 | 2026-06-22T16:00:00Z | CLOSE | SOL/USD | long | 121.5347 | 73.0435 | — | — | +1.19 | +182.13 | correction-previous-row |
 | 2026-06-27T16:00:00Z | OPEN | SOL/USD | long | 110.1608 | 72.7364 | 71.3184 | 78.4084 | — | — | entry-rule-v0.4-momentum |
 | 2026-06-27T19:00:00Z | CLOSE | SOL/USD | long | 110.1608 | 71.2827 | — | — | -1.29 | -201.55 | exit-stop-hit-intrabar |
+| 2026-06-29T04:00:00Z | OPEN | SOL/USD | long | 82.3578 | 72.6163 | 70.7563 | 80.0563 | — | — | entry-rule-v0.4-momentum |
