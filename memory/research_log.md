@@ -5761,3 +5761,93 @@ All 8 findings noted; routine-07 staleness is the upstream root; this EOD does n
 ### Summary
 
 **0 OPEN, 1 CLOSE.** Late-fire replay of the Mon 21:00 PT EOD slot. SOL/USD exited at the 04:00Z bar close on EMA20-confirm two-bar rule for **+$74.48 / +0.49R net** (gross +0.69R, friction −0.20R). Round-trip arc: +1.74R peak 1H close → +0.49R exit fill, ~1.25R give-back; W22-H ratchet did not arm because intrabar +2R touch did not produce a +2R close. Portfolio now **flat / $10,286.93 cash / DD 5.41%**. Regime 5a **PASS** (7/15 positive, median −0.15%, SBD CLEAR) but entry scan returns **0 eligible** — FARTCOIN passes technical but fails R4a liquidity ($0.63M < $2.0M); AVAX falls 1.04 RSI-points short of the R2 floor; all others fail R1 (below 20-EMA). Loss streak reset to **0 days**. Watchdog alerted 8 findings (routine-07 staleness root cause). Telegram EOD card sent. Files written: `trade_log.md` (SOL exit row), `portfolio.md` (rewritten flat), `research_log.md` (this row), `lessons.md` (1 lesson appended).
+
+
+## 2026-06-30T15:07Z — routine-01-overnight (Tue 06:00 PT slot, ~2h late fire at 08:07 PT)
+
+**Slot identity `bull-01-overnight`.** Cron `0 6 * * 1-5` PT = 13:00Z; fired at 15:07Z = 08:07 PT, ~2h7m late. Within tolerance — does not change which trading-day slot this covers (Tue 2026-06-30).
+
+### Position management
+
+Flat at wake (0 open positions, $10,286.93 cash). No MTM, no stop-monitor, no exit checks — SOL/USD was closed at the prior wake (routine-03-eod 06-30T10:30Z) on the Exit 1 two-bar EMA20 confirmation. No pending exits to verify.
+
+### Kraken multi-ticker (15-pair universe, live snapshot)
+
+| Pair | last | 24h % |
+|------|-----:|------:|
+| FARTCOIN | 0.1378 | −1.29 |
+| TRX | 0.316145 | −1.47 |
+| ADA | 0.143185 | −1.63 |
+| SUI | 0.6836 | −2.57 |
+| XRP | 1.03113 | −2.48 |
+| TAO | 202.4288 | −2.90 |
+| LINK | 7.15227 | −2.91 |
+| SOL | 72.76 | −3.05 |
+| ETH | 1,559.44 | −3.19 |
+| HYPE | 64.70 | −3.19 |
+| BTC | 58,225.7 | −3.23 |
+| LTC | 41.73 | −3.27 |
+| AVAX | 6.444 | −3.36 |
+| NEAR | 1.7828 | −4.10 |
+| XDG | 0.0703023 | −4.13 |
+
+- **Positives:** **0/15** (all 15 pairs red). Significant deterioration since 06-30T10:30Z EOD (7/15 positive, median −0.15%) — entire universe rolled negative in ~5h.
+- **Median 24h % change:** **−3.05%** (worsened from −0.15% at EOD → −3.05% now, ~2.9pp deeper).
+- **Regime gate (5a):** **FAIL** decisively — 0/15 positive (< 4/15 floor by 4 pairs). All entries gated.
+- **5a-SBD sub-state:** **ACTIVE** — positives 0 (≤ 1 ✓) AND median −3.05% (≤ −1.0% ✓). SBD re-engaged after the brief 06-30 EOD CLEAR window — third regime flip-flop in ~36h (Sun PT 06-28 EOD SBD ACTIVE → Mon 06-29 EOD SBD CLEAR → Tue 06-30 EOD SBD CLEAR → Tue 06-30 overnight SBD ACTIVE). Reinforces lesson 2026-06-17 (regime rate-of-change gap) — no new lesson appended; existing one already captures.
+
+### Entry-scan (Technical analyst pass)
+
+Indicator table from `scripts/indicators.py` at 15:07Z (latest closed bars; full indicators output captured):
+
+| Pair | R1 (>EMA20) | R2 (RSI≥55) | R2a | R3 (4H>EMA50) | R4a | All-PASS? |
+|---|---|---|---|---|---|---|
+| BTC/USD | FAIL −911.9 | FAIL RSI 30.9 | OK | FAIL −1,752 | OK | NO |
+| ETH/USD | FAIL −19.66 | FAIL RSI 37.8 | OK | FAIL −38.12 | OK | NO |
+| SOL/USD | FAIL −0.72 | FAIL RSI 42.6 | OK | PASS +1.745 | OK | NO (5b cooldown to 2026-07-01T04:00Z) |
+| HYPE/USD | FAIL −0.54 | FAIL RSI 47.2 | OK | PASS +1.34 | OK | NO |
+| XRP/USD | FAIL −0.010 | FAIL RSI 37.4 | OK | FAIL −0.034 | OK | NO |
+| SUI/USD | FAIL −0.004 | FAIL RSI 45.3 | OK | FAIL −0.012 | OK | NO |
+| TAO/USD | FAIL −1.42 | FAIL RSI 43.5 | OK | FAIL −10.99 | OK | NO |
+| XDG/USD | FAIL −0.0017 | FAIL RSI 31.9 | OK | FAIL −0.0046 | OK | NO |
+| NEAR/USD | FAIL −0.053 | FAIL RSI 34.9 | OK | FAIL −0.075 | OK | NO |
+| ADA/USD | FAIL −0.00077 | FAIL RSI 44.8 | OK | FAIL −0.0053 | OK | NO |
+| LINK/USD | FAIL −0.105 | FAIL RSI 37.3 | OK | FAIL −0.195 | FAIL $1.38M | NO |
+| LTC/USD | FAIL −0.73 | FAIL RSI 33.4 | OK | FAIL −0.28 | OK | NO |
+| FARTCOIN/USD | FAIL −0.0017 | FAIL RSI 46.5 | OK | PASS +0.0081 | FAIL $0.92M | NO |
+| TRX/USD | FAIL −0.0025 | FAIL RSI 21.3 | OK | FAIL −0.0057 | FAIL $0.79M | NO |
+| AVAX/USD | FAIL −0.119 | FAIL RSI 38.0 | OK | PASS +0.0688 | OK | NO |
+
+**Result: 0/15 pairs pass technical filters.** Every single pair fails R1 (1H below 20-EMA) — universe-wide breakdown. Only SOL/HYPE/AVAX/FARTCOIN hold the 4H 50-EMA (R3 PASS), but all four fail R1 by a meaningful margin and RSI floors. **Even if regime 5a had passed, zero entries would be eligible from technical screens alone.** Regime FAIL is redundant gate today.
+
+### News
+
+Skipped — zero technical-PASS candidates to scan for. Firecrawl call not made (per routine spec, news scan only runs on technical passes).
+
+### Sentiment
+
+Skipped — same reason. `kraken_spread` / `kraken_depth` not invoked.
+
+### Decision
+
+**0 OPEN, 0 CLOSE.** Regime 5a FAIL (0/15 positive) and SBD ACTIVE gate all entries; zero pairs would pass technical screens regardless; portfolio flat with no positions to exit.
+
+### First-of-month universe refresh
+
+Today is 2026-06-30 (Tue). First-of-month trigger is **tomorrow 2026-07-01 (Wed)**. **Skipped this wake** — next refresh expected at the first 07-01 routine wake (likely the 06:00 PT overnight Wed).
+
+### Stats
+
+- **Day P&L (06-30 PT DTD):** $0.00 / 0.00% (flat, no closes since 04:00Z EOD exit which was logged to PT 06-29).
+- **Trades opened:** 0. **Trades closed:** 0.
+- **New equity:** $10,286.93 unchanged. **Equity peak:** $10,875.85 unchanged. **Drawdown:** 5.41% unchanged.
+- **Loss streak:** 0 trading days unchanged (reset by Mon's SOL +0.49R close).
+- **All Ring 3 kill switches:** CLEAR.
+
+### Watchdog (`python scripts/watchdog.py --telegram`)
+
+8 findings — same constellation as 06-30T10:30Z EOD wake (routine-07 70h stale + 6× variant stale-MTM carry-over + 3 dirty-tree scripts). Telegram alert auto-sent by watchdog itself. No new findings, no new root causes. Routine-07 staleness remains the upstream issue; out of scope for this overnight wake.
+
+### Summary
+
+**0 OPEN, 0 CLOSE.** ~2h-late routine-01-overnight fire (08:07 PT vs 06:00 PT cron). Universe rolled fully negative over the ~5h since the 06-30 EOD wake (regime 7/15 positive → 0/15 positive, median −0.15% → −3.05%) — 3rd SBD flip-flop in ~36h. Every single pair fails R1 (below 1H 20-EMA); zero entries technically eligible even before regime gate applied. Portfolio remains flat at **$10,286.93 / DD 5.41%**. Watchdog 8 findings (carry-over). No news/sentiment scan needed (no technical passes). Silent on Telegram (no exit, no kill switch, no new lesson). Files written: `portfolio.md` (regime snapshot refresh), `research_log.md` (this row). `trade_log.md` untouched (no trade events). Next entry-eligible wake = routine-03-eod Tue 21:00 PT (= Wed 04:00Z) — gated by regime recovery to ≥ 4/15 positive AND SBD clearing.
