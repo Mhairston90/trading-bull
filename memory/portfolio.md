@@ -2,9 +2,9 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-06-30T15:07Z routine-01-overnight (Tue 06:00 PT slot, ~2h7m late fire at 08:07 PT). **0 entries / 0 exits** — portfolio entered wake flat after Mon EOD SOL exit; universe rolled fully negative over the ~5h since EOD (0/15 positive, median −3.05%, was 7/15 positive median −0.15% at EOD); regime 5a **FAIL** and 5a-SBD **ACTIVE** (3rd flip-flop in 36h); zero pairs pass any R1 check regardless of regime; nothing to manage, nothing to enter. Equity unchanged $10,286.93 (fully cash). DD unchanged 5.41%. All Ring 3 kill switches CLEAR.
+> **Last rebuild:** 2026-06-30T20:00Z routine-02-midday (Tue 13:00 PT ON-SCHEDULE M-F cron). **0 entries / 0 exits** — portfolio remained flat through wake; regime 5a still **FAIL** (1/15 positive, FARTCOIN +0.57% only) and 5a-SBD still **ACTIVE** (median −1.95%, was −3.05% at overnight 08:07 PT); no positions to manage and midday routine cannot open. Equity unchanged **$10,286.93** (fully cash). DD unchanged **5.41%**. All Ring 3 kill switches CLEAR.
 
-> **Prior rebuilds:** 2026-06-30T10:30Z routine-03-eod (LATE FIRE Mon 21:00 PT slot — labeled PT 2026-06-29 Mon EOD — closed SOL/USD long +$74.48 / +0.49R net on Exit-1 two-bar EMA20 confirmation, gross +0.69R, ratchet did not arm because intrabar +2R was touched but no 1H close cleared the $76.336 threshold; ended day $10,286.93 / +0.91%); 2026-06-29T20:00Z routine-02-midday (held SOL +1.71R unrealized at tick $75.80, equity $10,458.97, DD 3.83%); 2026-06-29T04:11Z routine-03-eod (OPENED SOL/USD 82.3578 @ $72.6163, regime flipped back PASS 9/15 SBD CLEAR); 2026-06-28T20:00Z routine-02-midday (flat, OFF-SCHED Sun, SOL cooldown lapsed at 19:00Z); 2026-06-28T16:22Z routine-03-eod (flat, SBD ACTIVE re-engaged).
+> **Prior rebuilds:** 2026-06-30T15:07Z routine-01-overnight (Tue 06:00 PT slot ~2h7m late fire, 0 entries / 0 exits, regime FAIL 0/15 SBD ACTIVE); 2026-06-30T10:30Z routine-03-eod (LATE FIRE Mon 21:00 PT slot — labeled PT 2026-06-29 Mon EOD — closed SOL/USD long +$74.48 / +0.49R net on Exit-1 two-bar EMA20 confirmation, ended day $10,286.93 / +0.91%); 2026-06-29T20:00Z routine-02-midday (held SOL +1.71R unrealized at tick $75.80, equity $10,458.97, DD 3.83%); 2026-06-29T04:11Z routine-03-eod (OPENED SOL/USD 82.3578 @ $72.6163, regime flipped back PASS 9/15 SBD CLEAR); 2026-06-28T20:00Z routine-02-midday (flat, OFF-SCHED Sun, SOL cooldown lapsed at 19:00Z).
 
 ## Account
 
@@ -51,32 +51,32 @@ Portfolio risk-at-moment: **0.00%** of equity. Cap 4% → 4.00pp headroom.
 Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; BTC-cluster 0/2 used).
 Breakeven ratchet (W22-H-partial): N/A (no open positions).
 
-## Overnight snapshot — 2026-06-30 PT Tue
+## Midday snapshot — 2026-06-30 PT Tue 13:00 PT
 
 | Metric | Value |
 |---|---|
-| Wake type | routine-01-overnight (Tue 06:00 PT slot, ~2h7m late at 08:07 PT) |
-| Entries this wake | 0 (regime 5a FAIL 0/15 positive + SBD ACTIVE; zero pairs pass R1 anyway) |
-| Exits this wake | 0 (flat; SOL closed at prior wake) |
-| Day-to-date P&L (PT 2026-06-30) | **$0.00 / 0.00%** (flat, no closes today) |
-| Equity (cash + MTM) | **$10,286.93** (all cash) |
+| Wake type | routine-02-midday (Tue 13:00 PT ON-SCHEDULE) |
+| Entries this wake | 0 (midday routine is position-management only — no entries permitted) |
+| Exits this wake | 0 (flat at wake; no positions to evaluate) |
+| Day-to-date P&L (PT 2026-06-30) | **$0.00 / 0.00%** (flat all day, no closes today) |
+| Equity (cash + MTM) | **$10,286.93** (all cash, unchanged from overnight) |
 | Equity peak | $10,875.85 (unchanged; need +$588.92 to retake) |
 | Drawdown from peak | **5.41%** (unchanged) |
-| Loss streak | 0 trading days (unchanged) |
+| Loss streak | 0 trading days (unchanged; Mon's +$74.48 winner reset prior streak) |
 | Trades today | 0 opened, 0 closed |
 
 ## Active kill-switch state
 
-- Daily realized + unrealized PT 2026-06-30: **$0.00 / 0.00%** of equity — CLEAR (flat, no positions, no closes).
-- Consecutive losing trading days: **0** (cap 7, full 7-day headroom; reset by Mon's +$74.48 winner). CLEAR.
-- Max drawdown: **5.41%** from peak $10,875.85 (cap 25%, warn 12.5%, 7.09pp to warn) — CLEAR.
+- Daily realized + unrealized PT 2026-06-30: **$0.00 / 0.00%** of equity — CLEAR (flat all day).
+- Consecutive losing trading days: **0** (cap 7, full 7-day headroom). CLEAR.
+- Max drawdown: **5.41%** from peak $10,875.85 (cap 25%, warn 12.5%, **7.09pp to warn**) — CLEAR.
 - Equity floor: $10,286.93 > $7,500 floor — CLEAR.
-- MCP availability: Kraken OK (`kraken_multi_ticker` returned all 15 pairs + `indicators.py` 720-bar series). CLEAR.
-- Regime gate (rule 5a): **FAIL** (0/15 positive, median −3.05%) — all entries gated.
-- Regime sub-state (rule 5a-SBD): **ACTIVE** (positives 0 ≤ 1 AND median −3.05% ≤ −1.0%). Re-engaged after brief 06-30 EOD CLEAR window — 3rd flip-flop in 36h.
+- MCP availability: Kraken OK (`kraken_multi_ticker` returned all 15 pairs). CLEAR.
+- Regime gate (rule 5a): **FAIL** (1/15 positive — FARTCOIN +0.57% only; median −1.95%) — all entries gated even if midday allowed them.
+- Regime sub-state (rule 5a-SBD): **ACTIVE** (positives 1 ≤ 1 AND median −1.95% ≤ −1.0%). Persists from overnight; gentle improvement from 08:07 PT read (0/15, median −3.05%) but both SBD gates still satisfied.
 - Active 5b cooldowns: **SOL/USD 24h** until 2026-07-01T04:00Z (exited 06-30T04:00Z via EMA-confirm).
 - Cluster cap (rule 6a, BTC-cluster): **0/2** used. Full headroom.
-- **All Ring 3 kill switches CLEAR.** Routine-01-overnight 2026-06-30T15:07Z: **0 entries, 0 exits, flat at wake / flat after**.
+- **All Ring 3 kill switches CLEAR.** Routine-02-midday 2026-06-30T20:00Z: **0 entries, 0 exits, flat at wake / flat after**.
 
 ## Universe refresh — 2026-06-01 (first true 30d aggregation)
 
@@ -105,7 +105,7 @@ Breakeven ratchet (W22-H-partial): N/A (no open positions).
 
 _None — portfolio flat._
 
-Next entry-eligible scan: routine-03-eod Tue 2026-06-30 21:00 PT (= Wed 04:00Z). Gated by regime recovery (≥ 4/15 positive AND SBD clearing). SOL 5b cooldown blocks SOL re-entry until 2026-07-01T04:00Z.
+Next entry-eligible scan: routine-03-eod Tue 2026-06-30 21:00 PT (= Wed 04:00Z). Gated by regime recovery (≥ 4/15 positive AND SBD clearing). SOL 5b cooldown blocks SOL re-entry until 2026-07-01T04:00Z. Midday read shows positives rising from 0 → 1 since overnight, but still far below the 4/15 threshold.
 
 ## Rolling performance
 
