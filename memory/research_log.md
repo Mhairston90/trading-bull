@@ -5646,3 +5646,118 @@ Flat at wake (0 open positions, $10,413.87 cash). No MTM, no stop-monitor, no ex
 2026-06-28T17:40:32Z | allocation | W26-cycle | momentum 100% single-bucket, no shift (30d -1.06R / since-incep +0.71R = noise branch), P-W26-CASHFIT auto-rejected 24h timeout | no strategy edit
 2026-06-29T17:07:07Z | harness | day-gate | not Saturday, skipping | no action
 2026-06-29T19:14:47Z | allocation | day-gate | not Sunday, skipping | no action
+
+
+## 2026-06-30T10:30Z — routine-03-eod (Mon 21:00 PT slot, LATE FIRE — replayed; labeled PT 2026-06-29)
+
+**Slot identity `bull-03-eod`.** Cron `0 21 * * 1-5` PT = 04:00Z. **Late fire** — wake fired at 10:30Z Tue 06-30 (≈6h30m past the 04:00Z slot). Per the 2026-06-11 date-labeling guard, this slot summarizes the **trading day this slot is for** (Mon 06-29 PT); the EOD 1H bar (04:00Z 06-30 UTC = 21:00 PT Mon close) is treated as the reference close and the exit triggered there is replayed at that bar.
+
+### Final mark-to-market — 21:00 PT close (= 04:00Z 06-30 UTC bar)
+
+Pre-exit position: SOL/USD long 82.3578 @ entry $72.6163, stop $70.7563, target $80.0563, 2×ATR stop dist $1.86.
+
+1H closes around the EOD bar (computed via `scripts/indicators.py` + back-fill EMA20 over 720-bar series):
+
+| Bar (UTC) | Close | EMA20 | Δ vs EMA | Side |
+|---|---:|---:|---:|---|
+| 2026-06-30 00:00Z | 74.32 | 74.0308 | +0.2892 | ABOVE |
+| 2026-06-30 01:00Z | 74.30 | 74.0564 | +0.2436 | ABOVE |
+| 2026-06-30 02:00Z | 74.49 | 74.0977 | +0.3923 | ABOVE |
+| 2026-06-30 03:00Z | 74.07 | 74.0951 | −0.0251 | **below (1st)** |
+| **2026-06-30 04:00Z** | **73.94** | **74.0803** | **−0.1403** | **below (2nd) → Exit 1 FIRES** |
+
+**Exit timing:** the EOD-bar close (04:00Z 06-30) is the second of two consecutive 1H closes below 1H 20-EMA → strategy v0.4 Exit rule 1 (W22-G two-bar confirmation) triggers. The 03:00Z 1st-bar below was a narrow tag (Δ −0.025); the 04:00Z confirm widened it to −0.14. Subsequent bars (05Z $74.10 brief recover, 06–09Z all below, 10Z–13Z deeper, low intrabar 12:00Z $71.97) confirm the bar-04 exit was timely and prevented the deeper afternoon give-back (no stop pierce, but extra unrealized give-back to ~−0.04R area at 12Z $71.97 close compared to ~+0.49R exit fill).
+
+### Exit fill
+
+- Pair: SOL/USD, side long, size 82.3578
+- Fill price: $73.9030 (= bar-04 close $73.94 × 0.9995 conservative slippage on sell)
+- Exit commission (Kraken taker 0.26%): $15.82
+- Net proceeds to cash: $6,070.68
+- **Gross R-multiple: +0.69R** (= ($73.9030 − $72.6163) / $1.86)
+- **Net R-multiple after both legs of friction (−$15.55 entry + −$15.82 exit = −$31.37 = −0.20R): +0.49R**
+- **Net realized PnL: +$74.48**
+- Reason tag: `exit-ema20-confirm-missed-scheduler-replay`
+
+### Round-trip arc & W22-H ratchet diagnostic
+
+- Entry 2026-06-29T04:00Z @ $72.6163, stop $70.7563, breakeven-trigger threshold +2R = $76.336 (1H close).
+- Peak 1H close during life of trade: **$75.86 at bar 29-19** (= +1.74R close-basis). Highest 1H **high**: $76.34 at bar 29-17 (= +2.00R intrabar — touched the ratchet level exactly).
+- W22-H rule explicitly requires the **close** to be ≥ +2R, not intrabar. So the ratchet **did not arm**. Net effect: position gave back ~1.25R from peak-close to exit-fill (+1.74R → +0.49R). This is the second instance (after the SOL 2026-06-22 +1.51R → +1.19R round trip) where the +2R close threshold was touched intrabar but missed at close.
+- Lesson candidate logged this wake (see `lessons.md` 2026-06-29 entry).
+
+### Entry-scan (W19-E analyst-role split)
+
+Indicator table from `scripts/indicators.py` at 10:26Z (latest closed bars):
+
+**Regime (5a / SBD)**: 7/15 positive 24h, median −0.15% → **5a PASS** (≥ 4/15 floor). **SBD CLEAR** (positives 7 > 1 AND median > −1.0%). Eligible to enter.
+
+#### Technical
+
+| Pair | R1 | R2 | R2a | R3 | R4a | All-PASS? |
+|---|---|---|---|---|---|---|
+| BTC/USD | FAIL −390.5 | FAIL RSI 39.3 | OK | FAIL −1,481 | OK | NO |
+| ETH/USD | FAIL −7.06 | FAIL RSI 45.3 | OK | FAIL −25.47 | OK | NO |
+| SOL/USD | (just-closed; 5b 24h cooldown — exited this wake) | — | — | — | — | NO (cooldown) |
+| HYPE/USD | FAIL −0.124 | FAIL RSI 51.3 | OK | PASS +1.32 | OK | NO |
+| XRP/USD | FAIL −0.007 | FAIL RSI 41.2 | OK | FAIL −0.027 | OK | NO |
+| SUI/USD | FAIL −0.002 | FAIL RSI 48.2 | OK | FAIL −0.003 | OK | NO |
+| TAO/USD | FAIL −1.573 | FAIL RSI 42.5 | OK | FAIL −8.82 | OK | NO |
+| XDG/USD | FAIL −0.0002 | FAIL RSI 43.6 | OK | FAIL −0.0038 | OK | NO |
+| NEAR/USD | FAIL −0.012 | FAIL RSI 45.4 | OK | FAIL −0.0677 | OK | NO |
+| ADA/USD | FAIL −0.0003 | FAIL RSI 47.6 | OK | FAIL −0.0043 | OK | NO |
+| LINK/USD | FAIL −0.040 | FAIL RSI 43.5 | OK | FAIL −0.160 | **FAIL $1.58M < $2.0M** | NO |
+| LTC/USD | FAIL −0.232 | FAIL RSI 43.1 | OK | FAIL −0.125 | OK | NO |
+| **FARTCOIN/USD** | **PASS +0.0017** | **PASS RSI 58.6** | **OK** | **PASS +0.0123** | **FAIL $0.63M < $2.0M** | **NO (liquidity floor)** |
+| TRX/USD | FAIL −0.0023 | FAIL RSI 27.8 | OK | FAIL −0.0041 | FAIL $0.93M | NO |
+| AVAX/USD | PASS +0.014 | **FAIL RSI 54.0 (< 55 floor by 1.04)** | OK | PASS +0.126 | OK | NO |
+
+**Result: 0 pairs pass all entry rules.** FARTCOIN passes the technical filter (R1/R2/R2a/R3) but is blocked by the W18-B liquidity floor ($0.63M 24h notional < $2.0M required). AVAX is one ATR-tick from passing (RSI floor by 1.04). All other pairs fail the basic 1H 20-EMA condition (R1) — the early-Tue UTC tape is broadly soft despite the headline 7/15-positive 24h regime read.
+
+#### News
+
+Skipped — only FARTCOIN reached technical PASS and it is structurally rejected by R4a; no point in scanning headlines for a pair that cannot fill regardless.
+
+#### Sentiment
+
+Skipped — same reason. Firecrawl / kraken_depth / kraken_spread not invoked this wake.
+
+#### Decision
+
+**0 OPEN, 1 CLOSE.** SOL exit-ema20-confirm-missed-scheduler-replay logged at 04:00Z bar close.
+
+### First-of-month universe refresh
+
+Today (slot label) is PT 2026-06-29. **Skipped.** Next refresh trigger: PT 2026-07-01 (Wed) on whichever routine fires first.
+
+### Monthly archive
+
+Today is **NOT** the last trading day of June 2026. The Mon 06-29 slot is the second-to-last weekday EOD; the last is **Tue 06-30 21:00 PT** (Tuesday's EOD). Archive will run at the Tue 06-30 EOD wake. **Skipped.**
+
+### Lessons extracted
+
+One lesson appended to `lessons.md` — **"2026-06-29 — +2R close-threshold near-miss again (SOL +1.74R peak close → +0.49R exit fill, ~1.25R give-back; 2nd instance of intrabar-touch / close-miss pattern)"**. Pairs with the 2026-06-22 SOL +1.51R→+1.19R round trip; the W22-H breakeven ratchet did not arm in either case because intrabar +2R was touched but no 1H close cleared the threshold. Pattern flagged for routine #4 backlog (potential proposal: intrabar-trigger variant, or lowered close threshold +1.75R).
+
+### Stats
+
+- **Day P&L (PT 2026-06-29):** **+$93.15 / +0.91%** (vs prior EOD 06-28 $10,193.78).
+- **Trades opened:** 0. **Trades closed:** 1 (SOL +0.49R).
+- **Win rate today:** 1/1 = 100% (single closed trade).
+- **New equity:** **$10,286.93** flat-cash. **Equity peak:** $10,875.85 (unchanged). **Drawdown:** **5.41%** ($588.92 below peak).
+- **Loss streak:** 0 trading days (reset by today's winner; was 1 after Sat 06-27 stop).
+- **Rolling 7d:** ≈ −1.2% BULL vs ≈ −5% BTC-hold → BULL ahead ~3.8pp.
+- **Rolling 30d:** ≈ +2.87% BULL (inception-to-date proxy) vs ≈ −23% BTC-hold → BULL ahead ~26pp.
+- **90d:** not computable (BULL inception 2026-04-20 = 71 days ago; window first computable ~2026-07-19).
+
+### Watchdog (`python scripts/watchdog.py --telegram`)
+
+8 findings — alerted to Telegram by the watchdog itself. Summary:
+- **A heartbeat:** routine-07 last committed 65h ago (threshold 30h) — scheduler / MCP check needed; not blocking this wake.
+- **C dirty-tree:** 3 uncommitted files in working tree — `scripts/replay_cache_20260629/`, `scripts/replay_result_20260629.json`, `scripts/routine07_replay_20260629.py`. Stranded work from a prior session. Will NOT be committed by this wake (this routine's COMMIT scope is `memory/` only).
+- **D stale-MTM (×6):** variants v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive all have open positions and last MTM rebuild >66h ago (threshold 30h). Variant tracks are paper-paper-evidence only and not blocking; routine-07 paper-paper-evidence is the rebuilder and its heartbeat-stale finding is the root cause.
+
+All 8 findings noted; routine-07 staleness is the upstream root; this EOD does not attempt to remediate (out of scope for routine #3).
+
+### Summary
+
+**0 OPEN, 1 CLOSE.** Late-fire replay of the Mon 21:00 PT EOD slot. SOL/USD exited at the 04:00Z bar close on EMA20-confirm two-bar rule for **+$74.48 / +0.49R net** (gross +0.69R, friction −0.20R). Round-trip arc: +1.74R peak 1H close → +0.49R exit fill, ~1.25R give-back; W22-H ratchet did not arm because intrabar +2R touch did not produce a +2R close. Portfolio now **flat / $10,286.93 cash / DD 5.41%**. Regime 5a **PASS** (7/15 positive, median −0.15%, SBD CLEAR) but entry scan returns **0 eligible** — FARTCOIN passes technical but fails R4a liquidity ($0.63M < $2.0M); AVAX falls 1.04 RSI-points short of the R2 floor; all others fail R1 (below 20-EMA). Loss streak reset to **0 days**. Watchdog alerted 8 findings (routine-07 staleness root cause). Telegram EOD card sent. Files written: `trade_log.md` (SOL exit row), `portfolio.md` (rewritten flat), `research_log.md` (this row), `lessons.md` (1 lesson appended).
