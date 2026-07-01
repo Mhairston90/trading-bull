@@ -1,47 +1,51 @@
 # BULL Universe — top 15 Kraken USD pairs by 30-day volume
 
 > **Refreshed monthly** by routine #1 on the 1st of each month, or manually if a pair delists.
-> **Source of truth:** Kraken MCP `kraken_pairs` + `kraken_ohlcv` 30d daily aggregation (sum of vwap × volume across 30 most-recent daily bars).
-> **Last refreshed:** 2026-06-01 (routine-01-overnight first-of-month sweep — first true 30d aggregation, replacing the 2026-04-20 standup 24h-proxy snapshot).
+> **Source of truth:** Kraken public REST OHLC (1440-min bars) — 30-day sum of vwap × volume, 30 most-recent daily bars per pair.
+> **Last refreshed:** 2026-07-01 (routine-01-overnight first-of-month sweep — second true 30d aggregation).
 
 ## Current universe
 
 | Rank | Pair | Kraken symbol | 30d notional (USD) | Notes |
 |------|------|---------------|-------------------:|-------|
-| 1 | BTC/USD | XXBTZUSD | ~$3,920M | — |
-| 2 | ETH/USD | XETHZUSD | ~$1,100M | — |
-| 3 | SOL/USD | SOLUSD | ~$573M | — |
-| 4 | HYPE/USD | HYPEUSD | ~$535M | Promoted from rank 6 — late-May parabolic rally (41 → 72) drove volume +5x |
-| 5 | XRP/USD | XXRPZUSD | ~$528M | — |
-| 6 | SUI/USD | SUIUSD | ~$312M | Promoted from rank 8 — May 10 8-10 mini-runup boosted notional |
-| 7 | TAO/USD | TAOUSD | ~$195M | — |
-| 8 | DOGE/USD | XDGUSD | ~$180M | Kraken symbol is XDG |
-| 9 | NEAR/USD | NEARUSD | ~$177M | **NEW** — replaces PENGU. 5/21-5/29 NEAR rallied 1.30 → 2.77 with 5-9M daily vol |
-| 10 | ADA/USD | ADAUSD | ~$106M | — |
-| 11 | LINK/USD | LINKUSD | ~$81M | — |
-| 12 | LTC/USD | XLTCZUSD | ~$66M | — |
-| 13 | FARTCOIN/USD | FARTCOINUSD | ~$48M | Meme — watch for volume decay |
-| 14 | TRX/USD | TRXUSD | ~$48M | — |
-| 15 | AVAX/USD | AVAXUSD | ~$42M | — |
+| 1 | BTC/USD | XXBTZUSD | ~$5,120M | — |
+| 2 | ETH/USD | XETHZUSD | ~$1,435M | — |
+| 3 | SOL/USD | SOLUSD | ~$795M | — |
+| 4 | HYPE/USD | HYPEUSD | ~$726M | — |
+| 5 | XRP/USD | XXRPZUSD | ~$711M | — |
+| 6 | ADA/USD | ADAUSD | ~$249M | ▲ from rank 10 — late-June rally + volume expansion |
+| 7 | NEAR/USD | NEARUSD | ~$210M | ▲ from rank 9 — continued volume growth |
+| 8 | SUI/USD | SUIUSD | ~$180M | ▼ from rank 6 — cooling after May run-up |
+| 9 | TAO/USD | TAOUSD | ~$158M | ▼ from rank 7 |
+| 10 | DOGE/USD | XDGUSD | ~$157M | ▼ from rank 8. Kraken symbol is XDG |
+| 11 | LTC/USD | XLTCZUSD | ~$75M | ▲ from rank 12 |
+| 12 | AVAX/USD | AVAXUSD | ~$70M | ▲ from rank 15 |
+| 13 | LINK/USD | LINKUSD | ~$68M | ▼ from rank 11 |
+| 14 | ONDO/USD | ONDOUSD | ~$51M | **NEW** — replaces FARTCOIN. Sustained June volume $1-2M/day |
+| 15 | TRX/USD | TRXUSD | ~$46M | ▼ from rank 14 |
 
 ## Near-miss (watch for next refresh)
 
-- PENGU/USD — ~$38M (dropped this refresh; meme decay 0.011 → 0.0074 over 30d)
-- DOT/USD — ~$22M
-- UNI/USD — ~$20M
+- TON/USD — ~$38M
+- UNI/USD — ~$33M
+- FARTCOIN/USD — ~$27M (dropped this refresh; meme volume decayed vs May peak)
+- DOT/USD — ~$21M
+- PENGU/USD — ~$20M (still on decay trajectory)
 
-## Diff vs prior universe (2026-04-20 24h-proxy snapshot)
+## Diff vs prior universe (2026-06-01 refresh)
 
-- **Added:** NEAR/USD (rank 9) — fresh entrant on May rally
-- **Dropped:** PENGU/USD (was rank 14)
-- **Promoted:** HYPE 6→4, SUI 8→6, DOGE 7→8 (relative ordering shifted)
-- **Demoted:** ADA 10→10, LINK 13→11, LTC 9→12, FARTCOIN 11→13, TRX 15→14, AVAX 12→15
-- All 14 incumbent pairs (ex-PENGU) retained. No open positions on PENGU → no holdover position handling needed.
+- **Added:** ONDO/USD (rank 14) — first appearance; consistent $1-2M/day notional
+- **Dropped:** FARTCOIN/USD (was rank 13) — meme volume decay, now $27M near-miss watch
+- **Promoted:** ADA 10→6, NEAR 9→7, LTC 12→11, AVAX 15→12
+- **Demoted:** SUI 6→8, TAO 7→9, XDG 8→10, LINK 11→13, TRX 14→15
+- **Unchanged:** BTC 1, ETH 2, SOL 3, HYPE 4, XRP 5
+- No open positions on FARTCOIN → no holdover position handling needed.
+- 14 of 15 pairs retained (only FARTCOIN churned).
 
 ## Refresh rules
 
 - Monthly on 1st (or next weekday if 1st is weekend)
-- Query Kraken for all `*/USD` spot pairs
+- Query Kraken for all `*/USD` spot pairs (this refresh: 26-pair candidate slate covering incumbent 15 + near-miss watchlist + momentum names ONDO/TON/APT/WIF/POPCAT/JUP/TIA/SEI)
 - Rank by 30-day notional USD volume (sum of vwap × volume across 30 daily bars)
 - Top 15 wins
 - **If a pair in the current universe has an open position and falls out of top-15:**
