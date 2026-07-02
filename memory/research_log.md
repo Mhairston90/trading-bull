@@ -6001,3 +6001,160 @@ Today is 2026-07-01 (Wed) — first-of-month cron trigger. Executed per routine-
 2026-07-01T17:06Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-07-01T17:40Z | allocation | day-gate | not Sunday, skipping | no action
+
+
+## 2026-07-02T13:07Z — routine-01-overnight (Thu 06:00 PT slot, ON-CRON fire at 06:07 PT)
+
+**Slot identity `bull-01-overnight`.** Cron `0 6 * * 1-5` PT = 13:00Z; fired at 13:07Z = 06:07 PT, on-schedule (7-min execution latency). PT date label = 2026-07-02 (Thu).
+
+### Position management — SOL/USD long (BREAKEVEN RATCHET ARMED THIS WAKE)
+
+**SOL/USD long open** — 87.5709 @ $75.3538 entered 2026-07-01T04:00Z (routine-03-eod). Original stop $73.5918, target $82.4019, 2×ATR $1.7620. Kraken multi-ticker last $81.39 (live tick, +5.18% 24h), indicators.py last 1H close $81.32.
+
+**W22-H breakeven ratchet — ARMED at 2026-07-02T09:00Z bar close.**
+- +2R close threshold = entry + 2×ATR = $75.3538 + $3.5240 = **$78.878**.
+- First qualifying 1H close: bar **2026-07-02 09:00Z, close $79.40 = +2.30R** (per Kraken OHLCV, high $79.80 low $78.21 volume 53,935). Above threshold by $0.522.
+- **Active stop moved from $73.5918 to $75.3538 (entry breakeven).** Ratchet-up-only per strategy v0.4 stop-management rule; will remain at breakeven for life of trade.
+- Post-arm bar closes (all still above breakeven, all still above 20-EMA): 10:00Z $81.96 (+3.75R), 11:00Z $82.30 (+3.94R), 12:00Z $81.32 (+3.39R). Post-arm intrabar lows: $79.32 / $81.41 / $81.04 / $81.16 (forming bar) — all above breakeven $75.3538 by at least $3.97. Stop not hit.
+- **Break-the-pattern moment:** After 3 prior missed-arm SOL trades (06-22 peak close +1.51R, 06-29 peak close +1.74R, 07-01 EOD peak close +1.87R — all short of +2R threshold on close despite intrabar touches, per [[lesson 2026-06-29 W22-H ratchet]]), today's 09:00Z bar cleared decisively at +2.30R close. The intrabar-touch/close-miss pattern flagged over ~10 days broke on the 4th attempt. Ratchet now doing its designed job (converting a runner to zero-floor exposure).
+
+**Exit checks (all NOT triggered):**
+- Exit 1 (W22-G two-bar EMA20 confirm): 20-EMA per indicators = $78.694 (close $81.32 minus 2.626 margin). Latest 3 closes all above EMA by $2.6 to $3.6. Not triggered.
+- Exit 1-SBD: regime PASS 15/15, SBD CLEAR to inactive.
+- Exit 2 (stop): NEW active stop $75.3538 (post-ratchet breakeven). Lowest low since 09:00Z arm = $79.32 to +$3.97 headroom. Not triggered.
+- Exit 3 (4R take-profit): $82.4019. **Intrabar $82.65 at bar 2026-07-02T11:00Z EXCEEDED target by $0.248**, but bar closed at $82.30 = **$0.10 SHORT of the +4R close threshold** ($82.302 vs $82.4019). Per strategy rule "Exits are checked at the close of each 1H candle. No intra-bar exits" — Exit 3 not triggered. **1st instance of intrabar-touch/close-miss pattern at the +4R take-profit level** (companion to the 3 prior +2R ratchet instances). Aggregate pattern now 4 instances across ~11 days, spanning both ratchet-arm and take-profit gates. Flagged for routine #4 W27 (Saturday 2026-07-04) consolidation with [[lesson 2026-06-29 W22-H ratchet]] — the pattern is no longer isolated to the +2R gate; it generalizes to any 1H-close-basis exit level and warrants unified consideration (e.g., intrabar-arm-with-next-close-confirm hybrid Option-C from that lesson would address both gate types).
+
+**Unrealized at last 1H close $81.32:** 87.5709 x ($81.32 minus $75.3538) = 87.5709 x $5.9662 = **+$522.42 gross / +3.386R** (up from +$153.25 at EOD close $78.64 = +1.87R). Live tick $81.39 to +$528.55 / +3.425R MTM. **Risk-at-moment now ~$0.00 / 0.00%** (post-ratchet breakeven stop; capital preserved).
+
+### Kraken multi-ticker (15-pair universe, live snapshot at 13:07Z)
+
+| Pair | last | 24h % |
+|------|-----:|------:|
+| SOL | 81.39 | +5.18 |
+| NEAR | 1.9319 | +6.97 |
+| TAO | 213.9388 | +5.57 |
+| LINK | 7.74027 | +5.30 |
+| ETH | 1,663.26 | +3.46 |
+| XRP | 1.09283 | +3.88 |
+| ADA | 0.160186 | +4.10 |
+| ONDO | 0.3348 | +3.26 |
+| HYPE | 65.14 | +4.44 |
+| BTC | 61,533.4 | +2.62 |
+| SUI | 0.7383 | +3.22 |
+| XDG | 0.0743543 | +3.08 |
+| AVAX | 6.803 | +2.18 |
+| LTC | 43.22 | +1.27 |
+| TRX | 0.3163 | +0.18 |
+
+- **Positives (live multi-ticker):** **15/15** (universe-wide green, first 15/15 print in over 3 weeks). TRX marginal at +0.18% but positive.
+- **Median 24h % (live):** **+3.46%**.
+- **Indicators.py bar-close snapshot:** **15/15 positive, median +5.77%** (used for entry gate — closed bars, per amended DO step 3).
+- **Regime gate (5a):** **PASS decisively** — 15/15 positive (>> 4/15 floor); median +5.77% (bar-close). Best regime print since 2026-05-11 rally window.
+- **5a-SBD sub-state:** **CLEAR** — positives 15 (>> 1) AND median +5.77% (>> −1.0%). SBD emphatically off. 5th regime flip in ~54h since Sun 06-28 EOD SBD ACTIVE (06-28 ACTIVE to 06-29 CLEAR to 06-30 EOD CLEAR to 06-30 overnight ACTIVE to 07-01 CLEAR to today CLEAR-15/15). Whipsaw pattern continues but current tape is unambiguously bullish.
+
+### Entry-scan (Technical analyst pass)
+
+Indicator table from `scripts/indicators.py` at 13:07:37Z (720-bar EMA/RSI convergence, 4H 50-EMA converged at at least 200 bars):
+
+| Pair | R1 (>EMA20) | R2 (RSI>=55) | R2a (<80) | R3 (4H>EMA50) | R4a (>=$2M) | All-PASS? |
+|---|---|---|---|---|---|---|
+| BTC/USD | PASS +1,001 | PASS RSI 66.7 | OK | PASS +904.4 | OK $200.76M | **YES** |
+| ETH/USD | PASS +35.39 | PASS RSI 69.0 | OK | PASS +39.26 | OK $64.46M | **YES** |
+| SOL/USD | PASS +2.626 | PASS RSI 70.1 | OK | PASS +8.821 | OK $47.47M | YES (R5 REJECT already-open) |
+| HYPE/USD | PASS +1.285 | PASS RSI 61.7 | OK | PASS +0.8095 | OK $13.37M | **YES** |
+| XRP/USD | PASS +0.02671 | PASS RSI 72.0 | OK | PASS +0.01823 | OK $31.14M | **YES** |
+| SUI/USD | PASS +0.01206 | PASS RSI 66.6 | OK | PASS +0.0369 | OK $6.49M | **YES** |
+| TAO/USD | PASS +6.996 | PASS RSI 68.8 | OK | PASS +2 | OK $3.15M | **YES** |
+| XDG/USD | PASS +0.001246 | PASS RSI 65.2 | OK | **FAIL -0.000526** | OK $7.60M | NO |
+| NEAR/USD | PASS +0.04099 | PASS RSI 64.0 | OK | PASS +0.05389 | OK $3.88M | **YES** |
+| ADA/USD | PASS +0.004479 | PASS RSI 71.7 | OK | PASS +0.009313 | OK $9.00M | **YES** |
+| LINK/USD | PASS +0.2451 | PASS RSI 74.3 | OK | PASS +0.2303 | OK $2.51M | **YES** |
+| LTC/USD | PASS +0.3805 | PASS RSI 58.1 | OK | PASS +0.4262 | OK $2.40M | **YES** |
+| FARTCOIN/USD | PASS +0.009228 | PASS RSI 71.6 | OK | PASS +0.0166 | **FAIL $1.18M** | NO |
+| TRX/USD | PASS +0.0003991 | **FAIL RSI 53.6** | OK | FAIL -0.003394 | FAIL $0.60M | NO |
+| AVAX/USD | PASS +0.09678 | PASS RSI 62.4 | OK | PASS +0.236 | **FAIL $1.41M** | NO |
+| ONDO/USD | — | — | — | — | — | (not evaluated — awaiting indicators.py inclusion in next pass) |
+
+**Result: 11 pairs pass technical + R4a (BTC, ETH, SOL, HYPE, XRP, SUI, TAO, NEAR, ADA, LINK, LTC).** SOL blocked by R5 (already-open) to **10 eligible-non-open candidates.** Widest pass field since inception.
+
+**Rule-8 rank-ordering (per freshly-refreshed 2026-07-01 universe):**
+1. BTC (rank 1) — top pick
+2. ETH (rank 2)
+3. HYPE (rank 4)
+4. XRP (rank 5)
+5. ADA (rank 6)
+6. NEAR (rank 7)
+7. SUI (rank 8)
+8. TAO (rank 9)
+9. LTC (rank 11)
+10. LINK (rank 13)
+
+**Pre-entry-check evaluation (cash-fit at strategy-mandated 1.5%-equity-risk sizing):**
+
+Current equity MTM = $10,792.63 (cash $3,670.97 + SOL MTM $7,121.66 at 1H close $81.32). Risk per trade = 1.5% x $10,792.63 = **$161.89**. Available cash for new position: **$3,670.97**.
+
+| Rank | Pair | 2xATR stop | Size needed | Notional (+0.05% slip) | Cash-fit? | REJECT reason |
+|---|---|---:|---:|---:|---|---|
+| 1 | BTC | $939.48 | 0.17232 | **$10,608.98** | NO (short $6,938.01) | cash-insufficient |
+| 2 | ETH | $29.174 | 5.5493 | **$9,234.94** | NO (short $5,563.97) | cash-insufficient |
+| 3 | HYPE | $1.7232 | 93.945 | **$6,122.30** | NO (short $2,451.33) | cash-insufficient |
+| 4 | XRP | $0.018469 | 8,764.58 | **$9,581.28** | NO | cash-insufficient |
+| 5 | ADA | $0.0041208 | 39,285.6 | **$6,296.53** | NO (short $2,625.56) | cash-insufficient |
+| 6 | NEAR | $0.05474 | 2,957.4 | **$5,715.65** | NO (short $2,044.68) | cash-insufficient |
+| 7 | SUI | $0.015693 | 10,316 | **$7,619.32** | NO | cash-insufficient |
+| 8 | TAO | $5.2562 | 30.799 | **$6,592.13** | NO | cash-insufficient |
+| 9 | LTC | $0.78912 | 205.16 | **$8,873.15** | NO | cash-insufficient |
+| 10 | LINK | $0.13713 | 1,180.55 | **$9,141.20** | NO | cash-insufficient |
+
+**All 10 rule-8-ordered candidates REJECT `cash-insufficient`.** No fallback path (rule 8 fallback exhausted). **0 entries this wake.**
+
+Cluster-cap check (rule 6a: BTC-cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} <= 2): moot — all cash-blocked before cluster check binds. Note that even at 0/2 cluster slots free, cash constraint blocks all 4 non-cluster passes (HYPE r4, XRP r5, ADA r6, NEAR r7, LTC r11) equally.
+
+**Cash-fit constraint pattern — 7th recurrence** across W24 to W27 (BTC 2x W24/W25; SUI+LTC+AVAX REJECT cluster routine-03-eod 2026-06-27; SUI+ADA REJECT routine-01-overnight 2026-07-01T15:52Z; today's **10-way REJECT** is the widest-hit instance to date). The binding is systemic under any regime where the whole universe rallies and BTC/ETH's 0.7-1.5% ATR/price ratio makes their 1.5%-risk sizing require ~100% notional. **P-W26-CASHFIT proposal remains pending user Y/N** — routine #4 W27 this Saturday 2026-07-04 will re-raise. Today's 10-way blocking (versus previously 1-3 per wake) may accelerate user attention. See `feedback-variant-breadth` memory: at this scale of block, the strategy is functionally "long SOL, hold cash" during a broad rally — a strong argument for the cashfit proposal's fractional-sizing or notional-cap approach.
+
+### News
+
+**Firecrawl skipped** — 10 tech-PASS candidates but all cash-blocked before news check would apply. Per skills/research.md, news is v0.4 informational-only — a scan cannot flip a cash-insufficient REJECT to a fill. Note logged: `no-scan-informational-only-and-no-eligible-entry`. Next news scan opportunity: routine-02-midday Thu 13:00 PT (= 20:00Z Thu) if cash-fit re-check clears (only would clear if SOL closes, freeing cash).
+
+### Sentiment
+
+**Skipped** — same reason (no cash-fittable technical passes). `kraken_spread` / `kraken_depth` not invoked.
+
+### Decision
+
+**0 OPEN, 0 CLOSE. Ratchet armed on open SOL position.** Portfolio state: 1 open (SOL, +3.39R unrealized, breakeven-stopped), $3,670.97 cash, $10,792.63 equity MTM, DD 0.77% (dramatically compressed from 2.93% at prior EOD — SOL mark-up of +$235.08 on +1.50R additional close-basis gain).
+
+### First-of-month universe refresh
+
+Today is 2026-07-02 (Thu). First-of-month refresh already executed at 2026-07-01T15:52Z overnight wake (ONDO in, FARTCOIN out). **No refresh this wake.** Next refresh: 2026-08-01 or first weekday thereafter.
+
+### Stats
+
+- **Day P&L (07-02 PT DTD, mark-to-market at 1H close $81.32):** **+$235.08 / +2.23%** vs prior EOD $10,557.55 (all unrealized SOL mark-up; no realized closes).
+- **Wake-over-wake P&L:** **+$235.08 / +2.23%** (SOL close $78.64 to $81.32 = +$2.68 x 87.5709 = +$234.69 MTM; residual rounding +$0.39 in equity basis).
+- **Trades opened:** 0. **Trades closed:** 0.
+- **New equity:** **$10,792.63** ($3,670.97 cash + $7,121.66 SOL MTM at 1H close $81.32). Live-tick basis $81.39 to equity $10,798.75 (using live for reference only; MTM basis remains close-anchored).
+- **Equity peak:** $10,875.85 (unchanged; **need +$83.22 / +0.77% to retake**).
+- **Drawdown from peak:** **0.77%** (compressed 2.16pp from 2.93% at prior EOD; **best DD reading since 2026-06-13T09:00Z peak-set**).
+- **Loss streak:** 0 trading days (unchanged).
+- **Since-inception return:** +7.93% ($10,792.63 / $10,000 minus 1).
+- **Rolling 7d:** approx +3.7% BULL (equity 06-25 approx $10,405 to today $10,792.63 MTM) vs approx −0.5% BTC-hold (BTC 06-25 approx $61,850 to today $61,533.4) to **BULL ahead approx 4.2pp 7d**.
+- **Rolling 30d:** approx +7.9% BULL inception-to-date (73 days) vs approx −20% BTC-hold (BTC approx $77k 30d ago to $61.5k today) to **BULL ahead approx 28pp**.
+- **90d:** not computable (BULL inception 2026-04-20 = 74 days ago; window first computable approx 2026-07-19).
+- **All Ring 3 kill switches:** CLEAR.
+
+### Watchdog (`python scripts/watchdog.py --telegram`)
+
+8 findings — identical constellation as prior 4 wakes (routine-07 heartbeat A now 116h stale +6x variant stale-MTM D carry-over +C dirty-tree 3 uncommitted scripts/replay files stranded from prior session). Telegram alert auto-sent. **Root cause unchanged: routine-07 paper-paper-evidence rebuilder heartbeat stale since 2026-06-27T21:xxZ** — this is now 5+ days without a routine-07 run, well beyond the 30h threshold. Out of scope for this overnight wake; routine-04-harness Saturday 2026-07-04 is the next scheduled routine-07-adjacent oversight opportunity.
+
+### Summary
+
+**0 OPEN, 0 CLOSE. Milestone wake: SOL breakeven ratchet ARMED at 09:00Z bar close ($79.40 = +2.30R).** After 3 consecutive close-basis misses over 10 days ([[lesson 2026-06-29 W22-H ratchet]]), today's 4th SOL attempt cleared the +2R threshold decisively. Active stop moved $73.5918 to $75.3538 (entry breakeven). **Risk-at-moment now approx $0.00 / 0.00%** — position is now runner with zero-loss floor.
+
+**Second milestone (pattern-level):** Intrabar +4R touch at $82.65 (07-02T11:00Z high) exceeded target $82.4019 by $0.248, but the bar closed at $82.30 = $0.10 short of the +4R close threshold. **1st instance of intrabar-touch/close-miss pattern at the +4R take-profit level** — same behavioral class as the 3 prior +2R ratchet misses. Aggregate pattern now 4 instances in ~11 days spanning both close-basis exit gates. Flagged for routine #4 W27 unified consideration (Option-C hybrid: intrabar-arm-with-next-close-confirm — applies equally to +2R ratchet arm and +4R take-profit fire).
+
+Regime universe-wide green (15/15 positive live, 15/15 positive bar-close, median +5.77%) — best print since 2026-05-11 rally window. **10 non-open tech-PASS candidates identified** (BTC/ETH/HYPE/XRP/ADA/NEAR/SUI/TAO/LTC/LINK) — **ALL 10 REJECT `cash-insufficient`** at 1.5%-risk sizing vs $3,670.97 cash. This is the **7th cash-fit binding wake and the widest-hit instance** (previously 1-3 rejects; today 10). P-W26-CASHFIT proposal remains pending user Y/N. Under current mandate + cash + strategy sizing, the effective posture during a broad-tape rally is "long SOL, hold cash" — see today's REJECT slate as decision-relevant evidence for the pending proposal.
+
+Portfolio at **$10,792.63 / DD 0.77%** — best DD since 2026-06-13. SOL runner still open (+3.39R unrealized close-basis, +3.43R live), breakeven-protected. Watchdog 8 findings (routine-07 116h stale, unchanged root cause). Silent on Telegram per NOTIFY spec (no OPEN, no CLOSE, no ACTIONABLE news, no universe refresh, no Ring 3 trip). Files written: `portfolio.md` (rewritten, ratchet-armed + regime PASS 15/15 + MTM refresh), `research_log.md` (this row). `trade_log.md` untouched (ratchet arming is stop-management, not a trade event — schema unchanged). `universe.md` unchanged (last refreshed 07-01). `lessons.md` unchanged (the +4R intrabar-touch/close-miss instance noted here; not appended as a fresh lesson since routine #4 W27 will absorb it into the aggregate pattern consolidation).
+
+**Next entry-eligible wake:** routine-02-midday Thu 2026-07-02 13:00 PT (= 20:00Z Thu). Cash-fit constraint remains dominant. Only exit paths that could open cash: (a) 4R close >= $82.4019 (missed by $0.10 on 11:00Z), (b) two consecutive 1H closes < 20-EMA $78.694 (would exit ratchet-protected trade for approx +$328 net at breakeven), or (c) stop-hit at $75.3538 breakeven (approx $0 net). Alternatively a lower-vol pair (LTC, XRP, XDG when it re-passes R3) with a tight enough 2xATR stop to fit at $3,670 cash.
