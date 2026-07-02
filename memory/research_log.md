@@ -6160,3 +6160,5 @@ Portfolio at **$10,792.63 / DD 0.77%** — best DD since 2026-06-13. SOL runner 
 **Next entry-eligible wake:** routine-02-midday Thu 2026-07-02 13:00 PT (= 20:00Z Thu). Cash-fit constraint remains dominant. Only exit paths that could open cash: (a) 4R close >= $82.4019 (missed by $0.10 on 11:00Z), (b) two consecutive 1H closes < 20-EMA $78.694 (would exit ratchet-protected trade for approx +$328 net at breakeven), or (c) stop-hit at $75.3538 breakeven (approx $0 net). Alternatively a lower-vol pair (LTC, XRP, XDG when it re-passes R3) with a tight enough 2xATR stop to fit at $3,670 cash.
 
 2026-07-02T17:06:50Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-07-02T17:40:18Z | allocation | day-gate | not Sunday, skipping | no action
