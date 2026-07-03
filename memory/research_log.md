@@ -6266,3 +6266,51 @@ ETH `kraken_spread` sampled 23:05:37-39Z: tight spreads 0.01–0.18 on ~$1,755 m
 Portfolio at **$10,854.08 / DD 0.29%** from just-set peak. Telegram: 2 events (CLOSE + OPEN) sent per NOTIFY spec.
 
 **Next entry-eligible wake:** routine-02-midday nominal 20:00Z Fri (may be skipped by scheduler backlog); effective next may be routine-03-eod Fri 21:00 PT (04:00Z Sat). Cash-fit constraint now tight ($759.96 cash) — only very low-notional pairs (XDG, XRP) fit under 1.5%-risk sizing. Cluster 1/2 used. Regime PASS 15/15.
+
+
+## 2026-07-03T23:15Z — routine-02-midday (bull-02-midday, PT Fri 2026-07-03 16:15, ~3h15m late vs 13:00 PT nominal — followed the 10h-late overnight fire; both compressed into same wake window)
+
+**Slot identity `bull-02-midday`.** Cron `0 13 * * 1-5` PT = 20:00Z; ~3h15m late fire. Same-wake window as the routine-01-overnight fire ~14 min prior at 23:01Z — midday runs against a portfolio just rebuilt by overnight (SOL 4R exit + ETH open both this wake).
+
+### Position management (1 open — ETH/USD long)
+
+- **Kraken multi-ticker:** ETH last $1,756.07 (24h +3.35%, high $1,773.11, low $1,690.91). BTC last $62,496.9 (24h +1.65%) — not held, sampled for context.
+- **ETH 1H post-entry state:** only 1 post-entry bar 07-03T23:00Z: open $1,755.83, high $1,757.41, low $1,753.47, close $1,756.07. Bar low $1,753.47 → **$24.92 above stop** $1,728.5520; no intrabar stop pierce.
+- **Exit 1 (W22-G 20-EMA):** 20-EMA of last 20 1H closes ≈ $1,735.19; current close $1,756.07 is **$20.88 above 20-EMA**. Zero below-EMA closes since entry. No two-consecutive-close trigger.
+- **Exit 1-SBD:** inactive (regime PASS 15/15, not SBD).
+- **Exit 2 (stop-hit):** stop $1,728.5520; no touch this bar.
+- **Exit 3 (4R target):** $1,870.5820; current $1,756.07 = $114.51 below; no touch.
+- **Breakeven ratchet:** arm level +2R close ≥ $1,813.7700; current $1,756.07 = $57.70 below; unrealized R ≈ −0.03R. Not armed.
+- **Result:** 0 exits, no stop movement.
+
+### Mark-to-market
+
+- **ETH position:** 5.7481 × $1,756.07 = **$10,094.06 MTM** (was $10,094.12 at overnight close mark; delta −$0.06 from 1¢ ETH price tick down).
+- **Cash:** $759.96 unchanged.
+- **Equity:** **$10,853.99** (= $759.96 + $10,094.06). Wake-over-wake delta vs overnight $10,854.08 = **−$0.09 / −0.001%**.
+- **Equity peak:** $10,885.39 (set 07-03T20:00Z post-SOL-exit; unchanged).
+- **Drawdown from peak:** ($10,885.39 − $10,853.99) / $10,885.39 = **0.29%** ($31.40 below peak; identical to overnight mark, sub-cent movement).
+
+### Kill-switch state
+
+- **Daily realized + unrealized PnL (07-03 PT DTD):** +$121.30 / +1.13% vs prior EOD $10,732.69 (SOL 4R $598.56 realized + ETH −$5.11 unrealized [−$5.05 open mark + −$0.06 tick] + entry commission −$26.26 net at open, all already booked in overnight). CLEAR (5% loss cap → 6.13pp headroom).
+- **Consecutive losing trading days:** 0 (today +1.13%). CLEAR (cap 7).
+- **Max drawdown:** 0.29% (cap 25%, warn 12.5% → **12.21pp headroom to warn**). CLEAR.
+- **Equity floor:** $10,853.99 > $7,500. CLEAR.
+- **MCP availability:** Kraken `kraken_multi_ticker` + `kraken_ohlcv` both returned data. CLEAR.
+- **Regime gate (5a):** not re-checked (midday is position-management-only, no new entries).
+- **5b cooldowns:** none active (SOL exit was 4R take-profit, not stop-hit).
+- **All Ring 3 kill switches: CLEAR.** No warning threshold crossed (0.29% DD << 12.5% warn).
+
+### Stats
+
+- **Day P&L (07-03 PT DTD):** +$121.30 / +1.13% unchanged since overnight.
+- **Trades opened:** 0 (midday non-entering). **Trades closed:** 0 (no exit triggers).
+- **New equity:** $10,853.99. **Equity peak:** $10,885.39. **Drawdown:** 0.29%.
+
+### Summary
+
+**0 exits, 0 entries — silent midday.** Fired ~3h15m late but within same wake window as overnight (14-min gap). ETH position 43 minutes old at time of check (opened 23:00Z, midday at ~23:15Z); only 1 post-entry 1H bar with close $1,756.07 essentially flat vs fill $1,756.9580 (−0.05% / −0.03R unrealized). Stop $1,728.5520 has $24.92 low-of-bar headroom; 20-EMA $1,735.19 has $20.88 close-to-EMA headroom on the correct (bullish) side. Breakeven ratchet not armed (needs +2R at close ≥ $1,813.77, currently $57.70 below). DD unchanged 0.29%, well under 12.5% warn. No Telegram triggers (no exits, no kill switch, no DD warn). Files written: `portfolio.md` (rewritten with fresh MTM), `research_log.md` (this row). `trade_log.md` untouched.
+
+**Next entry-eligible wake:** routine-03-eod nominal 21:00 PT Fri (04:00Z Sat 07-04). Cash-fit tight ($759.96); only XDG/XRP-tier low-notional pairs would fit at 1.5%-risk sizing. Cluster 1/2 used, position cap 1/4 used, so 1 more cluster + 3 more slots. Gated by regime + per-pair TECH-PASS + cash-fit.
+
