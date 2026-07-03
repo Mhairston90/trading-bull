@@ -6314,3 +6314,5 @@ Portfolio at **$10,854.08 / DD 0.29%** from just-set peak. Telegram: 2 events (C
 
 **Next entry-eligible wake:** routine-03-eod nominal 21:00 PT Fri (04:00Z Sat 07-04). Cash-fit tight ($759.96); only XDG/XRP-tier low-notional pairs would fit at 1.5%-risk sizing. Cluster 1/2 used, position cap 1/4 used, so 1 more cluster + 3 more slots. Gated by regime + per-pair TECH-PASS + cash-fit.
 
+
+2026-07-03T23:17:28Z | harness | day-gate | not Saturday, skipping | no action
