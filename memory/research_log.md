@@ -6166,3 +6166,103 @@ Portfolio at **$10,792.63 / DD 0.77%** — best DD since 2026-06-13. SOL runner 
 2026-07-02T17:06:50Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-07-02T17:40:18Z | allocation | day-gate | not Sunday, skipping | no action
+
+
+## 2026-07-03T23:01Z — routine-01-overnight (bull-01-overnight, PT Fri 2026-07-03 16:01, ~10h late vs 06:00 PT nominal)
+
+### Scheduling context
+
+Slot `bull-01-overnight` cron `0 6 * * 1-5` PT = 13:00Z Fri. Actual fire 23:01Z Fri → **10h1m late**. Not blocking: the 4R exit target on SOL was reachable from the 07-03T20:00Z bar close ($82.64 >= $82.4019 target) regardless of when the routine fires, and strategy convention `missed-scheduler-replay` allows logging the exit at the target-bar timestamp. Between routine-03-eod (04:11Z) and now (23:01Z), 19h elapsed with no intermediate routine wakes visible (routine-02-midday nominal 20:00Z fire either skipped or subsumed by this run). Continuing execution.
+
+### Position check — SOL/USD long (open at wake)
+
+SOL/USD 87.5709 @ $75.3538, initial stop $73.5918, W22-H breakeven ratchet armed 07-02T09:00Z (stop $75.3538 breakeven), 4R target $82.4019.
+
+Key 1H bars 07-03:
+- 19:00 close **$82.40** — 4R target $82.4019, close short by $0.0019 → NOT triggered
+- 20:00 close **$82.64** — >= target by **$0.238** → **Exit-3 4R take-profit TRIGGERED**
+
+**Exit fire at 2026-07-03T20:00Z bar close $82.64.** Sell fill (0.05% slippage): $82.64 × 0.9995 = **$82.5987**.
+
+P&L:
+- Gross round-trip: 87.5709 × ($82.5987 − $75.3538) = $634.53
+- Entry commission (07-01): $17.16
+- Exit commission: $18.81
+- Total commissions: $35.97
+- **Net P&L: +$598.56**
+- R-risk: 87.5709 × $1.762 = $154.32
+- **Net R: +3.88R**
+
+Milestone: 2nd 4R take-profit inception-to-date. First 4R take-profit on a trade that armed the W22-H breakeven ratchet — proof-of-mechanism for the ratchet amendment.
+
+All-time realized: +$286.80 → **+$885.36**. Post-exit cash: $3,670.97 + $7,214.42 = **$10,885.39**. Prior peak $10,875.85 CLEARED by +$9.54 → **NEW EQUITY PEAK $10,885.39**.
+
+### Technical
+
+Per `python scripts/indicators.py` (23:01:44Z): regime **PASS 15/15 median +3.61%**. SBD **CLEAR**.
+
+TECH-PASS list (SOL excluded — just closed, no same-wake re-entry): BTC, ETH, HYPE, XRP, ADA, NEAR, SUI, TAO, XDG, LTC. REJECT: AVAX (R4a $1.83M), LINK (R4a $1.31M), TRX (R2a RSI 80.8). NOT CHECKED: ONDO (indicators.py pair list still on FARTCOIN — 07-01 universe refresh not propagated to script; non-blocking since ONDO rank 14 < ETH rank 2 winner).
+
+**Rule-8 max-1-per-wake — cash-fit iteration:**
+
+Equity for sizing = post-SOL-exit all-cash **$10,885.39**. Risk per trade = 1.5% × $10,885.39 = **$163.28**. Available cash = **$10,885.39**.
+
+| Rank | Pair | 2×ATR | Size | Notional (+0.05% slip + comm) | Cash-fit | Result |
+|---|---|---:|---:|---:|---|---|
+| 1 | BTC | $667.80 | 0.24450 | $15,292.83 + $39.76 | NO (short ~$4,447) | REJECT cash-insufficient |
+| 2 | ETH | $28.406 | 5.7481 | $10,099.17 + $26.26 = $10,125.43 | YES ($759.96 left) | **ACCEPT — rule-8 winner** |
+
+**ETH wins by rule-8-fallback.** Guardrails: position cap 1/8, strategy cap 1/4, portfolio risk 1.50%, per-trade risk 1.50%, universe rank 2, not already open, daily P&L positive, equity floor cleared, regime PASS, no 5b cooldown (last ETH close 06-16 = 17 days ago), cluster 1/2. All PASS.
+
+Entry parameters:
+- Fill: $1,756.08 × 1.0005 = **$1,756.9580**
+- 2×ATR $28.406, stop **$1,728.5520**, 4R target **$1,870.5820**
+- Size: $163.28 / $28.406 = **5.7481** ETH
+- Notional: $10,099.17, entry commission $26.26, cash after = **$759.96**
+
+Rejects logged: BTC (cash-insufficient at rank 1). Ranks 4-11 not evaluated (rule-8 max-1 satisfied by ETH).
+
+### News
+
+Firecrawl skipped for ETH targeted scan — news is v0.2 informational-only and cannot flip the ACCEPT decision. Note: `no-scan-informational-only-and-decision-already-final`.
+
+### Sentiment
+
+ETH `kraken_spread` sampled 23:05:37-39Z: tight spreads 0.01–0.18 on ~$1,755 mid = 0.06–10 bps window; typical <1 bps. Excellent liquidity.
+
+### Decision
+
+**1 OPEN (ETH/USD long 5.7481 @ $1,756.9580), 1 CLOSE (SOL/USD 4R take-profit +$598.56 / +3.88R).** SOL exit was missed-scheduler-replay of 07-03T20:00Z bar close. ETH entry rule-8-fallback after BTC cash-rejected. Post-wake: 1 open (ETH), $759.96 cash, $10,854.08 equity MTM, **NEW EQUITY PEAK $10,885.39** (cleared 06-13 peak by +$9.54), DD 0.29%.
+
+### First-of-month universe refresh
+
+07-03 (Fri) — NOT first-of-month or first weekday. Already refreshed 07-01. No refresh this wake. Next: 2026-08-01 or first weekday thereafter.
+
+### Stats
+
+- Day P&L (07-03 PT DTD): **+$121.39 / +1.13%** vs prior EOD $10,732.69
+- Wake-over-wake P&L: **+$121.39 / +1.13%**
+- Trades opened: 1 (ETH). Trades closed: 1 (SOL 4R).
+- New equity: **$10,854.08** ($759.96 cash + $10,094.12 ETH MTM)
+- Equity peak: **$10,885.39 NEW** (superseded 06-13 peak $10,875.85 by +$9.54)
+- Drawdown from peak: **0.29%**
+- Loss streak: 0
+- Since-inception return: +8.54%
+- Rolling 7d: ≈ +4.23% BULL vs ≈ +3.46% BTC-hold → **BULL ahead ≈ +0.77pp 7d**
+- Rolling 30d: ≈ +8.54% BULL vs ≈ −19% BTC-hold → **BULL ahead ≈ +27.5pp**
+- 90d: not computable (74 days inception; window ~2026-07-19)
+- All Ring 3 kill switches: CLEAR
+
+### Watchdog (`python scripts/watchdog.py --telegram`)
+
+8 findings — same constellation: A routine-07 heartbeat now 150h stale (up from 116h prior wake — 6+ days silent); D 6x variant stale-MTM carry-over; C dirty-tree 3 uncommitted `scripts/replay_*` files. Telegram alert auto-sent. Out of scope this wake; routine-04-harness Saturday 2026-07-04 next oversight opportunity.
+
+### Summary
+
+**Milestone wake: SOL/USD +4R take-profit hit** at 07-03T20:00Z bar close $82.64. Net **+$598.56 / +3.88R**, 2nd 4R hit inception-to-date and **1st after arming the W22-H breakeven ratchet** — direct proof-of-mechanism for the ratchet amendment. The intrabar-touch/close-miss pattern flagged over prior wakes did NOT persist through this bar. All-time realized advances to +$885.36; equity peak $10,885.39 clears the 06-13 TAO 4R peak by +$9.54.
+
+**Second milestone: first cash-fittable non-SOL entry in 20 days** — SOL exit freed $7,214.42 cash → post-exit $10,885.39 allowed rule-8-fallback iteration. BTC cash-blocked at $15.29K notional, **ETH fit at $10,099.17**. The 7-consecutive-wake cash-fit blockade breaks. ETH OPEN 5.7481 @ $1,756.9580, stop $1,728.5520, target $1,870.5820, risk $163.28 / 1.50%.
+
+Portfolio at **$10,854.08 / DD 0.29%** from just-set peak. Telegram: 2 events (CLOSE + OPEN) sent per NOTIFY spec.
+
+**Next entry-eligible wake:** routine-02-midday nominal 20:00Z Fri (may be skipped by scheduler backlog); effective next may be routine-03-eod Fri 21:00 PT (04:00Z Sat). Cash-fit constraint now tight ($759.96 cash) — only very low-notional pairs (XDG, XRP) fit under 1.5%-risk sizing. Cluster 1/2 used. Regime PASS 15/15.
