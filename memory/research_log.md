@@ -6316,3 +6316,5 @@ Portfolio at **$10,854.08 / DD 0.29%** from just-set peak. Telegram: 2 events (C
 
 
 2026-07-03T23:17:28Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-07-03T23:18:26Z | allocation | day-gate | not Sunday, skipping | no action
