@@ -6325,3 +6325,4 @@ Portfolio at **$10,854.08 / DD 0.29%** from just-set peak. Telegram: 2 events (C
 
 2026-07-04T17:30Z | harness | W27 memo generated | proposal P-W27-CASHFIT re-drafted (auto-rejected P-W26 restated); 2 new lessons W27 (07-02 Exit-3 close-miss score 4, 07-03 W22-H proof-of-mechanism score 8); cash-fit lesson score 8→9; TV 8th-consecutive blocker; 11 active lessons (no prune); contest deadline outcome BULL lost to Aggro -13.05pp (predicted W21 audit) | wrote memory/weekly_memos/2026-W27.md + memory/lessons.md + this row
 
+2026-07-04T17:40:12Z | allocation | day-gate | not Sunday, skipping | no action
