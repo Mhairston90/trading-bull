@@ -32,3 +32,5 @@
 | 2026-07-01T04:00:00Z | OPEN | SOL/USD | long | 87.5709 | 75.3538 | 73.5918 | 82.4019 | — | — | entry-rule-v0.4-momentum |
 | 2026-07-03T20:00:00Z | CLOSE | SOL/USD | long | 87.5709 | 82.5987 | — | 82.4019 | +3.88 | +598.56 | exit-4R-target-missed-scheduler-replay |
 | 2026-07-03T23:00:00Z | OPEN | ETH/USD | long | 5.7481 | 1756.9580 | 1728.5520 | 1870.5820 | — | — | entry-rule-v0.4-momentum-rule8-fallback |
+| 2026-07-05T01:00:00Z | CLOSE | ETH/USD | long | 5.7481 | 1764.128 | — | — | -0.07 | -11.38 | exit-ema20-confirm-missed-scheduler-replay |
+| 2026-07-05T03:00:00Z | OPEN | ADA/USD | long | 24624 | 0.190146 | 0.183522 | 0.216642 | — | — | entry-rule-v0.4-momentum |
