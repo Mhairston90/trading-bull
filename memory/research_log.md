@@ -6517,3 +6517,82 @@ Trade log OPEN row appended. Portfolio.md rebuilt. Cluster 0/2 -> 1/2. Position 
 1. **Regime-flip velocity**: prior wake 10:30Z had 0/15 tech-PASS (universe-wide 1H pullback below 20-EMA). Just 7 hours later, 10/15 tech-PASS. Broad synchronized recovery, pullback resolved in one session. Pattern to watch: pullback signals with 4H trend intact tend to be short-lived; rule-8 "just-closed 1H candle" strictness properly caught rank-1 BTC when breadth recovered.
 2. **Cash-cap sizing (2nd binding instance recently)**: 07-04T17Z prior had 6 tech-PASS all cash-blocked; this wake had cash-cap sizing (0.16899 vs 0.169080 risk-based). Small $3.79 gap; delivered 1.499% vs target 1.500%.
 3. **ONDO indicators.py gap**: universe.md promoted ONDO at 07-01 but indicators.py output still lacks it (and includes legacy FARTCOIN). Script pair-list needs update. Not blocking today (ONDO rank 14) but data hygiene item.
+
+---
+
+## 2026-07-06T17:47Z routine-03-eod (PT Mon 10:47 — OFF-SCHEDULE ~10h13m EARLY vs 21:00 PT cron `0 21 * * 1-5`; fired ~7 min after routine-01-overnight 17:40Z, same 16-17Z just-closed 1H candle)
+
+### Wake summary
+
+**Slot identity verified**: this is `bull-03-eod`, routine content is EOD. Schedule fired ~10h early. PT calendar-date label at fire time: **2026-07-06** (per date-labeling guard: fire wall-clock UTC 17:47Z = 10:47 PT Mon, unambiguously 07-06 PT). No cron/content mismatch; body correctly references routine-03.
+
+**Position state at wake**: 1 open (BTC/USD long 0.16899 @ $63,679.4, opened prior wake 17:40Z at 16-17Z bar close). Cash $5.73 residual (99.95% deployed).
+
+**MTM (live tick 21:00-equivalent close proxy)**: BTC bid/ask mid ≈ $63,658 → position value $10,753.02, unrealized -$4.33 / -0.040%. Equity = $5.73 + $10,753.02 = **$10,758.75**.
+
+**Wake-over-wake P&L (17:40Z→17:47Z, ~7 min)**: -$4.33 / -0.040% — pure MTM drift on BTC as live tick eased from $63,687 entry-time snap to $63,658 mid.
+
+### Post-close exit check (16-17Z just-closed 1H candle)
+
+- **BTC/USD** (entry 16:00Z bar close $63,679.4 = SAME BAR as this check). Same-bar exit not eligible by rule (exits are checked at close of each 1H candle; entry-bar's close IS the check bar for entries, but exit rules 1/1-SBD/2/3 require post-entry bars). No exit action. First post-entry 1H close will be 17-18Z bar at 18:00Z (~13 min out).
+
+### Entry scan (universe pairs without open position)
+
+**Cash-constrained skip**: cash $5.73 dust. No entry is fundable (minimum BTC 0.00005 × $63,660 = $3.18 theoretical but strategy sizing at 1.5% of $10,758.75 = $161.38 risk × sizes exceeding cash for all pairs). Formal per-pair technical evaluation deferred (no actionable path).
+
+**Regime snapshot (live 24h % change via `kraken_multi_ticker` at 17:47Z)**:
+- Positive (5): BTC +0.11%, ETH +0.23%, NEAR +2.64%, ONDO +0.69%, SOL +0.02%
+- Negative (10): ADA -3.13%, SUI -1.59%, LTC -1.51%, XDG -1.39%, LINK -0.61%, XRP -0.60%, TAO -0.50%, HYPE -0.22%, TRX -0.19%, AVAX -0.01%
+- Median: -0.22%
+- **Rule 5a (≥4/15 positive)**: PASS (5/15, 1-positive cushion above floor).
+- **Rule 5a-SBD (≤1 positive AND median ≤-1.0%)**: CLEAR (5 positive » 1 ceiling; median -0.22% > -1.0% ceiling).
+
+**Regime delta vs 17:40Z prior wake bar-close (11/15 positive median +1.08%)**: universe softened materially in 7 minutes — 6 pairs flipped positive→negative on live 24h roll (HYPE, XRP, TAO, LTC, AVAX, LINK). This is likely a live-tick vs bar-close instrument difference (see 07-06T10:30Z prior wake, which observed similar bar-close/live-tick divergence pattern) rather than 7-minute real tape rotation. Regime remains 5a PASS + SBD CLEAR under both instruments; no defensive action needed.
+
+**News scan skipped** (informational-only per amended DO 4; no candidates funded).
+**Sentiment**: BTC spread 0.1-7.3 bps (mid ~$63,655 tight); other pairs skipped (no candidates funded).
+
+### Watchdog
+
+Ops watchdog fired at 17:48:03Z, Telegram sent. **9 findings unchanged from prior wake**: 1× A routine-06 217h stale, 1× A routine-07 216h stale (both cloud-cron heartbeats; local routines unaffected), 1× C dirty-tree 4 files (unchanged: `docs/sentinel_10k_reset_spec_20260704.md`, `scripts/replay_cache_20260629/`, `scripts/replay_result_20260629.json`, `scripts/routine07_replay_20260629.py`), 6× D variant stale-MTM 217h (v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive). Notes on dirty tree: these files date back to the 06-29 SOL intrabar-stop replay + 07-04 sentinel spec — long-lived scratchpad state. Not blocking; flag persists.
+
+### Day summary — PT 2026-07-06
+
+- **Day PnL (PT DTD, vs 07-06 open equity ~$10,763.08)**: **-$4.33 / -0.040%** (BTC MTM drift only; no realized events).
+- **Trades today**: 1 opened (BTC 17:40Z routine-01), 0 closed.
+- **Equity**: **$10,758.75** ($5.73 cash + $10,753.02 BTC MTM).
+- **Equity peak**: **$11,068.89** (unchanged; set 07-04T20:00Z).
+- **Drawdown from peak**: **$310.14 / 2.802%** (widened 0.039pp vs prior wake 2.763% on the -$4.33 MTM tick).
+- **Loss streak (trading days close-basis)**: **1** (07-05 negative; today TBD — currently -$4.33 could round to 0 by 21:00Z proper EOD).
+- **7-day BULL vs BTC-hold** (rolling): BULL ≈ +3.30% (equity $10,415 est → $10,758.75) vs BTC ≈ +3.7% ($60,437 → $62,814 ticker) = **-0.4pp BULL behind 7d**.
+- **30-day BULL vs BTC-hold** (rolling): BULL ≈ +7.59% (inception $10k → $10,758.75) vs BTC ≈ -17.4% est ($77k → $62.8k) = **+25.0pp BULL well ahead 30d**.
+- **90-day**: not computable (inception 2026-04-20 = 77 days ago; first computable ~2026-07-19).
+
+### Kill-switch state
+
+- **Daily realized+unrealized (PT 07-06)**: -$4.33 / -0.040% of equity — CLEAR (5% loss cap → 4.96pp headroom).
+- **Consecutive losing trading days**: 1 (07-05 negative; 07-04 positive). CLEAR (cap 7).
+- **Max drawdown**: 2.802% from peak $11,068.89 (cap 25%, warn 12.5%, **9.70pp headroom to warn**). CLEAR.
+- **Equity floor**: $10,758.75 > $7,500 (+$3,258.75). CLEAR.
+- **MCP**: Kraken OK (`kraken_multi_ticker`, `kraken_spread` both returned cleanly). CLEAR.
+- **Regime 5a**: PASS (5/15 positive live-tick, median -0.22%).
+- **5a-SBD**: CLEAR (5 positives » 1; median -0.22% > -1.0%).
+- **5b cooldowns**: none active (recent ETH/ADA exits were `exit-ema20-confirm`, not stop-hits).
+- **Cluster cap (6a BTC-cluster)**: 1/2 used (BTC/USD).
+- **All Ring 3 kill switches CLEAR.**
+
+### Lessons extraction
+
+**No new lessons this wake.** The wake is 7 minutes after the routine-01-overnight entry that opened BTC; the position hasn't had a post-entry 1H bar close yet. No trades closed, no gap/give-back events, no immediate reversals. Prior wake's observations (regime-flip velocity 0→10 tech-PASS in 7h; cash-cap sizing 2nd-recent instance; ONDO indicators.py gap) were logged in research_log.md 17:40Z entry and are candidate-pattern watch items — not yet lessons-worthy.
+
+### Monthly archive check
+
+Today is **not** the last trading day of the month (07-06, not 07-31). No archive action.
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md, trade_log.md (tail), research_log.md (tail), lessons.md, routines/03-eod.md.
+- **Verified**: kill switches (all clear), no mandate violations.
+- **Fetched**: kraken_multi_ticker (15 pairs), kraken_spread (BTC), watchdog scan.
+- **Wrote**: this research_log EOD row; portfolio.md rebuilt (MTM update).
+- **Skipped**: trade_log.md (no new open/close events); lessons.md (no material patterns); archive (not month-end); indicators.py (no entry candidates fundable).
