@@ -6598,3 +6598,5 @@ Today is **not** the last trading day of the month (07-06, not 07-31). No archiv
 - **Skipped**: trade_log.md (no new open/close events); lessons.md (no material patterns); archive (not month-end); indicators.py (no entry candidates fundable).
 
 2026-07-06T17:52:18Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-07-06T17:53:17Z | allocation | day-gate | not Sunday, skipping | no action
