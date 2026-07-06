@@ -6448,3 +6448,72 @@ Indicator table from `scripts/indicators.py` at 10:30:41Z (720-bar EMA/RSI conve
 Portfolio at **$10,763.08 all-cash / DD 2.76%** — 2nd consecutive flat-portfolio wake. 4/4 strategy slots open; 2/2 cluster slots open; full cash reserve. Watchdog 9 findings (routine-07 8.7+ days silent, routine-06 210h stale by threshold-that-doesn't-fit-cadence, dirty tree 4 files, 6 variant stale-MTM). Silent on Telegram per NOTIFY spec (no OPEN, no CLOSE, no ACTIONABLE news, no universe refresh, no Ring 3 trip — the watchdog alert was already auto-sent by the script itself). Files written: `portfolio.md` (rewritten for timestamp + fresh regime read + still-flat state), `research_log.md` (this row). `trade_log.md` untouched (no events). `universe.md` unchanged. `lessons.md` unchanged.
 
 **Next entry-eligible wake:** routine-02-midday nominal Mon 2026-07-06 13:00 PT (= 20:00Z Mon) — but midday is position-management-only, no entries. Next entry-scan opportunity: routine-03-eod Mon 2026-07-06 21:00 PT (= 04:00Z Tue). For any pair to become eligible, 1H closes need to rally back above 20-EMA AND RSI needs to cross ≥55 — from current RSI 32-45 range, a ~1-3% recovery move on 1H would be typical to re-clear. Watching for: (a) whether the live-tick 24h SBD divergence resolves to bar-close activation (would tighten defensive posture if positions existed), (b) whether 4H trend structure (R3) holds through the next 4H bar close (~12:00Z), (c) which pair recovers 1H momentum first (BTC/ETH lead-lag question).
+
+---
+
+2026-07-06T17:40Z | routine-01-overnight | PT Mon 2026-07-06 10:40 **OFF-SCHEDULE ~4h40m late** (cron `0 6 * * 1-5` M-F 06:00 PT = 13:00Z; wall-clock UTC 17:40Z; late-morning PT fire when nominal is early-morning; scheduler drift streak continues) | pre-wake 0 open (all-cash flat since ADA exit 07-05T10Z); pulled `kraken_multi_ticker` (15 universe pairs) + `scripts/indicators.py` (720-bar 1H+4H authoritative) + `kraken_spread` (BTC) at 17:39-17:42Z. Watchdog re-run 17:40Z — 9 findings (unchanged from prior wake at 10:30Z: 1× A routine-06 217h, 1× A routine-07 216h, 1× C dirty-tree 4 files, 6× D variant stale-MTM; no net-new). No position-management events (portfolio flat at wake start). No universe refresh (not first-of-month).
+
+### Technical
+
+Regime bar-close (indicators.py): **11/15 positive 24h, median +1.08% → 5a PASS**. SBD CLEAR (11 positives >> 1 ceiling; +1.08% median >> -1.0% ceiling). Live-tick regime (multi_ticker snapshot 17:39Z): 5/15 positive, median -0.32% — divergence from bar-close **inverted vs prior wake** (prior: bar-close pass but live-tick SBD-like; this wake: bar-close pass and live-tick softer but not SBD). Not gating: authoritative read is bar-close per amended DO 3.
+
+**Rule 8 winner:** BTC/USD (rank 1 of 10 tech-PASS candidates by 30d notional).
+
+Per-pair pass/reject (universe order):
+- **BTC/USD (rank 1)** — R1 PASS +$865 (close $63,679.4 vs EMA20 $62,814); R2 PASS +6.744 (RSI 61.7); R2a OK (<80); R3 PASS +$1,682 (4H close vs EMA50 $61,809); R3-20 (v0.14) PASS +$919.3; R4a PASS $187.76M; 24h +1.75%; ATR14 $477.43 → 2×ATR stop $954.85. **TECH-PASS → RULE-8 WINNER**.
+- **ETH/USD (rank 2)** — R1 PASS +$21.64; R2 PASS RSI 60.1; R2a OK; R3 PASS +$82.31; R4a $45.96M OK; 24h +1.08%; ATR $16.36. **TECH-PASS** (rule-8 loser).
+- **SOL/USD (rank 3)** — R1 PASS +$1.269; R2 PASS RSI 60.9; R2a OK; R3 PASS +$3.023; R4a $23.25M OK; 24h +1.22%; ATR $0.79. **TECH-PASS** (rule-8 loser).
+- **HYPE/USD (rank 4)** — R1 PASS +$0.8136; R2 PASS RSI 56.9; R2a OK; R3 PASS +$3.021; R4a $11.64M OK; 24h +2.71%; ATR $0.79. **TECH-PASS** (rule-8 loser).
+- **XRP/USD (rank 5)** — R1 PASS +$0.0149; R2 PASS RSI 58.4; R2a OK; R3 PASS +$0.03479; R4a $25.04M OK; 24h +1.67%; ATR $0.0111. **TECH-PASS** (rule-8 loser).
+- **ADA/USD (rank 6)** — R1 **FAIL** -$0.00004335 (close $0.184566 vs EMA20 $0.184609); R2 **FAIL** -6.564 (RSI 48.4); R3 PASS; 24h -2.72%. **REJECT** (R1+R2; recovering post-07-05T10Z exit but still deep sub-55).
+- **NEAR/USD (rank 7)** — R1 PASS +$0.05609; R2 PASS RSI 63.5; R2a OK; R3 PASS +$0.1243; R4a $2.17M OK; 24h +4.52% (strongest 24h in universe). **TECH-PASS** (rule-8 loser).
+- **SUI/USD (rank 8)** — R1 PASS +$0.005053; R2 **FAIL** -1.973 (RSI 53.0); R3 PASS; 24h -0.99%. **REJECT** (R2 marginal).
+- **TAO/USD (rank 9)** — R1 PASS +$3.23; R2 PASS RSI 59.0; R2a OK; R3 PASS +$0.1713; R4a $2.04M OK; 24h +1.81%; ATR $2.48. **TECH-PASS** (rule-8 loser).
+- **XDG/USD (rank 10)** — R1 PASS +$0.0001916; R2 **FAIL** -4.106 (RSI 50.9); R3 PASS. **REJECT** (R2).
+- **LTC/USD (rank 11)** — R1 PASS +$0.3366; R2 PASS RSI 55.5 (+0.53 margin); R2a OK; R3 PASS +$1.105; R4a $2.99M OK; 24h +0.27%; ATR $0.40. **TECH-PASS** (rule-8 loser; marginal R2).
+- **AVAX/USD (rank 12)** — R1 PASS +$0.08497; R2 PASS RSI 58.0; R2a OK; R3 PASS +$0.1567; R4a $3.74M OK; 24h +0.36%; ATR $0.065. **TECH-PASS** (rule-8 loser).
+- **LINK/USD (rank 13)** — R1 PASS +$0.0809; R2 PASS RSI 57.2; R2a OK; R3 PASS +$0.278; R4a $2.02M OK (borderline; second consecutive wake above $2M floor); 24h +0.81%; ATR $0.073. **TECH-PASS** (rule-8 loser).
+- **ONDO/USD (rank 14)** — **NOT IN indicators.py OUTPUT** (data gap; script hardcoded pair list still excludes ONDO despite universe.md promoting it 07-01). Cannot evaluate. Treated as REJECT for entry-scan purposes; flag for indicators.py maintenance.
+- **TRX/USD (rank 15)** — R1 **FAIL** -$0.000559; R2 **FAIL** -8.498 (RSI 46.5); R3 PASS; 24h -0.39%. **REJECT** (R1+R2).
+- **FARTCOIN/USD** — legacy indicators.py row but **not in current universe** (dropped 07-01). Skipped regardless of TECH signals (also R4a $1.97M FAIL notional).
+
+**Tech-PASS count: 10/15** (BTC, ETH, SOL, HYPE, XRP, NEAR, TAO, LTC, AVAX, LINK). BTC-cluster represented: 6/7 cluster pairs tech-PASS (SUI cluster member failed R2). **Highest tech-PASS breadth observed in recent research_log** (visually; unverified vs historical peaks).
+
+### News
+
+Firecrawl news scan **skipped** for 10 tech-PASS candidates this wake — informational-only per amended DO 4, and rule-8 winner is deterministic (rank 1 = BTC) so news would not change entry decision. Lean-mode skip acceptable per rule.
+
+### Sentiment
+
+- **BTC/USD** (rule-8 winner): 10 recent spread ticks 17:41:54Z all bid $63,679.8-63,682.0 / ask $63,682.3-63,683.4, spread 1.4-3.5 (~0.005% of price). Extremely tight liquidity. Live tick $63,687.1.
+- Other tech-PASS candidates: sentiment pass skipped (informational-only + rule-8 already decided).
+
+### Decision
+
+**Rule 5a regime gate:** PASS (11/15 positive, median +1.08%). SBD CLEAR.
+**Rule 5b cooldowns:** none active.
+**Rule 6 concurrent cap:** 0/4 used.
+**Rule 6a BTC-cluster:** 0/2 used.
+**Rule 7 portfolio risk:** 0% + 1.5% = 1.5% <= 4% cap.
+**Rule 8:** BTC/USD winner (rank 1 of 10 candidates).
+
+**Position sizing (BTC):**
+- Equity: $10,763.08
+- Risk cap: 1.5% x $10,763.08 = **$161.4462**
+- 2xATR(14) 1H stop distance: $954.85
+- Risk-based size: 0.169080 BTC -> pos value $10,766.87 -> **EXCEEDS cash $10,763.08 by $3.79**
+- Cash-cap size: $10,763.08 / $63,679.4 = 0.168994 -> rounded to 0.16899 BTC
+- Final position value: $10,757.35 (cash residual $5.73)
+- Final dollar risk: $161.35 = **1.499% equity** (under cap)
+- Stop: **$62,724.55**
+- 4R target: **$67,498.80**
+- W22-H ratchet arm level: **$65,589.10**
+
+**Action: OPEN BTC/USD long 0.16899 @ $63,679.4** (entry timestamp 2026-07-06T16:00:00Z = signal bar open; bar 16-17Z closed at 17:00Z was the just-closed 1H candle).
+
+Trade log OPEN row appended. Portfolio.md rebuilt. Cluster 0/2 -> 1/2. Position 0/4 -> 1/4. Portfolio risk 0% -> 1.499%.
+
+**Observations for next wake / lesson candidates:**
+1. **Regime-flip velocity**: prior wake 10:30Z had 0/15 tech-PASS (universe-wide 1H pullback below 20-EMA). Just 7 hours later, 10/15 tech-PASS. Broad synchronized recovery, pullback resolved in one session. Pattern to watch: pullback signals with 4H trend intact tend to be short-lived; rule-8 "just-closed 1H candle" strictness properly caught rank-1 BTC when breadth recovered.
+2. **Cash-cap sizing (2nd binding instance recently)**: 07-04T17Z prior had 6 tech-PASS all cash-blocked; this wake had cash-cap sizing (0.16899 vs 0.169080 risk-based). Small $3.79 gap; delivered 1.499% vs target 1.500%.
+3. **ONDO indicators.py gap**: universe.md promoted ONDO at 07-01 but indicators.py output still lacks it (and includes legacy FARTCOIN). Script pair-list needs update. Not blocking today (ONDO rank 14) but data hygiene item.
