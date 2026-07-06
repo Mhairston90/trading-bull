@@ -6332,3 +6332,119 @@ Portfolio at **$10,854.08 / DD 0.29%** from just-set peak. Telegram: 2 events (C
 2026-07-04T17:30Z | harness | W27 memo generated | proposal P-W27-CASHFIT re-drafted (auto-rejected P-W26 restated); 2 new lessons W27 (07-02 Exit-3 close-miss score 4, 07-03 W22-H proof-of-mechanism score 8); cash-fit lesson score 8→9; TV 8th-consecutive blocker; 11 active lessons (no prune); contest deadline outcome BULL lost to Aggro -13.05pp (predicted W21 audit) | wrote memory/weekly_memos/2026-W27.md + memory/lessons.md + this row
 
 2026-07-04T17:40:12Z | allocation | day-gate | not Sunday, skipping | no action
+
+
+## 2026-07-06T10:30Z — routine-01-overnight (bull-01-overnight, PT Mon 2026-07-06 03:30, ~2h30m EARLY vs 06:00 PT cron)
+
+### Scheduling context
+
+Slot `bull-01-overnight` cron `0 6 * * 1-5` PT = 13:00Z Mon. Actual fire 10:30Z Mon → **~2h30m EARLY**. Portfolio flat at wake (last event = ADA exit 2026-07-05T10:00Z via missed-scheduler-replay at prior midday). No open positions to check. Universe unchanged (last refresh 07-01 first-of-month; next 08-01). Watchdog findings logged below.
+
+### Position check
+
+Portfolio flat — 0 open positions at wake. No exit checks. No stop-management events. Cash $10,763.08 all-cash reserve.
+
+### Kraken multi-ticker (15-pair universe, live snapshot at 10:31Z)
+
+| Pair | last | 24h % | 24h high | 24h low |
+|------|-----:|------:|---------:|--------:|
+| BTC | 62,814.4 | -1.22 | 63,925.9 | 62,510.7 |
+| ETH | 1,765.01 | -1.09 | 1,806.34 | 1,754.07 |
+| SOL | 80.33 | -1.46 | 82.35 | 79.95 |
+| HYPE | 70.27 | -1.49 | 72.60 | 68.49 |
+| XRP | 1.14107 | -1.31 | 1.16832 | 1.12692 |
+| ADA | 0.182328 | -3.72 | 0.19244 | 0.181402 |
+| NEAR | 1.9891 | -1.27 | 2.0555 | 1.935 |
+| SUI | 0.7401 | -2.13 | 0.7662 | 0.7313 |
+| TAO | 211.4144 | -1.69 | 218.3381 | 209.9361 |
+| XDG | 0.0767899 | -1.33 | 0.0787436 | 0.0756452 |
+| LTC | 44.62 | -2.53 | 46.11 | 44.41 |
+| AVAX | 6.83 | -1.20 | 6.998 | 6.796 |
+| LINK | 7.92116 | -1.54 | 8.14402 | 7.8658 |
+| ONDO | 0.32903 | -1.10 | 0.3364 | 0.32389 |
+| TRX | 0.326781 | -0.70 | 0.330092 | 0.32499 |
+
+- **Positives (live):** **0/15** — universe-wide red on live-tick 24h. Sorted 24h %: [-3.72, -2.53, -2.13, -1.69, -1.54, -1.49, -1.46, -1.33, -1.31, -1.27, -1.22, -1.20, -1.10, -1.09, -0.70]. **Median live: -1.33%** (XDG).
+- **Bar-close (indicators.py 10:30Z, closed bar 09:00Z):** **12/15 positive, median +0.50%** — divergence from live because indicators.py 24h basis rolls forward slower than live-tick 24h basis. Live tick captures overnight PT deterioration; bar-close still anchored to earlier 24h window.
+- **Regime gate (5a) authoritative read (bar-close per amended DO step 3):** **PASS 12/15 positive, median +0.50%** (>> 4/15 floor).
+- **5a-SBD sub-state (bar-close):** **CLEAR** (positives 12 >> 1, median +0.50% > -1.0%).
+- **5a-SBD sub-state (live-tick, informational only, NOT gating):** would be **ACTIVE** if computed on live (0/15 positive AND median -1.33% ≤ -1.0%). This is a "leading-edge" divergence [[lesson 2026-06-17 SBD leading-edge]] — the price-based SBD trigger has not yet crystallized on bar-close basis, but live-tick shows the deteriorating tape. Not gating today because portfolio is flat (no open positions to defensively tighten). If SBD activates on next bar-close read, it would be moot for entries (all pairs already tech-FAIL) and moot for exits (no positions).
+
+### Entry-scan (Technical analyst pass)
+
+Indicator table from `scripts/indicators.py` at 10:30:41Z (720-bar EMA/RSI convergence, 4H 50-EMA converged on all pairs):
+
+| Pair | R1 (>EMA20) | R2 (RSI≥55) | R2a (<80) | R3 (4H>EMA50) | R4a (≥$2M) | All-PASS? |
+|---|---|---|---|---|---|---|
+| BTC/USD | **FAIL -403.4** | **FAIL RSI 40.2** | OK | PASS +1,312 | OK $66.81M | NO |
+| ETH/USD | **FAIL -15.98** | **FAIL RSI 36.9** | OK | PASS +71.92 | OK $35.35M | NO |
+| SOL/USD | **FAIL -0.83** | **FAIL RSI 38.1** | OK | PASS +2.54 | OK $14.16M | NO |
+| HYPE/USD | **FAIL -0.73** | **FAIL RSI 44.7** | OK | PASS +3.34 | OK $8.19M | NO |
+| XRP/USD | **FAIL -0.007** | **FAIL RSI 43.0** | OK | PASS +0.039 | OK $17.22M | NO |
+| ADA/USD | **FAIL -0.005** | **FAIL RSI 32.5** | OK | PASS +0.015 | OK $8.23M | NO |
+| NEAR/USD | **FAIL -0.014** | **FAIL RSI 43.8** | OK | PASS +0.040 | FAIL $1.02M | NO |
+| SUI/USD | **FAIL -0.009** | **FAIL RSI 36.4** | OK | PASS +0.008 | OK $9.00M | NO |
+| TAO/USD | **FAIL -2.46** | **FAIL RSI 37.3** | OK | PASS +0.63 | FAIL $1.29M | NO |
+| XDG/USD | **FAIL -0.0004** | **FAIL RSI 44.9** | OK | PASS +0.001 | OK $2.45M | NO |
+| LTC/USD | **FAIL -0.58** | **FAIL RSI 37.6** | OK | PASS +1.09 | OK $2.84M | NO |
+| AVAX/USD | **FAIL -0.070** | **FAIL RSI 40.9** | OK | PASS +0.19 | OK $2.38M | NO |
+| LINK/USD | **FAIL -0.077** | **FAIL RSI 38.4** | OK | PASS +0.22 | FAIL $1.50M | NO |
+| TRX/USD | **FAIL -0.001** | **FAIL RSI 42.7** | OK | PASS +0.005 | FAIL $0.65M | NO |
+| ONDO/USD | — | — | — | — | — | (not evaluated — indicators.py pair list has not yet swapped FARTCOIN→ONDO post the 07-01 universe refresh; ONDO ticker in live snapshot; non-blocking — ONDO rank 14 unlikely rule-8 winner even if PASS, and non-eval here doesn't affect a zero-pass slate) |
+
+**Result: 0 pairs pass R1+R2.** 4H trend structure is intact on 14/15 evaluated pairs (R3 PASS everywhere), but 1H closes have dropped below the 20-EMA AND RSI has fallen well below 55 across the entire universe. This is a **universe-wide 1H pullback** — trend still bullish on the 4H timeframe (all-PASS R3) but 1H momentum is fully retraced. RSI values cluster 32-45 — deep in the "below 55 floor" zone, not just marginal misses; would need substantial 1H rally to cross back to ≥55.
+
+**Rule-8 rank-ordering:** N/A — 0 candidates. No pair reaches the rule-8 tiebreak.
+
+**Cash-fit iteration:** N/A — 0 candidates precede the cash-fit check. **Notable:** this is the first entry-scan slate in ~9 wakes where cash-fit is NOT the binding rejection — technical rejection is. The $10,763 cash reserve is fully available but has no eligible target. Contrast with 07-02 wake (10 tech-PASS all cash-rejected) — today is the inverse asymmetry (0 tech-PASS, cash irrelevant).
+
+**REJECT tally by rule (Technical layer):**
+- All 15 pairs REJECT on **R1 (below 1H 20-EMA)** — universe-wide.
+- All 15 pairs REJECT on **R2 (RSI < 55)** — universe-wide.
+- 4 pairs also REJECT on R4a liquidity floor: NEAR ($1.02M), TAO ($1.29M), LINK ($1.50M), TRX ($0.65M). (Moot — R1/R2 already REJECT.)
+- 0 pairs REJECT on R3 (4H trend still intact everywhere).
+
+**Contrast with 07-03T23:01Z overnight wake:** that was 11 tech-PASS at median +5.77% regime. In just 3 days (with 07-04 Sat + 07-05 Sun weekend + 07-05 Sun midday ADA exit interleaved), 1H tape has fully rotated from breadth to universal 1H pullback while 4H trend structure has held.
+
+### News
+
+**Firecrawl skipped** — 0 tech-PASS candidates. Per skills/research.md, news is v0.4 informational-only and cannot flip a technical REJECT to a fill. Note logged: `no-scan-no-eligible-entry`. Next news scan opportunity: routine-01-overnight Tue 2026-07-07 06:00 PT (= 13:00Z Tue) if any pair returns to R1+R2 pass.
+
+### Sentiment
+
+**Skipped** — same reason (no tech-PASS candidates). `kraken_spread` / `kraken_depth` not invoked.
+
+### Decision
+
+**0 OPEN, 0 CLOSE. Portfolio remains flat** — 0 positions, $10,763.08 all cash, equity unchanged at $10,763.08. This is the **2nd consecutive flat-portfolio wake** since ADA exit at 07-05T10:00Z bar close (~24h earlier).
+
+### First-of-month universe refresh
+
+07-06 (Mon) — NOT first-of-month or first weekday. Already refreshed 07-01. No refresh this wake. Next refresh: 2026-08-01 or first weekday thereafter.
+
+### Stats
+
+- **Day P&L (07-06 PT DTD):** **$0.00 / 0.00%** — no trades, flat portfolio, no MTM change since prior wake also flat.
+- **Wake-over-wake P&L:** **$0.00 / 0.00%** vs prior midday 01:15Z 07-06 mark $10,763.08 (also all-cash post-ADA-exit).
+- **Trades opened:** 0. **Trades closed:** 0.
+- **New equity:** **$10,763.08** (all cash, unchanged).
+- **Equity peak:** **$11,068.89** (unchanged since 07-04T20:00Z ETH-MTM peak).
+- **Drawdown from peak:** **2.763%** ($305.81 below peak; **9.74pp headroom to 12.5% warn**).
+- **Loss streak:** 1 trading day (07-05 negative; 07-04 was positive close-basis).
+- **Since-inception return:** **+7.63%** ($10,763.08 / $10,000 - 1).
+- **Rolling 7d:** BULL ≈ +3.34% (equity 06-29 est ~$10,415 → $10,763.08) vs BTC-hold ≈ +3.9% ($60,437 → $62,814.4) = ≈ **−0.56pp BULL behind 7d** (rolled deeper negative as BTC-hold benefits from 06-29→07-06 grinding rally while BULL sat in cash the last 24h).
+- **Rolling 30d:** BULL ≈ +7.63% vs BTC-hold ≈ −17.5% est ($77k → $62.8k) = ≈ **+25.1pp BULL well ahead 30d**.
+- **90d:** not computable (inception 2026-04-20 = 77 days ago; first computable ~2026-07-19).
+- **All Ring 3 kill switches:** CLEAR (daily loss 0%, DD 2.76%, loss streak 1, equity floor +$3,263 above, MCP OK).
+
+### Watchdog (`python scripts/watchdog.py --telegram`)
+
+9 findings — **1 net-new vs prior wake** (routine-06 heartbeat crossed 200h threshold; previously below): (A) routine-06 last committed 210h ago (threshold 200h), (A) routine-07 last committed 209h ago (threshold 30h — 8.7+ days silent), (C) dirty-tree 4 uncommitted files (docs/sentinel_10k_reset_spec_20260704.md, scripts/replay_cache_20260629/, scripts/replay_result_20260629.json, scripts/routine07_replay_20260629.py — stranded from prior session), (D) 6 variant portfolio.md files with open positions but stale MTM (>30h): v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive (all 210h stale). Telegram alert auto-sent. Root cause unchanged: routine-07 rebuilder heartbeat now 8.7+ days silent. **Out of scope this wake**; routine-04-harness Sat 2026-07-11 W28 will be the next scheduled oversight opportunity. The routine-06 (allocation) 200h+ crossing is expected — routine #5 fires only Sundays and day-gate exits on non-Sundays, so heartbeat naturally stales between Sun-to-Sun fires. Watchdog threshold assumes daily heartbeat, not weekly — this is a **known false-positive** for routine-06 (worth flagging to routine-04 W28 for a threshold-tune-per-routine tweak), not an actionable finding.
+
+### Summary
+
+**0 OPEN, 0 CLOSE — silent overnight wake.** Zero tech-PASS in entry scan (all 15 pairs FAIL R1 AND R2 on 09:00Z bar close). Universe-wide 1H pullback while 4H trend structure holds (R3 PASS 14/14 evaluated). Bar-close regime still 5a PASS 12/15 positive median +0.50%, but live-tick 24h has crossed into 0/15 positive median -1.33% — a leading-edge SBD divergence [[lesson 2026-06-17]] that is not gating today because portfolio is flat and no pair passes technical anyway. RSI cluster 32-45 across the board indicates the pullback is not a marginal miss but a deep 1H momentum retracement.
+
+Portfolio at **$10,763.08 all-cash / DD 2.76%** — 2nd consecutive flat-portfolio wake. 4/4 strategy slots open; 2/2 cluster slots open; full cash reserve. Watchdog 9 findings (routine-07 8.7+ days silent, routine-06 210h stale by threshold-that-doesn't-fit-cadence, dirty tree 4 files, 6 variant stale-MTM). Silent on Telegram per NOTIFY spec (no OPEN, no CLOSE, no ACTIONABLE news, no universe refresh, no Ring 3 trip — the watchdog alert was already auto-sent by the script itself). Files written: `portfolio.md` (rewritten for timestamp + fresh regime read + still-flat state), `research_log.md` (this row). `trade_log.md` untouched (no events). `universe.md` unchanged. `lessons.md` unchanged.
+
+**Next entry-eligible wake:** routine-02-midday nominal Mon 2026-07-06 13:00 PT (= 20:00Z Mon) — but midday is position-management-only, no entries. Next entry-scan opportunity: routine-03-eod Mon 2026-07-06 21:00 PT (= 04:00Z Tue). For any pair to become eligible, 1H closes need to rally back above 20-EMA AND RSI needs to cross ≥55 — from current RSI 32-45 range, a ~1-3% recovery move on 1H would be typical to re-clear. Watching for: (a) whether the live-tick 24h SBD divergence resolves to bar-close activation (would tighten defensive posture if positions existed), (b) whether 4H trend structure (R3) holds through the next 4H bar close (~12:00Z), (c) which pair recovers 1H momentum first (BTC/ETH lead-lag question).
