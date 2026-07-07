@@ -6838,3 +6838,4 @@ Ops watchdog fired 13:07:05Z, Telegram sent. **9 findings, all unchanged carryov
 - **NOTIFY**: Telegram brief summary of HYPE OPEN queued per routine NOTIFY spec (new-entry event).
 
 2026-07-07T17:06:36Z | harness | day-gate | not Saturday, skipping | no action
+2026-07-07T17:40:02Z | allocation | day-gate | not Sunday, skipping | no action
