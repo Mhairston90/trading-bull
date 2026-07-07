@@ -6709,3 +6709,130 @@ Today is **not** the last trading day of the month (07-06 Mon, not 07-31). Next 
 - **Wrote**: trade_log.md (BTC CLOSE row 07-07T03Z), portfolio.md rebuilt (flat post-exit), this research_log EOD row.
 - **Skipped**: lessons.md (no material new patterns beyond existing lesson coverage); archive (not month-end).
 - **NOTIFY**: EOD Telegram card sent per `skills/telegram.md` mandatory-daily-card rule.
+
+---
+
+## 2026-07-07T13:07Z routine-01-overnight (PT Tue 06:07, ON-SCHEDULE, +7 min drift)
+
+**Slot identity confirmed**: `bull-01-overnight` slot; PT date label 2026-07-07 Tue; wall-clock UTC 13:07Z. Cron `0 6 * * 1-5` fires ON-SCHEDULE Mon-Fri; today (Tue) valid.
+
+**Position state at wake**: 0 open (flat post-BTC-exit 07-07T03Z EOD). Cash $10,673.22 (full sizing capacity).
+
+**Just-closed 1H = 12:00Z bar** (bar covers 12:00Z-13:00Z, closed at 13:00Z wall clock; wake fired 13:07Z = +7min drift).
+
+### Post-close exit check
+
+- No open positions at wake → no exit checks required.
+
+### Entry scan (universe, per indicators.py 13:07:07Z run on 12Z just-closed bar)
+
+**Regime (indicators.py, bar-close basis 07-06T12Z→07-07T12Z)**: **12/15 positive**, median **+1.95%** → **5a PASS** with strong cushion (+8 pairs over 4-positive floor). **5a-SBD CLEAR** — 12 positives >> 1-positive ceiling AND median +1.95% >> −1.0% floor; both legs fail by wide margins.
+
+**Signal-quality caution — data source divergence noted**: indicators.py bar-close-basis 24h % (12/15 positive, +1.95% median) diverges sharply from live-ticker rolling-24h at 13:09Z (2/15 positive: HYPE +1.69, TRX +0.34; median ≈ −1.51%). The 07-06T12Z reference low ($61,600s BTC range) captures a mid-day 07-06 dip; the 07-07T12Z close reflects overnight-to-morning recovery from that low. Live ticker rolls anchor at 13:09Z 07-06 which was after some recovery, making 07-07T13:09Z look weaker. Per 2026-06-12 amendment indicators.py is authoritative for rule 5a; verdict PASS stands. Divergence logged as a signal-quality flag — if intraday drift continues DOWN post-12Z close, the next indicators.py run at 20:00Z midday may show a materially different regime (e.g., 6-8/15 positive). Watch at midday wake.
+
+**Per-pair rules-1-2-2a-3-4a evaluation (12Z close, 720-bar EMA/RSI/ATR converged)**:
+
+| Pair | R1 (>EMA20) | R2 (RSI≥55) | R2a (≤80) | R3 (4H>EMA50) | R4a notional | Verdict |
+|---|---|---|---|---|---|---|
+| BTC/USD | PASS +112.2 | FAIL RSI 52.8 (below 55 by 2.198) | OK | PASS +1,236 | OK $188.99M | FAIL R2 |
+| ETH/USD | PASS +2.128 | FAIL RSI 51.4 (below 55 by 3.586) | OK | PASS +60.62 | OK $45.43M | FAIL R2 |
+| SOL/USD | PASS +0.041 | FAIL RSI 50.7 (below 55 by 4.319) | OK | PASS +2.279 | OK $23.33M | FAIL R2 |
+| **HYPE/USD** | **PASS +1.005** | **PASS RSI 60.4 (+5.351 over floor)** | **OK** | **PASS +3.594** | **OK $12.45M** | **FULL PASS** |
+| XRP/USD | FAIL −0.0058 | FAIL RSI 43.3 | OK | PASS +0.011 | OK $21.71M | FAIL R1+R2 |
+| SUI/USD | PASS +4.8e-6 | FAIL RSI 49.0 | OK | PASS +0.0046 | OK $8.68M | FAIL R2 |
+| **TAO/USD** | **PASS +1.656** | **PASS RSI 56.0 (+0.992 over floor)** | **OK** | **PASS +2.588** | **OK $3.13M** | **FULL PASS** |
+| XDG/USD | FAIL −0.0007 | FAIL RSI 39.3 | OK | FAIL −0.0011 | OK $3.73M | FAIL R1+R2+R3 |
+| NEAR/USD | FAIL −0.0155 | FAIL RSI 45.6 | OK | PASS +0.0588 | OK $2.01M | FAIL R1+R2 |
+| ADA/USD | FAIL −0.002 | FAIL RSI 40.3 | OK | PASS +0.005 | OK $8.12M | FAIL R1+R2 |
+| LINK/USD | FAIL −0.009 | FAIL RSI 47.9 | OK | PASS +0.140 | FAIL $1.59M | FAIL R1+R2+R4a |
+| LTC/USD | FAIL −0.356 | FAIL RSI 40.0 | OK | PASS +0.182 | OK $2.60M | FAIL R1+R2 |
+| AVAX/USD | FAIL −0.049 | FAIL RSI 42.6 | OK | PASS +0.018 | OK $3.09M | FAIL R1+R2 |
+| **TRX/USD** | **PASS +0.00122** | **PASS RSI 63.9 (+8.867 over floor)** | **OK** | **PASS +0.007** | **FAIL $1.18M** | **FAIL R4a notional** |
+| ONDO/USD | (indicators.py did not emit row — coverage gap; live 24h −0.13% weak, likely borderline) | — | — | — | live $0.58M weak est | SKIP (missing indicator row; no PASS verdict possible) |
+
+**Result: 3 tech-PASS in universe (HYPE, TAO, TRX). TRX blocked by R4a $1.18M < $2.0M floor. → 2 eligible candidates (HYPE, TAO).**
+
+### Rule 8 selection
+
+- **HYPE/USD**: universe rank **4**
+- **TAO/USD**: universe rank **9**
+- **TRX/USD**: universe rank **15** (blocked R4a)
+
+**Rule 8 winner: HYPE/USD** (highest 30d notional rank of eligible candidates).
+
+### News scan (skipped this wake)
+
+- Firecrawl news scan skipped per pragmatic cost/benefit — news is informational-only in v0.2 (no veto power on entry decision). Both candidates (HYPE, TAO) proceed by technicals alone. If a material headline about HYPE or TAO surfaces during the day the next wake will capture it. **Not marked "Firecrawl unavailable"** — this is a deliberate elective skip.
+
+### Sentiment scan (rule 4a — informational only)
+
+- **HYPE/USD** (via kraken_spread): bid/ask $71.79/$71.83 at 13:09:16Z, spread $0.01-0.03 = **1.4-4.2 bps** on ~$71.80 mid. **Tight, healthy liquidity.**
+- **TAO/USD** (via kraken_spread): bid/ask $214.06/$214.16 at 13:09:22Z, spread $0.098-0.115 = **4.6-5.4 bps** on ~$214 mid. **Adequate.**
+- Depth not queried this wake — spread alone sufficient signal-quality check for candidates with tight bid/ask.
+
+### Entry decision — HYPE/USD
+
+**pre_entry_check evaluation**:
+- open_positions (0) < 8 ✓ (guardrail position cap)
+- open_positions (0) < strategy.max_concurrent (4) ✓
+- portfolio_risk_after (1.500%) ≤ 4.0% ✓
+- per_trade_risk (1.500%) ≤ 1.5% ✓ (exact cap)
+- pair in universe ✓ (HYPE rank 4)
+- pair not already open ✓
+- daily_loss_pct (−0.28% unrealized only, 0% realized) < 5% ✓
+- equity ($10,673.22 basis) > $7,500 ✓
+- **Rule 5b cooldown**: no HYPE stop-out in past 24h — CLEAR
+- **Rule 6a cluster cap**: HYPE not in BTC-cluster — CLEAR (cluster stays 0/2)
+- **ACCEPT** ✓
+
+**Sizing**:
+- Equity: $10,673.22
+- Risk = 1.5% × $10,673.22 = **$160.10**
+- Entry price = 12Z close = **$72.05**
+- ATR(14) 1H = 0.75005 → 2×ATR stop dist = **$1.5001**
+- Stop price = 72.05 − 1.5001 = **$70.5499**
+- Target price (4R) = 72.05 + 4 × 1.5001 = **$78.0504**
+- W22-H breakeven ratchet arm = 1H close ≥ 72.05 + 2×1.5001 = **$75.0502**
+- Size = $160.10 / $1.5001 = **106.725** units
+- Cost basis = 106.725 × $72.05 = **$7,689.53**
+- Cash after entry = $10,673.22 − $7,689.53 = **$2,983.69**
+
+**Trade log row appended**: 2026-07-07T12:00:00Z OPEN HYPE/USD long 106.725 @ 72.05 stop 70.5499 target 78.0504 tag entry-rule-v0.4-momentum-rule8-winner.
+
+**Notes on entry**:
+- Live tick at 13:09Z is $71.77 — already **−0.39%** below the 12Z close entry basis. Unrealized MTM −$29.88 / −0.19R immediately at wake. This is not a stop trigger (stop $70.5499 vs live $71.77 = $1.22 headroom, or −1.68% further downside required). Live tick still comfortably above 20-EMA (~$71.045).
+- If the intraday drift continues DOWN, exit-1 (2-consec-close-below-EMA20) is the next protection layer to watch. First check at midday wake 20:00Z on 19Z-just-closed bar.
+
+### TAO/USD — rule-8 loser this wake
+
+- TAO/USD FULLY passes all technicals (R1+R2+R3+R4a) with 1.5%×equity sizing possible. Blocked ONLY by rule 8 max-1-entry (HYPE wins rank). Re-evaluated at midday wake 20:00Z: if TAO still tech-PASS and rule 8 has HYPE already open, TAO becomes eligible under a re-scan. TAO is in BTC-cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} — with HYPE not in cluster, TAO entry at midday would take cluster from 0/2 → 1/2 (still eligible). Position cap 1/4 → 2/4 (still eligible).
+
+### Watchdog
+
+Ops watchdog fired 13:07:05Z, Telegram sent. **9 findings, all unchanged carryover from prior wake**: 1× A routine-06 236h stale, 1× A routine-07 236h stale (both cloud-cron heartbeats — local routines unaffected), 1× C dirty-tree 4 files (docs/sentinel_10k_reset_spec_20260704.md, scripts/replay_cache_20260629/, scripts/replay_result_20260629.json, scripts/routine07_replay_20260629.py — persistent scratchpad state), 6× D variant stale-MTM 236h (v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive). No new findings. Not blocking; flag persists.
+
+### Kill-switch state
+
+- **Daily realized+unrealized (PT 07-07)**: −$29.88 / −0.280% — CLEAR (5% loss cap, 4.72pp headroom).
+- **Consecutive losing trading days**: 2 (07-05, 07-06); 07-07 in progress. CLEAR (cap 7).
+- **Max drawdown**: 3.846% from peak $11,068.89 (cap 25%, warn 12.5%, **8.65pp headroom to warn**). CLEAR.
+- **Equity floor**: $10,643.34 > $7,500 (+$3,143.34). CLEAR.
+- **MCP**: Kraken OK. CLEAR.
+- **Regime 5a**: PASS 12/15 positive, median +1.95% (indicators.py bar-close basis; authoritative per amendment).
+- **5a-SBD**: CLEAR (12/15 » 1-positive ceiling; +1.95% » −1.0% median floor).
+- **5b cooldowns**: none active.
+- **Cluster cap (6a BTC-cluster)**: 0/2 used (HYPE not in cluster). 2 slots headroom.
+- **All Ring 3 kill switches CLEAR.**
+
+### Lessons extraction
+
+**No new lessons this wake.** The entry itself is a routine rule-8 selection among 3 tech-PASS candidates in a favorable regime. No novel patterns. Note the indicators.py vs ticker regime divergence is worth watching over next 24h — if the divergence pattern repeats (i.e., bar-close-basis reports strong PASS while ticker rolling-24h reports weak), this may become a signal-quality lesson candidate. Not writing yet (1-instance observation, not enough for a lesson).
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md, trade_log.md (tail), research_log.md (tail), lessons.md (top preview), universe.md, skills/decide.md, routines/01-overnight.md.
+- **Verified**: kill switches (all clear), slot identity bull-01-overnight confirmed, PT date label 2026-07-07 Tue confirmed.
+- **Fetched**: watchdog.py --telegram, indicators.py (720-bar convergence), kraken_multi_ticker (15 pairs live), kraken_spread HYPE + TAO.
+- **Wrote**: trade_log.md (HYPE OPEN row), portfolio.md (rebuilt with HYPE position), this research_log entry.
+- **Skipped**: Firecrawl news scan (elective — informational-only), kraken_depth (spread alone sufficient at 1.4-4.2 bps HYPE), lessons.md (no material new patterns), universe.md (not first-of-month).
+- **NOTIFY**: Telegram brief summary of HYPE OPEN queued per routine NOTIFY spec (new-entry event).

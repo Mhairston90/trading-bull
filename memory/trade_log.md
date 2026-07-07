@@ -37,3 +37,4 @@
 | 2026-07-05T10:00:00Z | CLOSE | ADA/USD | long | 24624 | 0.186604 | — | — | -0.68 | -110.94 | exit-ema20-confirm-missed-scheduler-replay |
 | 2026-07-06T16:00:00Z | OPEN | BTC/USD | long | 0.16899 | 63679.4 | 62724.55 | 67498.80 | — | — | entry-rule-v0.4-momentum |
 | 2026-07-07T03:00:00Z | CLOSE | BTC/USD | long | 0.16899 | 63125.0 | — | — | -0.58 | -93.69 | exit-ema20-confirm |
+| 2026-07-07T12:00:00Z | OPEN | HYPE/USD | long | 106.725 | 72.05 | 70.5499 | 78.0504 | — | — | entry-rule-v0.4-momentum-rule8-winner |
