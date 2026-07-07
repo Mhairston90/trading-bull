@@ -38,3 +38,4 @@
 | 2026-07-06T16:00:00Z | OPEN | BTC/USD | long | 0.16899 | 63679.4 | 62724.55 | 67498.80 | — | — | entry-rule-v0.4-momentum |
 | 2026-07-07T03:00:00Z | CLOSE | BTC/USD | long | 0.16899 | 63125.0 | — | — | -0.58 | -93.69 | exit-ema20-confirm |
 | 2026-07-07T12:00:00Z | OPEN | HYPE/USD | long | 106.725 | 72.05 | 70.5499 | 78.0504 | — | — | entry-rule-v0.4-momentum-rule8-winner |
+| 2026-07-07T18:00:00Z | CLOSE | HYPE/USD | long | 106.725 | 70.5146 | — | — | -1.02 | -163.87 | exit-stop-hit-intrabar |
