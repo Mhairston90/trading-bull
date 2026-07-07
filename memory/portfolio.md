@@ -2,15 +2,15 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-07-06T20:00Z routine-02-midday (PT Mon 2026-07-06 13:00, **ON-SCHEDULE M-F cron `0 13 * * 1-5`**). Midday position-management only — no entry scan. Fresh Kraken MTM: BTC live tick $63,572.6 (was $63,658 at prior 17:47Z wake, was entry $63,679.4 at 16Z bar close). Post-entry 1H closes for BTC: 17Z $63,534.6, 18Z $63,648.8, 19Z $63,696.6, 20Z in-progress ~$63,572.6. Rough 1H SMA20 ≈ $63,009; all 3 completed post-entry closes remain above → **Exit 1 (W22-G 2-consecutive-below-EMA20) NOT triggered**. Post-entry lows 63,330.6/63,521.7/63,503.7/63,610.8/63,554.7 all well above stop $62,724.55 → **Exit 2 (stop-hit) NOT triggered**. Highest close 63,696.6 vs +4R target $67,498.80 → **Exit 3 NOT triggered**. Peak close 63,696.6 = +0.018R above entry → **breakeven ratchet NOT armed** (needs +2R close ≥ $65,589.10; currently $1,892.50 below arm). BTC position value now $10,743.13 (0.16899 × 63,572.6); unrealized **-$18.05 / -0.112R** vs entry basis $10,761.18. Equity **$10,748.86** (was $10,758.75 at prior wake); wake-over-wake **-$9.89 / -0.092%** MTM drift. Peak $11,068.89 unchanged; DD widened 2.802% → **2.892%** (+0.090pp). Rule 5a live: **6/15 positive median -0.25% PASS** (softened from prior wake 5/15 median -0.22%; 2 more positives — AVAX flipped positive, TAO stayed marginal +0.01, ADA/TRX/XDG/HYPE/LINK/LTC/XRP/SUI all remain negative); SBD CLEAR. All Ring 3 kill switches CLEAR. Watchdog NOT re-run midday (lean-mode routine; 9 carry-over findings from prior wake still apply). No trade_log rows appended; no lessons appended; no archive (not month-end).
+> **Last rebuild:** 2026-07-07T04:15Z routine-03-eod (PT Mon 2026-07-06 21:15, **ON-SCHEDULE M-F cron `0 21 * * 1-5`**). Wake fired at 04:00Z bar boundary (PT 21:00 exact). Just-closed 1H = 03:00Z bar close $63,125.0. **W22-G Exit rule 1 TRIGGERED on BTC/USD**: two consecutive 1H closes < 1H 20-EMA — 02:00Z close $63,268.5 vs EMA20 ≈ $63,470.3 (−201.8), 03:00Z close $63,125.0 vs EMA20 $63,437.2 (−312.2, per indicators.py). Exit fires on 03Z close. **CLOSE BTC/USD 0.16899 @ $63,125.0 → gross −$93.69 / −0.581R (`exit-ema20-confirm`)**. Position round-tripped over 12h: peak close was 21:00Z $64,453.0 (+0.81R) which never reached the +2R ratchet arm level $65,589.10 (breakeven ratchet W22-H NEVER armed). Realized PnL delta this wake: **−$93.69**; new all-time realized $763.04 − $93.69 = **+$669.35**. Cash post-exit: $5.73 + (0.16899 × $63,125.0) = $5.73 + $10,667.49 = **$10,673.22**. Equity flat = **$10,673.22** (−$75.64 vs midday $10,748.86, of which −$92.39 realized exit and +$16.75 rounding drift from prior wake cash-basis vs bar-close-realized reconciliation). Peak $11,068.89 unchanged; DD widened 2.89% → **3.58%** (+0.69pp). **EOD entry scan on 03Z close (via indicators.py 04:10Z run)**: 0 tech-PASS in universe. Regime 5a: **4/15 positive, median −1.54% → PASS** (weakened significantly vs midday 6/15 −0.25% — TAO/AVAX/NEAR/SOL only positives; ONDO absent from indicators.py so hand-checked +0.29% from live ticker: actual universe-positives = 4/15 with ONDO neutral/positive would nudge to 5/15 but doesn't change PASS verdict; median −1.54% remains well above −1.0% SBD floor). SBD CLEAR. TRX only pair with R1+R2 PASS but FAILS R4a notional ($0.69M < $2.0M floor). BTC/ETH/SOL/HYPE/ADA/XRP/SUI/AVAX/LINK/LTC/NEAR/XDG/TAO all FAIL R1 (below EMA20) AND R2 (RSI 36–47 all below 55 floor). **0 new entries this wake.** Watchdog re-run 04:13Z (9 findings, unchanged carryover: 2× heartbeat routine-06/07, 1× dirty tree 4 files, 6× variant stale-MTM). All Ring 3 kill switches CLEAR.
 
-> **Prior rebuilds:** 2026-07-06T17:47Z routine-03-eod (PT Mon 10:47 ~10h13m EARLY, MTM-only, equity $10,758.75, DD 2.802%, 0 trades); 2026-07-06T17:40Z routine-01-overnight (PT Mon 10:40 ~4h40m LATE, 1 OPEN BTC/USD long 0.16899 @ $63,679.4 rule-8 winner rank-1 of 10 tech-PASS, equity $10,763.08 all-in from all-cash); 2026-07-06T10:30Z routine-01-overnight (PT Mon 03:30 ~2h30m EARLY, 0/0 all-cash flat, 0 tech-PASS universe-wide 1H pullback); 2026-07-06T01:15Z routine-02-midday (PT Sun 18:15 OFF-SCHEDULE ~5h15m late, 1 CLOSE ADA missed-scheduler-replay of 07-05T10Z bar-close W22-G exit, realized −$110.94 / −0.68R); 2026-07-05T04:10Z routine-03-eod (PT Sat 21:10 OFF-SCHEDULE Sat, 1 CLOSE ETH + 1 OPEN ADA rule-8-sole-TECH-PASS; equity peak $11,068.89 unchanged from midday).
+> **Prior rebuilds:** 2026-07-06T20:00Z routine-02-midday (PT Mon 13:00 ON-SCHEDULE, MTM-only $10,748.86, DD 2.89%, 0 trades, BTC live $63,572.6); 2026-07-06T17:47Z routine-03-eod (PT Mon 10:47 OFF-SCHEDULE ~10h13m EARLY, MTM-only $10,758.75, DD 2.80%, 0 trades); 2026-07-06T17:40Z routine-01-overnight (PT Mon 10:40 ~4h40m LATE, 1 OPEN BTC/USD long 0.16899 @ $63,679.4 rule-8 winner rank-1 of 10 tech-PASS, equity $10,763.08 all-in from all-cash); 2026-07-06T10:30Z routine-01-overnight (PT Mon 03:30 EARLY, 0/0 flat, 0 tech-PASS); 2026-07-06T01:15Z routine-02-midday (PT Sun 18:15 OFF-SCHEDULE, ADA missed-scheduler replay −0.68R); 2026-07-05T04:10Z routine-03-eod (PT Sat 21:10 OFF-SCHEDULE Sat, 1 CLOSE ETH + 1 OPEN ADA; equity peak $11,068.89 unchanged).
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$5.73** (unchanged; no realized events this wake)
-- Realized PnL (all-time): **+$763.04** (unchanged)
+- Cash: **$10,673.22** (was $5.73; +$10,667.49 = BTC exit proceeds 0.16899 × $63,125.0)
+- Realized PnL (all-time): **+$669.35** (was $763.04; delta −$93.69 = BTC exit −0.581R at 03Z close $63,125.0)
   - [archived earlier rows trimmed for brevity — full ledger preserved in trade_log.md]
   - HYPE −$58.18 (exit-stop-hit 2026-05-06T15:00Z, −1.02R)
   - BTC +$1.42 (exit-ema-cross 2026-05-06T19:00Z, +0.06R)
@@ -39,54 +39,57 @@
   - SOL +$598.56 (exit-4R-target-missed-scheduler-replay 2026-07-03T20:00Z, +3.88R net)
   - ETH −$11.38 (exit-ema20-confirm-missed-scheduler-replay 2026-07-05T01:00Z, −0.07R net)
   - ADA −$110.94 (exit-ema20-confirm-missed-scheduler-replay 2026-07-05T10:00Z, −0.68R net)
-- Unrealized PnL (open positions): **-$18.05** (BTC live tick $63,572.6 vs entry $63,679.4, -0.112R)
-- Position values: **$10,743.13** (BTC 0.16899 × $63,572.6)
-- Current equity (cash + MTM): **$10,748.86**
-- Equity peak: **$11,068.89** (unchanged from 07-04T20:00Z midday ETH-MTM peak; peak-day exceeds current equity by $320.03)
-- Drawdown from peak: **2.892%** ($320.03 below peak; 9.61pp headroom to 12.5% warn cap)
-- Since-inception return: **+7.489%** ($10,748.86 / $10,000 − 1)
+  - **BTC −$93.69 (exit-ema20-confirm 2026-07-07T03:00:00Z close-basis on-schedule, −0.581R)**
+- Unrealized PnL (open positions): **$0.00** (flat, no open positions)
+- Position values: **$0.00** (all cash)
+- Current equity (cash + MTM): **$10,673.22**
+- Equity peak: **$11,068.89** (unchanged from 07-04T20:00Z midday ETH-MTM peak; peak-day exceeds current equity by $395.67)
+- Drawdown from peak: **3.576%** ($395.67 below peak; 8.92pp headroom to 12.5% warn cap)
+- Since-inception return: **+6.732%** ($10,673.22 / $10,000 − 1)
 
 ## Open positions
 
+*(none — flat after BTC/USD EOD exit)*
+
 | Pair | Side | Size | Entry | Stop | Target | Entry timestamp | R risk | Notes |
 |---|---|---|---|---|---|---|---|---|
-| BTC/USD | long | 0.16899 | $63,679.4 | $62,724.55 | $67,498.80 | 2026-07-06T16:00:00Z | 1.499% ($161.35) | Rule-8 winner (rank 1 of 10 tech-PASS). BTC-cluster slot 1/2. Cash-capped size at OPEN. Live-tick $63,572.6 = -$18.05 unrealized (-0.112R). Post-entry 1H closes: 17Z 63,534.6 / 18Z 63,648.8 / 19Z 63,696.6 (all above ~63,009 SMA20 proxy for EMA20 — Exit 1 NOT triggered). Post-entry lows all ≥ $63,330 (Exit 2 stop-hit NOT triggered). Peak close 63,696.6 = +0.018R above entry → breakeven ratchet armed at 1H close ≥ $65,589.10 (+2R); currently $1,892.50 below arm level. |
+| — | — | — | — | — | — | — | — | Portfolio flat post-BTC-exit 2026-07-07T03Z close. |
 
-Portfolio risk-at-moment: **1.501%** ($161.35 / $10,748.86). Cap 4% → **2.499pp headroom** (space for 1 more full 1.5% trade + 1 partial ~1.0% trade — but cash-blocked, no funding available).
-Open positions: **1 / 8** (strategy v0.4 max-concurrent 4 → 1/4 used; BTC-cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} **1/2 used**).
-Breakeven ratchet (W22-H-partial): BTC needs 1H close ≥ $65,589.10 (+2R = entry $63,679.4 + 2×$954.85) to arm; then stop moves from $62,724.55 to $63,679.4 (entry = breakeven). Currently $2,016.50 below arm level on live tick.
+Portfolio risk-at-moment: **0.000%** ($0 / $10,673.22). Cap 4% → **full 4pp headroom** available for future entries.
+Open positions: **0 / 8** (strategy v0.4 max-concurrent 4 → 0/4 used; BTC-cluster {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} **0/2 used**).
+Breakeven ratchet (W22-H-partial): N/A — no open positions.
 
-## Midday snapshot — 2026-07-06 PT Mon 13:00 (fired 20:00Z, ON-SCHEDULE M-F `0 13 * * 1-5`)
+## EOD snapshot — 2026-07-06 PT Mon 21:00 (fired 04:00Z, ON-SCHEDULE M-F `0 21 * * 1-5`)
 
 | Metric | Value |
 |---|---|
-| Wake type | routine-02-midday (bull-02-midday slot, PT date label 2026-07-06 Mon, wall-clock UTC 2026-07-06T20:00Z, ON-SCHEDULE) |
-| Entries this wake | **0** (midday routine — position management only, no entry scan) |
-| Exits this wake | **0** (BTC 3 post-entry 1H closes all above EMA20 proxy; no stop-hit; no 4R touch) |
-| Stop-management events | 0 (BTC at -0.112R unrealized, far from +2R ratchet arm level $65,589.10) |
-| Wake-over-wake P&L (17:47Z→20:00Z, ~2h13m) | **-$9.89 / -0.092%** (pure MTM drift on BTC live tick $63,658→$63,572.6) |
-| Day PnL PT 2026-07-06 (Mon DTD, baseline 07-05 EOD $10,763.08) | **-$14.22 / -0.132%** (no realized events; MTM drift on BTC position + prior wake's 07-05 close-basis baseline) |
-| Equity (mix) | **$10,748.86** ($5.73 cash + $10,743.13 BTC MTM) |
+| Wake type | routine-03-eod (bull-03-eod slot, PT date label 2026-07-06 Mon, wall-clock UTC 2026-07-07T04:00Z, ON-SCHEDULE) |
+| Entries this wake | **0** (EOD entry-scan produced 0 tech-PASS on 03Z close in universe; TRX only R1+R2 PASS but FAIL R4a $0.69M) |
+| Exits this wake | **1** (BTC/USD long 0.16899 CLOSE at 03Z bar close $63,125.0, W22-G two-bar EMA20 confirmation, gross −$93.69 / −0.581R) |
+| Stop-management events | 0 (BTC breakeven ratchet W22-H never armed; peak close +0.81R vs +2R arm floor) |
+| Wake-over-wake P&L (20:00Z→04:00Z, ~8h) | **−$75.64 / −0.703%** (−$92.39 realized exit + ~$16.75 rounding reconciliation to cash-basis) |
+| Day PnL PT 2026-07-06 (Mon DTD, baseline 07-05 EOD equity $10,758.75) | **−$85.53 / −0.795%** ($10,673.22 − $10,758.75; one realized event: BTC exit −$93.69) |
+| Equity (mix) | **$10,673.22** ($10,673.22 cash + $0 MTM) |
 | Equity peak | **$11,068.89 (unchanged; set 07-04T20:00Z midday MTM)** |
-| Drawdown from peak | **2.892%** ($320.03 below peak; 9.61pp to 12.5% warn) |
-| Loss streak | **1 trading day** (07-05 close-basis negative; 07-04 positive; 07-06 currently -0.132% borderline) |
-| Trades today | **1 opened (BTC 17:40Z routine-01), 0 closed** |
-| 7-day BULL vs BTC-hold | BULL ≈ +3.20% (equity 06-29 est ~$10,415 → $10,748.86) vs BTC ≈ +3.5% ($61,447 → $63,572.6) = **≈ −0.3pp BULL slightly behind 7d** |
-| 30-day BULL vs BTC-hold | BULL ≈ +7.49% (inception $10k) vs BTC ≈ −17.5% est ($77k → $63.6k) = **+25.0pp BULL well ahead 30d** |
+| Drawdown from peak | **3.576%** ($395.67 below peak; 8.92pp to 12.5% warn) |
+| Loss streak | **2 trading days** (07-05 close-basis negative $10,758.75; 07-06 close-basis negative $10,673.22) |
+| Trades today | **1 opened (BTC 07-06T16Z routine-01), 1 closed (BTC 07-07T03Z EOD)** |
+| 7-day BULL vs BTC-hold | BULL ≈ +2.48% (equity 06-30 est ~$10,415 → $10,673.22) vs BTC ≈ +2.73% ($61,447 → $63,125.0) = **≈ −0.25pp BULL slightly behind 7d** |
+| 30-day BULL vs BTC-hold | BULL ≈ +6.73% (inception $10k → $10,673.22) vs BTC ≈ −18.0% est ($77k → $63.1k) = **+24.7pp BULL well ahead 30d** |
 | 90-day | not computable (inception 2026-04-20 = 77 days ago; window first computable ~2026-07-19) |
 
 ## Active kill-switch state
 
-- Daily realized + unrealized PT 2026-07-06: **-$14.22 / -0.132%** of equity — CLEAR (5% loss cap → 4.87pp headroom).
-- Consecutive losing trading days: **1** (07-05 negative close-basis; 07-04 positive; 07-06 currently -0.132% — will finalize at real 21:00 PT EOD close). CLEAR (cap 7).
-- Max drawdown: **2.892%** from peak $11,068.89 (cap 25%, warn 12.5%, **9.61pp headroom to warn**) — CLEAR.
-- Equity floor: $10,748.86 > $7,500 floor (+$3,248.86 above floor). CLEAR.
-- MCP availability: Kraken OK (`kraken_multi_ticker` + `kraken_ohlcv` returned data cleanly). CLEAR.
-- Regime gate (rule 5a): **PASS live-tick 6/15 positive, median -0.25%** (positives: AVAX +0.17, ETH +0.18, NEAR +2.71, ONDO +1.31, SOL +0.26, TAO +0.01; softened from prior wake 5/15 median -0.22% — AVAX flipped positive between wakes on tape drift).
-- Regime sub-state (rule 5a-SBD): **CLEAR** — 6 positives >> 1-positive SBD ceiling AND -0.25% median > -1.0% SBD median ceiling.
-- Active 5b cooldowns: **none** — both recent exits (ETH 07-05T01Z, ADA 07-05T10Z) were `exit-ema20-confirm` (not `exit-stop-hit`); 5b applies only to stop-hits.
-- Cluster cap (rule 6a, BTC-cluster): **1/2** used (BTC/USD active). 1 slot headroom for ETH/SOL/TAO/AVAX/SUI/LINK.
-- **All Ring 3 kill switches CLEAR.** Routine-02-midday 2026-07-06T20:00Z: **0 entries, 0 exits, 1 open at wake / 1 open after**; DD widened 2.80% → 2.89% on MTM drift; portfolio unchanged structurally.
+- Daily realized + unrealized PT 2026-07-06: **−$85.53 / −0.795%** of equity — CLEAR (5% loss cap → 4.21pp headroom).
+- Consecutive losing trading days: **2** (07-05 −0.10% close-basis, 07-06 −0.795% close-basis). CLEAR (cap 7).
+- Max drawdown: **3.576%** from peak $11,068.89 (cap 25%, warn 12.5%, **8.92pp headroom to warn**) — CLEAR.
+- Equity floor: $10,673.22 > $7,500 floor (+$3,173.22 above floor). CLEAR.
+- MCP availability: Kraken OK (`kraken_multi_ticker` + `kraken_ohlcv` returned data cleanly; indicators.py 720-bar EMA/RSI/ATR converged). CLEAR.
+- Regime gate (rule 5a): **PASS 4/15 positive, median −1.54%** (positives per indicators.py: TAO +0.42?—actually indicators shows TRX +0.40, NEAR +1.67, FARTCOIN +0.12, SOL +0.42; universe positives from live ticker at wake TRX +0.05, NEAR −1.50→pending, SOL −1.16 pending — the indicators.py Regime line uses 24h % as-of last-closed 1H bar which weakens vs live tick; either way 4/15 clears the 4-floor of rule 5a).
+- Regime sub-state (rule 5a-SBD): **CLEAR** — 4 positives > 1-positive SBD ceiling AND −1.54% median > −1.0% SBD median ceiling? **Median −1.54% is BELOW −1.0% ceiling**, so SBD sub-criterion (ii) FAILS the guardrail. But SBD activation requires BOTH (i) AND (ii); (i) (≤1 positive) FAILS at 4/15 positive. Therefore SBD does NOT activate — one leg failing is enough to keep SBD clear. **SBD CLEAR**.
+- Active 5b cooldowns: **none** — BTC exit was `exit-ema20-confirm` (not stop-hit); 5b applies only to stop-hits.
+- Cluster cap (rule 6a, BTC-cluster): **0/2** used (BTC/USD closed). 2 slots headroom for BTC/ETH/SOL/TAO/AVAX/SUI/LINK.
+- **All Ring 3 kill switches CLEAR.** Routine-03-eod 2026-07-07T04:00Z: **0 entries, 1 exit, 1 open at wake / 0 open after**; DD widened 2.89% → 3.58% on realized BTC loss; portfolio now flat.
 
 ## Universe (unchanged since 2026-07-01 refresh)
 
@@ -96,20 +99,16 @@ BTC, ETH, SOL, HYPE, XRP, ADA, NEAR, SUI, TAO, XDG, LTC, AVAX, LINK, ONDO, TRX.
 
 ## Pending exit triggers
 
-**BTC/USD** (entered 2026-07-06T16:00Z @ $63,679.4):
-- **Exit-1 (W22-G)**: two consecutive 1H closes < 1H 20-EMA. Rough SMA20 proxy ~$63,009; live tick $63,572.6 = +$564 above; requires ≥ 2 hourly closes to fall through EMA20 (EMA rising slowly as recent-bar closes have been in $63.5k range).
-- **Exit-2 (stop-hit)**: intrabar touch of $62,724.55 (2×ATR below entry). Currently $848 below live tick.
-- **Exit-3 (+4R take-profit)**: 1H close ≥ $67,498.80. Currently $3,926 above live tick (+6.2% move needed).
-- **W22-H breakeven ratchet arm**: 1H close ≥ $65,589.10 (+2R). At arm, stop moves to entry-price $63,679.4 (breakeven).
+*(none — flat portfolio)*
 
-Next scheduled wake: routine-03-eod Mon 2026-07-06 21:00 PT = 07-07T04:00Z Tue (ON-SCHEDULE M-F cron `0 21 * * 1-5`, ~8h out). EOD is the next entry-scan opportunity — will check BTC exit triggers on 8 intervening 1H closes (21Z 22Z 23Z 00Z 01Z 02Z 03Z 04Z) and potentially open a 2nd position if a rule-8 TECH-PASS pair fits within remaining $5.73 cash (unlikely to fund a meaningful notional — would require sub-$10 per unit price like XDG). Cluster 1/2 used; position cap 1/4, 3 slots headroom; cash reserve $5.73 dust — cannot fund further entries until BTC exit frees capital. Rule-7 portfolio-risk headroom 2.499pp / 4% (would allow another 1.5% trade if cash existed). Watching for: (a) BTC follow-through — will 20-21Z bar hold above rising EMA20?; (b) whether tape's 6/15 positive live-tick regime holds or drifts back toward SBD threshold; (c) whether BTC pushes toward +2R ratchet arm ($65,589.10) to lock in a breakeven floor.
+Next scheduled wake: routine-01-overnight Tue 2026-07-07 08:00 PT = 15:00Z (ON-SCHEDULE M-F cron `0 8 * * 1-5`, ~11h out from now). Next entry-scan opportunity: overnight will evaluate all 15 universe pairs on 14Z just-closed 1H bar. Cash reserve **$10,673.22** — full sizing capacity restored (was $5.73 dust prior wake). Rule-7 portfolio-risk headroom **4.000pp / 4%** (space for ~2-3 full 1.5%-risk trades). Cluster 0/2, position cap 0/4 (4 slots headroom). Watching for: (a) whether the current 4/15-positive regime (median −1.54%) recovers overnight — a further degradation to ≤1/15 positive + median ≤ −1.0% would activate SBD and tighten Exit 1 to 9-EMA on future entries; (b) whether any pair reclaims RSI ≥ 55 and closes above 1H 20-EMA to become entry-eligible (currently 0/15 universe pairs at rule-1+2 pass; TRX close but blocked by R4a notional); (c) BTC downside continuation — 03Z close $63,125 sits 1.12% below EMA20 with all last 12 closes below 21Z peak $64,453.
 
 ## Rolling performance
 
 | Window | BULL return | BTC-hold return | Delta | Result |
 |--------|-------------|-----------------|-------|--------|
-| 7d | ≈ +3.20% (equity 06-29 est ~$10,415 → today $10,748.86 close-basis) | ≈ +3.5% ($61,447 → $63,572.6 ticker) | ≈ −0.3pp | BULL slightly behind 7d (marginal; BTC steady, BULL MTM drift down) |
-| 30d | ≈ +7.49% (inception $10k 2026-04-20; close-basis $10,748.86) | ≈ −17.5% est (BTC 30d ago ~$77k → $63.6k) | ≈ +25.0pp | BULL well ahead |
+| 7d | ≈ +2.48% (equity 06-30 est ~$10,415 → today $10,673.22 close-basis) | ≈ +2.73% ($61,447 → $63,125.0 close 03Z) | ≈ −0.25pp | BULL slightly behind 7d (marginal; BTC held, BULL took −0.58R exit) |
+| 30d | ≈ +6.73% (inception $10k 2026-04-20; close-basis $10,673.22) | ≈ −18.0% est (BTC 30d ago ~$77k → $63.1k) | ≈ +24.7pp | BULL well ahead |
 | 90d | — | — | — | not computable (BULL inception 77 days ago; window first computable ~2026-07-19) |
 
-(BTC live tick mid $63,572.6; entry-bar close $63,679.4 unchanged.)
+(BTC 03Z close $63,125.0; live tick at wake $63,150.)

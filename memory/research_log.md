@@ -6602,3 +6602,110 @@ Today is **not** the last trading day of the month (07-06, not 07-31). No archiv
 2026-07-06T17:52:18Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-07-06T17:53:17Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-07-07T04:15Z routine-03-eod (PT Mon 21:15 — ON-SCHEDULE M-F cron `0 21 * * 1-5`; wake fired 21:00 PT = 04:00Z bar boundary exact)
+
+### Wake summary
+
+**Slot identity verified**: `bull-03-eod`, EOD routine content confirmed. PT date label at fire time: **2026-07-06** (wall-clock 04:00Z Tue = 21:00 PT Mon; per date-labeling guard). No cron/content mismatch.
+
+**Position state at wake**: 1 open (BTC/USD long 0.16899 @ entry $63,679.4, opened 07-06T16Z routine-01 as rule-8 winner rank-1 of 10 tech-PASS). Cash $5.73 dust residual.
+
+**Just-closed 1H = 03:00Z bar** (close $63,125.0). Wake fires exact bar boundary; no fractional-bar drift.
+
+### Post-close exit check (03Z just-closed 1H candle)
+
+- **BTC/USD** (open, entered 07-06T16:00Z @ $63,679.4).
+  - **W22-G Exit rule 1 evaluation** (two consecutive 1H closes < 20-EMA):
+    - 02Z close $63,268.5 vs EMA20 ≈ $63,470.3 → close BELOW by $201.8 (bar 1 of 2)
+    - 03Z close $63,125.0 vs EMA20 $63,437.2 (per indicators.py 720-bar converged) → close BELOW by $312.2 (bar 2 of 2)
+    - **TRIGGER FIRES on 03Z close.** Both bars confirmed below EMA20; second-bar close closes the trade.
+  - **W22-H breakeven ratchet status**: NEVER armed. Post-entry peak close was 21:00Z $64,453.0 (+0.81R above entry $63,679.4; short of +2R arm level $65,589.10 by $1,136 / +$2R needed $1,909.7). Position exits at loss because ratchet never activated.
+  - **Exit-2 (stop-hit) evaluation**: intrabar low over 12 post-entry bars was 03Z low $63,110.1 — remains $386 above stop $62,724.55. Stop NOT hit.
+  - **Exit-3 (+4R target)**: peak close 21Z $64,453 = $3,046 below +4R target $67,498.80. Never in range.
+  - **Executed CLOSE**: 0.16899 × $63,125.0 = $10,667.49 exit proceeds; entry basis $10,761.18; gross PnL **−$93.69 / −0.581R** (`exit-ema20-confirm`). Reason tag on-schedule (no missed-scheduler suffix — wake fired at bar close boundary).
+  - **12h trajectory review** (entry 16Z → exit 03Z next day):
+    - 17Z 63,534.6 / 18Z 63,648.8 / 19Z 63,696.6 / 20Z 63,783.3 / 21Z **64,453.0 peak** / 22Z 64,204.4 / 23Z 64,005.1 / 00Z 64,162.4 / 01Z 63,791.0 / 02Z 63,268.5 / 03Z 63,125.0
+    - Peak-to-exit drawdown: $1,328 / −1.39R decline over 6h. Classic recovery-spike failure — 15Z spike bar $61,998 → $63,490.6 (+$1,494 / +2.4% single-bar) built the entry setup but couldn't hold above EMA20 that subsequently caught up.
+
+### Entry scan (universe, per indicators.py 04:10Z run on 03Z just-closed bar)
+
+**Regime (indicators.py)**: 4/15 positive 24h, median −1.54% → **5a PASS** (4-positive floor exactly met; 0-positive cushion). **5a-SBD CLEAR** (i-leg 4/15 » 1 ceiling → SBD requires BOTH legs; automatic exit despite ii-leg −1.54% being below −1.0% floor).
+
+**Per-pair rules-1-2-2a-3-4a evaluation (03Z close, 720-bar EMA/RSI/ATR converged)**:
+
+| Pair | R1 (>EMA20) | R2 (RSI≥55) | R2a (≤80) | R3 (4H>EMA50) | R4a notional | Verdict |
+|---|---|---|---|---|---|---|
+| BTC/USD | FAIL −312.2 | FAIL RSI 46.8 | OK | PASS +1,113 | OK $214.94M | FAIL R1+R2 |
+| ETH/USD | FAIL −13.67 | FAIL RSI 44.4 | OK | PASS +56.3 | OK $52.48M | FAIL R1+R2 |
+| SOL/USD | FAIL −0.46 | FAIL RSI 46.5 | OK | PASS +2.26 | OK $24.71M | FAIL R1+R2 |
+| HYPE/USD | FAIL −0.65 | FAIL RSI 45.9 | OK | PASS +2.10 | OK $12.31M | FAIL R1+R2 |
+| XRP/USD | FAIL −0.012 | FAIL RSI 42.0 | OK | PASS +0.016 | OK $25.69M | FAIL R1+R2 |
+| SUI/USD | FAIL −0.010 | FAIL RSI 41.1 | OK | PASS +0.0002 | OK $10.27M | FAIL R1+R2 |
+| TAO/USD | FAIL −2.98 | FAIL RSI 41.6 | OK | FAIL −1.87 | OK $2.60M | FAIL R1+R2+R3 |
+| XDG/USD | FAIL −0.0013 | FAIL RSI 36.4 | OK | FAIL −0.0008 | OK $3.90M | FAIL R1+R2+R3 |
+| NEAR/USD | FAIL −0.020 | FAIL RSI 46.9 | OK | PASS +0.057 | OK $2.12M | FAIL R1+R2 |
+| ADA/USD | FAIL −0.0026 | FAIL RSI 40.5 | OK | PASS +0.0093 | OK $9.21M | FAIL R1+R2 |
+| LINK/USD | FAIL −0.091 | FAIL RSI 41.0 | OK | PASS +0.115 | FAIL $1.84M | FAIL R1+R2+R4a |
+| LTC/USD | FAIL −0.72 | FAIL RSI 37.4 | OK | PASS +0.15 | OK $2.85M | FAIL R1+R2 |
+| AVAX/USD | FAIL −0.093 | FAIL RSI 40.8 | OK | PASS +0.022 | OK $3.64M | FAIL R1+R2 |
+| TRX/USD | PASS +0.0010 | PASS RSI 59.7 | OK | PASS +0.006 | **FAIL $0.69M** | FAIL R4a notional |
+| ONDO/USD | (indicators.py did not emit row — coverage gap) | — | — | — | live 24h −1.36% weak | SKIP (missing indicator run — no PASS-verdict possible) |
+
+**Result: 0 tech-PASS in universe.** No news/sentiment scan needed (informational-only in v0.2 and no candidates to evaluate). **No entries this wake.**
+
+**Notable near-misses**:
+- **TRX/USD**: only pair with R1+R2 PASS (close 0.329655 above EMA20 by 0.0010, RSI 59.7 = +4.73 over floor); R3 also PASS (4H close +0.006 above EMA50). Blocked by R4a — 24h notional $0.69M is 66% below the $2.0M floor. TRX has been notional-blocked essentially all June/July; no strategic action.
+- **BTC** (ex-position): entered at 15-16Z recovery spike, now sits at RSI 46.8 with close $312 below EMA20 that itself sits above 03Z close. Full mean-reversion from the entry setup.
+
+### Watchdog
+
+Ops watchdog fired 04:13:29Z, Telegram sent. **9 findings, all unchanged carryover from prior wake**: 1× A routine-06 228h stale, 1× A routine-07 227h stale (both cloud-cron heartbeats — local routines unaffected), 1× C dirty-tree 4 files (`docs/sentinel_10k_reset_spec_20260704.md`, `scripts/replay_cache_20260629/`, `scripts/replay_result_20260629.json`, `scripts/routine07_replay_20260629.py` — persistent scratchpad state), 6× D variant stale-MTM 228h (v0.12-sbd-exit, v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive). No new findings. Not blocking; flag persists.
+
+### Day summary — PT 2026-07-06
+
+- **Day PnL (PT DTD, vs 07-05 EOD baseline $10,758.75)**: **−$85.53 / −0.795%** (one realized event: BTC exit −$93.69; MTM drift +$8.16 from prior wake close-basis reconciliation).
+- **Trades today**: 1 opened (BTC 07-06T16Z routine-01), 1 closed (BTC 07-07T03Z EOD).
+- **Realized events today**: −$93.69 (BTC exit).
+- **Equity**: **$10,673.22** ($10,673.22 cash + $0 MTM, flat).
+- **Equity peak**: **$11,068.89** (unchanged; set 07-04T20:00Z).
+- **Drawdown from peak**: **$395.67 / 3.576%** (widened 0.68pp vs prior wake 2.892% on realized BTC loss).
+- **Loss streak (trading days close-basis)**: **2** (07-05 close $10,758.75 ≈ −0.10% vs 07-04 EOD; 07-06 close $10,673.22 = −0.795%).
+- **7-day BULL vs BTC-hold** (rolling): BULL ≈ +2.48% (equity 06-30 est $10,415 → $10,673.22) vs BTC ≈ +2.73% ($61,447 → $63,125.0 close 03Z) = **−0.25pp BULL slightly behind 7d**.
+- **30-day BULL vs BTC-hold** (rolling): BULL ≈ +6.73% (inception $10k → $10,673.22) vs BTC ≈ −18.0% est ($77k → $63.1k) = **+24.7pp BULL well ahead 30d**.
+- **90-day**: not computable (inception 2026-04-20 = 77 days ago; first computable ~2026-07-19).
+
+### Kill-switch state
+
+- **Daily realized+unrealized (PT 07-06)**: −$85.53 / −0.795% — CLEAR (5% loss cap, 4.21pp headroom).
+- **Consecutive losing trading days**: 2 (07-05, 07-06). CLEAR (cap 7).
+- **Max drawdown**: 3.576% from peak $11,068.89 (cap 25%, warn 12.5%, **8.92pp headroom to warn**). CLEAR.
+- **Equity floor**: $10,673.22 > $7,500 (+$3,173.22). CLEAR.
+- **MCP**: Kraken OK. CLEAR.
+- **Regime 5a**: PASS 4/15 positive at exact floor, median −1.54%.
+- **5a-SBD**: CLEAR (i-leg 4/15 » 1 keeps SBD off despite ii-leg median −1.54% below −1.0% floor; SBD requires BOTH legs).
+- **5b cooldowns**: none active — BTC exit was `exit-ema20-confirm` (not stop-hit); no 24h re-entry block on BTC.
+- **Cluster cap (6a BTC-cluster)**: 0/2 used (BTC/USD closed). 2 slots headroom.
+- **All Ring 3 kill switches CLEAR.**
+
+### Lessons extraction
+
+**No new lessons this wake.** The BTC round-trip is a familiar archetype:
+- **Not a novel gap**: the 12h peak-to-close decline (+0.81R peak → −0.58R exit = 1.39R give-back) sits inside the pre-existing `2026-05-15 winner round-tripped` lesson archetype. That lesson was already addressed by W22-H breakeven ratchet (approved 05-20); the ratchet did NOT arm here because peak fell $1,136 short of the +2R threshold. This is exactly the "ratchet doesn't help when winner doesn't reach +2R" case which is a known design tradeoff (ratchet arms only at +2R by design, so a +0.81R peak trade cannot be protected by it).
+- **Not a novel entry-timing gap**: the 15Z spike entry (single-bar +2.4% recovery from $61,998 to $63,490.6, then 16Z entry-bar $63,679.4 close) resembles the `2026-06-12 entry-timing patience` lesson archetype — but that lesson emphasizes waiting for non-borderline signals across MULTIPLE regime-recovery wakes, not single-bar spike tops. Nothing to add.
+- **Rule-8 rank-1 selection was correct** by strategy given 10 tech-PASS at 15Z bar-close entry-scan — no strategy critique here.
+
+No lessons appended (routine caps at 2/day and only when material; today's exit is within known lesson coverage).
+
+### Monthly archive check
+
+Today is **not** the last trading day of the month (07-06 Mon, not 07-31). Next month-end archive routine due 2026-07-31 EOD. No archive action.
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md, trade_log.md (tail), research_log.md (tail), lessons.md, routines/03-eod.md.
+- **Verified**: kill switches (all clear), slot identity `bull-03-eod` confirmed, PT date label 2026-07-06 confirmed at fire-time.
+- **Fetched**: kraken_multi_ticker (15 pairs), kraken_ohlcv XBTUSD 1h 30 bars, indicators.py 720-bar EMA/RSI/ATR converged run, watchdog scan+telegram alert.
+- **Wrote**: trade_log.md (BTC CLOSE row 07-07T03Z), portfolio.md rebuilt (flat post-exit), this research_log EOD row.
+- **Skipped**: lessons.md (no material new patterns beyond existing lesson coverage); archive (not month-end).
+- **NOTIFY**: EOD Telegram card sent per `skills/telegram.md` mandatory-daily-card rule.
