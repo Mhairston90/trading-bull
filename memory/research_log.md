@@ -6841,3 +6841,87 @@ Ops watchdog fired 13:07:05Z, Telegram sent. **9 findings, all unchanged carryov
 2026-07-07T17:40:02Z | allocation | day-gate | not Sunday, skipping | no action
 
 2026-07-07T20:00Z | routine-02-midday | PT Tue 2026-07-07 13:00 **ON-SCHEDULE M-F cron `0 13 * * 1-5`** +0min drift | pre-wake 1 open (HYPE/USD long 106.725 @ $72.05 entry 07-07T12Z rule-8 winner, stop $70.5499, target $78.0504, 6 bars held 12Z-17Z closed); pulled `kraken_multi_ticker` (15 universe pairs) + `kraken_ticker` HYPE spot + `kraken_ohlcv` HYPE 12× 1H bars 09Z→20Z. **EXIT DETECTED — HYPE stop pierced intrabar during 07-07T18:00Z 1H bar**: bar OHLC = open $71.61, high $71.86, **low $70.14 (below stop $70.5499 by $0.4099)**, close $70.19. Per routine spec ("if price has pierced [2×ATR stop] intrabar, close at stop price"), and following SOL 2026-06-27T19:00Z precedent, exit fill = stop − 0.05% slippage = $70.5499 × 0.9995 = **$70.5146**. Trade log row appended: `2026-07-07T18:00:00Z | CLOSE | HYPE/USD | long | 106.725 | 70.5146 | — | — | -1.02 | -163.87 | exit-stop-hit-intrabar`. Post-exit cash $2,983.69 + $7,525.67 proceeds = **$10,509.36 (flat)**. All-time realized PnL $669.35 − $163.87 = **+$505.48**. Wake-over-wake P&L 13:07Z→20:00Z = −$133.98 = −1.258% ($10,643.34 → $10,509.36). Day P&L 07-07 = −$163.86 = −1.535% (fully realized). Drawdown from peak $11,068.89 = **5.055%** (headroom to 12.5% warn = 7.445pp). Loss streak: 2 confirmed prior + today's provisional 3rd (cap 7, headroom 4). No new entries per routine spec (midday is position-management only). Rule 5b cooldown activated on HYPE: no re-entry until 2026-07-08T18:00Z (spans EOD 07-07T04Z Wed + overnight 07-08T13Z). Bar-by-bar post-entry price walk: 12Z close $72.05 (entry), 13Z close $71.29 (below entry, above stop, above 20-EMA), 14Z close $72.34 (recovery), 15Z close $71.95, 16Z close $71.67, 17Z close $71.63, **18Z bar low $70.14 pierces stop $70.5499 → exit at $70.5146**. Bars 19Z and 20Z (post-exit) continued weak: 19Z close $70.15 (still below stop), 20Z in-progress at $70.20. The 18Z pierce came ~$1.51 (2.1%) below the 12Z entry close on a 1.72% intrabar drop (72.05 → 70.14). **Live-ticker snapshot at 20:00Z for regime read (not authoritative — bar-close basis via indicators.py is authoritative, but noted for EOD watch)**: 1/15 positive (TRX +0.54%), median 24h % change ≈ −1.24% across 15 pairs (BTC −0.41, ETH −0.63, SOL −0.85, HYPE −0.54, XRP −2.13, ADA −4.04, NEAR −1.33, SUI −1.55, TAO −0.54, XDG −2.40, LTC −1.74, AVAX −2.54, LINK −1.24, ONDO −0.57, TRX +0.54). Under bar-close basis a similar reading at 07-08T04Z EOD wake would fail rule 5a outright (≤4 positive threshold: 1 << 4) AND enter SBD sub-state (≤1 positive AND median ≤ −1.0%: both satisfied on this live snap). Not acting on this — regime is evaluated on bar close by indicators.py at the next EOD wake; live-tick snapshot is diagnostic-only. Kill switches: daily loss −1.535% CLEAR (cap 5%, headroom 3.465pp); DD 5.055% CLEAR (warn 12.5%, headroom 7.445pp); equity $10,509.36 > $7,500 floor CLEAR (+$3,009.36 above); consec losing days 2+today provisional 3 CLEAR (cap 7, headroom 4); MCP OK. Watchdog carry-over (9 findings from 13:07Z overnight — not re-run this lean midday wake): 2× A heartbeat routine-06/07 stale (236h+), 1× C dirty-tree 4 files (docs/sentinel_10k_reset_spec_20260704.md + scripts/replay_cache_20260629/ + scripts/replay_result_20260629.json + scripts/routine07_replay_20260629.py — all untracked as of overnight wake), 6× D variant stale-MTM 236h+. All Ring 3 kill switches CLEAR. Telegram ALERT dispatched (routine spec: "Any exit happened (e.g. stop hit intrabar)" → mandatory).
+
+
+---
+
+## 2026-07-08T04:10Z routine-03-eod (PT Tue 2026-07-07 21:10, ON-SCHEDULE cron `0 21 * * 1-5`, +10min drift)
+
+**Slot identity confirmed**: `bull-03-eod` slot; PT calendar date label 2026-07-07 Tue (fired at 21:10 PT = 04:10Z Wed — per date-labeling guard, EOD wake takes PT-date-at-fire-time = 2026-07-07). Cron `0 21 * * 1-5` valid for Tue.
+
+**Position state at wake**: **0 open (flat)** — carried forward from routine-02-midday 2026-07-07T20:00Z (HYPE stop-hit-intrabar at 07-07T18Z closed the last position). Cash $10,509.36; equity $10,509.36.
+
+**Just-closed 1H bar = 03:00Z** (covers 03:00Z→04:00Z UTC; closed at 04:00Z; wake fired 04:10Z = +10min drift).
+
+### Post-close exit check
+
+- No open positions → no exit checks required.
+
+### Regime read (indicators.py bar-close basis, 720-bar convergence)
+
+**Regime: 1/15 positive 24h, median −2.94% → 5a FAIL; 5a-SBD ACTIVE** (both legs satisfied: ≤1 positive AND median ≤ −1.0%).
+
+Only pair positive on 24h: **TRX +0.22%** (still blocked by R4a $1.08M < $2.0M floor). AVAX at −5.95% is the worst single mover; ADA −5.84%, FARTCOIN −9.61% (universe.md now has ONDO in that slot — **indicators.py universe divergence noted**: indicators.py still emits the pre-07-01 universe with FARTCOIN in place of ONDO; ONDO's actual 07-08T03Z close is not read this wake. **Filing as universe-divergence flag for next routine-01 to reconcile** — non-blocking for EOD decision-making since 5a fails outright regardless).
+
+**Midday's SBD-activation prediction confirmed**: the 20:00Z midday wake noted "live snap 1/15 positive median −1.24% — if bar-close-basis at 07-08T04Z mirrors this, regime 5a fails outright AND 5a-SBD sub-state may activate". Bar-close-basis at 04:00Z is 1/15 positive median −2.94% — deeper into SBD territory than the live-tick snapshot at 20:00Z. Prediction accuracy: directionally correct, magnitude understated (median deteriorated further from −1.24% live → −2.94% bar-close over the 8h between midday and EOD).
+
+**Overnight-13:07Z live-vs-bar-close divergence flag validated in reverse**: the overnight wake flagged that indicators.py bar-close read 12/15 positive median +1.95% diverged sharply from live-ticker 2/15 positive median −1.51%. That flag was recorded as a signal-quality note. Over the intervening ~15h, bar-close-basis has caught DOWN to match the live-ticker weakness (12/15 → 1/15 positive; +1.95% → −2.94% median). The overnight live-ticker signal was leading; the bar-close reading was lagging. This is a **2nd confirmation** of a leading-indicator pattern where live-ticker rolling-24h can foreshadow bar-close regime shifts on the same-day timescale. Not yet enough for a rule change, but adds one instance to the SBD-leading-edge lesson (2026-06-17).
+
+### Entry scan (per indicators.py, 03:00Z just-closed bar)
+
+**All 15 universe pairs FAIL R1 (>EMA20)** — this is a complete-breakdown tape. RSI readings 20.4-48.0 (all below 55). Only TRX passes R2a<80 AND R3 (>EMA50 4H) AND R3-20 (v0.14) but fails R1 by −0.00046 and R2 by −7.01 AND R4a notional $1.08M < $2.0M. **Zero technical-PASS candidates.** Even if any single pair had passed, 5a FAIL would reject outright.
+
+**News scan**: skipped — 0 tech-PASS candidates to evaluate; news is v0.4 informational-only and cannot flip a zero-eligible-entries wake. Log: `no-scan-no-eligible-candidate`.
+
+**Sentiment scan**: skipped — same reasoning.
+
+**Entry decision**: **0 new entries.** Zero tech-PASS × 5a-FAIL × SBD-ACTIVE. Multiple independent rejects.
+
+### Kill-switch state (EOD PT 2026-07-07 close-basis)
+
+- **Daily realized+unrealized (PT 07-07)**: **−$163.86 / −1.535%** (fully realized via HYPE stop-hit-intrabar 18Z). CLEAR (5% loss cap, **3.465pp headroom**).
+- **Consecutive losing trading days**: **3** (07-05 −0.10% close-basis, 07-06 −0.795% close-basis, 07-07 **−1.535% close-basis** — today confirmed as 3rd losing day). CLEAR (cap 7, headroom 4).
+- **Max drawdown**: **5.055%** from peak $11,068.89 (equity $10,509.36 vs peak $11,068.89 = −$559.53). CLEAR (cap 25%, warn 12.5%, **7.445pp headroom to warn**).
+- **Equity floor**: $10,509.36 > $7,500 (**+$3,009.36 above floor**). CLEAR.
+- **MCP availability**: Kraken OK (`indicators.py` completed 720-bar convergence run for 15 pairs). CLEAR.
+- **Regime 5a**: FAIL 1/15 positive, median −2.94% (indicators.py bar-close basis; authoritative). Blocks new entries.
+- **5a-SBD**: ACTIVE (≤1 positive AND ≤−1.0% median: both satisfied by wide margins). No open positions to tighten via Exit rule 1-SBD (9-EMA two-bar); if any positions had been open, the SBD-tightened exit would fire in place of the 20-EMA exit. Zero avoided-give-back this wake (flat book).
+- **5b cooldowns**: **HYPE/USD** active until 2026-07-08T18:00Z (spans tonight's EOD, tomorrow's overnight 07-08T13Z, tomorrow's midday 07-08T20Z — HYPE off-limits for all 3 wakes; clears before Wed's EOD).
+- **Cluster cap (6a BTC-cluster)**: 0/2 used (flat). Headroom 2 slots.
+- **All Ring 3 kill switches CLEAR.**
+
+### Day summary (PT 2026-07-07 Tue close)
+
+| Metric | Value |
+|---|---|
+| Day PnL | **−$163.86 / −1.535%** (all realized) |
+| Trades opened today | **1** (HYPE/USD 12:00Z routine-01, rule-8 winner) |
+| Trades closed today | **1** (HYPE/USD 18:00Z routine-02, stop-hit-intrabar, −1.02R / −$163.87) |
+| Win rate today | **0%** (0 winners / 1 closed) |
+| New equity (EOD close) | **$10,509.36** |
+| Equity peak | $11,068.89 (unchanged; set 2026-07-04T20:00Z midday MTM) |
+| Drawdown from peak | **5.055%** |
+| Since-inception return | **+5.094%** ($10,509.36 / $10,000 − 1) |
+| 7d BULL vs BTC-hold | BULL ≈ +0.90% vs BTC ≈ +2.04% ($61,447 → $62,703) = **≈ −1.14pp behind 7d** |
+| 30d BULL vs BTC-hold | BULL ≈ +5.09% vs BTC ≈ −18.6% est ($77k → $62,703) = **≈ +23.7pp ahead 30d** |
+| 90d | not computable (inception 2026-04-20 = 79 days ago; first computable ~2026-07-19) |
+
+### Lessons extraction
+
+**One new lesson written**: SBD-leading-edge live-ticker divergence pattern got its 2nd confirmation today. The overnight wake's live-ticker vs bar-close divergence flag (13:09Z 2/15 positive live vs 12/15 bar-close) preceded the bar-close catch-down by ~15h — bar-close is now 1/15 positive matching the leading live-tick signal. Companion instance to the 2026-06-17 SOL same-session stop-out lesson (score 7) where regime rolled over rapidly post-entry. See lessons.md new row 2026-07-07 for full detail.
+
+No other lessons — the HYPE stop-hit-intrabar itself is a repeat of the SOL 06-17/06-27 pierce-then-close-below pattern already captured. Not adding a redundant instance.
+
+### Monthly archive check
+
+Today is **not** the last trading day of the month (07-07 Tue, not 07-31 or last weekday of July). Next month-end archive routine due 2026-07-31 EOD. **No archive action.**
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md, trade_log.md (tail 30d), research_log.md (tail 7d), lessons.md, universe.md, skills/decide.md, skills/log-trade.md, skills/telegram.md, routines/03-eod.md.
+- **Verified**: kill switches (all clear, 3rd losing day confirmed, DD 5.055% well under 12.5% warn); slot identity `bull-03-eod` confirmed (PT date 2026-07-07 Tue at fire time 21:10 PT); indicators.py authoritative-source used per 2026-06-12 amendment.
+- **Fetched**: watchdog.py --telegram (9 findings, unchanged carry-over); indicators.py 720-bar convergence (regime 1/15 positive median −2.94%, all 15 pairs FAIL R1).
+- **Wrote**: portfolio.md (rebuilt flat, EOD close, regime SBD-ACTIVE noted), lessons.md (1 new row 2026-07-07 SBD-leading-edge 2nd confirmation), this research_log EOD entry.
+- **Skipped**: trade_log.md append (no trade events this wake); universe.md (not first-of-month); archive (not month-end); news scan (0 eligible candidates); sentiment scan (0 eligible candidates).
+- **Flagged for follow-up**: indicators.py universe-config drift (still emits FARTCOIN row, universe.md swapped to ONDO at 07-01). Non-blocking for regime math; routine-01 tomorrow to reconcile.
+- **NOTIFY**: EOD Telegram card sent per `skills/telegram.md` mandatory-daily-card rule.
