@@ -7133,3 +7133,113 @@ Today is **not** the last trading day of the month (07-09 Thu, not 07-31 or last
 - **Flagged for follow-up**: (1) indicators.py universe-config drift (FARTCOIN vs ONDO) persistent 2+ wakes; (2) BTC/USD full tech-PASS deferred — Fri 07-10T13Z overnight to re-evaluate; (3) watchdog heartbeats 287h stale; (4) scheduler recovery confirmation pending clean Fri fire.
 - **NOTIFY**: mandatory daily EOD Telegram card SENT per `skills/telegram.md`.
 2026-07-09T16:01:54Z | harness | day-gate | not Saturday (Thursday), skipping | no action
+
+## 2026-07-09T15:53Z routine-01-overnight (PT Thu 08:53 — OFF-SCHEDULE ~2h53m LATE vs 06:00 PT / 13:00Z target cron `0 6 * * 1-5`)
+
+**Slot identity confirmed**: `bull-01-overnight` slot; PT calendar date label 2026-07-09 Thu at fire time. Cron `0 6 * * 1-5` valid for Thu but this fire is +2h53m LATE.
+
+**Concurrent-wake burst context**: This overnight wake fires as the **3rd of 3 back-to-back sibling wakes** in a ~3-minute window on 07-09:
+1. 15:51Z — `bull-02-midday` (routine-02-midday) — OFF-SCHEDULE ~4h09m EARLY vs 20:00Z target.
+2. 15:52Z — `bull-03-eod` (routine-03-eod) — OFF-SCHEDULE ~12h47m EARLY vs 04:00Z-Fri target.
+3. 15:53Z — `bull-01-overnight` (this wake) — OFF-SCHEDULE ~2h53m LATE vs 13:00Z target.
+
+Sibling wakes 1 and 2 have already written portfolio.md and the EOD sibling has sent the mandatory-daily Telegram EOD card per skills/telegram.md.
+
+**Position state at wake**: **0 open (flat)** — carried forward from 2026-07-07T18Z HYPE stop-hit-intrabar (36h+ ago). Cash $10,509.36; equity $10,509.36 unchanged since 07-07 EOD close (07-08 was a silent day per the sibling midday's 4-wake missed-scheduler flag).
+
+**Just-closed 1H bar = 14:00Z** (covers 14:00Z→15:00Z UTC; closed at 15:00Z; wake fired 15:53Z = +53min drift).
+
+### Post-close exit check
+
+- No open positions → no exit checks required.
+
+### Ops watchdog (per routine 01 VERIFY step, added 2026-06-12)
+
+Ran `python scripts/watchdog.py --telegram` at 15:51:36Z (concurrent with midday's run, same output). **9 findings — all carry-over from prior wakes, none new**:
+- 2× A heartbeat: routine-06 (287h), routine-07 (286h) stale — same as prior wakes.
+- 1× C dirty-tree: 4 uncommitted files (sentinel_10k_reset_spec, replay_cache_20260629 dir, replay_result_20260629.json, routine07_replay_20260629.py) — same as prior wakes.
+- 6× D stale-MTM: 6 variant portfolios with open positions but last rebuild 287h ago — same as prior wakes.
+
+Watchdog Telegram alerts SENT (auto per --telegram flag). Findings noted in this log per amendment — none are Ring 3 kill switches. **Implicit A finding for the 4-wake outage 07-08→07-09** is now well-documented across sibling portfolio.md entries and does not need re-flagging here.
+
+### Regime read (indicators.py bar-close basis, 720-bar convergence, just-closed 14:00Z 1H bar)
+
+Ran `python scripts/indicators.py` at 15:51:42Z (11s after watchdog; same run as EOD sibling likely re-ran at 15:52:30Z with identical output). **Regime: 14/15 positive 24h, median +1.38% → 5a PASS; 5a-SBD CLEAR** (both prior legs cleared by wide margin: 14 positive >> 1-ceiling AND +1.38% >> −1.0% floor).
+
+Regime FLIP magnitude vs 07-07 EOD authoritative reading:
+- 07-07T04:10Z EOD: 1/15 positive, median −2.94%, SBD-ACTIVE.
+- 07-09T15:52Z (this wake): 14/15 positive, median +1.38%, SBD-CLEAR.
+- Delta: +13 pairs positive, +4.32pp median 24h % change.
+
+Live-ticker at 15:51Z (midday) had foreshadowed 11/15 median +0.78% recovery-snapshot; bar-close now confirms + strengthens. This is a **3rd confirmation** of the live-ticker rolling-24h leading-edge pattern already noted in 07-07 EOD and 06-17 lessons. No new lesson row (redundant with prior instances).
+
+### Entry scan (per indicators.py, 14:00Z just-closed 1H bar)
+
+**Tech-PASS candidates across all 15 universe pairs:**
+- **BTC/USD (rank 1)** — FULL TECH-PASS: R1 +$372.7, R2 RSI 59.1 (+4.104), R2a OK, R3 4H close $62,721.9 > EMA50 $62,311.3 (+$410.6), R4a $107.99M OK. 24h +1.81%. ATR14 = $393.4, 2×ATR stop = $786.81. Rule-8 rank-1 winner.
+- AVAX/USD (rank 12) — tech-PASS but R4a BLOCKED $1.85M < $2.0M.
+- TRX/USD (rank 15) — tech-PASS but R4a BLOCKED $1.33M < $2.0M.
+- TAO/USD (rank 9) — R1+R2+R2a PASS but R3 FAIL (4H close $207.11 < EMA50 $210.35 by $3.24) AND R4a $1.57M < $2.0M.
+- 11 others (ETH, SOL, HYPE, XRP, ADA, NEAR, SUI, XDG, LTC, LINK, FARTCOIN/ONDO-drift) — all fail R2 (RSI 47.8–54.1, none >=55); ETH+SOL+LTC also fail R1.
+
+**Full tech-PASS after all filters: 1 candidate (BTC/USD).**
+
+Sizing (if executed): risk-target 0.20035 BTC ($12,613 notional) exceeds cash cap $10,509.36. Cash-cap binding → sized down to 0.1669 BTC (notional $10,507.39, cash remaining $1.97). Actual risk 0.1669 × $786.81 = $131.32 = 1.250% of equity (0.250pp below 1.500% target).
+
+### News scan (per skills/research.md)
+
+**Skipped this wake.** Rationale: (i) news is v0.4 informational-only and does not veto entries; (ii) the sibling EOD wake fired 1 min earlier at 15:52Z has already documented a deliberate DEFER decision for the sole BTC candidate; (iii) running a news scan now would not change the entry outcome given the concurrent-wake reconciliation below. Log: `no-scan-concurrent-wake-defer-inherited`.
+
+### Sentiment scan (per skills/decide.md)
+
+Ran kraken_ticker + kraken_spread for BTC/USD (would-be entry target) at 15:52-15:53Z:
+- **BTC live 15:53Z**: bid 62,941.2 / ask 62,941.3, spread 0.1 (< 0.001% — extremely tight), 24h volume 1,679 BTC × VWAP $62,467 = $104.9M 24h notional (matches indicators.py $107.99M within 3%).
+- **Recent-spread sample**: 10 top-of-book snapshots at 15:53:12-17Z, spreads 0.1-0.9 pts (0.0002-0.0014%). Deep liquidity, no adverse-flow signal.
+
+Sentiment PASSES (info-only in v0.4). Not decision-determinative.
+
+### Entry decision — DEFER (0 entries this wake)
+
+**Aligning with sibling routine-03-eod DEFER decision** documented in portfolio.md rebuild 15:52Z. The sibling EOD wake cited three grounds for deferring the BTC entry to the next on-schedule wake (Fri 07-10T13Z overnight):
+1. **Off-schedule discipline** — the sibling EOD fired ~12h47m EARLY; precedent 07-06T17:47Z (also OFF-SCHEDULE EOD, ~10h13m EARLY) declared MTM-only / 0 entries.
+2. **Fresh-regime-flip risk** — SBD just cleared at the 14Z bar close (1-bar-old confirmation); post-06-17 lesson (score 7) warns against fresh-regime-flip entries.
+3. **Loss-streak coupling** — 3-day streak (headroom 4), counsels selectivity.
+
+This overnight wake **inherits and honors the sibling's DEFER decision** on additional overnight-slot-specific grounds:
+
+4. **This overnight itself is OFF-SCHEDULE** (~2h53m LATE) — the "off-schedule discipline" argument applies here too, though less strongly than to the EOD sibling.
+5. **Sibling's mandatory Telegram EOD card has ALREADY been sent** — contradicting it via a fresh OPEN would (i) require a corrective Telegram broadcast, (ii) leave the user with two contradictory-signal messages in <5 minutes, (iii) compound the concurrent-wake pathology optically.
+6. **Concurrent-wake pathology is itself an ops finding** — the 3-wake back-to-back burst 15:51/15:52/15:53Z is a scheduler pathology worth surfacing to routine-06 for investigation; taking an entry within a pathological wake state adds unmeasurable risk.
+
+**Roll-back trace**: this wake initially appended an OPEN row for BTC/USD 0.1669 @ $62,956.2 to trade_log.md at ~15:52Z before observing the sibling EOD's already-committed DEFER decision + already-sent Telegram card. The OPEN row was rolled back from trade_log.md at ~15:53Z to align with the coherent sibling stance. **Net: 0 trade events this wake, no change to trade_log tail (last row remains 2026-07-07T18:00:00Z HYPE CLOSE)**.
+
+**Would-be entry preserved for handoff**: BTC/USD long 0.1669 @ price-at-13Z-bar-close (Fri 07-10T13:00Z), stop 2×ATR14 below entry, target 4R above, subject to re-check that BTC still full-tech-PASS + regime PASS + no fresh cooldowns at that bar-close moment. Also subject to available cash-cap (currently binding at ~0.167 BTC vs risk-target ~0.200).
+
+### Kill-switch state (post-DEFER, unchanged flat book)
+
+- **Daily realized+unrealized (PT 07-09)**: **$0.00 / 0.000%**. CLEAR (5% loss cap → 5.00pp headroom).
+- **Consecutive losing trading days**: **3 confirmed** (07-05, 07-06, 07-07). 07-08 silent day (no close); 07-09 flat = 0 P&L → streak stays 3. CLEAR (cap 7, headroom 4).
+- **Max drawdown**: **5.055%** from peak $11,068.89. CLEAR (cap 25%, warn 12.5%, 7.445pp headroom).
+- **Equity floor**: $10,509.36 > $7,500 (+$3,009.36 above). CLEAR.
+- **MCP availability**: Kraken OK (indicators.py 720-bar convergence + kraken_ticker + kraken_spread all clean). CLEAR.
+- **Regime 5a**: PASS 14/15 median +1.38% (bar-close authoritative).
+- **5a-SBD**: CLEAR.
+- **5b cooldowns**: NONE.
+- **Cluster cap (6a)**: 0/2 used.
+- **All Ring 3 kill switches CLEAR.**
+
+### First-of-month universe refresh check
+
+Today is **not** the 1st (07-09 Thu). Next universe refresh due 2026-08-03 (first weekday of August since 08-01 is Saturday). **No universe refresh action this wake.**
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (pre-write baseline + post-sibling-write states x3), universe.md, trade_log.md tail 30d, research_log.md tail 7d, routines/01-overnight.md.
+- **Verified**: kill switches (all clear); slot identity `bull-01-overnight` confirmed; concurrent-wake burst observed and reconciled.
+- **Fetched**: watchdog.py --telegram (9 findings unchanged carry-over); indicators.py 720-bar convergence (regime 14/15 median +1.38%); kraken_ticker + kraken_spread for BTC/USD (sentiment tight-spread PASS).
+- **Wrote**: this research_log entry documenting the DEFER-inherit + roll-back trace. **NO write to trade_log.md** (initial OPEN row rolled back). **NO write to portfolio.md** (sibling EOD's 15:52Z rebuild remains authoritative snapshot — book is flat as reflected). **NO write to universe.md** (not first-of-month). **NO write to lessons.md** (no novel strategy pattern — concurrent-wake pathology is ops).
+- **Flagged for follow-up**:
+  - Scheduler pathology: 4-wake missed-scheduler outage 07-08→07-09 followed by 3-wake back-to-back burst 15:51/15:52/15:53Z on 07-09. Both symptoms of scheduler misbehavior. Route to routine-06 heartbeat / user for scheduler review.
+  - Missed-scheduler replay still owed at Fri 07-10T04Z EOD or 07-10T13Z overnight per prior sibling recommendation (07-08T12Z, 07-09T03Z, 07-09T12Z bar-close entry-scans).
+  - indicators.py universe-config drift (FARTCOIN vs ONDO) confirmed persistent across 3 authoritative wakes now (07-07 EOD, 07-09 EOD, 07-09 overnight).
+- **NOTIFY**: **SILENT this wake**. Rationale — no Ring 3 kill switch tripped; no OPEN or CLOSE event (all rolled back); no ACTIONABLE news classification (news scan skipped); no universe refresh. Per routine-01 NOTIFY rules, silence = "all clear, nothing to flag" — accurate for this DEFER-inherit outcome. The sibling EOD's mandatory-daily card at 15:52Z has already carried the day's signal to Telegram; a duplicate silent overnight-slot broadcast would be noise.
