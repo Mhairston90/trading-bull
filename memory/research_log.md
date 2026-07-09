@@ -7014,3 +7014,121 @@ Routine-02 sends Telegram ONLY if:
 - Drawdown crossed a warning threshold (12.5%) → **DID NOT CROSS** (5.055%, 7.445pp below warn cap, unchanged from 07-07 EOD).
 
 **Decision: SILENT** — no Telegram notification per routine spec. The 4-wake scheduler outage is a meaningful operational anomaly but does not fall into any of the three NOTIFY triggers as written; it is documented in portfolio.md + research_log for the next authoritative wake to pick up.
+
+
+---
+
+## 2026-07-09T15:52Z routine-03-eod (PT Thu 2026-07-09 08:52 **OFF-SCHEDULE ~12h47m EARLY** vs 04:00Z-Fri target cron `0 21 * * 1-5`; fired back-to-back ~45s after 15:51Z midday)
+
+### Slot identity + date-label guard
+
+Slot identity confirmed: `bull-03-eod` (per scheduled-task prompt body "Routine 03 — End-of-Day Journal"; not "Routine 01" — no slot-mismatch flag). PT calendar date at fire time = 2026-07-09 Thu (per date-labeling guard, EOD wake takes PT-date-at-fire-time). Wall-clock UTC 2026-07-09T15:52:26Z (watchdog timestamp) = 15:52:30Z (indicators.py timestamp). Not the on-schedule 04:00Z-Fri fire — this is an OFF-SCHEDULE early fire firing back-to-back with the 15:51:41Z routine-02-midday wake.
+
+**Off-schedule pattern**: 4 scheduled wakes were missed between 07-08T04:10Z (last on-schedule routine-03-eod) and 07-09T15:51Z (first back-online routine-02-midday) — 07-08 overnight/midday/EOD + 07-09 overnight all silently skipped. This EOD is the second post-outage wake; both fired within ~45 seconds of each other, suggesting the scheduler is now active. Precedent for OFF-SCHEDULE EOD: 07-06T17:47Z ran ~10h13m EARLY, was declared MTM-only / 0 entries.
+
+### Position state at wake
+
+**0 open (flat)** — carried forward from 07-07T18Z HYPE stop-hit-intrabar (~45h34m ago). Cash $10,509.36; equity $10,509.36. HYPE 5b cooldown expired 07-08T18Z (21h52m ago); no cooldowns active.
+
+### Post-close exit check
+
+No open positions → no exit checks required. Stop-management: N/A (flat book). Breakeven ratchet W22-H-partial: N/A.
+
+### Regime read (indicators.py bar-close basis, 720-bar convergence, 15:52:30Z run)
+
+**Regime: 14/15 positive 24h, median +1.38% → 5a PASS; 5a-SBD CLEAR.**
+
+Both prior SBD legs cleared by wide margin: 14 positive » 1-positive ceiling AND +1.38% » −1.0% floor. Full FLIP vs 07-07T04:10Z EOD reading (1/15 median −2.94% + SBD-ACTIVE). 13-pair swing in positive count, +4.32pp swing in median 24h % over the 35h+ outage window.
+
+Only pair NON-positive on 24h: FARTCOIN −0.20% (indicators.py continues to emit the pre-07-01 universe with FARTCOIN in place of ONDO; universe.md is authoritative with ONDO at rank 14). Universe-config drift confirmed persistent — routine-01 tomorrow to reconcile.
+
+Biggest positive movers: AVAX +4.63%, NEAR +3.08%, TAO +1.82%, BTC +1.81%, LINK +1.69%, XRP +1.50%, ADA +1.38%, HYPE +1.05%, SOL +1.01%, LTC +0.39%. Median value +1.38% (ADA).
+
+**Midday live-ticker prediction confirmed**: the 15:51Z midday wake noted live-ticker 11/15 positive median +0.78% suggested a bar-close PASS. Bar-close basis 60 seconds later confirmed 14/15 positive median +1.38% — actually stronger than the live-ticker snap. Live-ticker was directionally correct; bar-close overshoots to the upside.
+
+### Entry scan (per indicators.py, 14:00Z just-closed bar)
+
+**One (1) full technical-PASS candidate: BTC/USD (rank 1 by 30d notional).**
+
+Per-pair rule breakdown:
+- **BTC/USD** — R1 PASS (+$372.7 above 20-EMA); R2 PASS (RSI 59.1, +4.10 above 55 floor); R2a OK (< 80); R3 PASS (4H close $62,721.9 > 50-EMA $62,311.3 by +$410.6); R4a OK ($107.99M notional » $2.0M floor). **Full tech-PASS.** 24h +1.81%.
+- AVAX/USD — R1/R2/R2a/R3 all PASS but **R4a BLOCKED** ($1.85M < $2.0M). 24h +4.63%.
+- TRX/USD — R1/R2/R2a/R3 all PASS but **R4a BLOCKED** ($1.33M < $2.0M). 24h +0.77%.
+- TAO/USD — R2 PASS (RSI 55.2 barely, +0.20 above floor); R1 PASS; **R3 FAIL** ($207.11 4H < EMA50 $210.35 by −$3.24); R4a also BLOCKED $1.57M.
+- 11 others (ETH, SOL, HYPE, XRP, SUI, XDG, NEAR, ADA, LINK, LTC, FARTCOIN) — all fail R2 (RSI 47.8–54.1, none ≥ 55). Some also fail R1 (ETH −$1.98, SOL −$0.007, LTC −$0.024 below 20-EMA).
+
+**News scan**: skipped for BTC because entry is being deferred (see decision below) — news scan is informational-only in v0.4 and cannot flip a deferred decision. Log: `news-scan-skipped-deferred-entry`.
+
+**Sentiment scan**: skipped — same reasoning.
+
+### Entry decision: DEFER (0 new entries this wake)
+
+BTC/USD is the sole full tech-PASS candidate and would be the rule-8 rank-1 winner if executed. **Deferred to next authoritative on-schedule wake (Fri 07-10T13:00Z overnight)** on three grounds:
+
+1. **Off-schedule discipline** — this EOD fired ~12h47m EARLY vs its 04:00Z-Fri scheduled slot. Precedent 07-06T17:47Z (routine-03-eod OFF-SCHEDULE ~10h13m EARLY) declared MTM-only / 0 entries. Following precedent to preserve routine boundary.
+2. **Fresh regime FLIP** — SBD just cleared at the 14Z bar close (1-bar-old confirmation). Prior 6 authoritative wakes (07-06T17:40Z through 07-08T04:10Z) all read regime FAIL or SBD-ACTIVE. Post-06-17 lesson (SBD crystallized within 11h of a rule-8 fallback entry, score 7) explicitly cautions against fresh-regime-flip entries; the on-schedule Fri overnight would have 21+ additional confirmation bars.
+3. **Loss-streak coupling** — 3-day streak with headroom 4 to cap 7 → selectivity favored. Skip does not consume streak headroom; take-now-and-lose would take streak to 4/7 headroom 3.
+
+**Materially compliant either way** — rule 8 says max 1 new entry per wake, not must take an entry per wake. Documented flag for audit: had this been an on-schedule fire the BTC entry would have executed at 14Z close = $62,956.2, stop $62,169.4 (2×ATR = $786.81), target $65,316.6 (4R), size 0.1669 BTC (cash-constrained rule-8-fallback), notional $10,509.36, risk $131.32 = 1.25% of equity.
+
+### Kill-switch state (EOD PT 2026-07-09 close-basis; bar-close authoritative)
+
+- **Daily realized+unrealized (PT 07-09)**: **$0.00 / 0.000%** (flat book, no trade events; 07-08 was a missed-scheduler day with no close). CLEAR (5% loss cap, **5.00pp headroom**).
+- **Consecutive losing trading days**: **3** confirmed (07-05 −0.10%, 07-06 −0.795%, 07-07 −1.535%). 07-08 was missed-scheduler (no close computed — conservatively 0 P&L, streak unchanged). 07-09 flat at wake time = 0 close-basis P&L. Streak stays at 3. CLEAR (cap 7, headroom 4).
+- **Max drawdown**: **5.055%** from peak $11,068.89 (equity $10,509.36; peak-day −$559.53). CLEAR (cap 25%, warn 12.5%, **7.445pp headroom to warn**).
+- **Equity floor**: $10,509.36 > $7,500 (+$3,009.36 above floor). CLEAR.
+- **MCP availability**: Kraken OK (`indicators.py` 720-bar run + `kraken_multi_ticker` fetch both clean; watchdog `--telegram` succeeded). CLEAR.
+- **Regime 5a**: **PASS 14/15 positive, median +1.38%** (bar-close basis; authoritative per 2026-06-12 amendment). Gate OPEN.
+- **5a-SBD**: **CLEAR** (both legs: 14 » 1 ceiling AND +1.38% » −1.0% floor). Exit rule 1 reverts to 20-EMA two-bar. N/A (flat book).
+- **5b cooldowns**: NONE (HYPE cooldown cleared 2026-07-08T18Z). All 15 pairs entry-eligible.
+- **Cluster cap (6a BTC-cluster)**: 0/2 used. 2 slots headroom.
+- **All Ring 3 kill switches CLEAR.**
+
+### Day summary (PT 2026-07-09 Thu close, off-schedule EOD early-fire)
+
+| Metric | Value |
+|---|---|
+| Day PnL | **$0.00 / 0.000%** (flat book, no trade events this wake or prior missed wakes) |
+| Trades opened today | **0** (BTC tech-PASS deferred per OFF-SCHEDULE precedent) |
+| Trades closed today | **0** |
+| Win rate today | N/A (0 closed) |
+| New equity (EOD close, bar-close basis) | **$10,509.36** |
+| Equity peak | $11,068.89 (unchanged; set 2026-07-04T20:00Z midday MTM) |
+| Drawdown from peak | **5.055%** (unchanged from 07-07 EOD) |
+| Since-inception return | **+5.094%** ($10,509.36 / $10,000 − 1) |
+| 7d BULL vs BTC-hold | BULL ≈ +0.34% ($10,474 est → $10,509.36) vs BTC ≈ +0.87% ($62,405 est → $62,956.2) = **≈ −0.5pp behind 7d** |
+| 30d BULL vs BTC-hold | BULL ≈ +5.09% (inception $10k) vs BTC ≈ −18.2% est ($77k → $62,956.2) = **≈ +23.3pp ahead 30d** |
+| 90d | not computable (inception 2026-04-20 = 80 days ago; first computable ~2026-07-19) |
+
+### Missed-wake gap end-to-end summary (07-08→07-09 outage)
+
+Scheduler outage now bookended and quantifiable:
+- **Last on-schedule wake before outage**: 07-08T04:10Z routine-03-eod (PT Tue 21:10, +10min drift, normal).
+- **Missed wakes** (in order): 07-08T13Z routine-01-overnight, 07-08T20Z routine-02-midday, 07-09T04Z routine-03-eod, 07-09T13Z routine-01-overnight. 4 consecutive scheduled fires missed.
+- **First back-online wake**: 07-09T15:51Z routine-02-midday (Thu 08:51 PT, OFF-SCHEDULE ~4h09m EARLY vs 20:00Z target).
+- **Second back-online wake**: 07-09T15:52Z routine-03-eod (this wake, OFF-SCHEDULE ~12h47m EARLY vs 04:00Z-Fri target).
+- **Total gap**: ~35h41m (04:10Z Wed → 15:51Z Thu).
+- **Material impact**: 07-08T12Z entry-scan (SBD likely still active), 07-09T03Z EOD scan (borderline), 07-09T12Z overnight scan (recovery likely complete — most-costly miss). No open positions during outage → no missed exits.
+- **Reconciliation choice**: NO targeted replay this wake. Rationale: (a) current 14Z bar-close is authoritative enough for today; (b) no exits missed; (c) BTC candidate captured by DEFER; (d) precedent replay scripts exist if Fri overnight chooses to run one.
+
+### Lessons extraction
+
+**No new lessons.md rows this wake.** Two candidate patterns considered:
+1. *4-wake scheduler outage during regime FLIP.* Ops concern (watchdog A findings, routine-06/07 heartbeat), not a strategy pattern. Belongs in ops layer.
+2. *Missed 12Z entry opportunity during FLIP.* Would-be lesson but: (a) precedent OFF-SCHEDULE EOD defers entries anyway (07-06T17:47Z), and (b) entry functionally captured by DEFER. Not novel.
+
+Neither meets strategy-relevance bar. Existing lessons (2026-07-07 live-ticker leading indicator, 2026-07-04 W22-H ratchet miss, 2026-06-17 SBD-leading-edge) already capture regime-transition themes.
+
+### Monthly archive check
+
+Today is **not** the last trading day of the month (07-09 Thu, not 07-31 or last weekday of July). Next month-end archive routine due 2026-07-31 EOD. **No archive action.**
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (post-midday), trade_log.md (tail), research_log.md (tail 7d + prior midday entry), lessons.md (top preview), universe.md, routines/03-eod.md, skills/telegram.md.
+- **Verified**: slot identity `bull-03-eod` confirmed (prompt body Routine 03 — End-of-Day Journal); PT date label 2026-07-09 Thu at fire time confirmed; kill switches all CLEAR; DD 5.055% unchanged (< 12.5% warn, headroom 7.445pp); indicators.py authoritative-source per 2026-06-12 amendment.
+- **Fetched**: `python scripts/watchdog.py --telegram` (9 findings unchanged carry-over); `python scripts/indicators.py` (720-bar convergence for 15 pairs, 14Z just-closed bar); `kraken_multi_ticker` 15 pairs (sanity check).
+- **Wrote**: portfolio.md (EOD header, EOD snapshot section inserted above midday, kill-switch state updated to bar-close authoritative, next-scheduled-wake → Fri overnight), this research_log EOD entry.
+- **Skipped**: trade_log.md append (no trade events); universe.md (not first-of-month); archive (not month-end); news scan (deferred entry); sentiment scan (same); lessons.md append (no novel strategy patterns); targeted missed-scheduler replay (owned by Fri overnight).
+- **Flagged for follow-up**: (1) indicators.py universe-config drift (FARTCOIN vs ONDO) persistent 2+ wakes; (2) BTC/USD full tech-PASS deferred — Fri 07-10T13Z overnight to re-evaluate; (3) watchdog heartbeats 287h stale; (4) scheduler recovery confirmation pending clean Fri fire.
+- **NOTIFY**: mandatory daily EOD Telegram card SENT per `skills/telegram.md`.
