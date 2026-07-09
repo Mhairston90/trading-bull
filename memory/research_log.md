@@ -6925,3 +6925,92 @@ Today is **not** the last trading day of the month (07-07 Tue, not 07-31 or last
 - **Skipped**: trade_log.md append (no trade events this wake); universe.md (not first-of-month); archive (not month-end); news scan (0 eligible candidates); sentiment scan (0 eligible candidates).
 - **Flagged for follow-up**: indicators.py universe-config drift (still emits FARTCOIN row, universe.md swapped to ONDO at 07-01). Non-blocking for regime math; routine-01 tomorrow to reconcile.
 - **NOTIFY**: EOD Telegram card sent per `skills/telegram.md` mandatory-daily-card rule.
+
+## 2026-07-09T15:51Z routine-02-midday (PT Thu 08:51 — OFF-SCHEDULE ~4h09m EARLY vs 13:00 PT / 20:00Z target cron `0 13 * * 1-5`)
+
+### Wake context
+
+Wake fired 2026-07-09T15:51:41Z = 08:51 PT Thu, ~4h09m EARLY vs the routine's declared 13:00 PT / 20:00Z target. Slot identity `bull-02-midday`, PT date label 2026-07-09 Thu at fire time.
+
+**Major scheduler outage flagged**: 4 scheduled wakes were missed between the previous wake (07-08T04:10Z routine-03-eod) and this one — routine-01-overnight 07-08T13Z, routine-02-midday 07-08T20Z, routine-03-eod 07-09T04Z, routine-01-overnight 07-09T13Z. Gap ~35h41m end-to-end. Documented in portfolio.md "Missed-wake reconciliation" section this wake with recommendation that the next authoritative wake run a targeted replay per the established `scripts/routine07_replay_YYYYMMDD.py` pattern.
+
+### Position management (routine-02 mandate)
+
+- **Open positions**: 0 (flat since 07-07T18Z HYPE stop-hit-intrabar)
+- **MTM at 15:51Z live-ticker**: $0.00 (no positions)
+- **Exit checks**: none required (0 positions)
+- **Entry scan**: SKIPPED per routine spec ("DO NOT OPEN NEW POSITIONS IN MIDDAY"). Not evaluated here even though live-ticker regime suggests broad recovery — the next authoritative overnight/EOD wake owns the bar-close entry-scan.
+
+### Kraken live-ticker snapshot (15:51Z, for informational regime read only)
+
+| Pair | Last | 24h % | Note |
+|---|---|---|---|
+| XBT (BTC) | 62947.7 | +1.14% | positive |
+| ETH | 1740.12 | −0.11% | slightly negative |
+| SOL | 77.67 | −0.13% | slightly negative |
+| HYPE | 67.61 | 0.00% | flat; note this is $2.90 / −4.1% below the 07-07T18Z stop-hit-intrabar exit fill $70.51, so retrospective SBD tightening would have added little rescue value even if applied |
+| XRP | 1.09096 | +0.10% | marginally positive |
+| ADA | 0.166548 | −0.26% | slightly negative |
+| NEAR | 1.9139 | +1.21% | positive |
+| SUI | 0.7176 | +0.93% | positive |
+| TAO | 207.20 | +1.27% | positive |
+| XDG | 0.0726113 | +0.31% | positive |
+| LTC | 43.87 | +0.50% | positive |
+| AVAX | 6.758 | +4.44% | biggest positive mover today |
+| LINK | 7.70173 | +0.82% | positive |
+| ONDO | 0.3181 | +0.78% | positive |
+| TRX | 0.331397 | +0.97% | positive |
+
+**Regime (live-ticker basis, informational only — NOT authoritative)**:
+- Positive count: 11/15 (XBT, XRP, NEAR, SUI, TAO, XDG, LTC, AVAX, LINK, ONDO, TRX)
+- Non-positive count: 4 (ETH, SOL, HYPE-flat, ADA)
+- Median 24h %: sorted [−0.26, −0.13, −0.11, 0.00, 0.10, 0.31, 0.50, 0.78, 0.82, 0.93, 0.97, 1.14, 1.21, 1.27, 4.44]; 8th (median) value = **+0.78%**
+- Rule 5a (≥ 4 positive): PASS 11 ≥ 4 ✓
+- Rule 5a-SBD ceiling (≤ 1 positive): would clear (11 > 1)
+- Rule 5a-SBD floor (median ≤ −1.0%): would clear (+0.78 > −1.0)
+- **If bar-close were to confirm the live-ticker read, both 5a-SBD legs would clear and regime would become PASS-normal**. But bar-close is the only authoritative gate per prior amendments, and this cannot be evaluated in a midday wake with an entry-scan skip.
+
+### Kill-switch state (2026-07-09T15:51Z live-ticker basis, flat book)
+
+- **Daily realized+unrealized (PT 07-09 DTD)**: $0.00 / 0.000% (flat, no events). CLEAR (5% loss cap → 5.00pp headroom).
+- **Consecutive losing trading days**: **3 confirmed** as last computed at 07-07 EOD close (07-05 −0.10%, 07-06 −0.795%, 07-07 −1.535%). 07-08 was a MISSED WAKE — no close was ever computed; the next EOD wake can either count 07-08 as no-trade-flat or (recommended) run the missed-scheduler replay first and derive close from that. Conservatively unchanged at 3. CLEAR (cap 7, headroom 4).
+- **Max drawdown**: 5.055% from peak $11,068.89, equity $10,509.36 (unchanged from 07-07 EOD, flat book). CLEAR (cap 25%, warn 12.5%, **7.445pp headroom to warn** — did not cross the 12.5% warn threshold; no Telegram DD-warn trigger).
+- **Equity floor**: $10,509.36 > $7,500 (+$3,009.36 above floor). CLEAR.
+- **MCP availability**: Kraken live-ticker `kraken_multi_ticker` 15-pair fetch clean at 15:51:41Z. CLEAR.
+- **Regime (5a)**: live-ticker PASS (informational only, not authoritative). Last authoritative reading was 07-07T03Z bar-close = FAIL 1/15 median −2.94% + SBD-ACTIVE. Bar-close regime cannot be authoritatively updated in a midday wake without re-running indicators.py against the 07-09T15Z bar (which would still be mid-bar); the next 04:00Z EOD wake is the earliest authoritative 07-09T03Z→07-10T03Z regime read available.
+- **5b cooldowns**: NONE — HYPE cooldown expired 2026-07-08T18:00Z (~21h51m before this wake).
+- **Cluster cap (6a)**: 0/2 used. 2 slots headroom.
+- **All Ring 3 kill switches CLEAR.**
+
+### Midday summary (PT 2026-07-09 Thu 08:51 wake)
+
+| Metric | Value |
+|---|---|
+| Day PnL (DTD, flat book) | **$0.00 / 0.000%** |
+| Trades opened today | **0** |
+| Trades closed today | **0** |
+| Open positions after wake | **0 / 4** (0 BTC-cluster / 2) |
+| Equity | **$10,509.36** ($10,509.36 cash + $0.00 MTM) |
+| Equity peak | $11,068.89 (unchanged; set 2026-07-04T20:00Z midday MTM) |
+| Drawdown from peak | **5.055%** (unchanged; 7.445pp to warn) |
+| Since-inception return | **+5.094%** ($10,509.36 / $10,000 − 1) |
+| Regime live-ticker | 11/15 positive median +0.78% (broad recovery vs 07-07 EOD bar-close 1/15 median −2.94% + SBD-ACTIVE) |
+| Regime authoritative (bar-close) | Last read 07-07T03Z: FAIL 1/15 −2.94% SBD-ACTIVE; NOT UPDATED THIS WAKE |
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md, trade_log.md (tail, 7d rows), skills/decide.md, skills/log-trade.md, skills/telegram.md, research_log.md (tail context).
+- **Verified**: kill switches (all clear; DD unchanged 5.055% did not cross 12.5% warn); slot identity `bull-02-midday` confirmed (PT date 2026-07-09 Thu at fire time 08:51 PT, wall-clock 15:51:41Z, OFF-SCHEDULE ~4h09m EARLY vs 20:00Z target).
+- **Fetched**: Kraken `kraken_multi_ticker` for all 15 universe pairs (live-ticker snapshot, informational).
+- **Wrote**: portfolio.md (rebuilt flat, midday MTM $0.00, missed-wake reconciliation section added, regime live-ticker snapshot noted), this research_log midday entry.
+- **Skipped**: trade_log.md append (no trade events this wake — flat book, no MTM effect); entry scan (routine-02 mandate); universe.md (not first-of-month); indicators.py bar-close run (not owed by midday routine; the next authoritative wake owns this); lessons.md (nothing new; the scheduler outage is a scheduler concern not a strategy concern); Telegram (see NOTIFY decision below); missed-scheduler replay (owned by next authoritative overnight/EOD wake per portfolio.md "Missed-wake reconciliation" recommendation).
+- **Flagged for follow-up**: (a) major scheduler outage 07-08 all 3 wakes + 07-09 overnight — next authoritative wake should run targeted replay; (b) indicators.py universe-config drift (FARTCOIN vs ONDO) still unreconciled; (c) live-ticker regime recovery suggests SBD may clear on next bar-close — worth confirming at next authoritative check.
+
+### NOTIFY decision
+
+Routine-02 sends Telegram ONLY if:
+- A Ring 3 kill switch tripped → **NOT TRIPPED** (all clear).
+- Any exit happened → **NONE** (0 open positions, no exits possible).
+- Drawdown crossed a warning threshold (12.5%) → **DID NOT CROSS** (5.055%, 7.445pp below warn cap, unchanged from 07-07 EOD).
+
+**Decision: SILENT** — no Telegram notification per routine spec. The 4-wake scheduler outage is a meaningful operational anomaly but does not fall into any of the three NOTIFY triggers as written; it is documented in portfolio.md + research_log for the next authoritative wake to pick up.
