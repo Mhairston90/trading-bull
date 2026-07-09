@@ -7243,3 +7243,5 @@ Today is **not** the 1st (07-09 Thu). Next universe refresh due 2026-08-03 (firs
   - Missed-scheduler replay still owed at Fri 07-10T04Z EOD or 07-10T13Z overnight per prior sibling recommendation (07-08T12Z, 07-09T03Z, 07-09T12Z bar-close entry-scans).
   - indicators.py universe-config drift (FARTCOIN vs ONDO) confirmed persistent across 3 authoritative wakes now (07-07 EOD, 07-09 EOD, 07-09 overnight).
 - **NOTIFY**: **SILENT this wake**. Rationale — no Ring 3 kill switch tripped; no OPEN or CLOSE event (all rolled back); no ACTIONABLE news classification (news scan skipped); no universe refresh. Per routine-01 NOTIFY rules, silence = "all clear, nothing to flag" — accurate for this DEFER-inherit outcome. The sibling EOD's mandatory-daily card at 15:52Z has already carried the day's signal to Telegram; a duplicate silent overnight-slot broadcast would be noise.
+
+2026-07-09T16:02:58Z | allocation | day-gate | not Sunday, skipping | no action
