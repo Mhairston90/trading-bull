@@ -2,9 +2,9 @@
 
 > **Rebuilt each wake** from `trade_log.md` by whichever routine is running.
 > `trade_log.md` is the source of truth; this file is a derived snapshot.
-> **Last rebuild:** 2026-07-09T15:52Z routine-03-eod (PT Thu **2026-07-09 08:52**, **OFF-SCHEDULE ~12h47m EARLY** vs 21:00 PT / 04:00Z-Fri target cron `0 21 * * 1-5`; fired ~45s after the routine-02-midday finished — back-to-back scheduler burst). Slot identity confirmed `bull-03-eod`; PT date label 2026-07-09 Thu at fire time. **0 trade events this wake — flat book carried forward from 07-07 HYPE stop-hit-intrabar (35h+ ago).** Zero exit checks (0 open positions). **Authoritative bar-close regime read via `indicators.py` at 15:52:30Z (720-bar convergence, just-closed 14Z 1H bar basis): 14/15 positive 24h, median +1.38% → 5a PASS, 5a-SBD CLEAR (both prior legs cleared by wide margin: 14 positive » 1-ceiling AND +1.38% » −1.0% floor).** **Full regime FLIP confirmed authoritative** vs 07-07T04:10Z EOD reading (1/15 median −2.94% + SBD-ACTIVE); intervening SBD-clearing bars occurred during the 35h+ missed-wake gap. **Entry-scan result: 1 pair full-tech-PASS = BTC/USD** (R1 +$372.7, R2 +4.104 RSI 59.1, R2a OK, R3 +$410.6 EMA 62,311.3, R4a OK $107.99M); AVAX+TRX pass R1+R2+R2a+R3 but FAIL R4a ($1.85M and $1.33M respectively < $2.0M floor); TAO passes R1+R2+R2a but FAILS R3 (4H close $207.11 < EMA50 $210.35 by $3.24); all 11 others FAIL R2 (RSI < 55). **Entry decision: BTC entry DEFERRED to next authoritative on-schedule wake** — precedent 07-06T17:47Z (OFF-SCHEDULE EOD → MTM-only, 0 entries); the ~13h off-schedule state + fresh-regime-flip (1-bar-old SBD clear) + 3-day loss streak headroom-4 recommend defer over take-now. **Materially compliant with mandate either way** — flagging as "would-be BTC/USD rank-1 winner Fri overnight" for the 07-10T13Z on-schedule wake. Post-EOD equity **$10,509.36** (unchanged since 07-07 EOD, flat book), DD **5.055%** (unchanged, peak $11,068.89), since-inception **+5.094%**. Loss streak still **3 confirmed** as of 07-07 EOD (07-05 −0.10%, 07-06 −0.795%, 07-07 −1.535%); 07-08 was a missed-wake day (no close computed, conservatively 0 P&L, streak unchanged); today 07-09 flat and no bar-close-driven exit fires → streak stays at 3, cap 7, headroom 4. Kill switches all CLEAR (day PnL 0.000%, DD 5.055% < 12.5% warn, equity $10,509 > $7,500 floor). Rule 5b HYPE cooldown CLEARED 07-08T18Z. Watchdog carry-over: 9 findings identical to midday (routine-06/07 stale, dirty-tree, 6× variant stale-MTM). indicators.py universe-config drift confirmed persistent (still emitted FARTCOIN row in place of ONDO at 15:52Z run — ONDO's 14Z bar-close not read this wake; non-blocking for regime headline math since only 1 of 15 pairs; routine-01 tomorrow should reconcile). **Mandatory EOD Telegram card SENT per `skills/telegram.md`.**
+> **Last rebuild:** 2026-07-09T20:07Z routine-02-midday (PT Thu **2026-07-09 13:07**, **ON-SCHEDULE +7 min** vs 13:00 PT / 20:00Z target cron `0 13 * * 1-5` — scheduler back on-schedule after 4-wake outage, confirming recovery indicated by the back-to-back midday+EOD burst 45s apart at 15:51+15:52Z earlier today). Slot identity `bull-02-midday`; PT date label 2026-07-09 Thu at fire time. **0 trade events this wake — flat book (0 open positions) carried forward from 07-07T18Z HYPE stop-hit-intrabar (~50h ago).** Position-management routine — 0 MTM computations needed, 0 exit checks needed, 0 entries per midday spec. **Live-ticker regime snapshot at 20:07Z (Kraken `kraken_multi_ticker` 15-pair, NOT authoritative — bar-close authoritative per 2026-06-12 amendment): 13/15 positive 24h, median +0.78% → 5a PASS, 5a-SBD CLEAR (both legs cleared: 13 positive » 1-ceiling AND +0.78% » −1.0% floor).** BTC $63,144.3 (+1.46%); only negatives ADA −0.86%, HYPE −0.81%. Consistent with EOD 15:52Z authoritative bar-close read (14/15 median +1.38%) — regime PASS + SBD CLEAR persisting ~4h+ into next 1H bar window. Equity **$10,509.36** unchanged (flat book, no MTM to compute), DD **5.055%** unchanged (peak $11,068.89), since-inception **+5.094%**. Loss streak **3 confirmed** as of 07-07 EOD; 07-08 skipped-scheduler (0 P&L); 07-09 flat and no exit fires → streak stays 3, cap 7, headroom 4. Kill switches all CLEAR. Rule 5b HYPE cooldown CLEARED 07-08T18Z, no active same-pair cooldowns. Rule 5a-BTC DEFERRED entry from 15:52Z EOD still standing — reserved for next authoritative overnight wake (07-10T13:00Z Fri, cron `0 6 * * 1-5`). **Silent — no Telegram (0 exits, no kill-switch trip, DD 5.055% < 12.5% warn).**
 
-> **Prior rebuilds:** 2026-07-09T15:51Z routine-02-midday (PT Thu 08:51 OFF-SCHEDULE ~4h09m EARLY, 0/0 flat, equity $10,509.36 unchanged, DD 5.055%, regime live-ticker 11/15 +0.78% recovery-snapshot, 4-wake scheduler outage flagged); 2026-07-08T04:10Z routine-03-eod (PT Tue 21:10 ON-SCHEDULE +10min, 0/0 flat, equity $10,509.36, DD 5.055%, regime FAIL 1/15 SBD-ACTIVE, loss streak 3 confirmed); 2026-07-07T20:00Z routine-02-midday (PT Tue 13:00 ON-SCHEDULE, HYPE stop-hit-intrabar 18Z −$163.87/−1.02R, flat post-exit, equity $10,509.36, DD 5.055%); 2026-07-07T13:07Z routine-01-overnight (PT Tue 06:07 ON-SCHEDULE +7min, 1 OPEN HYPE/USD long 106.725 @ $72.05 rule-8 winner of 3 tech-PASS, TRX blocked R4a, regime FLIP overnight to PASS 12/15 +1.95% median; live-ticker rolling-24h divergence flagged); 2026-07-07T04:15Z routine-03-eod (PT Mon 21:15 ON-SCHEDULE, BTC exit −$93.69 / −0.581R exit-ema20-confirm, 0 new, equity $10,673.22, DD 3.58%, flat post-exit, regime 4/15 −1.54% PASS just above SBD); 2026-07-06T20:00Z routine-02-midday (PT Mon 13:00 ON-SCHEDULE, MTM-only $10,748.86, DD 2.89%, 0 trades, BTC live $63,572.6); 2026-07-06T17:47Z routine-03-eod (PT Mon 10:47 OFF-SCHEDULE ~10h13m EARLY, MTM-only $10,758.75, DD 2.80%, 0 trades); 2026-07-06T17:40Z routine-01-overnight (PT Mon 10:40 ~4h40m LATE, 1 OPEN BTC/USD long 0.16899 @ $63,679.4 rule-8 winner rank-1 of 10 tech-PASS, equity $10,763.08).
+> **Prior rebuilds:** 2026-07-09T15:52Z routine-03-eod (PT Thu 08:52 OFF-SCHEDULE ~12h47m EARLY vs 04:00Z-Fri, 0 trade events flat book, equity $10,509.36 unchanged, DD 5.055%, authoritative regime 14/15 median +1.38% SBD CLEAR full-FLIP vs 07-07 EOD, 1 tech-PASS BTC/USD DEFERRED per OFF-SCHEDULE precedent 07-06T17:47Z); 2026-07-09T15:51Z routine-02-midday (PT Thu 08:51 OFF-SCHEDULE ~4h09m EARLY, 0/0 flat, equity $10,509.36 unchanged, DD 5.055%, regime live-ticker 11/15 +0.78% recovery-snapshot, 4-wake scheduler outage flagged); 2026-07-08T04:10Z routine-03-eod (PT Tue 21:10 ON-SCHEDULE +10min, 0/0 flat, equity $10,509.36, DD 5.055%, regime FAIL 1/15 SBD-ACTIVE, loss streak 3 confirmed); 2026-07-07T20:00Z routine-02-midday (PT Tue 13:00 ON-SCHEDULE, HYPE stop-hit-intrabar 18Z −$163.87/−1.02R, flat post-exit, equity $10,509.36, DD 5.055%); 2026-07-07T13:07Z routine-01-overnight (PT Tue 06:07 ON-SCHEDULE +7min, 1 OPEN HYPE/USD long 106.725 @ $72.05 rule-8 winner of 3 tech-PASS, TRX blocked R4a); 2026-07-07T04:15Z routine-03-eod (PT Mon 21:15 ON-SCHEDULE, BTC exit −$93.69 / −0.581R exit-ema20-confirm); 2026-07-06T20:00Z routine-02-midday (PT Mon 13:00 ON-SCHEDULE, MTM-only $10,748.86, DD 2.89%, 0 trades).
 
 ## Account
 
@@ -42,7 +42,7 @@
   - BTC −$93.69 (exit-ema20-confirm 2026-07-07T03:00:00Z close-basis on-schedule, −0.581R)
   - HYPE −$163.87 (exit-stop-hit-intrabar 2026-07-07T18:00:00Z, −1.02R) — stop pierced during 18Z bar low $70.14 < stop $70.5499
 - Unrealized PnL (open positions): **$0.00** (flat)
-- Position values (MTM at 2026-07-09T15:52Z bar-close basis): **$0.00** (flat)
+- Position values (MTM at 2026-07-09T20:07Z live-ticker basis): **$0.00** (flat)
 - Current equity (cash + MTM): **$10,509.36** ($10,509.36 cash + $0.00 MTM)
 - Equity peak: **$11,068.89** (unchanged from 07-04T20:00Z; peak-day exceeds current equity by $559.53)
 - Drawdown from peak: **5.055%** ($559.53 below peak; 7.445pp headroom to 12.5% warn cap)
@@ -101,12 +101,12 @@ Rule pass-fail per pair (bold = full tech-PASS eligible):
 
 Take-now would have been within mandate (BTC passes all 8 rules, and rule 8 says "max 1 new entry per wake" not "must take an entry per wake"). Documenting for audit: had this been on-schedule the entry would have been executed. Flagged as **would-be BTC/USD rank-1 entry Fri 07-10T13Z overnight wake** if BTC still tech-PASS + regime PASS at that 12Z bar close.
 
-## Midday snapshot — 2026-07-09 PT Thu 08:51 (fired 15:51Z, OFF-SCHEDULE ~4h09m EARLY vs 13:00 PT target)
+## Midday snapshot — 2026-07-09 PT Thu 13:07 (fired 20:07Z, ON-SCHEDULE +7 min vs 13:00 PT target)
 
 | Metric | Value |
 |---|---|
-| Wake type | routine-02-midday (bull-02-midday slot, PT date label 2026-07-09 Thu at fire time, wall-clock UTC 2026-07-09T15:51Z, **OFF-SCHEDULE ~4h09m EARLY** vs scheduled 20:00Z) |
-| MTM basis | Kraken live-ticker at 15:51Z (flat book, MTM = $0.00) |
+| Wake type | routine-02-midday (bull-02-midday slot, PT date label 2026-07-09 Thu, wall-clock UTC 2026-07-09T20:07Z, **ON-SCHEDULE +7 min** vs scheduled 20:00Z) |
+| MTM basis | Kraken live-ticker at 20:07Z (flat book, MTM = $0.00) |
 | Entries this wake | **0** — midday routine is position-management only (skill mandate) |
 | Exits this wake | **0** — 0 open positions to evaluate |
 | Stop-management events | 0 (flat book) |
@@ -114,13 +114,13 @@ Take-now would have been within mandate (BTC passes all 8 rules, and rule 8 says
 | Equity (mix) | **$10,509.36** ($10,509.36 cash + $0.00 MTM, flat) |
 | Equity peak | **$11,068.89 (unchanged; set 07-04T20:00Z midday MTM)** |
 | Drawdown from peak | **5.055%** ($559.53 below peak; 7.445pp headroom to 12.5% warn) — UNCHANGED |
-| Loss streak (last-known) | **3 confirmed** as of 07-07 EOD (07-05 −0.10%, 07-06 −0.795%, 07-07 −1.535%). Cap 7, headroom 4. 07-08 was a MISSED WAKE — no close computed. Live-day 07-09 currently flat (0 events) so no new loss day accumulating. |
-| Regime (live-ticker snapshot 15:51Z, NOT authoritative — bar-close basis is authoritative per prior amendments) | **11/15 positive, median +0.78%** (calc: sorted 24h% changes ETH −0.11, SOL −0.13, HYPE 0.00, ADA −0.26 = 4 non-positive; XBT +1.14, XRP +0.10, NEAR +1.21, SUI +0.93, TAO +1.27, XDG +0.31, LTC +0.50, AVAX +4.44, LINK +0.82, ONDO +0.78, TRX +0.97 = 11 positive; median 8th value = 0.78%) |
-| SBD status (live-ticker) | Would clear both legs — 11 positive > 1 ceiling AND +0.78% median > −1.0% floor. Awaiting bar-close confirmation at next overnight wake (07-10T13Z or replay). |
-| BTC live | $62,947.7 (+1.14% vs 24h ago) |
-| AVAX live | $6.758 (+4.44%, biggest mover today) |
-| HYPE live | $67.61 (0.00%, closed exit near $70.51 = live is $2.90 / −4.1% below stop-exit fill; retrospective SBD-tightened 9-EMA would likely have exited BTC/HYPE earlier if applied — but was N/A since flat mid-wake) |
-| MCP availability | Kraken OK (`kraken_multi_ticker` 15-pair fetch clean at 15:51:41Z). CLEAR. |
+| Loss streak (last-known) | **3 confirmed** as of 07-07 EOD (07-05 −0.10%, 07-06 −0.795%, 07-07 −1.535%). Cap 7, headroom 4. 07-08 was skipped-scheduler (no close computed, 0 P&L). 07-09 flat book → no new loss day. |
+| Regime (live-ticker snapshot 20:07Z, NOT authoritative — bar-close basis is authoritative) | **13/15 positive, median +0.78%** (calc: sorted 24h% changes ADA −0.86, HYPE −0.81 = 2 negative; ETH +0.18, SOL +0.31, XRP +0.54, ONDO +0.61, LTC +0.66, XDG +0.78, SUI +0.96, TRX +1.05, NEAR +1.28, BTC +1.46, LINK +1.51, TAO +1.66, AVAX +3.37 = 13 positive; median 8th value = +0.78%) |
+| SBD status (live-ticker) | CLEAR both legs — 13 positive » 1 ceiling AND +0.78% median » −1.0% floor. Consistent with 15:52Z EOD authoritative read (14/15 median +1.38%) — persisting. |
+| BTC live | $63,144.3 (+1.46% vs 24h ago) — up $196.6 vs live 15:51Z snapshot ($62,947.7). Held above 20-EMA ~$62,772 (~15:52Z indicator level); would-be BTC rank-1 rule-8 winner still tracking. |
+| AVAX live | $6.689 (+3.37%, biggest mover today; still R4a-blocked 24h volume $2.57M borderline — closer to $2M floor now than mid-morning $1.85M reading) |
+| HYPE live | $67.06 (−0.81%, below 07-07T18Z stop-fill $70.51; 5b cooldown expired 07-08T18Z, no re-entry gate) |
+| MCP availability | Kraken OK (`kraken_multi_ticker` 15-pair fetch clean at 20:07Z). CLEAR. |
 
 ## Active kill-switch state
 
@@ -129,11 +129,11 @@ Take-now would have been within mandate (BTC passes all 8 rules, and rule 8 says
 - Max drawdown: **5.055%** from peak $11,068.89 (cap 25%, warn 12.5%, **7.445pp headroom to warn**) — CLEAR. UNCHANGED from 07-07 EOD.
 - Equity floor: $10,509.36 > $7,500 floor (+$3,009.36 above floor). CLEAR.
 - MCP availability: Kraken live-ticker OK. TradingView / Telegram not exercised this wake (silent). CLEAR.
-- Regime gate (rule 5a): **bar-close authoritative PASS 14/15 median +1.38%** at 07-09T14Z 1H bar close (indicators.py 15:52:30Z run). Full flip from 07-07 EOD FAIL 1/15 −2.94% + SBD-ACTIVE → PASS 14/15 +1.38% + SBD CLEAR. Entry gate OPEN this wake (but 0 entries taken per DEFER decision above).
-- 5a-SBD status: **CLEAR** (both legs: 14 positive » 1 ceiling AND +1.38% » −1.0% floor). Exit rule 1 reverts to 20-EMA two-bar (from 9-EMA-SBD-tightened). N/A this wake (flat book).
-- Active 5b cooldowns: **NONE** — HYPE cooldown expired 2026-07-08T18:00Z, ~21h52m ago. No same-pair cooldowns active. All 15 universe pairs entry-eligible at bar close (subject to per-rule filters).
+- Regime gate (rule 5a): **bar-close authoritative PASS 14/15 median +1.38%** at 07-09T14Z (last authoritative read). Live-ticker at 20:07Z confirms persistence (13/15 median +0.78%). Entry gate open — but midday routine per spec takes no entries regardless.
+- 5a-SBD status: **CLEAR** (both legs: live-ticker 13 positive » 1 ceiling AND +0.78% » −1.0% floor). Exit rule 1 remains 20-EMA two-bar. N/A this wake (flat book).
+- Active 5b cooldowns: **NONE** — HYPE cooldown expired 2026-07-08T18:00Z. No same-pair cooldowns active.
 - Cluster cap (rule 6a, BTC-cluster): **0/2** used. 2 slots headroom.
-- **All Ring 3 kill switches CLEAR.** Routine-03-eod 2026-07-09T15:52Z: **0 entries (1 tech-PASS deferred), 0 exits, 0 open at wake / 0 open after**; DD unchanged 5.055%; portfolio 0/4 positions (flat); regime FULLY FLIPPED authoritative to PASS + SBD CLEAR.
+- **All Ring 3 kill switches CLEAR.** Routine-02-midday 2026-07-09T20:07Z: **0 entries (midday spec = no entries), 0 exits, 0 open at wake / 0 open after**; DD unchanged 5.055%; portfolio 0/4 positions (flat); regime PASS + SBD CLEAR persisting.
 
 ### EOD lesson entry (Thu 07-09)
 
@@ -170,14 +170,14 @@ This midday wake CANNOT run the replay itself (routine-02 spec: position-managem
 
 *(none — portfolio flat)*
 
-Next scheduled wake: routine-01-overnight Fri 2026-07-10 06:00 PT = 13:00Z Fri (cron `0 6 * * 1-5`, ~21h out from this fire). Cash reserve **$10,509.36** (100% cash). Rule-7 portfolio-risk headroom **4.00pp / 4.0%**. Cluster 0/2 unchanged, position cap 0/4 (4 slots headroom). No 5b cooldowns active (HYPE expired 07-08T18Z). Watching for: (a) whether the scheduler resumes normally at the Fri 13:00Z wake (this back-to-back 15:51+15:52Z midday+EOD burst suggests the scheduler is now active again after the 4-wake outage; a clean on-schedule fire tomorrow confirms recovery); (b) whether BTC/USD retains full tech-PASS at the 07-10T12Z bar close and executes as the rank-1 rule-8 winner (deferred this wake); (c) whether the fresh SBD-CLEAR regime persists across additional bars (24+ bars would strengthen confidence per 06-17 same-session-flip lesson); (d) indicators.py universe-config drift (FARTCOIN vs ONDO) reconciliation status.
+Next scheduled wake: routine-01-overnight Fri 2026-07-10 06:00 PT = 13:00Z Fri (cron `0 6 * * 1-5`, ~17h out from this fire). Cash reserve **$10,509.36** (100% cash). Rule-7 portfolio-risk headroom **4.00pp / 4.0%**. Cluster 0/2 unchanged, position cap 0/4 (4 slots headroom). No 5b cooldowns active. Watching for: (a) scheduler on-schedule fire at Fri 13:00Z (this midday's clean +7min ON-SCHEDULE fire confirms recovery from 4-wake outage — next Fri overnight should also fire cleanly); (b) whether BTC/USD retains full tech-PASS at 07-10T12Z bar close and executes as the rank-1 rule-8 winner (deferred at 15:52Z EOD, still tracking above key levels at 20:07Z); (c) SBD-CLEAR persistence — now ~6h+ old, additional bars strengthen confidence; (d) indicators.py universe-config drift (FARTCOIN vs ONDO) reconciliation.
 
 ## Rolling performance
 
 | Window | BULL return | BTC-hold return | Delta | Result |
 |--------|-------------|-----------------|-------|--------|
-| 7d | ≈ +0.34% (equity 07-02 est ~$10,474 → $10,509.36) | ≈ +0.87% ($62,405 est 24h→ $62,947.7 live) | ≈ −0.5pp | BULL slightly behind 7d |
-| 30d | ≈ +5.09% (inception $10k 2026-04-20; $10,509.36 flat) | ≈ −18.2% est (BTC 30d ago ~$77k → $62,947.7 live) | ≈ +23.3pp | BULL well ahead |
-| 90d | — | — | — | not computable (BULL inception 79 days ago; window first computable ~2026-07-19) |
+| 7d | ≈ +0.34% (equity 07-02 est ~$10,474 → $10,509.36) | ≈ +1.19% ($62,401 est 24h→ $63,144.3 live) | ≈ −0.85pp | BULL slightly behind 7d |
+| 30d | ≈ +5.09% (inception $10k 2026-04-20; $10,509.36 flat) | ≈ −18.0% est (BTC 30d ago ~$77k → $63,144.3 live) | ≈ +23.1pp | BULL well ahead |
+| 90d | — | — | — | not computable (BULL inception 80 days ago; window first computable ~2026-07-19) |
 
-(BTC live-ticker 2026-07-09T15:51Z = $62,947.7. Portfolio flat.)
+(BTC live-ticker 2026-07-09T20:07Z = $63,144.3. Portfolio flat.)

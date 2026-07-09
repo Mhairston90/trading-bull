@@ -7249,3 +7249,5 @@ Today is **not** the 1st (07-09 Thu). Next universe refresh due 2026-08-03 (firs
 2026-07-09T17:07:01Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-07-09T17:40:33Z | allocation | day-gate | not Sunday, skipping | no action
+
+2026-07-09T20:07:00Z | routine-02-midday | wake | Thu 13:07 PT ON-SCHEDULE +7min vs 20:00Z target — scheduler recovery from 4-wake outage confirmed by clean on-time fire | 0 trades, 0 exits, flat book (0 open); MTM $0.00; equity $10,509.36 unchanged; DD 5.055% unchanged; live-ticker regime PASS 13/15 median +0.78% SBD-CLEAR (consistent with 15:52Z EOD authoritative 14/15 +1.38%); BTC $63,144.3 (+1.46%) still above key levels — deferred rank-1 entry still tracking for Fri overnight; kill switches all CLEAR (day PnL 0.00%, DD 5.055% < 12.5% warn, equity > $7,500 floor, MCP OK); no Telegram sent (silent per spec — no anomaly, no exit, no kill-switch trip)
