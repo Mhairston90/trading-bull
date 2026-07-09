@@ -7132,3 +7132,4 @@ Today is **not** the last trading day of the month (07-09 Thu, not 07-31 or last
 - **Skipped**: trade_log.md append (no trade events); universe.md (not first-of-month); archive (not month-end); news scan (deferred entry); sentiment scan (same); lessons.md append (no novel strategy patterns); targeted missed-scheduler replay (owned by Fri overnight).
 - **Flagged for follow-up**: (1) indicators.py universe-config drift (FARTCOIN vs ONDO) persistent 2+ wakes; (2) BTC/USD full tech-PASS deferred — Fri 07-10T13Z overnight to re-evaluate; (3) watchdog heartbeats 287h stale; (4) scheduler recovery confirmation pending clean Fri fire.
 - **NOTIFY**: mandatory daily EOD Telegram card SENT per `skills/telegram.md`.
+2026-07-09T16:01:54Z | harness | day-gate | not Saturday (Thursday), skipping | no action
