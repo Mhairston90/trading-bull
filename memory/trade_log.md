@@ -40,3 +40,4 @@
 | 2026-07-07T12:00:00Z | OPEN | HYPE/USD | long | 106.725 | 72.05 | 70.5499 | 78.0504 | — | — | entry-rule-v0.4-momentum-rule8-winner |
 | 2026-07-07T18:00:00Z | CLOSE | HYPE/USD | long | 106.725 | 70.5146 | — | — | -1.02 | -163.87 | exit-stop-hit-intrabar |
 | 2026-07-10T03:00:00Z | OPEN | BTC/USD | long | 0.16438 | 63925.85 | 63184.34 | 66891.89 | — | — | entry-rule-v0.4-momentum-rule8-cashfit |
+| 2026-07-10T19:00:00Z | CLOSE | BTC/USD | long | 0.16438 | 63758.30 | — | — | -0.23 | -27.54 | exit-ema20-2bar-recovery (18:00Z and 19:00Z closes below converged 1H EMA20; recovered from the scheduler outage using the full local Kraken-derived 1H cache) |
