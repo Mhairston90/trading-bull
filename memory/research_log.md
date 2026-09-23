@@ -7345,3 +7345,74 @@ Today is 2026-09-23 (Wed), not the 1st. Next refresh due first weekday of Octobe
 - **NOTIFY**: **Telegram sent** — new OPEN NEAR/USD flag per routine-01 NOTIFY rule (b).
 2026-09-23T17:09:05Z | harness | day-gate | not Saturday, skipping | no action
 2026-09-23T17:40:31Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-09-23T20:00:00Z routine-02-midday (PT Wed 2026-09-23 13:00 ON-SCHEDULE vs 13:00 PT cron)
+
+Slot identity: `bull-02-midday`. Wall-clock UTC 20:00Z. Fired on cron `0 13 * * 1-5` (PT).
+
+### Position management — 1 EXIT (NEAR stop-hit-intrabar)
+
+**NEAR/USD stop hit intrabar on the 14:00-15:00Z 1H bar.** Kraken 1H OHLCV shows 14:00Z bar high 4.773, low **4.4012** — pierced the entry stop 4.45616 before recovering to close 4.6476.
+
+Exit execution (per skill `decide.md` intrabar rule: "if price has pierced it intrabar, close at stop price"; per prior stop-hit-intrabar precedent SOL 06-17/06-27, HYPE 07-07 which apply 0.05% slippage to stop price):
+
+- Fill: 4.45616 × (1 − 0.0005) = **$4.45393**
+- Size: 577.6 NEAR
+- Gross PnL: (4.45393 − 4.72836) × 577.6 = **−$158.51**
+- Entry commission (0.26% × $2,731.10): **−$7.10**
+- Exit commission (0.26% × $2,572.59): **−$6.69**
+- **Net realized: −$172.30**
+- R at exit: −0.27443 / 0.27220 = **−1.01R**
+- Timestamp: 2026-09-23T14:00:00Z (bar-start of stop-piercing 1H bar)
+- Reason tag: `exit-stop-hit-intrabar`
+
+Ratio-of-stop-to-realized-loss check: expected pure −1R would be −$157.22 (initial risk); realized −$172.30 = −1.096× stop. Extra 0.096× accounts for exit-side slippage (0.05% of notional ≈ $1.29) + $13.79 round-trip commission. Within model tolerance.
+
+### Full 1H trace 13:00 → 20:00Z (entry to now)
+
+| Bar | Open | High | Low | Close | Notes |
+|---|---:|---:|---:|---:|---|
+| 13:00Z | 4.7278 | 4.7531 | 4.6248 | 4.7442 | Entry bar; fill 4.72836 slightly above bar-open, below bar-close (bar-close convention with 0.05% slip) |
+| 14:00Z | 4.7439 | 4.773 | **4.4012** | 4.6476 | **STOP HIT** (low 4.4012 < 4.45616); exit at $4.45393 |
+| 15:00Z | 4.6462 | 4.7352 | 4.1327 | 4.216 | Continued sell (−16% peak-to-trough vs 12:00Z close 4.726) — validates stop's protective purpose |
+| 16:00Z | 4.2149 | 4.3373 | 4.0352 | 4.3196 | Session low 4.0352 |
+| 17:00Z | 4.3196 | 4.4307 | 4.2291 | 4.3897 | Recovery |
+| 18:00Z | 4.3861 | 4.483 | 4.2654 | 4.4023 | Volume spike (1.86M) |
+| 19:00Z | 4.4082 | 4.4391 | 4.324 | 4.4051 | Consolidation |
+| 20:00Z | 4.4049 | 4.425 | 4.3815 | 4.3836 | Mid-bar at wake; live ticker 4.3836 |
+
+Had we not been stopped: current MTM at 20:00Z live 4.3836 would be (4.3836 − 4.72836) × 577.6 = −$199.13 unrealized (−1.27R adverse); stop-out at −1.01R was the strictly better outcome versus hold.
+
+### Entry scan — SKIPPED per routine-02 mandate
+
+Routine-02 is position management only. Entry responsibility belongs to routine-01 (overnight) and routine-03 (EOD).
+
+### Kill-switch state (post-exit)
+
+- **Daily P&L (PT 09-23)**: realized −$172.30 = −1.64% of start-of-day equity $10,481.82. CLEAR (5% cap, 3.36pp headroom).
+- **Consecutive losing trading days**: 1 (NEAR today). Streak 1/7. CLEAR.
+- **Max drawdown**: **6.86%** from peak $11,068.89 (was 5.34% pre-exit, +1.52pp from realizing the stop). CLEAR (25% cap, 12.5% warn, **5.64pp headroom**).
+- **Equity floor**: $10,309.52 > $7,500 (+$2,809.52). CLEAR.
+- **MCP availability**: Kraken REST responsive; ticker + OHLCV both retrieved cleanly. CLEAR.
+- **5b cooldown**: NEAR/USD active until 2026-09-24T14:00:00Z (24h from exit).
+- **Portfolio risk**: 0.000% / 4%.
+- **All Ring 3 kill switches CLEAR.**
+
+### Notes on the entry (retrospective)
+
+Not flagged as a rule violation — every rule-1..8 check documented at entry passed deterministically. The stop-out is the designed −1R outcome. However, one contextual observation worth logging for future post-outage first-wake decisions:
+
+- Entry fill 4.72836 landed within 1% of the 24h session high 4.8017 (which had just been set in the 12:00Z bar as bar-high). Rule-8 winners entering into 24h-high territory face elevated distribution-top risk — the momentum that qualifies R1 (close > EMA20) and R2 (RSI > 55) at bar-close is often the same climactic push that reverses on the next bar. R2a's 80-cap partially addresses this but RSI 69.1 today was well within the acceptable band.
+- Not proposing a strategy change from n=1 — will let this data point season and route to routine-04 harness for pattern-detection across future stop-outs.
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (post-routine-01 state), trade_log.md tail 7d, skills/decide.md, skills/log-trade.md, skills/telegram.md.
+- **Fetched**: `kraken_ticker NEARUSD` (live 4.3836 spot); `kraken_ohlcv NEARUSD 1h 30bars` (confirmed 14:00Z stop-piercing bar).
+- **Wrote**: trade_log.md +1 CLOSE row 2026-09-23T14:00Z NEAR/USD long 577.6 @ 4.45393 (−$172.30 realized, −1.01R); portfolio.md fully rebuilt (flat, DD 6.86%, all Ring 3 CLEAR); this research_log entry.
+- **Skipped**: entry scan (routine-02 mandate — position management only); news scan (routine-02 does not own news); lessons.md (no novel pattern from n=1 stop-out on rule-conformant entry — routing pattern-detection to routine-04 harness).
+- **NOTIFY**: **Telegram sent** — exit event per routine-02 NOTIFY rule (b, "Any exit happened").
+
+### Compact log row
+
+2026-09-23T20:00:00Z | routine-02-midday | wake | Wed 13:00 PT ON-SCHEDULE vs 13:00 PT cron | 0 entries, 1 exit (NEAR stop-hit-intrabar 14:00Z bar: fill 4.45393, −1.01R, −$172.30 net); equity $10,309.52 (was 10,476.97 MTM); DD 6.86% CLEAR; day PnL −1.64% CLEAR; all Ring 3 CLEAR; Telegram sent (exit alert)
