@@ -7343,3 +7343,4 @@ Today is 2026-09-23 (Wed), not the 1st. Next refresh due first weekday of Octobe
   - 5x stale-MTM variant portfolios (1339-2109h since last rebuild). Variant rack effectively frozen since scheduler outage; needs routine-04-harness resume to unfreeze.
   - Post-outage-first-wake decision framework: this wake sets precedent for EXECUTE under (i) on-schedule fire, (ii) rules pass deterministically, (iii) SBD clear both legs, (iv) sizing fits cap. Future first-wakes should reference this decision.
 - **NOTIFY**: **Telegram sent** — new OPEN NEAR/USD flag per routine-01 NOTIFY rule (b).
+2026-09-23T17:09:05Z | harness | day-gate | not Saturday, skipping | no action
