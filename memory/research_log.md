@@ -7256,3 +7256,90 @@ Today is **not** the 1st (07-09 Thu). Next universe refresh due 2026-08-03 (firs
 2026-09-23T05:32:52Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-09-23T05:33:10Z | allocation | day-gate | not Sunday, skipping | no action
+
+2026-09-23T13:13:36Z | routine-01-overnight | wake | Wed 06:13 PT ON-SCHEDULE +13min vs 13:00Z target — **first main-routine wake since 2026-07-10 (~74d scheduler outage on routine-01/02/03/06/07; only 04/05 day-gate skips ran)** | slot identity bull-01-overnight confirmed | READ CLAUDE.md guardrails.md strategy.md v0.4 portfolio.md (74d-stale, book flat since 07-29 manual replay) universe.md (07-01 refresh, still current) trade_log.md-tail research_log.md-tail lessons.md skills/decide.md skills/telegram.md routines/01-overnight.md
+
+VERIFY: watchdog.py --telegram at 13:13:36Z: **11 findings, telegram sent auto**. 5x A heartbeat 12d gap (routine-01/02/03/06/07 all silent since 07-10). 1x C dirty-tree 4 files (sentinel_10k_reset_spec, replay_cache_20260629 dir, replay_result_20260629.json, routine07_replay_20260629.py — carry-over from 07-09 wake, still uncommitted). 5x D stale-MTM variant portfolios (1339-2109h — v0.3/v0.5/v0.7/v0.13/v0.14 all with open positions). None Ring-3 by themselves; the 5x A finding is by far the most important operationally. Findings NOTED per routine amendment.
+
+### Regime read (indicators.py bar-close basis, 720-bar convergence, just-closed 12:00Z 1H bar)
+
+Ran indicators.py at 13:13:42Z (6s after watchdog). **Regime: 4/15 positive 24h, median -0.86% -> 5a PASS (exactly at 4-floor); 5a-SBD CLEAR** (positive-count 4 > 1-ceiling; median -0.86% > -1.0% floor by 0.14pp — a NARROW SBD-clear). Marginal PASS both criteria.
+
+Compare 07-10T03Z last authoritative read (routine-03 EOD): 15/15 positive median +2.38%, SBD-CLEAR strong. Delta over 74 days: **-11 pairs positive, -3.24pp median 24h % change** — full unwind of the July recovery tape into a marginal/mixed regime.
+
+### Entry scan (per indicators.py, 12:00Z bar-close authoritative)
+
+Full R1+R2 PASS candidates: **1 pair only — NEAR/USD (rank 7)**.
+- **NEAR/USD**: R1 PASS +$0.2405 (close 4.726 > EMA20 4.4855), R2 PASS RSI14 69.1 (+14.09), R2a OK (69.1 < 80), R3 PASS +$1.008 (4H 4.726 > EMA50 3.68134), R3-20 (v0.14) PASS +$0.4774, R4a OK $30.67M > $2M. 24h +2.98% bar-close (live +4.86%). ATR14 = 0.1361, 2xATR stop distance = $0.2722.
+- Other 14 pairs: all FAIL R1 or R2 (RSI range 37.4-47.6 across BTC/ETH/SOL/HYPE/XRP/SUI/TAO/XDG/ADA/LINK/LTC/FARTCOIN/TRX/AVAX). Only NEAR broke above the 55 RSI floor + 20-EMA reclaim.
+- R4a-blocked among near-passes: TRX $1.51M < $2.0M floor (but also fails R1+R2 outright, so double-block).
+- Universe-config drift on indicators.py FARTCOIN vs ONDO still present (log unchanged from 07-07/07-09 wakes). Not gating this wake.
+
+**Full tech-PASS after all filters: 1 candidate (NEAR/USD).**
+
+### Sentiment scan (kraken_ticker + kraken_spread)
+
+- **NEAR live 13:14Z**: bid 4.6388 / ask 4.6408, spread 0.002 (~4bps), 24h volume 6.91M NEAR x VWAP $4.47 = **$30.8M notional** (matches indicators.py $30.67M within 0.4%). Trades_24h 43,999 — deep active book.
+- **Recent-spread sample** 13:15:14Z (10 snapshots): spreads 0.0018-0.0049 (4-11bps). Tight, no adverse-flow.
+- **Live-ticker vs bar-close 24h % change**: live +4.86% vs bar-close +2.98% (+1.88pp DIVERGENCE, LIVE LEADING BULLISH). Opposite direction from the 07-07 lesson concern (which flagged bar-close bullish vs live bearish as pre-flag for regime rollover). Not a veto; logged for symmetry.
+- **Intra-bar drift**: live last 4.6409 vs bar-close 4.726 = -1.79% pullback in first 14min of new 13Z bar. Informational; entry-price convention remains bar-close x 1.0005 slippage.
+
+Sentiment PASSES (informational-only in v0.4).
+
+### News scan
+
+**Skipped this wake.** Rationale: (i) v0.4 news is informational-only and does not veto entries; (ii) Firecrawl budget conservation across a first-wake-back-from-outage. Log: news-skip-post-outage-informational-only.
+
+### Entry decision — EXECUTE (1 entry this wake)
+
+**RULE-8 winner NEAR/USD executed.** Sizing:
+- Equity $10,481.82 -> risk-target 1.5% x $10,481.82 = $157.23
+- Stop distance $0.2722 (2xATR14)
+- Size = $157.23 / $0.2722 = 577.62 -> rounded to 577.6 NEAR (Kraken min lot 0.1)
+- Entry: bar-close 4.726 x 1.0005 slippage = **$4.72836**
+- Stop: $4.72836 - $0.2722 = **$4.45616**
+- Target: $4.72836 + 4 x $0.2722 = **$5.81716** (4R)
+- Notional: 577.6 x $4.72836 = $2,731.10 (fits cash cap $10,481.82 with 74% headroom — no degrade-to-cash needed)
+- Actual risk: 577.6 x $0.2722 = $157.22 = **1.500%** of equity (bang-on target)
+
+**Trade timestamp**: 2026-09-23T13:00:00Z (bar-open of just-closed 12:00-13:00Z 1H bar per convention).
+**Reason tag**: entry-rule-v0.4-momentum-rule8-winner.
+
+### Post-outage-first-wake decision framework
+
+Deliberated DEFER vs EXECUTE given:
+- **Pro-DEFER**: 74-day scheduler outage precludes continuous regime monitoring; entering on first-wake-back without multi-wake regime confirmation adds ops uncertainty; regime is marginal (4/15 at exact floor); portfolio.md was 74d-stale until this rebuild.
+- **Pro-EXECUTE (chosen)**: (i) rules pass deterministically — 5a floor is a hard-coded threshold, not a subjective margin; (ii) wake essentially on-schedule (+13min); (iii) 5a-SBD CLEAR both legs; (iv) NEAR is a mid-rank universe pair with strong single-name momentum (+4.86% live 24h, RSI 69.1 mid-range not climactic), not a marginal-liquidity meme; (v) risk sized at exactly the 1.5% cap with 0/8 positions used; (vi) watchdog auto-sent Telegram alert of outage so user is aware and can HALT manually if desired; (vii) systematic DEFER on every post-outage first-wake would render BULL a no-op until scheduler stability is manually verified — that is outside BULL autonomy.
+
+Precedent-alignment: 2026-07-10T04:11Z EOD executed a BTC entry ON-SCHEDULE after 4-wake outage under 15/15 strong regime; this wake is a weaker-tape parallel (4/15 marginal) but the deterministic-rule reasoning matches. Precedent-divergence: 2026-07-09T15:52Z EOD DEFERRED under three grounds (off-schedule, fresh-flip, loss-streak) — none of which apply here (on-schedule; no fresh flip because there IS no continuous data; no loss-streak because 74-day gap resets).
+
+### Kill-switch state (post-entry)
+
+- **Daily P&L (PT 09-23)**: MTM -$4.85 (-0.05%) at 13:15Z (NEAR live 4.6409 vs entry 4.72836, 577.6 x -$0.08746). CLEAR (5% loss cap, 4.95pp headroom).
+- **Consecutive losing trading days**: N/A across 74-day gap. Reset streak = 0 with this new entry pending its close.
+- **Max drawdown**: **5.34%** from peak $11,068.89 (was 5.30% pre-entry, +0.04pp from MTM). CLEAR (25% cap, 12.5% warn, 7.16pp headroom).
+- **Equity floor**: $10,476.97 > $7,500 (+$2,976.97 above). CLEAR.
+- **MCP availability**: Kraken REST + MCP + Telegram all responsive. CLEAR.
+- **Regime 5a**: PASS 4/15 median -0.86% (bar-close authoritative, at 4-floor).
+- **5a-SBD**: CLEAR (both legs cleared, one narrowly).
+- **5b cooldowns**: NONE (no NEAR trade history).
+- **Cluster cap (6a)**: 0/2 used (NEAR outside {BTC,ETH,SOL,TAO,AVAX,SUI,LINK}).
+- **Portfolio risk-at-moment**: 1.500% of 4% cap used.
+- **All Ring 3 kill switches CLEAR.**
+
+### First-of-month universe refresh check
+
+Today is 2026-09-23 (Wed), not the 1st. Next refresh due first weekday of October (2026-10-01 Thu). **No universe refresh action this wake.** Universe.md still reflects the 2026-07-01 refresh (14 pairs unchanged since; NEAR at rank 7 confirmed).
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (74d-stale), universe.md, trade_log.md tail, research_log.md tail, lessons.md head, routines/01-overnight.md, skills/telegram.md tail.
+- **Verified**: watchdog (11 findings, Telegram-sent, 5x A heartbeat outage acknowledged — none Ring-3); slot identity bull-01-overnight confirmed against prompt body; regime authoritative bar-close read.
+- **Fetched**: indicators.py 720-bar convergence (regime + all 15 pairs R1/R2/R2a/R3/R3-20/R4a); kraken_ticker NEAR (live); kraken_spread NEAR (10-snap sample).
+- **Wrote**: trade_log.md +1 OPEN row 2026-09-23T13:00Z NEAR/USD long 577.6 @ 4.72836; portfolio.md fully rebuilt (1 open, 1.500% risk, MTM -$4.85, DD 5.34%); this research_log entry. NO write to universe.md (not first-of-month). NO write to lessons.md (no novel strategy pattern — post-outage-first-wake framework is ops discipline, not strategy).
+- **Flagged for follow-up**:
+  - **CRITICAL**: 74-day routine-01/02/03/06/07 scheduler outage. Only 04/05 day-gate skips ran during the gap. User should verify Task Scheduler / cron config for main routines. Watchdog auto-alerted 5x A findings via Telegram this wake.
+  - Dirty-tree carry-over still uncommitted (4 files, all from 06-29). Route to routine-06 backlog whenever routine-06 resumes.
+  - 5x stale-MTM variant portfolios (1339-2109h since last rebuild). Variant rack effectively frozen since scheduler outage; needs routine-04-harness resume to unfreeze.
+  - Post-outage-first-wake decision framework: this wake sets precedent for EXECUTE under (i) on-schedule fire, (ii) rules pass deterministically, (iii) SBD clear both legs, (iv) sizing fits cap. Future first-wakes should reference this decision.
+- **NOTIFY**: **Telegram sent** — new OPEN NEAR/USD flag per routine-01 NOTIFY rule (b).
