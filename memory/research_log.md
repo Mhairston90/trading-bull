@@ -7344,3 +7344,4 @@ Today is 2026-09-23 (Wed), not the 1st. Next refresh due first weekday of Octobe
   - Post-outage-first-wake decision framework: this wake sets precedent for EXECUTE under (i) on-schedule fire, (ii) rules pass deterministically, (iii) SBD clear both legs, (iv) sizing fits cap. Future first-wakes should reference this decision.
 - **NOTIFY**: **Telegram sent** — new OPEN NEAR/USD flag per routine-01 NOTIFY rule (b).
 2026-09-23T17:09:05Z | harness | day-gate | not Saturday, skipping | no action
+2026-09-23T17:40:31Z | allocation | day-gate | not Sunday, skipping | no action
