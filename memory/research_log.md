@@ -7578,3 +7578,5 @@ Today is 2026-09-24 Thu, not the 1st. Skip. Next refresh candidate: routine-01-o
 ### Compact log row
 
 2026-09-24T13:14:24Z | routine-01-overnight | wake | Thu 06:14 PT ON-SCHEDULE vs 06:00 PT cron | 0 entries (reject-all-5a: 1/15 positive median −5.07%, SBD ACTIVE 2nd wake), 0 exits (book flat since 09-23T14Z); equity $10,309.52 unchanged; DD 6.86% CLEAR; all Ring 3 CLEAR; LTC/USD sole R1+R2 PASS (24h +7.57%) 2nd-wake-in-a-row, 5a-blocked; Telegram silent.
+
+2026-09-24T17:08:38Z | harness | day-gate | not Saturday, skipping | no action
