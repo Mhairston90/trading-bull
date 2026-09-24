@@ -7501,3 +7501,80 @@ Today is 2026-09-23 Wed, not the last trading day of September (which is 09-30 W
   - **Route to routine-04-harness on next Sat** (2026-09-26): (a) pattern-of-3 same-session-stop-after-regime-rollover promotion candidate; (b) post-outage-first-wake DEFER-heuristic Ring-2 memo; (c) variant-rack stale-MTM unfreeze; (d) dirty-tree carry-over cleanup.
   - **routine-07 still stale** 12d+ (heartbeat A). No trade actions gated on it; ops-only.
 - **NOTIFY**: mandatory daily EOD card SENT per skills/telegram.md template.
+
+## 2026-09-24T13:14:24Z routine-01-overnight (PT date 2026-09-24, Thu 06:14 PT ON-SCHEDULE)
+
+Slot identity: `bull-01-overnight` confirmed against prompt body (Routine 01 — Overnight Recap). Wall-clock UTC 13:14Z fire (06:14 PT); Thu 06:00 PT cron slot. First main-routine wake of PT 2026-09-24. Prior wake was routine-03-eod 2026-09-24T04:12Z (PT 2026-09-23 EOD). Book has been flat since 2026-09-23T14:00Z NEAR stop-out.
+
+### VERIFY
+
+- `watchdog.py --telegram` at 13:13:02Z: **8 findings, telegram sent auto**. 2× A heartbeat routine-06/07 (>12d gap; routine-03 heartbeat now current after 04:12Z commit). 1× C dirty-tree (same 4-file carry-over from 06-29, unchanged). 5× D stale-MTM variant portfolios (1363–2133h; variant rack frozen since 07-10 scheduler outage; unfreezes at next routine-04-harness Sat). None Ring-3 by themselves. Delta vs 04:12Z EOD watchdog: routine-03 heartbeat resolved (9→8 findings).
+- Slot-identity guard: prompt body reads "Routine 01 — Overnight Recap" — matches slot bull-01-overnight. No 01-vs-03 duplication detected.
+- Kill switches (all re-checked with 13:13Z bar-close prices via indicators.py):
+  - Daily loss (PT 2026-09-24): **0** (book flat since yesterday's NEAR stop-out; no P&L today). CLEAR.
+  - Consecutive-loss cap: **1** (NEAR 09-23). Streak 1/7. CLEAR.
+  - Max drawdown: **6.86%** from peak $11,068.89. CLEAR (12.5% warn, 5.64pp headroom).
+  - Equity floor: **$10,309.52 > $7,500**. CLEAR (+$2,809.52 headroom).
+  - Exposure: 0.000% / 4% cap. CLEAR (flat book).
+  - Cluster cap: 0/2. CLEAR.
+  - MCP availability: Kraken REST + indicators.py + watchdog + Telegram OK. CLEAR.
+  - **All Ring 3 kill switches CLEAR.**
+
+### Position management
+
+Book is flat (0 open positions). No stop checks, no exits to evaluate. Portfolio.md carries no positions since 2026-09-23T14:00Z NEAR CLOSE.
+
+### Regime read (indicators.py 13:13:06Z, just-closed 13:00Z 1H bar)
+
+**Regime: 1/15 positive 24h, median −5.07% → 5a FAIL AND SBD ACTIVE** (both legs tripped by wide margins: positive-count 1 ≤ 1-ceiling; median −5.07% ≤ −1.0% floor by 4.07pp).
+
+Compare 09-24T04:12Z EOD indicators (9h ago, PT calendar 09-23): 1/15 median −6.18%. Delta over 9 hours: **positive-count unchanged (1/15), median +1.11pp toward baseline** (from −6.18% to −5.07%). Deterioration has paused but not reversed — SBD still comfortably tripped on both legs. LTC/USD remains the sole positive-24h pair (yesterday +4.81%, today +7.57% — strengthening single-name outlier).
+
+24h changes per pair: LTC/USD +7.57% (only positive). TRX/USD −0.40% (still ~flat but liquidity-blocked). All others −2.2% to −8.67%. TAO/USD −8.67% (worst), AVAX/USD −6.16%, XDG/USD −6.68%, NEAR/USD −6.62%, XRP/USD −5.57%, FARTCOIN/USD −6.13%. BTC/USD −2.22%, ETH/USD −2.69%, SOL/USD −2.65% (major names milder).
+
+### Technical — entry-condition scan on 15 universe pairs (indicators.py authoritative)
+
+**R1+R2 PASS candidates (before 5a gate):** 1 pair — **LTC/USD only**.
+
+- **LTC/USD**: R1 PASS +$1.522 (close 66.96 > EMA20 65.438), R2 PASS RSI 60.2 (+5.19 above 55 floor), R2a OK (60.2 < 80 cap), R3 PASS +$6.88 (4H 66.96 > EMA50 59.4602), R3-20 (v0.14) PASS +$3.802, R4a OK $28.42M > $2M floor. 24h **+7.57%** — the only positive-24h pair in the universe (2nd consecutive wake as single-name outlier). ATR14 = 1.4787, 2×ATR = $2.9574. Tempting deterministic PASS but **BLOCKED by rule 5a mandatory reject-all-new-entries under regime FAIL** (positive-count 1 ≤ 4-floor and SBD ACTIVE).
+- **NEAR/USD**: R1 PASS +$0.0663 (close 4.413 > EMA20 4.347), R2 **FAIL** RSI 53.2 (−1.808 below 55 floor). R2a OK. R3 PASS. Also: **5b cooldown active until 14:00Z** (24h from yesterday's 14:00Z stop-out). Double-rejected (R2 + 5b).
+- **TRX/USD**: R1 FAIL −$0.001234 (close 0.340163 < EMA20 0.341397). R2 FAIL RSI 41.9. R3 FAIL −$0.001549. R4a **FAIL $1.39M < $2.0M floor**. Multi-blocked.
+- **LINK/USD**: R1 FAIL. R2 FAIL RSI 43.7. R3 **FAIL** −$0.1421 (4H close below 4H 50-EMA). Multi-blocked.
+- Remaining 11 pairs (BTC, ETH, SOL, HYPE, XRP, SUI, TAO, XDG, ADA, FARTCOIN, AVAX): all FAIL R1 and R2 (RSI range 34.3–45.2). Universe-drift note: indicators.py still lists FARTCOIN instead of ONDO (universe.md rank-14 change 2026-07-01); FARTCOIN triple-blocked anyway (R1 FAIL, R2 FAIL, would-fail R4a) → moot for this wake. Continues pre-existing indicator-config drift documented at prior wakes; not a new issue.
+
+**Rule 5a mandatory reject-all**: 1/15 positive ≤ 4-floor → reject all new entries this wake. **Rule 5a-SBD ACTIVE**: leg-1 (positive-count 1 ≤ 1-ceiling) TRIPPED; leg-2 (median −5.07% ≤ −1.0% floor) TRIPPED by 4.07pp. Both legs tripped for 2nd consecutive wake (04:12Z EOD tripped both, this wake still trips both). Exit rule 1 tightens to 9-EMA 2-bar under SBD — n/a right now, book flat.
+
+**No entries executed this wake.** Reason tag class: `entry-reject-5a-regime-fail-AND-sbd-active` (same as 04:12Z EOD, same as pre-outage 07-08 EOD).
+
+### News — SKIPPED
+
+Per v0.4 news is informational-only and does not gate/veto entries. Since 0 entries reached execution (only LTC PASSed technical, blocked by 5a), news scan skipped. No Firecrawl budget spent. Rationale matches 07-08 EOD and 09-24 04:12Z EOD skips under identical 5a-FAIL condition.
+
+### Sentiment — SKIPPED
+
+Same reason. Kraken_spread/depth informational-only; 0 candidates reached this stage.
+
+### First-of-month universe refresh — N/A
+
+Today is 2026-09-24 Thu, not the 1st. Skip. Next refresh candidate: routine-01-overnight on 2026-10-01 Thu.
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (post-EOD 04:12Z state), universe.md, trade_log.md tail 30d, research_log.md tail 7d, lessons.md head, skills/{decide,log-trade,research,telegram}.md, routines/01-overnight.md.
+- **Verified**: watchdog (8 findings, all sub-Ring-3, one improvement from EOD); slot-identity `bull-01-overnight` confirmed; all Ring-3 kill switches CLEAR.
+- **Fetched**: indicators.py 720-bar convergence (regime + all 15 pairs R1/R2/R2a/R3/R3-20/R4a).
+- **Wrote**:
+  - `research_log.md` — this entry.
+  - **NO write** to `trade_log.md` (0 entries, 0 exits; book flat).
+  - **NO write** to `portfolio.md` (state unchanged from 04:12Z EOD — flat book, same equity, same kill-switch status; sole delta is 24h regime slightly less-deep at −5.07% vs −6.18%. Not material enough to rebuild.)
+  - **NO write** to `lessons.md` (no new pattern; today's regime read continues 09-23 EOD lesson's flagged SBD-persistence hypothesis — companion evidence, not a new lesson).
+  - **NO write** to `universe.md` (not first-of-month).
+- **Flagged for follow-up**:
+  - **SBD persistence** — SBD entered active state at 09-24T04:12Z EOD; still ACTIVE 9h later. Reference archetype 2026-05-12 → 05-17 SBD persisted ~5 days. Current SBD tick-count: 2 consecutive wakes. Route to routine-04-harness (Sat 2026-09-26) for SBD-duration-vs-outcome pattern tracking.
+  - **LTC/USD 5a-gated outlier** — 2nd consecutive wake as sole positive-24h pair with full R1+R2+R2a+R3+R4a PASS. Blocked by 5a both wakes. This is exactly the archetype the P-W25R-SAMESESSION-STOP-GATE lesson (09-23) is designed to protect against — if 5a lifts and LTC still qualifies mid-day, the pattern's regime-margin-gate option (a) becomes directly relevant. Route to routine-02-midday for continued observation.
+  - **Regime tick-count for SBD-clearance tracker** — SBD auto-clears when either leg (positive-count > 1 OR median > −1.0%) becomes true. Neither leg near clearance today. Continue monitoring.
+- **NOTIFY**: **Telegram silent** — no new OPEN/CLOSE, no Ring-3 trip, no ACTIONABLE news, no universe refresh. Absence-of-message = "all clear, nothing to flag" per skills/telegram.md and routines/01-overnight.md NOTIFY spec. (Watchdog already sent its own alert at 13:13:02Z per --telegram flag — that is a separate ops channel, not a trade event.)
+
+### Compact log row
+
+2026-09-24T13:14:24Z | routine-01-overnight | wake | Thu 06:14 PT ON-SCHEDULE vs 06:00 PT cron | 0 entries (reject-all-5a: 1/15 positive median −5.07%, SBD ACTIVE 2nd wake), 0 exits (book flat since 09-23T14Z); equity $10,309.52 unchanged; DD 6.86% CLEAR; all Ring 3 CLEAR; LTC/USD sole R1+R2 PASS (24h +7.57%) 2nd-wake-in-a-row, 5a-blocked; Telegram silent.
