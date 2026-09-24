@@ -7581,3 +7581,77 @@ Today is 2026-09-24 Thu, not the 1st. Skip. Next refresh candidate: routine-01-o
 
 2026-09-24T17:08:38Z | harness | day-gate | not Saturday, skipping | no action
 2026-09-24T17:40:09Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-09-24T20:05Z routine-02-midday — book flat, REGIME FLIP (SBD CLEARED, 5a PASS)
+
+Slot identity: `bull-02-midday`. PT 13:00–13:10 window ON-SCHEDULE vs 13:00 PT cron (13:05 PT).
+
+### State summary
+
+- Equity **$10,309.52** unchanged (book flat since 09-23T14Z NEAR CLOSE).
+- No open positions → **no MTM** to fetch, **no exits** to evaluate.
+- Drawdown from peak $11,068.89: **6.86%** unchanged. CLEAR (25% cap, 12.5% warn, 5.64pp headroom).
+- Per midday spec: **DO NOT OPEN NEW POSITIONS** — entry responsibility owned by routine-01-overnight + routine-03-EOD. Observation-only wake for entry logic.
+
+### Regime read (Kraken multi-ticker snapshot 20:05Z, 15 universe pairs)
+
+**Regime FLIP: 14/15 positive 24h, median +3.75% → 5a PASS AND SBD CLEARED.** Compare 09-24T13:14Z overnight (7h ago): 1/15 median −5.07% (both SBD legs tripped, 2nd consecutive wake). Delta over 7 hours: **positive-count +13 (1 → 14), median +8.82pp (−5.07% → +3.75%)** — one of the sharpest single-wake regime reversals recorded.
+
+**5a status:** 14/15 positive ≥ 4-floor → **PASS by 10** (widest margin since pre-outage). New entries no longer regime-gated at this snapshot; EOD scan tonight (~03Z Fri) will determine executions.
+
+**5a-SBD status:** **CLEARED both legs.** Leg-1: positive-count 14 > 1-ceiling → CLEAR. Leg-2: median +3.75% > −1.0% floor → CLEAR. SBD was ACTIVE 2 consecutive wakes (09-24T04:12Z EOD entered; 09-24T13:14Z overnight persisted); this wake auto-clears. Exit rule 1 reverts to 20-EMA 2-bar (n/a right now, book flat).
+
+24h % change per pair (highest→lowest):
+- ONDO/USD **+23.95%** (rank-14 newcomer explodes; low 0.4073, last 0.51146)
+- LTC/USD **+15.64%** (yesterday's flagged 5a-gated outlier — doubles down; low 60.73, last 71.56)
+- NEAR/USD **+9.84%** (was −6.62% yesterday — full reversal; 5b cooldown expired at 14:00Z earlier today so R5b no longer blocks)
+- LINK/USD +7.20%, SUI/USD +6.72%, ADA/USD +4.24%
+- TAO/USD +3.81%, XDG/USD +3.75%, XRP/USD +2.02%, AVAX/USD +2.04%, SOL/USD +2.01%
+- HYPE/USD +0.44%, ETH/USD +0.39%, BTC/USD +0.01%
+- TRX/USD −0.49% (sole negative; would-fail R4a $2M anyway)
+
+BTC-cluster reversal: yesterday BTC −2.22%, ETH −2.69%, SOL −2.65%, TAO −8.67%, AVAX −6.16%, SUI/LINK not-in-cluster; today entire cluster positive (BTC +0.01% to TAO +3.81%). Base tape has re-synchronized upward.
+
+### Entry-condition preview (INFORMATIONAL — no execution at midday)
+
+Not running full indicators.py convergence at midday (kraken_multi_ticker is a 24h snapshot, not bar-close indicators). Full 1H-close authoritative scan owned by EOD routine. Preliminary momentum candidates for EOD watch based on 24h % change + regime clearance:
+
+- **LTC/USD** — 3rd-consecutive-wake momentum leader (+7.57% → +15.64%). Presumed R1/R2/R2a/R3 all favorable (24h low $60.73, last $71.56 — well above any recent EMA20). RSI likely elevated; watch R2a ceiling (RSI ≤ 80).
+- **ONDO/USD** — +23.95% breakout on rank-14 pair. Indicators.py config drift noted at overnight wake (still lists FARTCOIN not ONDO); may not be scanned by indicators.py convergence. **Watchlist follow-up:** if EOD scan misses ONDO due to config drift, this is exactly the miss-cost of the not-yet-updated indicator config. Route to routine-04-harness (Sat 2026-09-26) for indicator-config-vs-universe reconciliation.
+- **NEAR/USD** — R5b cooldown expired 14:00Z; +9.84% today after stopping out yesterday. Would trigger a re-entry into the pair that just stopped — the exact archetype the P-W25R-SAMESESSION-STOP-GATE lesson warns about. Watch closely at EOD; regime-margin gate proposal (Option a in the lesson) is directly relevant if EOD indicators show NEAR technically qualified.
+- **SUI/USD, LINK/USD, ADA/USD** — mid-tier momentum candidates worth EOD-scan.
+
+### Kill-switch verification (midday snapshot)
+
+- Daily loss cap (PT 2026-09-24 fresh day since 07:00Z rollover): **0.00%** (flat book, no trades today). CLEAR.
+- Consecutive-loss cap: **1 loss** (yesterday's NEAR). Streak = 1 of 7. CLEAR.
+- Max drawdown: **6.86%** unchanged. CLEAR.
+- Equity floor: **$10,309.52 > $7,500** (+$2,809.52 above). CLEAR.
+- Exposure: 0.000% / 4% used. CLEAR.
+- Cluster cap: 0/2. CLEAR.
+- 5b cooldown: NEAR/USD **expired at 14:00Z** (24h from yesterday's stop-out). No pairs in cooldown.
+- **Regime 5a: PASS 14/15 positive median +3.75%** (was FAIL 1/15 at overnight).
+- **5a-SBD: CLEARED** (both legs clear by wide margin).
+- **All Ring 3 kill switches CLEAR.**
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md, trade_log.md tail, skills/{decide,log-trade,telegram}.md, universe.md.
+- **Fetched**: kraken_multi_ticker for 15 universe pairs (single API call, 24h % change snapshot).
+- **Wrote**:
+  - `research_log.md` — this entry.
+  - `portfolio.md` — light rewrite: updated Last-rebuild timestamp + Active kill-switch section (5a PASS, SBD CLEARED). Book still flat; equity/DD unchanged.
+  - **NO write** to `trade_log.md` (0 entries, 0 exits per midday spec).
+- **Flagged for follow-up**:
+  - **EOD regime-flip re-scan** — routine-03-EOD tonight (~03Z Fri) will run indicators.py on just-closed 1H bar with 5a PASS + SBD CLEARED. Multiple momentum candidates (LTC, NEAR, SUI, LINK, ADA, possibly ONDO if indicator config not stale). Rule 8 will pick 1-per-wake winner by highest 30d notional rank if multiple pairs pass all filters.
+  - **NEAR/USD same-session re-entry risk** — 5b cooldown just expired, pair up +9.84% today after yesterday's stop-out. This is the exact P-W25R-SAMESESSION-STOP-GATE archetype. If EOD scan sees NEAR technically qualified, the regime-margin gate proposal (Option a: "block re-entry if 5a passes by ≤ margin threshold X") becomes directly relevant. Regime PASSes by margin 10 (14/15 vs 4 floor) — well above any plausible tight threshold, so P-W25R won't gate NEAR under this specific regime. Route observation to routine-04-harness for the pattern's ongoing evidence track.
+  - **ONDO/USD indicator-config drift** — indicators.py still lists FARTCOIN not ONDO (documented drift). ONDO +23.95% breakout may miss EOD scan if config not refreshed. Route to routine-04-harness (Sat 2026-09-26) for reconciliation.
+- **NOTIFY**: **Telegram silent** — per midday spec, notify only on Ring-3 trip, exit-happened, or DD-warning-crossed. All 3 conditions negative:
+  - No Ring-3 trip (all clear).
+  - No exit (book flat, nothing to exit).
+  - DD 6.86% unchanged, still 5.64pp below 12.5% warn.
+  A regime CLEARANCE (SBD cleared, 5a PASS) is not in the notify-conditions set — it's favorable news, not an alert. Silent per spec.
+
+### Compact log row
+
+2026-09-24T20:05:15Z | routine-02-midday | wake | 13:05 PT ON-SCHEDULE vs 13:00 PT cron | book flat, 0 exits, 0 entries (midday spec); equity $10,309.52 unchanged; DD 6.86% CLEAR; **regime FLIP: 14/15 positive median +3.75% → 5a PASS AND SBD CLEARED** (from 1/15 −5.07% at 13:14Z overnight, Δ +13 count / +8.82pp median in 7h); LTC +15.64% / ONDO +23.95% / NEAR +9.84% top movers; EOD scan will re-run indicators.py on cleared regime; all Ring 3 CLEAR; Telegram silent.

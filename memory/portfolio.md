@@ -1,7 +1,7 @@
 # BULL Portfolio State
 
 > **Rebuilt each wake** from `trade_log.md`; the log remains the source of truth.
-> **Last rebuild:** 2026-09-24T04:15:00Z routine-03-eod (PT date 2026-09-23) — book still flat (no new entries this wake — full 5a FAIL + SBD ACTIVE); EOD MTM formality-only since flat.
+> **Last rebuild:** 2026-09-24T20:05:15Z routine-02-midday — book still flat (midday is position-management-only; no MTM since no positions); **REGIME FLIP recorded**: 5a PASS 14/15 positive median +3.75%, SBD CLEARED both legs (from 1/15 −5.07% SBD-ACTIVE at 13:14Z overnight, Δ +8.82pp median in 7h).
 
 ## Account
 
@@ -47,19 +47,19 @@ Open positions: **0 / 8** (strategy cap 0/4; BTC cluster 0/2).
 - **NEAR/USD 5b cooldown ACTIVE** until 2026-09-24T14:00:00Z (24h from 14:00Z stop-out).
 - **Reversal from 09-23T13Z overnight-wake regime read**: 4/15 median −0.86% → 1/15 median −6.18% (−5.32pp median deterioration + 3-pair drop-out in 15h). SBD leg-1 tripped (4 → 1 positive-count crossed the ≤1 ceiling); SBD leg-2 tripped (median −0.86% crossed the −1.0% floor and continued to −6.18%).
 
-## Active kill-switch state (EOD 04:15Z)
+## Active kill-switch state (midday 20:05Z)
 
-- Daily loss cap (PT 2026-09-23): **−1.64%** ($−172.30 / $10,481.82 start-of-day). CLEAR (5% cap, 3.36pp headroom).
-- Consecutive-loss cap: **1 loss** (NEAR today). Streak = 1 of 7. CLEAR.
+- Daily loss cap (PT 2026-09-24 fresh session): **0.00%** (flat book, no trades today). CLEAR.
+- Consecutive-loss cap: **1 loss** (NEAR yesterday). Streak = 1 of 7. CLEAR.
 - Max drawdown: **6.86%** from peak $11,068.89. CLEAR (25% cap, 12.5% warn, 5.64pp headroom).
 - Equity floor: **$10,309.52 > $7,500** (+$2,809.52 above). CLEAR.
 - Exposure: 0.000% / 4% used. CLEAR.
 - Cluster cap: 0/2. CLEAR.
 - Universe/liquidity: N/A (flat). CLEAR.
-- 5b cooldown: **NEAR/USD active until 2026-09-24T14:00Z**.
-- **Regime 5a**: **FAIL** 1/15 positive median −6.18% (entry-scan reject-all).
-- **5a-SBD**: **ACTIVE** (both legs tripped by wide margins; Exit rule 1 tightens to 9-EMA 2-bar for any hypothetical future open position — n/a right now, book flat).
-- MCP availability: Kraken REST + MCP + indicators.py + watchdog + Telegram OK. CLEAR.
+- 5b cooldown: **NEAR/USD expired 2026-09-24T14:00Z** — no active cooldowns.
+- **Regime 5a**: **PASS 14/15 positive median +3.75%** (regime FLIP from 1/15 −5.07% at 13:14Z overnight, Δ +13 count / +8.82pp median in 7h). Entry-scan gate is OPEN; EOD tonight will re-run indicators.py on the cleared regime.
+- **5a-SBD**: **CLEARED both legs.** Leg-1: 14 positive > 1-ceiling. Leg-2: median +3.75% > −1.0% floor. Exit rule 1 reverts to 20-EMA 2-bar (n/a right now, book flat). SBD was ACTIVE 2 consecutive wakes (04:12Z EOD, 13:14Z overnight); auto-cleared this midday.
+- MCP availability: Kraken MCP OK (multi-ticker fetched successfully). CLEAR.
 - **All Ring 3 kill switches CLEAR.** (5a/SBD are entry-scan gates, not Ring-3 kills.)
 
 ## Ops notes (from watchdog)
