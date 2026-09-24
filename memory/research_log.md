@@ -7416,3 +7416,88 @@ Not flagged as a rule violation — every rule-1..8 check documented at entry pa
 ### Compact log row
 
 2026-09-23T20:00:00Z | routine-02-midday | wake | Wed 13:00 PT ON-SCHEDULE vs 13:00 PT cron | 0 entries, 1 exit (NEAR stop-hit-intrabar 14:00Z bar: fill 4.45393, −1.01R, −$172.30 net); equity $10,309.52 (was 10,476.97 MTM); DD 6.86% CLEAR; day PnL −1.64% CLEAR; all Ring 3 CLEAR; Telegram sent (exit alert)
+
+## 2026-09-24T04:12:00Z routine-03-eod (PT date 2026-09-23, Wed 21:12 PT ON-SCHEDULE)
+
+Slot identity: `bull-03-eod` confirmed against prompt body. Wall-clock UTC 04:12Z fire (21:12 PT); PT calendar date label 2026-09-23 per 06-11 date-labeling guard. Second main-routine wake since 74d scheduler outage (routine-01-overnight at 13:13Z fired first, opened+lost NEAR/USD).
+
+### VERIFY
+
+- `watchdog.py --telegram` at 04:12:17Z: **9 findings, telegram sent auto**. 3× A heartbeat routine-03/06/07 (12d gap — this wake will break routine-03 heartbeat post-commit; routine-06/07 still stale). 1× C dirty-tree (4 files carry-over from 06-29, unchanged from morning wake). 5× D stale-MTM variant portfolios (1354–2123h; variant rack frozen since scheduler outage; unfreezes at next routine-04-harness). None Ring-3 by themselves.
+- Slot-identity guard: prompt body reads "Routine 03 — End-of-Day Journal" — matches slot. No 03-vs-01 duplication detected.
+- Kill switches (re-checked with EOD prices): all Ring-3 CLEAR. Daily loss −1.64% (3.36pp headroom to 5% cap); loss-streak 1/7; drawdown 6.86% (5.64pp headroom to 12.5% warn); equity $10,309.52 > $7,500 floor.
+
+### Regime read (indicators.py bar-close authoritative, just-closed 03:00Z 1H bar)
+
+Ran indicators.py at 04:12:19Z. **Regime: 1/15 positive 24h, median −6.18% → 5a FAIL AND SBD ACTIVE** (both legs tripped: positive-count 1 ≤ 1-ceiling; median −6.18% ≤ −1.0% floor by 5.18pp — deep into SBD territory, comparable to the 2026-05-12→05-17 fragility-audit period that motivated the SBD rule addition).
+
+Compare 09-23T13Z overnight wake (this same PT day): 4/15 positive median −0.86% (5a marginal PASS, SBD narrow-clear). Delta over 15 hours: **−3 positive pairs, −5.32pp median 24h % change**. **This is a same-day regime crystallization from marginal-PASS to full-SBD** — the same-day mechanism the 06-17 SOL and 07-07 HYPE lessons flagged as an operational risk, now instance #3 and the first as a rule-8 winner (not rule-8 fallback).
+
+Only 1 universe pair (LTC/USD) posted positive 24h (+4.81%); every other pair red, most −3% to −13%. XDG −10.36%, TAO −9.23%, AVAX −8.88%, ADA −8.13%, XRP −7.75%, SUI −6.18% (median), LINK −6.53%, HYPE −5.10%, ETH −3.52%, SOL −3.74%, BTC −3.20%, FARTCOIN −12.69%.
+
+### Entry scan — 0 executions (mandatory reject-all under 5a FAIL + SBD ACTIVE)
+
+Full R1+R2 PASS candidates (before 5a gate): **2 pairs — LTC/USD, TRX/USD**.
+- **LTC/USD**: R1 PASS +$4.033 (close 66.62 > EMA20 62.587), R2 PASS RSI 73.8 (+18.77), R2a OK, R3 PASS +$7.84 (4H 66.62 > EMA50 58.7798), R3-20 (v0.14) PASS, R4a OK $19.43M > $2M. 24h **+4.81%** — the only positive-24h pair in the universe. ATR14 = 1.3497, 2×ATR = $2.6995. Tempting single-name outlier but **BLOCKED by rule 5a mandatory reject-all**.
+- **TRX/USD**: R1 PASS +$0.001703 (barely), R2 PASS RSI 60.6, R2a OK, R3 PASS +$0.00276, R4a **FAIL $1.39M < $2.0M floor**. Double-blocked (5a + R4a). 24h −0.10% (nominally flat but at illiquid-notional).
+- Remaining 13 pairs: outright FAIL R1 and R2 (RSI range 33.9–47.9); LINK additionally FAIL R3 (4H close below 4H 50-EMA).
+- **NEAR/USD**: R2 borderline (RSI 47.9, still FAIL floor of 55); 5b cooldown ACTIVE until 2026-09-24T14:00Z.
+- **FARTCOIN/USD**: still in universe-config drift (indicators.py doesn't yet replace with ONDO); FAIL R1+R2+R4a triple-block — moot.
+
+**No entries executed this wake.** Reason tag class: `entry-reject-5a-regime-fail-AND-sbd-active`.
+
+### News scan — SKIPPED
+
+Per v0.4 news is informational-only and does not gate/veto entries. Since 0 entries were evaluated past the 5a gate, news scan skipped. No Firecrawl budget spent. Rationale: identical to prior EOD-with-full-5a-FAIL wakes (07-08T04Z EOD did the same).
+
+### Sentiment scan — SKIPPED
+
+Same reason as news. Kraken_spread/depth informational-only; 0 candidates reached the sentiment stage.
+
+### Extract-lessons pass
+
+Reviewed today's single trade (NEAR/USD OPEN 13:00Z → CLOSE 14:00Z stop-hit-intrabar, −1.01R / −$172.30):
+
+- **Gap-risk**: no overnight gap — trade opened and closed within 2 hours of the same trading day. Not a gap-risk lesson.
+- **4R-target-vs-take-profit**: N/A, trade never reached +1R let alone +4R (stopped intrabar within 1 hour).
+- **Entry-immediate-reversal**: **YES** — entry at 13:00Z fill $4.72836 (near bar-close $4.7442), next bar (14:00Z) low $4.4012 = **−6.9% intrabar swing** hitting stop within 60 minutes. This is the archetype of "entry that immediately reversed" per routine-03 spec.
+- **Regime rollover**: entry at 4/15 marginal-PASS regime; EOD at 1/15 SBD-ACTIVE. **Same-day regime crystallization from marginal-PASS to full-SBD**. Instance #3 of same-session-stop-after-regime-rollover pattern (companions: 06-17 SOL rule-8-fallback, 07-07 HYPE rule-8-fallback with live-ticker leading signal).
+- **Post-outage-first-wake framework**: routine-01 this morning explicitly deliberated DEFER vs EXECUTE and chose EXECUTE (documented in real time). Outcome: full −1R stop-out within 1 bar under regime that then crystallized into SBD by EOD.
+
+**Two lessons appended to lessons.md** (see write section).
+
+### Day summary stats
+
+- **Day PnL (PT 2026-09-23)**: **−$172.30 / −1.64%** (start-of-day equity $10,481.82; NEAR realized loss the only P&L event).
+- **Trades opened**: 1 (NEAR/USD 13:00Z, rule-8-winner).
+- **Trades closed**: 1 (NEAR/USD 14:00Z, stop-hit-intrabar).
+- **Win rate today**: 0/1 = 0%.
+- **New equity**: **$10,309.52**.
+- **Drawdown from peak**: **6.86%** (peak $11,068.89 unchanged since 06-13).
+- **Since-inception**: **+3.10%**.
+- **Rolling 30d (08-24 close → 09-24 close)**: BULL **−1.64%** vs BTC-hold **+6.15%** = **−7.79pp behind**.
+- **Rolling 7d (09-17 close → 09-24 close)**: BULL **−1.64%** vs BTC-hold **+9.78%** = **−11.42pp behind**.
+- **90d benchmark**: not-yet-computable (74d scheduler outage cross-window; will resume once we have 90d of continuous post-outage data, ≥2026-12-22).
+
+### Monthly-archive check
+
+Today is 2026-09-23 Wed, not the last trading day of September (which is 09-30 Wed). **No archive action this wake.** Next archive candidate: routine-03-eod on 2026-09-30 (Wed).
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (routine-02-midday post-exit state), trade_log.md tail 30d, research_log.md tail 7d + this-day earlier wakes, lessons.md head, skills/{decide,log-trade,telegram}.md, routines/03-eod.md, universe.md.
+- **Verified**: watchdog (9 findings, telegram-sent, all sub-Ring-3, unchanged carry-over); slot-identity `bull-03-eod` confirmed; kill switches all CLEAR at EOD prices.
+- **Fetched**: indicators.py 720-bar convergence (regime + all 15 pairs R1/R2/R2a/R3/R3-20/R4a); Kraken REST BTC ticker (EOD live $83,803.20); Kraken REST BTC 1D OHLC 32-bar (08-24 → 09-24 for BTC-hold benchmark).
+- **Wrote**:
+  - `portfolio.md` — fully rewritten with EOD timestamp, flat-book state, day summary section, EOD entry-scan block, rolling-benchmark block, kill-switch state showing 5a FAIL / SBD ACTIVE (Ring-3 CLEAR).
+  - `research_log.md` — this entry.
+  - `lessons.md` — **2 new lessons appended** (see below).
+  - **NO write** to `trade_log.md` (0 entries, 0 exits this wake — NEAR OPEN and CLOSE were already logged by routine-01 and routine-02 earlier today).
+  - **NO write** to `universe.md` (not first-of-month).
+  - **NO write** to `memory/archive/` (not last trading day of month).
+- **Flagged for follow-up**:
+  - **Full SBD ACTIVE regime** — next wake (routine-01-overnight tomorrow 06:00 PT / 13:00Z) will re-check 5a/SBD legs; SBD auto-clears when either leg (positive-count > 1 OR median > −1.0%) becomes true. Given the depth of today's break (median −6.18%), SBD may persist multiple days — reference the 2026-05-12→05-17 archetype.
+  - **Post-outage-first-wake framework** — updated with the 09-23 NEAR outcome. See lessons.md new entry for the concrete conditional (DEFER when regime at 5a floor 4/15 or below).
+  - **Route to routine-04-harness on next Sat** (2026-09-26): (a) pattern-of-3 same-session-stop-after-regime-rollover promotion candidate; (b) post-outage-first-wake DEFER-heuristic Ring-2 memo; (c) variant-rack stale-MTM unfreeze; (d) dirty-tree carry-over cleanup.
+  - **routine-07 still stale** 12d+ (heartbeat A). No trade actions gated on it; ops-only.
+- **NOTIFY**: mandatory daily EOD card SENT per skills/telegram.md template.
