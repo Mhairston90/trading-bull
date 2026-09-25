@@ -1,7 +1,7 @@
 # BULL Portfolio State
 
 > **Rebuilt each wake** from `trade_log.md`; the log remains the source of truth.
-> **Last rebuild:** 2026-09-24T20:05:15Z routine-02-midday — book still flat (midday is position-management-only; no MTM since no positions); **REGIME FLIP recorded**: 5a PASS 14/15 positive median +3.75%, SBD CLEARED both legs (from 1/15 −5.07% SBD-ACTIVE at 13:14Z overnight, Δ +8.82pp median in 7h).
+> **Last rebuild:** 2026-09-24T04:12:21Z routine-03-eod — book still flat (no positions since 09-23T14Z NEAR CLOSE, no exits this wake); EOD entry scan produced 1 rule-8-winner (SOL) but was **DEFERRED as Ring-1 judgment** on live-ticker-vs-bar-close divergence matching the 2026-07-07 HYPE archetype + fresh 2026-09-23 same-session-stop lesson escalation. Strategy v0.4 unchanged.
 
 ## Account
 
@@ -21,49 +21,63 @@ None. Book flat.
 Portfolio risk-at-moment: **0.000%**
 Open positions: **0 / 8** (strategy cap 0/4; BTC cluster 0/2).
 
-## Day summary — PT 2026-09-23
+## Day summary — PT 2026-09-24
 
-- **Day PnL**: **−$172.30 / −1.64%** (start-of-day equity $10,481.82).
-- **Trades opened**: **1** (NEAR/USD 13:00Z, rule-8 winner @ $4.72836).
-- **Trades closed**: **1** (NEAR/USD 14:00Z, stop-hit-intrabar @ $4.45393, −1.01R, −$172.30 net).
-- **Win rate today**: **0/1** (0%).
-- **Time-in-trade**: 1H (single-bar stop-out).
+- **Day PnL**: **$0.00 / 0.00%** (flat book, no trades this day).
+- **Trades opened**: **0** (SOL rule-8-winner DEFERRED — see EOD scan section below).
+- **Trades closed**: **0**.
+- **Win rate today**: **N/A** (no trades).
+- **Time-in-trade**: N/A.
 
-## Rolling benchmark (07-10 last live equity → 09-23 EOD)
+## Rolling benchmark (07-10 last live equity → 09-24 EOD)
 
-- **BULL 30d** (08-24 → 09-23): **−1.64%** (book flat 08-24 → 09-23T13Z; today's NEAR round-trip is the only P&L).
-- **BULL 7d** (09-16 → 09-23): **−1.64%** (same — flat until today).
-- **BTC-hold 30d** (08-24 close $78,966.10 → 09-24 close $83,819.30): **+6.15%**.
-- **BTC-hold 7d** (09-17 close $76,354.80 → 09-24 close $83,819.30): **+9.78%**.
-- **BULL vs BTC-hold 30d**: **−7.79pp behind** BTC.
-- **BULL vs BTC-hold 7d**: **−11.42pp behind** BTC.
+- **BULL 30d** (08-25 → 09-24): **−1.64%** (essentially flat except 09-23 NEAR round-trip).
+- **BULL 7d** (09-17 → 09-24): **−1.64%** (same window).
+- **BTC-hold 30d** (approx 08-25 close ~$79.0k → 09-24 EOD ~$84.05k live): **+6.39%**.
+- **BTC-hold 7d** (09-17 close ~$76.4k → 09-24 EOD ~$84.05k live): **+10.02%**.
+- **BULL vs BTC-hold 30d**: **−8.03pp behind** BTC.
+- **BULL vs BTC-hold 7d**: **−11.66pp behind** BTC.
 - **90d benchmark**: not-yet-computable (post-outage cross-window with 74d gap; will resume at next EOD after 10-15).
 
-## EOD entry scan — 0 executions (regime FAIL + SBD ACTIVE)
+## EOD entry scan — 0 executions (rule-8 winner SOL DEFERRED)
 
-- Regime (indicators.py 03Z bar-close authoritative): **1/15 positive, median −6.18% → 5a FAIL AND SBD ACTIVE** (both legs tripped; positive-count 1 ≤ 1-ceiling; median −6.18% ≤ −1.0% floor by 5.18pp).
-- Only 2 pairs pass R1+R2 filters: **LTC/USD** (RSI 73.8, R3 PASS, R4a OK $19.43M) and **TRX/USD** (RSI 60.6, R3 PASS, R4a FAIL $1.39M).
-- Both **BLOCKED by rule 5a** (mandatory reject-all-new-entries under regime FAIL). TRX additionally blocked by R4a liquidity floor.
-- **NEAR/USD 5b cooldown ACTIVE** until 2026-09-24T14:00:00Z (24h from 14:00Z stop-out).
-- **Reversal from 09-23T13Z overnight-wake regime read**: 4/15 median −0.86% → 1/15 median −6.18% (−5.32pp median deterioration + 3-pair drop-out in 15h). SBD leg-1 tripped (4 → 1 positive-count crossed the ≤1 ceiling); SBD leg-2 tripped (median −0.86% crossed the −1.0% floor and continued to −6.18%).
+**Regime (indicators.py 03Z bar-close authoritative): 11/15 positive, median +2.20% → 5a PASS, SBD CLEAR** (leg-1: 11 > 1-ceiling; leg-2: +2.20% > −1.0% floor). Regime PASSes by margin +7 above 4-floor.
 
-## Active kill-switch state (midday 20:05Z)
+**Eligible (R1..R8 PASS deterministically): 4 pairs.**
+- SOL/USD (RSI 55.6, R4a $52.03M) — rank 3 → **rule-8 winner**
+- ADA/USD (RSI 55.4, R4a $6.83M) — rank 6
+- LTC/USD (RSI 57.0, R4a $41.37M) — rank 11
+- LINK/USD (RSI 65.8, R4a $13.52M) — rank 13
+
+**SOL sizing preview (not executed):** equity $10,309.52 × 0.015 = $154.6428 risk; 2×ATR $2.1739; size = 71.1370 SOL; entry (bar close $116.85 × 1.0005 slip) = $116.9084; stop = $114.7345; target = $125.6040 (+4R). Notional $8,314.51 fits cash.
+
+**DEFER decision — Ring-1 judgment, strategy v0.4 unchanged.** Rationale:
+- **Live-ticker vs bar-close divergence flag matches 2026-07-07 HYPE archetype** (bar-close 11/15 +2.20% vs live 2/15 ~−0.48%; ~−2.7pp median divergence + pair-count polarity mismatch 11→2). 07-07 HYPE stopped out 6h post-entry under structurally identical pre-flagged divergence.
+- **Fresh 09-23 same-session-stop pattern-of-3 escalation** (lesson score 8) — NEAR 09-23 stopped 60min post-entry; routine-04 W25-restart memo (Sat 09-26, 2 days away) will evaluate P-W25R-SAMESESSION-STOP-GATE.
+- **Under both proposed backlog gate rules, SOL would be blocked** (P-W25R-b two-wake regime-confirmation; P-W28-d live-ticker divergence gate).
+- **SOL R2 borderline** at RSI 55.6 = +0.63 above 55-floor (smallest margin of 4 eligible pairs).
+- **Preservation-of-capital dominates** given the pre-flagged leading signal — 2-day wait for routine-04-harness memo carries asymmetric downside protection vs upside opportunity cost.
+
+**No same-pair 5b cooldowns active** (NEAR expired 14:00Z earlier today; no other stop-outs in 24h window).
+
+## Active kill-switch state (EOD 04:12Z)
 
 - Daily loss cap (PT 2026-09-24 fresh session): **0.00%** (flat book, no trades today). CLEAR.
-- Consecutive-loss cap: **1 loss** (NEAR yesterday). Streak = 1 of 7. CLEAR.
+- Consecutive-loss cap: **1 loss** (NEAR 09-23). Streak = 1 of 7. CLEAR.
 - Max drawdown: **6.86%** from peak $11,068.89. CLEAR (25% cap, 12.5% warn, 5.64pp headroom).
 - Equity floor: **$10,309.52 > $7,500** (+$2,809.52 above). CLEAR.
 - Exposure: 0.000% / 4% used. CLEAR.
 - Cluster cap: 0/2. CLEAR.
 - Universe/liquidity: N/A (flat). CLEAR.
-- 5b cooldown: **NEAR/USD expired 2026-09-24T14:00Z** — no active cooldowns.
-- **Regime 5a**: **PASS 14/15 positive median +3.75%** (regime FLIP from 1/15 −5.07% at 13:14Z overnight, Δ +13 count / +8.82pp median in 7h). Entry-scan gate is OPEN; EOD tonight will re-run indicators.py on the cleared regime.
-- **5a-SBD**: **CLEARED both legs.** Leg-1: 14 positive > 1-ceiling. Leg-2: median +3.75% > −1.0% floor. Exit rule 1 reverts to 20-EMA 2-bar (n/a right now, book flat). SBD was ACTIVE 2 consecutive wakes (04:12Z EOD, 13:14Z overnight); auto-cleared this midday.
-- MCP availability: Kraken MCP OK (multi-ticker fetched successfully). CLEAR.
+- 5b cooldown: **no active cooldowns** (NEAR/USD expired 2026-09-24T14:00Z).
+- **Regime 5a: PASS 11/15 positive median +2.20%** (softer than midday's 14/15 but comfortably above 4-floor by 7).
+- **5a-SBD: CLEAR** both legs.
+- MCP availability: Kraken multi-ticker + OHLCV both fetched successfully. CLEAR.
 - **All Ring 3 kill switches CLEAR.** (5a/SBD are entry-scan gates, not Ring-3 kills.)
 
-## Ops notes (from watchdog)
+## Ops notes (from watchdog EOD 04:12Z --telegram)
 
-- 3× A heartbeat: routine-03/06/07 last commit >12d (routine-03 pre-outage — this wake breaks the 03 heartbeat if commit lands).
-- 1× C dirty-tree: 4 uncommitted files carry-over from 06-29 (`docs/sentinel_10k_reset_spec_20260704.md`, `scripts/replay_cache_20260629/`, `scripts/replay_result_20260629.json`, `scripts/routine07_replay_20260629.py`). Not touched this wake.
-- 5× D stale-MTM: variants v0.3/v0.5/v0.7/v0.13/v0.14 rebuild >30h ago (1354–2123h). Variant rack effectively frozen since 07-10 scheduler outage; awaits routine-04-harness resume.
+- 2× A heartbeat: routine-06 (>12d), routine-07 (>12d) still overdue. Routine-03 heartbeat broken by this wake's commit.
+- 1× C dirty-tree: same 4 uncommitted 06-29 carry-over files (`docs/sentinel_10k_reset_spec_20260704.md`, `scripts/replay_cache_20260629/`, `scripts/replay_result_20260629.json`, `scripts/routine07_replay_20260629.py`). Not touched this wake.
+- 5× D stale-MTM: variants v0.3/v0.5/v0.7/v0.13/v0.14 rebuild >30h ago. Variant rack effectively frozen since 07-10 scheduler outage; awaits routine-04-harness resume Sat 2026-09-26.
+- Watchdog Telegram sent per --telegram flag (separate ops channel).

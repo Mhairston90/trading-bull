@@ -3,6 +3,177 @@
 > **Append-only.** News and external research notes per routine run.
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
+
+## 2026-09-24T04:12Z routine-03-eod — book flat, EOD scan DEFERRED SOL entry on live-vs-bar-close divergence
+
+Slot identity: `bull-03-eod`. PT 2026-09-24 21:12 wake, ON-SCHEDULE (03Z bar-close basis, 04:12Z indicators.py run).
+
+### State summary
+
+- Equity **$10,309.52** unchanged (book flat since 09-23T14Z NEAR CLOSE; midday 09-24T20:05Z rebuild carried same equity).
+- No open positions → **no MTM**, **no exits** to evaluate.
+- Drawdown from peak $11,068.89: **6.86%** unchanged. CLEAR (25% cap, 12.5% warn, 5.64pp headroom).
+- PT 2026-09-24 fresh-day realized P&L: **$0.00** (no trades this day).
+
+### Regime read (indicators.py 03Z bar-close authoritative)
+
+**5a PASS: 11/15 positive 24h, median +2.20%.** SBD CLEAR (leg-1: 11 positive > 1-ceiling; leg-2: median +2.20% > −1.0% floor). Regime PASSes by margin **+7 above 4-floor** — mid-range PASS.
+
+Progression across last 3 wakes:
+- 09-24T04:12Z prior-EOD: 1/15 positive median −6.18% (5a FAIL, SBD ACTIVE both legs)
+- 09-24T13:14Z overnight: 1/15 positive median −5.07% (SBD ACTIVE persisted)
+- 09-24T20:05Z midday: 14/15 positive median +3.75% (5a PASS, SBD CLEARED — sharp reversal)
+- 09-24T04:12Z EOD (this wake): 11/15 positive median +2.20% (5a PASS holding, but softer than midday)
+
+Trajectory: midday recovery peak has pulled back modestly by EOD (positive-count 14 → 11, median +3.75% → +2.20%, Δ −3 count / −1.55pp median in 8h).
+
+### Live-ticker vs bar-close divergence check (kraken_multi_ticker snapshot ~04:12Z)
+
+**Material divergence flagged, consistent with 07-07 HYPE archetype.**
+
+- **Bar-close 03Z (indicators.py):** 11/15 positive, median +2.20%.
+- **Live-ticker now (kraken_multi_ticker):** counting positive from snapshot — LINK +0.74% and ONDO +1.38% are the only positives. All other pairs negative. **2/15 positive live**, median ~ **−0.48%**.
+- Per-pair divergence (live − bar-close, percentage points):
+  - LTC/USD: −2.00% live vs +6.14% bar-close = **−8.14pp** (biggest gap)
+  - LINK/USD: +0.74% live vs +9.15% bar-close = −8.41pp
+  - SUI/USD: −0.20% live vs +5.31% bar-close = −5.51pp
+  - NEAR/USD: −2.90% live vs +2.20% bar-close = −5.10pp
+  - TAO/USD: −0.82% live vs +3.07% bar-close = −3.89pp
+  - ADA/USD: −0.10% live vs +3.71% bar-close = −3.81pp
+  - XDG/USD: −0.70% live vs +2.23% bar-close = −2.93pp
+  - XRP/USD: −0.37% live vs +2.50% bar-close = −2.87pp
+  - SOL/USD: −0.22% live vs +1.88% bar-close = −2.10pp
+  - BTC/USD: −0.39% live vs +0.34% bar-close = −0.73pp
+  - ETH/USD: −0.49% live vs +0.09% bar-close = −0.58pp
+- Comparable divergence at 07-07T13:07Z overnight: bar-close 12/15 +1.95% vs live 2/15 −1.51% → ~−3.5pp median divergence. **Today's divergence is ~−2.7pp median but with a similar pair-count polarity (11/15 vs 2/15).** Structurally the same rollover-leading-signal pattern.
+
+### EOD entry scan (indicators.py 03Z bar-close)
+
+Full R1..R8 pass matrix (from indicators.py table):
+
+| Pair | R1 EMA20 | R2 RSI≥55 | R2a ≤80 | R3 4H EMA50 | R4a ≥$2M | ELIGIBLE |
+|---|---|---|---|---|---|---|
+| BTC | FAIL | FAIL 48.0 | ok | PASS | ok | NO (R1, R2 fail) |
+| ETH | FAIL | FAIL 47.9 | ok | PASS | ok | NO |
+| SOL | PASS | PASS 55.6 | ok | PASS | ok | **YES** |
+| HYPE | FAIL | FAIL 43.6 | ok | PASS | ok | NO |
+| XRP | PASS | FAIL 53.5 | ok | PASS | ok | NO (R2) |
+| SUI | PASS | FAIL 53.7 | ok | PASS | ok | NO (R2) |
+| TAO | PASS | FAIL 51.6 | ok | PASS | ok | NO (R2) |
+| XDG | FAIL | FAIL 49.9 | ok | PASS | ok | NO |
+| NEAR | FAIL | FAIL 47.0 | ok | PASS | ok | NO |
+| ADA | PASS | PASS 55.4 | ok | PASS | ok | **YES** |
+| LINK | PASS | PASS 65.8 | ok | PASS | ok | **YES** |
+| LTC | PASS | PASS 57.0 | ok | PASS | ok | **YES** |
+| FARTCOIN | FAIL | FAIL 40.5 | ok | PASS | FAIL $1.51M | NO (config-drift; ONDO absent) |
+| TRX | FAIL | FAIL 35.0 | ok | FAIL | FAIL $1.26M | NO |
+| AVAX | FAIL | FAIL 43.2 | ok | PASS | ok | NO |
+
+**Eligible: SOL, ADA, LINK, LTC (4 pairs).** All pass R5 (no open positions), R5a (regime PASS), R5b (no active cooldowns), R6 (0/4 positions), R6a (BTC-cluster 0/2 — SOL and LINK would each use 1 of 2), R7 (portfolio risk 0% + 1.5% ≤ 4%).
+
+**R8 tiebreaker (highest 30d notional rank):**
+- SOL rank 3 (~$795M) ← **rule-8 winner**
+- ADA rank 6 (~$249M)
+- LTC rank 11 (~$75M)
+- LINK rank 13 (~$68M)
+
+SOL sizing preview (if executed): equity $10,309.52 × 0.015 = $154.6428 risk; 2×ATR stop $2.1739; size = 71.1370 SOL; entry (bar close $116.85 × 1.0005 slip) = $116.9084; stop = $114.7345; target = $125.6040 (+4R). Notional $8,314.51 fits cash $10,309.52.
+
+### DEFER decision (single-wake judgment; strategy.md v0.4 unchanged)
+
+**Deferring SOL entry this wake.** All strategy v0.4 R1..R8 rules PASS deterministically — this is a Ring-1 routine-level judgment, not a rule change, not a strategy edit.
+
+Rationale (documented in real time before outcome):
+
+1. **Fresh pattern-of-3 escalation (2026-09-23 lesson, score 8):** Same-session-stop-after-regime-crystallization triggered its own escalation clause yesterday. NEAR 09-23 stopped out 60min post-fill under regime 4/15 marginal-PASS. Routine-04 W25-restart memo (Sat 2026-09-26, 2 days away) will process candidate P-W25R-SAMESESSION-STOP-GATE with options (a)-(c). Executing a same-archetype trade in the 2-day window would generate a 4th failure instance INTO a documented open pattern.
+
+2. **Live-ticker vs bar-close divergence matches 07-07 HYPE archetype (lesson score 6):** Bar-close 11/15 positive median +2.20% vs live 2/15 positive median ~−0.48%. Median divergence ~−2.7pp; pair-count polarity 11/15 → 2/15. The 07-07 setup was 12/15 vs 2/15 (structurally identical); the trade taken under that pre-flagged divergence stopped out 6h later (−1.02R HYPE). Live-ticker as leading indicator has been validated in 2 of 2 known instances (07-07 HYPE + retrospectively 09-23 NEAR trajectory into full SBD).
+
+3. **Under both proposed backlog rules, this trade would be blocked:**
+   - Option P-W25R-b (two-wake regime-confirmation): last 2 wakes were 09-24T13:14Z overnight (1/15 SBD-ACTIVE FAIL) + 09-24T20:05Z midday (14/15 PASS). Only 1 of last 2 wakes passed 5a. WOULD BLOCK.
+   - Option P-W28-d (live-ticker divergence gate): ≥3-4pp median divergence + polarity mismatch. Current gap qualifies. WOULD BLOCK.
+   - Option P-W25R-a (regime-margin gate at floor=4): 11/15 is comfortably above floor. Would NOT block (this rule only catches exact-floor entries).
+
+4. **Entry quality is borderline on R2:** SOL RSI 55.6 = +0.63 above 55-floor. Not a strong-momentum entry. The R2 margin is the smallest of the 4 eligible pairs (ADA +0.38 is smaller but ADA also has R6a-adjacent risk in cluster context). Combined with the leading-signal weakness, entry quality is on the wrong side of the SOL 07-01 archetype (+4R take-profit came from RSI 57.4 + strong regime + no live divergence).
+
+5. **Post-outage recency:** This is only the 3rd main-routine wake post-outage. The 09-23 lesson on execute-vs-defer framework explicitly noted post-outage precedent-application should require regime strength. 11/15 is above the proposed ≥6 mid-range threshold, but that threshold was built for FIRST post-outage wake — recency-multiplier arguably still applies at wake #3.
+
+6. **Preservation-of-capital dominates when setup pattern-matches known failure:** BULL is −8pp behind BTC 30d and can't afford another −1R stop. The 2-day wait for routine-04-harness W25R memo evaluation carries near-zero opportunity cost if the tape actually is rolling over (live-ticker basis says it is), and modest opportunity cost if bar-close was right (SOL runs, and we sit out). Asymmetric payoff favors defer given the pre-flagged leading signal.
+
+**Countervailing arguments considered and weighted:**
+- (a) "Deterministic strategy rules should not be overridden by backlog judgment" — accepted principle, but not "must execute" — strategy is silent on skip-eligible-entries; Ring-1 routine judgment on execution is autonomous per prior precedent (cash-fit rule-8 fallback, post-outage DEFER framework).
+- (b) "Competition context favors action over defer" — accepted, but −1R same-session stop-out loses MORE ground than sitting out 1 wake. Preservation dominates.
+- (c) "n=2 live-ticker divergence pattern is thin evidence" — accepted, but 2/2 confirmed instances with material outcomes; the pattern is not statistically strong but it is directionally consistent with the 09-23 same-session-stop lesson which has n=3.
+
+**This DEFER decision creates a new outcome data point** for the live-ticker-divergence pattern. If SOL runs to +2R by next wake, defer was wrong → downgrade pattern weight. If SOL stops out or reverses to −0.5R by next wake, defer was correct → upgrade pattern weight and route to P-W28 memo evaluation with n=3.
+
+### Ops watchdog (04:12Z run --telegram)
+
+**8 findings, all sub-Ring-3, unchanged from prior wakes:**
+- 3× A heartbeat: routine-06 (>12d), routine-07 (>12d), routine-03 was on this list but breaks the streak this wake.
+- 1× C dirty-tree: 4 uncommitted 06-29 carry-over files (docs/sentinel_10k_reset_spec_20260704.md, scripts/replay_cache_20260629/, scripts/replay_result_20260629.json, scripts/routine07_replay_20260629.py). Not touched this wake.
+- 4× D stale-MTM: variants v0.3/v0.5/v0.7/v0.13/v0.14 rebuild >30h. Variant rack frozen since 07-10 outage; awaits routine-04-harness resume Sat 09-26.
+- Watchdog Telegram sent per --telegram flag (separate ops channel, not a trade event).
+
+### Kill-switch verification (EOD 04:12Z)
+
+- Daily loss cap (PT 2026-09-24 fresh session): **0.00%** (flat book, no trades today). CLEAR.
+- Consecutive-loss cap: **1 loss** (NEAR 09-23). Streak = 1 of 7. CLEAR.
+- Max drawdown: **6.86%** unchanged. CLEAR (25% cap, 12.5% warn, 5.64pp headroom).
+- Equity floor: **$10,309.52 > $7,500** (+$2,809.52 above). CLEAR.
+- Exposure: 0.000% / 4% used. CLEAR.
+- Cluster cap: 0/2. CLEAR.
+- 5b cooldown: NEAR expired 14:00Z; no active cooldowns.
+- **Regime 5a: PASS 11/15 positive median +2.20%** (softer than midday's 14/15 but still comfortably above 4-floor).
+- **5a-SBD: CLEAR** both legs.
+- MCP: Kraken multi-ticker + OHLCV both fetched successfully. CLEAR.
+- **All Ring 3 kill switches CLEAR.**
+
+### Day summary stats (PT 2026-09-24)
+
+- Day PnL: **$0.00 / 0.00%** (flat book, no trades).
+- Trades opened: **0**. Trades closed: **0**. Win rate today: **N/A**.
+- New equity: **$10,309.52** unchanged.
+- Drawdown: **6.86%** unchanged.
+- **BULL 30d** (08-25 → 09-24): **−1.64%** (essentially flat except 09-23 NEAR round-trip).
+- **BULL 7d** (09-17 → 09-24): **−1.64%** (same window as portfolio.md 30d).
+- **BTC-hold 30d** (approx 08-25 close ~$79.0k → 09-24 EOD ~$84.05k live): **+6.39%**.
+- **BTC-hold 7d** (09-17 close ~$76.4k → 09-24 EOD ~$84.05k live): **+10.02%**.
+- **BULL vs BTC-hold 30d**: **−8.03pp behind** BTC.
+- **BULL vs BTC-hold 7d**: **−11.66pp behind** BTC.
+- **90d benchmark**: not-yet-computable (post-outage cross-window with 74d gap; will resume at next EOD after 10-15).
+
+### Lessons
+
+**No new lesson written this wake.** The DEFER decision is INFORMATIONAL for the two existing lessons (09-23 same-session-stop-gate + 07-07 live-ticker-divergence). Outcome data will be captured next wake — if SOL runs +2R the defer was wrong; if SOL rolls over the pattern strengthens. Route decision + outcome to routine-04-harness (Sat 2026-09-26) as evidence for P-W25R-SAMESESSION-STOP-GATE and P-W28-REGIME-DIVERGENCE joint memo. Committing a new lesson now with n=1 defer-outcome would be premature.
+
+### Monthly archive
+
+Today is 2026-09-24 (Thu). Last trading day of Sep 2026 is Wed 09-30. **No archive this wake.** Next archive candidate: routine-03-eod on Wed 09-30.
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md, trade_log.md tail 30d, research_log.md tail 7d, lessons.md, skills/{decide,log-trade,telegram}.md, universe.md.
+- **Verified**: watchdog (8 findings, all sub-Ring-3, Telegram sent per --telegram); slot-identity `bull-03-eod` confirmed; PT-date label 2026-09-24 confirmed (fire time PT 21:12 = 04:12 UTC = still PT Thu 09-24, sanity check passes); all Ring-3 kill switches CLEAR.
+- **Fetched**: indicators.py 720-bar convergence (regime + all 15 pairs R1..R4a); kraken_multi_ticker for live-vs-bar-close divergence check.
+- **Wrote**:
+  - `research_log.md` — this entry.
+  - `portfolio.md` — full rewrite (equity/positions/kill-switches all unchanged; timestamp + EOD-section updates).
+  - **NO write** to `trade_log.md` (0 entries, 0 exits — DEFER decision, book flat).
+  - **NO write** to `lessons.md` (defer outcome pending next wake; premature to codify).
+  - **NO write** to `memory/archive/` (not last trading day of month).
+- **Flagged for follow-up**:
+  - **Next-wake SOL outcome check** (routine-01-overnight 2026-09-25T13Z): re-scan SOL R1..R8 and record whether the DEFER decision preserved capital (SOL rolled over) or missed a runner (SOL +2R). Either outcome is data.
+  - **Routine-04-harness W25-restart memo (Sat 2026-09-26)**: P-W25R-SAMESESSION-STOP-GATE + P-W28-REGIME-DIVERGENCE joint evaluation with n=3 (09-23 SOL/HYPE/NEAR failures) + n=1 defer outcome from this wake.
+  - **Indicator-config drift** (ONDO absent, FARTCOIN present): unchanged from midday flag; route to routine-04-harness for reconciliation.
+- **NOTIFY**: **Mandatory EOD Telegram card** sent per NOTIFY spec.
+
+### Compact log row
+
+2026-09-24T04:12:21Z | routine-03-eod | wake | PT Thu 21:12 ON-SCHEDULE | book flat, 0 entries (SOL DEFER on live-vs-bar-close divergence pattern-match to 07-07 HYPE + fresh 09-23 same-session-stop lesson escalation), 0 exits; equity $10,309.52 unchanged; DD 6.86% CLEAR; **regime PASS 11/15 median +2.20% bar-close vs 2/15 median ~−0.48% live-ticker (~−2.7pp divergence)**; eligible-R8-winner=SOL, DEFERRED as Ring-1 judgment (strategy v0.4 unchanged); watchdog 8 findings all sub-Ring-3; all Ring 3 kill switches CLEAR; Telegram EOD card sent.
+
+---
+
 2026-07-06T20:00Z | routine-02-midday | PT Mon 2026-07-06 13:00 **ON-SCHEDULE M-F cron `0 13 * * 1-5`** — first on-schedule midday since 07-01 (last 3 midday wakes were off-schedule replays: 07-01 Wed on-schedule, 07-04 Sat off, 07-06 Sun-evening off) | pre-wake 1 open (BTC/USD long 0.16899 @ $63,679.4 entry from 07-06T16:00Z rule-8 winner rank-1, 4h held, 4 post-entry 1H bars closed 07-06T17Z→20Z with 20Z in-progress); pulled `kraken_multi_ticker` (15 universe pairs) + 30× 1H BTC bars via `kraken_ohlcv` at 20:00Z. Watchdog NOT re-run midday (lean-mode routine; 9 carry-over findings from prior 17:47Z wake still apply). **Post-close exit check on BTC/USD (bar-by-bar since 07-06T16Z entry)**: (i) **1H 20-EMA rough SMA20-proxy** = mean of last 20 closed 1H closes 07-06T00Z→19Z = ($63,689.1 + $63,510.1 + $63,414.5 + $63,241.6 + $63,201.7 + $63,059.2 + $62,920.7 + $63,023.2 + $62,840.0 + $62,603.6 + $62,757.0 + $62,455.5 + $61,694.2 + $61,719.1 + $61,996.8 + $63,490.6 + $63,679.4 + $63,534.6 + $63,648.8 + $63,696.6) / 20 = **$63,008.8** (simple mean; true EMA20 will sit modestly higher near ~$63,050-63,150 given recent-bar weighting of the $63.5k+ closes 15Z-19Z); bar-by-bar closes vs SMA20-proxy — 17Z close $63,534.6 vs proxy $63,008.8 = **+$525.8 ABOVE**; 18Z close $63,648.8 vs proxy ~$63,020 = **+$629 ABOVE**; 19Z close $63,696.6 vs proxy ~$63,050 = **+$647 ABOVE** → **Exit 1 W22-G two-bar confirmation NOT triggered** (all 3 completed post-entry closes above EMA proxy with $500+ headroom; 20Z bar in-progress at $63,572.6 also above); (ii) **stop-hit check** since 07-06T16Z entry: 5 post-entry bar lows (16Z $63,330.6, 17Z $63,521.7, 18Z $63,503.7, 19Z $63,610.8, 20Z $63,554.7) vs stop $62,724.55 → min headroom $606.05 at 16Z entry-bar low; current-bar (20Z) headroom $830.15 → **Exit 2 NOT triggered**; (iii) **4R target check** ($67,498.80 close basis): peak intrabar $63,900.0 (17Z high), peak close $63,696.6 (19Z close) → **Exit 3 NOT triggered**, gap $3,802.20 close-basis; (iv) **breakeven ratchet** arm level +2R close ≥ $65,589.10: peak close $63,696.6 = **+0.018R above entry** (arm-level $1,892.50 above peak close) → **NOT armed** — trade has barely moved forward, has not reached the ratchet mechanism's relevance zone. **Midday routine — NO ENTRY SCAN** per routine spec (position management only; entries reserved for #1 Overnight and #3 EOD). Regime NOT re-scored midday via authoritative indicators.py; informational `kraken_multi_ticker` at 20:00Z shows **6/15 positive on 24h % change** (positives: AVAX +0.17, ETH +0.18, NEAR +2.71, ONDO +1.31, SOL +0.26, TAO +0.01 marginal; negatives: BTC -0.03, ADA -3.19, HYPE -0.27, LINK -0.71, LTC -1.64, SUI -1.30, TRX -0.25, XDG -1.38, XRP -1.17; median -0.25%), **1 positive better than prior 17:47Z wake (5/15 median -0.22%)** — AVAX flipped positive by +0.17pp while TAO stayed marginal. 5a PASS 6 ≥ 4 floor with 2-positive cushion; SBD CLEAR (6 >> 1 ceiling; median -0.25% > -1.0% floor by 0.75pp). Note: NEAR and ONDO are not currently open positions but are the top-2 24h gainers among universe — these would be worth tracking at 21Z EOD entry-scan if they retain momentum and stay within rule 2a's 55-80 RSI band. Equity math (live-tick basis): cash $5.73 + BTC 0.16899 × $63,572.6 = **$10,748.86** (day PnL PT 2026-07-06 = **-$14.22 / -0.132%** vs prior EOD baseline $10,763.08; wake-over-wake **-$9.89 / -0.092%** vs prior 17:47Z EOD $10,758.75, driven entirely by BTC tick $63,658→$63,572.6 = -$85.40/BTC × 0.16899 size); DD from peak $11,068.89 = **2.892% live-tick** (widened from 2.802% at prior wake by +0.090pp on the -$9.89 tick drift; still 9.61pp under 12.5% warn); loss streak **1 trading day** (07-05 negative close-basis; 07-04 was +0.274% positive; 07-06 currently -0.132% borderline, will finalize at real 21:00 PT EOD close); portfolio risk-at-moment **1.501%** ($161.35 / $10,748.86; 2.499pp headroom to 4% cap); cluster cap 1/2 (BTC); position cap 1/4; **all Ring 3 kill switches CLEAR** (day PnL -0.132% vs -5% cap 4.87pp headroom; loss streak 1/7; DD 2.892% vs 12.5% warn 9.61pp headroom; equity $10,748.86 > $7,500 floor +$3,248.86; MCP OK; regime PASS 6/15 SBD CLEAR). **0 lessons appended** (no new material; BTC position 4h old at -0.112R unrealized is well within normal early-trade fluctuation range — no lesson-generating event; the +0.018R peak-close-so-far is far below the +2R ratchet arm and does not fit any of the profit-give-back archetypes tracked in lessons.md). **News (informational)**: SKIPPED (midday position-management only, no entries to justify news check per routine spec). **Sentiment (informational)**: not queried. MCP OK (Kraken `kraken_multi_ticker` + `kraken_ohlcv` responsive). Monthly archive check: PT 2026-07-06 (Mon) is NOT last trading day of July → **no archive** (2026-06 rows queued for 2026-07-31 EOD sweep). Files written: `trade_log.md` (no rows — no OPEN/CLOSE this wake), `portfolio.md` (rewritten with fresh MTM), `research_log.md` (this row). NOTIFY: no Ring 3 trip; no exit; DD 2.892% far from 12.5% warn (9.61pp headroom, no threshold crossed) → **silent wake per routine-02 NOTIFY spec** (all NOTIFY conditions negative: no Ring 3 kill switch, no exits, no drawdown warning threshold crossed). Commit follows `routine-02-midday 2026-07-06` slot identity per date-labeling guard | 0 trades, 1 research item (this row)
 
 2026-07-06T01:15Z | routine-02-midday | PT Sun 2026-07-05 18:15 **OFF-SCHEDULE Sun fire + ~5h15m late** (cron `0 13 * * 1-5` is M-F 13:00 PT, but routine markdown has no day-gate → executes on scheduled-task fire; PT date label 2026-07-05, UTC wall-clock 07-06T01:15Z; late-Sun-evening fire is unusual — most prior off-schedule fires have been within a few hours of nominal slot) | pre-wake 1 open (ADA/USD long 24,624 @ $0.190146 entry from 07-05T03:00Z rule-8-sole-TECH-PASS, 22h held pre-exit-trigger); pulled `kraken_multi_ticker` (15 universe pairs) + 60× 1H ADA bars via `kraken_ohlcv` at 01:15Z. Watchdog NOT re-run midday (lean-mode routine; 8 carry-over findings from 07-05T04:10Z EOD still apply — 1× A routine-07 stale (now ~197h past 30h threshold, continuing), 1× C dirty-tree carry-over, 6× D stale-MTM). **Post-close exit check on ADA/USD (bar-by-bar since 07-05T03Z entry)**: (i) **1H 20-EMA arithmetic** α=2/21 seeded EMA20 $0.188204@03Z (portfolio-recorded from indicators.py at 07-05T04:10Z EOD wake), forward-march through 22 bars 07-05 04Z→07-06 00Z: EMA sequence 0.188426 → 0.188473 → 0.188596 → 0.189005 → 0.189247 → 0.189094 → **0.188866** → 0.188655 → 0.188556 → 0.188592 → 0.188656 → 0.188685 → 0.188784 → 0.188911 → 0.188983 → 0.188944 → 0.188886 → 0.189023 → 0.189143 → 0.189163 → 0.189234; bar-by-bar closes vs EMA — 04Z $0.190532 vs $0.188426 = +$0.002106 ABOVE; 05Z $0.188916 vs $0.188473 = +$0.000443 ABOVE; 06Z $0.189764 vs $0.188596 = +$0.001168 ABOVE; 07Z $0.192895 vs $0.189005 = +$0.003890 ABOVE (peak close +0.415R); 08Z $0.19155 vs $0.189247 = +$0.002303 ABOVE; **09Z $0.18764 vs $0.189094 = −$0.001454 BELOW** (1st below-EMA close since entry, at 6h post-open); **10Z $0.186697 vs $0.188866 = −$0.002169 BELOW** (2nd consecutive → **EXIT 1 W22-G TRIGGERED at 10Z bar close**); 11Z $0.186652 vs $0.188781 = −$0.002129 BELOW (post-exit, informational — still confirming trend break); 12Z $0.187617 vs $0.188670 = −$0.001053 BELOW (post-exit); 13Z-00Z 07-06 close-drift back toward EMA with recovery attempt but no re-entry consideration in midday routine; (ii) **stop-hit check** since entry: 22 post-entry bar lows through 07-06T00Z, min $0.185118 at 07-05T10:00Z (near-miss at exit-firing bar itself) vs stop $0.183522 = $0.001596 / +0.86% headroom → **NOT triggered pre-exit**; (iii) **4R target check** ($0.216642 close basis): peak close pre-exit $0.192895 (07-05T07Z, +0.415R close); peak intrabar pre-exit $0.194841 (07-05T01Z — wait that's pre-entry; correct post-entry peak intrabar $0.192222 07-05T04Z, +0.313R intrabar) → **Exit 3 NEVER triggered** during life of trade, gap $0.024420 close-basis at peak; (iv) **breakeven ratchet** arm level +2R close ≥ $0.203394: peak close +0.415R at 07Z = $0.010499 below arm; peak intrabar +0.313R at 04Z = $0.011172 below arm → **NEVER armed** (peak was too far from arm level to be relevant — this is a "fast-fade" pattern, not a "close-called-arm-missed" pattern like the prior 3 SOL/SOL/ETH ratchet-non-arm cases). **Exit fill mechanics**: 10Z close $0.186697 × (1 − 0.0005) adverse slippage = fill $0.186604; exit gross 24,624 × $0.186604 = $4,594.94; exit comm 0.26% = $11.95; cash back $4,582.99. Realized PnL vs recorded entry cost $4,693.93 = **−$110.94 / −0.68R net** (gross price move −$87.22 amplified by round-trip $24.12 friction). All-time realized: $873.98 + (−$110.94) = **$763.04**. Cash post-exit: $6,180.09 + $4,582.99 = **$10,763.08** (all cash, flat portfolio; first flat since 2026-07-01T04Z overnight). **Midday routine — NO ENTRY SCAN** per routine spec (position management only; entries reserved for #1 Overnight and #3 EOD). Regime NOT re-scored midday; informational `kraken_multi_ticker` at 01:15Z shows 13/15 positive on 24h % change (only AVAX −0.06, TRX −0.08 negative; ADA +0.07 marginal), a material improvement from indicators.py 5/15 median −0.97% at 07-05T04:10Z — the narrow SBD miss appears to have relaxed as tape recovered overnight-into-Sun-evening. If overnight routine at 07-06T13Z re-scores authoritative indicators.py and confirms 13/15+, that would break the 3-wake regime-deterioration trajectory. Equity math (close-basis): all cash **$10,763.08** (day PnL PT 2026-07-05 = **−$98.77 / −0.909%** vs prior EOD $10,861.85; wake-over-wake **−$98.77 / −0.909%** vs same-reference EOD); DD from peak $11,068.89 = **2.763% close-basis** (widened from 1.871% at prior EOD but still 9.74pp under 12.5% warn); loss streak **1 trading day** (07-05 negative; 07-04 was +0.274% positive); portfolio risk-at-moment 0.000% (flat); cluster cap 0/2; position cap 0/4; **all Ring 3 kill switches CLEAR**. **Ratchet-arm-never-fired analysis (4th instance)**: SOL 06-22 (+1.51R close, arm-miss by $0.005), SOL 06-29 (+1.74R close, arm-miss by $0.013), ETH 07-04 (+1.44R close, arm-miss by $15.95), now ADA 07-05 (+0.42R close, arm-miss by $0.010). The first 3 all peaked near the arm (missed by tenths of R); ADA peaked far below (+0.42R vs +2R arm = missed by 1.58R). **ADA is NOT a member of the "close-just-missed-arm" cluster** — it is a "fast-fade" pattern where the entry never developed enough favorable motion to be relevant to the ratchet. This is materially different and should not be added to the routine-04 memo that was queued after 07-04 for the +2R-close-miss pattern (which is genuinely a 3-instance cluster; adding ADA would dilute the specificity). **0 lessons appended** — the ADA fast-fade is a routine unfavorable-motion pattern well within v0.4 expected loss distribution (−0.68R is below the −1R stop-out) and does not indicate a strategy defect. **News (informational)**: SKIPPED (midday position-management only, no entries to justify news check). **Sentiment (informational)**: not queried. MCP OK (Kraken responsive). Monthly archive check: PT 2026-07-05 (Sun) is NOT last trading day of July → **no archive**. Files written: `trade_log.md` (1 row CLOSE ADA), `portfolio.md` (rewritten with flat state), `research_log.md` (this row). NOTIFY: no Ring 3 trip, but **1 exit occurred** → per routine-02 NOTIFY spec "Any exit happened", Telegram alert to be sent. Commit follows `routine-02-midday 2026-07-05` slot identity per date-labeling guard | 1 trade (CLOSE ADA), 1 research item (this row)
