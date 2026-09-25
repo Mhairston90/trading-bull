@@ -4,6 +4,57 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-09-25T20:00Z routine-02-midday — book flat, no exits, regime recovery persists
+
+Slot identity: `bull-02-midday`. PT 2026-09-25 13:00 wake, ON-SCHEDULE.
+
+### State summary
+
+- Equity **$10,309.52** unchanged (book flat since 09-23T14Z NEAR CLOSE).
+- No open positions → **no MTM**, **no exits** to evaluate. Trade log untouched this wake.
+- Drawdown from peak $11,068.89: **6.86%** unchanged. CLEAR (25% cap, 12.5% warn, **5.64pp headroom to warn**).
+- PT 2026-09-25 fresh-day realized P&L: **$0.00** (no trades this day; midday routine bars new entries by spec).
+
+### Live-ticker regime snapshot (~20:00Z, informational — no entry scan permitted at midday)
+
+**13/15 positive 24h, median +3.14%.** SBD CLEAR both legs (leg-1: 13 > 1-ceiling; leg-2: +3.14% > −1.0% floor).
+
+Progression across last 4 wakes:
+- 09-24T04:12Z prior-EOD: 1/15 positive median −6.18% (5a FAIL, SBD ACTIVE both legs)
+- 09-24T20:05Z midday: 14/15 positive median +3.75% (5a PASS, SBD CLEARED — sharp reversal)
+- 09-25T04:12Z EOD (prior wake): 11/15 positive median +2.20% (5a PASS holding, mid-range)
+- 09-25T20:00Z midday (this wake, live-ticker): 13/15 positive median +3.14% (5a PASS, still recovering)
+
+Trajectory: modest re-acceleration since prior EOD (+2 positive count, +0.94pp median in ~16h). Note this is live-ticker read only; bar-close authoritative regime not recomputed at midday per routine spec.
+
+Only negatives on live: LTC −1.17%, BTC −0.52%. Strongest positives: SUI +13.87%, NEAR +10.00%.
+
+### Prices snapshot (live-ticker, informational)
+
+- BTC $83,942.8 (−0.52% 24h) — down modestly from prior-EOD $84.05k
+- ETH $2,689.77 (+0.09%)
+- SOL $121.65 (+3.96%)
+- NEAR $5.05 (+10.00%) — the same pair that stopped BULL out 09-23 has continued the recovery trajectory
+- SUI $1.15 (+13.87%) — largest 24h mover
+
+### Actions taken this wake
+
+- None on trade log (0 positions, 0 exits, 0 entries by spec).
+- Portfolio.md rewritten with fresh 20:00Z timestamp and updated live-ticker regime read.
+- No Telegram notification (silent per routine spec: no kill switch, no exit, DD unchanged below 12.5% warn).
+
+### Kill switches
+
+All 8 Ring-3 checks CLEAR (daily loss, consecutive loss, DD, equity floor, exposure, cluster, universe, MCP availability). 5b cooldown clear.
+
+### Ops carry-over (unchanged from prior wake)
+
+- 4 untracked files from 06-29 still not committed; deferred to Sat routine-04-harness resume.
+- Routine-06/07 heartbeats overdue >13d; deferred.
+- Variant rack frozen since 07-10 scheduler outage; awaits routine-04-harness.
+
+---
+
 ## 2026-09-24T04:12Z routine-03-eod — book flat, EOD scan DEFERRED SOL entry on live-vs-bar-close divergence
 
 Slot identity: `bull-03-eod`. PT 2026-09-24 21:12 wake, ON-SCHEDULE (03Z bar-close basis, 04:12Z indicators.py run).
