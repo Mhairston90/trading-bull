@@ -44,3 +44,5 @@
 | 2026-09-23T13:00:00Z | OPEN | NEAR/USD | long | 577.6 | 4.72836 | 4.45616 | 5.81716 | — | — | entry-rule-v0.4-momentum-rule8-winner |
 | 2026-09-23T14:00:00Z | CLOSE | NEAR/USD | long | 577.6 | 4.45393 | — | — | -1.01 | -172.30 | exit-stop-hit-intrabar |
 | 2026-09-26T04:00:00Z | OPEN | ADA/USD | long | 19263 | 0.256346 | 0.248318 | 0.288458 | — | — | entry-rule-v0.4-momentum-rule8-winner |
+| 2026-09-26T06:00:00Z | CLOSE | ADA/USD | long | 19263 | 0.254014 | — | — | -0.29 | -44.92 | exit-ema20-2bar-recovery-missed-scheduler-replay (05:00Z close 0.254976 < EMA20 0.255259 and 06:00Z close 0.254014 < EMA20 0.255140, both below by ≥$0.00028 on converged 1H EMA20; routine-02-midday did not run Sat off-schedule so exit was recovered at routine-01-overnight replay) |
+| 2026-09-26T12:00:00Z | OPEN | SOL/USD | long | 75.09 | 121.07 | 119.0198 | 129.2708 | — | — | entry-rule-v0.4-momentum-rule8-winner |

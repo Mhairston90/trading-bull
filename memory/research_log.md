@@ -7968,3 +7968,125 @@ Reviewed today's trades: 0 stop-outs (book was flat), 0 winners past 4R, 0 immed
 ### Compact log row
 
 2026-09-26T04:15Z | routine-03-eod | wake | PT 2026-09-25 21:12 ON-SCHEDULE vs 21:00 PT cron | 1 entry (ADA/USD long 19263 @ 0.256346, rule-8 winner among 5 full-pass candidates: ADA/SUI/TAO/AVAX/LINK), 0 exits (book was flat); equity $10,309.52 unchanged; exposure 1.500%; DD 6.86% CLEAR; regime 5a PASS 13/15 median +3.23%; SBD CLEAR both legs; watchdog 8 findings (2 heartbeat + 4 dirty + 5 stale variants); Telegram EOD card sent.
+
+## 2026-09-26T13:20Z routine-01-overnight — ADA exit-replay + SOL rule-8 entry (Sat off-schedule fire)
+
+Slot identity: `bull-01-overnight`. PT 2026-09-26 06:20. **Off-schedule Saturday fire** — cron is `0 6 * * 1-5` (Mon-Fri); scheduler triggered on Saturday. Slot identity verified against task prompt: OK. Routine executed per spec.
+
+### State summary (pre-action)
+
+- Equity $10,309.52 entering wake, 1 open position (ADA/USD long 19263 @ 0.256346 opened 2026-09-26T04:00Z).
+- Drawdown 6.86%. All Ring 3 CLEAR.
+
+### Kill-switch verification (13:20Z snapshot)
+
+- Daily loss cap: 0.00% → -0.44% (post-ADA-close) CLEAR. Consecutive-loss: 2/7 CLEAR (NEAR 09-23 + ADA 09-26). Max DD: 7.27%/25% CLEAR. Equity: $10,264.60 > $7,500 CLEAR.
+- 5b cooldown: no active cooldowns (NEAR 09-24T14Z expired; ADA exit was ema20-2bar not stop-hit, no cooldown created).
+- **Regime 5a PASS 6/15 positive, median -0.15%** (margin +2, thin); **5a-SBD CLEAR** both legs.
+- MCP: Kraken ticker + indicators.py both healthy.
+
+### Position check — ADA exit fired retroactively at 06:00Z bar close
+
+Recomputed 1H EMA20 for ADA over the last 100 bars (SMA-seeded on first 20, alpha=2/21). Position active from bar 2026-09-26T04:00Z onward (opened at 03:00Z bar close 0.256346):
+
+| Bar | Close | EMA20 | Diff | State |
+|---|---:|---:|---:|---|
+| 04:00Z | 0.256558 | 0.255288 | +0.00127 | ABOVE |
+| 05:00Z | 0.254976 | 0.255259 | -0.000283 | BELOW (bar 1) |
+| 06:00Z | 0.254014 | 0.255140 | -0.001126 | BELOW (bar 2) — EXIT FIRES |
+| 07:00Z | 0.255874 | 0.255210 | +0.000664 | (post-exit) |
+| 08:00Z | 0.254788 | 0.255170 | -0.000382 | (post-exit) |
+| 09:00Z | 0.254177 | 0.255075 | -0.000898 | (post-exit) |
+| 12:00Z | 0.255653 | 0.255499 | +0.000154 | (post-exit, current) |
+
+Exit fill: 0.254014 (bar close, no slippage per 07-10 BTC precedent). Gross PnL: 19263 × (0.254014 - 0.256346) = -$44.92. R at exit: -0.002332 / 0.008028 = **-0.29R**. Reason tag: `exit-ema20-2bar-recovery-missed-scheduler-replay` (routine-02-midday did not run Sat off-schedule so the 06:00Z exit was recovered at this 13:20Z wake).
+
+### W19-E analyst-role split (Technical / News / Sentiment / Decision)
+
+**Technical (authoritative — `python scripts/indicators.py` 13:13Z, closed 12:00Z bar):**
+
+Full-pass rule set (R1 + R2 + R2a + R3, all rules 4/4a/5/5a/5b/6/6a/7 clear), 6 candidates:
+- **SOL/USD** — R1 +0.4521, R2 RSI 55.9 (+0.92, thin), R2a OK, R3 +6.676 (4H EMA50 114.574), notional $56.43M, 24h +0.30%. Rank 3.
+- **SUI/USD** — R1 +0.01618, R2 RSI 60.3 (+5.28), R2a OK, R3 +0.1984 (EMA 0.980246), notional $29.43M, 24h +2.23%. Rank 8.
+- **TAO/USD** — R1 +16.55, R2 RSI 76.8 (+21.85), R2a OK (<80), R3 +42.47 (EMA 287.351), notional $18.78M, 24h +7.96%. Rank 9.
+- **LTC/USD** — R1 +0.4121, R2 RSI 55.9 (+0.87, thin), R2a OK, R3 +8.945 (EMA 64.1948), notional $16.65M, 24h +3.99%. Rank 11.
+- **AVAX/USD** — R1 +0.1653, R2 RSI 59.4 (+4.37), R2a OK, R3 +0.8751 (EMA 10.0729), notional $9.21M, 24h +2.26%. Rank 12.
+- **LINK/USD** — R1 +0.1998, R2 RSI 62.4 (+7.41), R2a OK, R3 +1.399 (EMA 12.8724), notional $15.34M, 24h +1.26%. Rank 13.
+
+Non-universe technical pass: FARTCOIN R1 PASS +0.000562, R2 FAIL (RSI 53.0 < 55) — off-universe anyway.
+
+Rejects with cited failing rule:
+- BTC/USD — REJECT rule 1 (close 84,046.2 < EMA20 84,052.4) + rule 2 (RSI 49.3 < 55)
+- ETH/USD — REJECT rule 2 (RSI 50.0 < 55)
+- HYPE/USD — REJECT rule 2 (RSI 49.9 < 55)
+- XRP/USD — REJECT rule 1 (close 1.54249 < EMA20 by $0.011) + rule 2 (RSI 44.3 < 55)
+- ADA/USD — REJECT rule 5 (position was open, then exited this wake) + rule 2 (RSI 52.1 < 55)
+- NEAR/USD — REJECT rule 1 (close 4.8533 < EMA20 by $0.036) + rule 2 (RSI 48.2 < 55)
+- XDG/USD — REJECT rule 1 + rule 2 (RSI 48.5 < 55)
+- TRX/USD — REJECT rule 1 + rule 2 (RSI 34.9 far short) + rule 3 (4H EMA50) + rule 4a (notional $0.86M < $2M)
+- ONDO/USD — NOT EVALUATED (indicators.py config drift, still lists FARTCOIN; route to routine-04-harness).
+
+**News:** Firecrawl skipped this wake per v0.2 strategy (informational-only, does NOT veto). Time budget prioritized ADA exit-replay accuracy + SOL entry execution.
+
+**Sentiment (Kraken spread for SOL winner):** ~1.2 bps bid/ask spread (bid 120.71 / ask 120.72, ~$0.01-$0.02 on $120.72). Excellent depth. Informational: supportive of clean fill on paper.
+
+**Decision:** Rule 8 selects **SOL/USD** — highest 30d notional rank among 6 full-pass candidates (rank 3 vs SUI 8, TAO 9, LTC 11, AVAX 12, LINK 13). Rank 8-13 re-evaluated at next wake per rule 8 design.
+
+### Entry executed — SOL/USD long
+
+- Timestamp: 2026-09-26T12:00:00Z (1H bar close reference)
+- Entry: 121.07 (bar close from indicators.py + kraken_ohlcv verification)
+- ATR14 (1H): 1.0251 → 2×ATR stop distance: 2.0502
+- Stop: 119.0198 (entry - 2×ATR)
+- Target: 129.2708 (entry + 4×2×ATR = entry + 8×ATR)
+- Size: 75.09 SOL (($10,264.60 × 0.015) / 2.0502 = 75.098 rounded down to 0.01 lot). Post-ADA-exit equity used.
+- Position cost: $9,091.15 (well under $10,264.60 cash — cash-fit NOT needed after ADA freed capital)
+- Trade risk: $153.95 (1.500% of equity — at cap)
+- Portfolio risk-at-moment: 1.500% (well within 4% cap)
+- BTC-cluster check: SOL in {BTC,ETH,SOL,TAO,AVAX,SUI,LINK} — 0/2 to 1/2 after entry (CLEAR of 2 cap)
+- Reason tag: `entry-rule-v0.4-momentum-rule8-winner`
+
+### Day stats (PT 2026-09-26)
+
+- **Day PnL:** -$44.92 / -0.44% (ADA -0.29R exit-replay).
+- **Trades opened:** 1 (SOL). **Trades closed:** 1 (ADA).
+- **Win rate today:** 0/1 = 0.00%. **Time-in-trade (ADA):** 2h (04:00Z open to 06:00Z close).
+- **BULL 30d:** -2.08%. **BULL 7d:** -2.08% (ADA loss marked in).
+- **BTC-hold 30d:** +5.65%. **7d:** +9.94%.
+- **BULL vs BTC-hold 30d:** -7.73pp behind. **7d:** -12.02pp behind.
+
+### Watchdog findings
+
+8 findings (same as EOD 04:15Z wake, unchanged):
+- A heartbeat: routine-06 no commit in 12d (200h cadence exceeded). Route to routine-04-harness Sat 09-26.
+- A heartbeat: routine-07 no commit in 12d (30h cadence exceeded). Route to routine-04-harness Sat 09-26.
+- C dirty-tree: 4 uncommitted 06-29 carry-over files (spec + replay cache + replay result + replay script). Deferred.
+- D stale-MTM (×5): variants rack (v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive). Expected — rack frozen since 07-10 scheduler outage.
+
+Telegram: watchdog alert auto-sent per --telegram flag.
+
+### Lessons check
+
+Reviewed today's trades: 1 stop-out-equivalent (ADA exit-ema20-2bar for -0.29R, small close-to-scratch loss on 2h hold), 0 winners past 4R. No new lessons — the ADA -0.29R exit is exactly the archetype the W22-G 2-bar-confirmation was designed to LOOSEN, and it still fired here (2 clean consecutive below-EMA closes at 05:00Z and 06:00Z, not a single-bar tag). Behaviour as designed. `lessons.md` not updated this wake.
+
+Anti-pattern watch flagged for routine-04-harness: 2 stop-out-equivalent losses in 3 days (NEAR 09-23 -1.01R stop-hit, ADA 09-26 -0.29R ema-2bar) both on rule-8-winner entries in thin-margin regimes. Neither triggers Ring 3 (streak 2/7); noted for weekly memo evidence tracking.
+
+### Off-schedule fire flag
+
+Cron `0 6 * * 1-5` should not fire Saturday. Recording for routine-04-harness (Sat 2026-09-26 planned) to investigate scheduler config drift. Slot-identity guard confirmed the prompt did name `bull-01-overnight`, so no mis-slot violation. Executed per routine spec anyway.
+
+### Actions taken
+
+- **Read:** CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md, trade_log.md tail (last 30d), research_log.md tail (last 7d), lessons.md tail, skills/{decide,log-trade}.md, universe.md.
+- **Fetched:** kraken_multi_ticker for 15 universe pairs; `python scripts/indicators.py` (authoritative closed-bar EMA/RSI/ATR); kraken_ohlcv ADAUSD 100×1H (for retroactive EMA20 exit verification); kraken_ohlcv SOLUSD 30×1H (entry price verification); kraken_spread SOLUSD (sentiment); `python scripts/watchdog.py --telegram`.
+- **Wrote:**
+  - `trade_log.md` — appended CLOSE ADA row (2026-09-26T06:00Z, 19263 @ 0.254014, -0.29R, -$44.92) + OPEN SOL row (2026-09-26T12:00Z, 75.09 @ 121.07).
+  - `portfolio.md` — rewritten with SOL position, exposure 1.500%, equity $10,264.60, DD 7.27%.
+  - `research_log.md` — this entry.
+  - **NO write** to `lessons.md` (no new lesson archetype).
+  - **NO archive** (not last trading day of month).
+- **NOTIFY:** Telegram brief summary sent — ADA exit + SOL entry per NOTIFY spec (new OPEN + stop-out-equivalent CLOSE both trigger).
+
+### Compact log row
+
+2026-09-26T13:20Z | routine-01-overnight | wake | PT 2026-09-26 06:20 **SAT OFF-SCHEDULE** (cron Mon-Fri) | 1 exit (ADA/USD long 19263 @ 0.254014 exit-ema20-2bar-recovery-replay -0.29R / -$44.92), 1 entry (SOL/USD long 75.09 @ 121.07 rule-8 winner among 6 full-pass: SOL/SUI/TAO/LTC/AVAX/LINK); equity $10,309.52 to $10,264.60; realized PnL +$309.52 to +$264.60; DD 6.86% to 7.27%; exposure 0% to 1.500%; regime 5a PASS 6/15 median -0.15% (thin margin +2); SBD CLEAR both legs; watchdog 8 findings (unchanged from EOD); Telegram entry+exit summary sent.
