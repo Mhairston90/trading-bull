@@ -8090,3 +8090,41 @@ Cron `0 6 * * 1-5` should not fire Saturday. Recording for routine-04-harness (S
 ### Compact log row
 
 2026-09-26T13:20Z | routine-01-overnight | wake | PT 2026-09-26 06:20 **SAT OFF-SCHEDULE** (cron Mon-Fri) | 1 exit (ADA/USD long 19263 @ 0.254014 exit-ema20-2bar-recovery-replay -0.29R / -$44.92), 1 entry (SOL/USD long 75.09 @ 121.07 rule-8 winner among 6 full-pass: SOL/SUI/TAO/LTC/AVAX/LINK); equity $10,309.52 to $10,264.60; realized PnL +$309.52 to +$264.60; DD 6.86% to 7.27%; exposure 0% to 1.500%; regime 5a PASS 6/15 median -0.15% (thin margin +2); SBD CLEAR both legs; watchdog 8 findings (unchanged from EOD); Telegram entry+exit summary sent.
+
+## 2026-09-26T20:00Z routine-02-midday — SOL holds, no exits, regime softened 6→3 positives
+
+Slot identity: `bull-02-midday`. PT 2026-09-26 13:00 wake. **Off-schedule Saturday fire** (cron `0 13 * * 1-5` should not fire on Sat; second consecutive Sat off-schedule after overnight — flagged for routine-04-harness).
+
+### Book state
+- Open: SOL/USD long 75.09 @ 121.07, stop 119.0198, target 129.2708. Age 8h (opened 12:00Z).
+- Live $121.03 → unrealized -$3.01 / -0.02R. Well within noise.
+- Cash $1,173.45; equity $10,261.59.
+- Day PnL PT-09-26: -$47.93 / -0.46% (ADA realized -$44.92 + SOL MTM -$3.01).
+
+### Exit-rule evaluation — SOL
+- **Rule 1 (W22-G 2-bar 20-EMA)**: last two closed bars 18:00Z close 121.03 vs EMA20 120.92 (+$0.11 ABOVE) and 19:00Z close 121.11 vs EMA20 120.94 (+$0.17 ABOVE). Neither below → rule not armed. EMA20 SMA-seeded from bar 1 (09-22 17:00Z, 118.1605) rolled α=2/21 to bar 99.
+- **Rule 1-SBD (9-EMA)**: not applicable (regime not SBD).
+- **Rule 2 (static stop 119.0198)**: not hit. Current 20:00Z bar low 120.99; 24h low 119.84; +$0.82 headroom.
+- **Rule 3 (4R target 129.2708)**: not hit. -$8.24 to go.
+- **Verdict**: hold. No trade_log write, no notify.
+
+### Regime snapshot (~20:00Z live-ticker, informational — midday bars entry scan)
+- **3/15 positive 24h, median -0.89%.**
+- Positive: LINK +1.19, AVAX +0.81, TAO +0.79 (3).
+- Negative: XBT -0.07, ETH -0.27, SOL -0.89, XDG -2.00, ADA -1.73, XRP -2.93, LTC -1.10, TRX -0.64, NEAR -1.79, SUI -2.80, HYPE -0.80, ONDO -2.41 (12).
+- **5a: FAIL** (3 < 4 floor) — entries would be blocked at next entry-scan if this level holds. Overnight 6/15 → midday 3/15 = -3 positive count, -0.74pp median in 7h.
+- **5a-SBD: CLEAR both legs** — leg-1 3 > 1-ceiling (2 headroom), leg-2 -0.89% > -1.0% floor (only $0.11 headroom, narrowing).
+
+### Kill switches
+- Daily loss cap -0.46% / 5% cap → CLEAR, 4.54pp headroom.
+- Consec loss 2/7 → CLEAR.
+- DD 7.29% / 25% cap / 12.5% warn → CLEAR, 5.21pp to warn (no threshold crossed).
+- Equity floor $10,261.59 > $7,500 → CLEAR.
+- Exposure 1.500% / 4% → CLEAR.
+- All Ring 3 CLEAR.
+
+### Ops
+- Second consecutive off-schedule Saturday fire; routed to routine-04-harness for cron audit.
+- Regime deteriorating (leg-2 SBD headroom down to $0.11) — flagged for EOD attention.
+- SOL trade essentially at scratch; no discretionary action justified under mandate.
+- No Telegram notify (silent per spec — no anomaly, no kill-switch, no exit).
