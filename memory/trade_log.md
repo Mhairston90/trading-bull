@@ -43,3 +43,4 @@
 | 2026-07-10T19:00:00Z | CLOSE | BTC/USD | long | 0.16438 | 63758.30 | — | — | -0.23 | -27.54 | exit-ema20-2bar-recovery (18:00Z and 19:00Z closes below converged 1H EMA20; recovered from the scheduler outage using the full local Kraken-derived 1H cache) |
 | 2026-09-23T13:00:00Z | OPEN | NEAR/USD | long | 577.6 | 4.72836 | 4.45616 | 5.81716 | — | — | entry-rule-v0.4-momentum-rule8-winner |
 | 2026-09-23T14:00:00Z | CLOSE | NEAR/USD | long | 577.6 | 4.45393 | — | — | -1.01 | -172.30 | exit-stop-hit-intrabar |
+| 2026-09-26T04:00:00Z | OPEN | ADA/USD | long | 19263 | 0.256346 | 0.248318 | 0.288458 | — | — | entry-rule-v0.4-momentum-rule8-winner |
