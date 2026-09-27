@@ -8128,3 +8128,129 @@ Slot identity: `bull-02-midday`. PT 2026-09-26 13:00 wake. **Off-schedule Saturd
 - Regime deteriorating (leg-2 SBD headroom down to $0.11) — flagged for EOD attention.
 - SOL trade essentially at scratch; no discretionary action justified under mandate.
 - No Telegram notify (silent per spec — no anomaly, no kill-switch, no exit).
+
+## 2026-09-27T04:27Z routine-03-eod — SOL holds, regime recovered, 5 candidates cash-blocked
+
+Slot identity: `bull-03-eod`. PT 2026-09-26 21:27 wake. **Third consecutive off-schedule Saturday fire today** (cron `0 21 * * 1-5` should not fire Sat; overnight + midday + EOD all fired Sat 09-26 — flagged for routine-04-harness cron audit).
+
+Date-label guard: PT calendar date at fire time = **2026-09-26**. Commit label + all "today" references use 2026-09-26 (not the UTC 09-27).
+
+### Book state (EOD MTM to just-closed 1H bar 03:00Z 09-27 close $120.59)
+
+- Open: SOL/USD long 75.09 @ 121.07, stop 119.0198, target 129.2708. Age 16h.
+- MTM $120.59 → unrealized -$36.04 / -0.23R.
+- Live ticker $120.54 (30-min after bar close).
+- Cash $1,173.45; equity **$10,228.56** (from $10,264.60 at ADA-exit, MTM -$36.04 net).
+- Day PnL PT-09-26: **-$80.96 / -0.79%** (ADA realized -$44.92 + SOL MTM -$36.04).
+- DD: **7.59%** from peak $11,068.89 (+0.30pp vs midday 7.29%).
+
+### Exit-rule evaluation — SOL/USD
+
+**Rule 1 (W22-G 2-bar 20-EMA break)**: NOT ARMED. EMA20 rolled α=2/21 from SMA20-seed 117.6005 (09-23T00Z over first 20 bars 116.82…118.81) through 03:00Z 09-27:
+- 02:00Z 09-27: close 121.13, EMA20 121.0138 → ABOVE (+$0.116)
+- 03:00Z 09-27: close 120.59, EMA20 120.9735 → BELOW (-$0.383)
+
+Only 1 of last 2 consecutive closes is below EMA20. Single-bar EMA tag does NOT trigger W22-G (rule explicitly rejects single-bar breaks — the whole point of W22-G is the 2-bar confirmation). Rule not armed.
+
+**Rule 1-SBD (9-EMA)**: NOT APPLICABLE — regime not SBD (see 5a below).
+
+**Rule 2 (static stop 119.0198)**: NOT HIT. 24h low $119.84 per Kraken ticker; +$0.82 headroom above stop.
+
+**Rule 3 (4R target 129.2708)**: NOT HIT. -$8.73 to go from live $120.54.
+
+**Verdict**: hold SOL. No trade_log write, no exit executed.
+
+### W19-E analyst-role split (Technical / News / Sentiment / Decision)
+
+**Technical (authoritative — `python scripts/indicators.py` 04:26:45Z on closed 03:00Z 09-27 bar)**:
+
+Regime: 8/15 positive 24h, median +0.13% → **5a PASS**, 5a-SBD CLEAR both legs.
+
+Full-pass rules 1+2+2a+3+4/4a/5/5a/5b/6/6a/7, ordered by universe rank:
+- **BTC/USD** rank 1 — R1 +$175.7 (close 84,380 > EMA20 84,204.3), R2 RSI 57.5 (+2.47), R2a OK, R3 +$1,149 (4H EMA50 83,231.2), notional $87.45M, 24h +0.53%.
+- **ETH/USD** rank 2 — R1 +$5.17, R2 RSI 55.3 (+0.29 thin), R2a OK, R3 +$34.26, notional $33.94M, 24h +0.32%.
+- **HYPE/USD** rank 4 — R1 +$0.80, R2 RSI 61.6 (+6.62), R2a OK, R3 +$1.67, notional $10.23M, 24h +1.47%.
+- **NEAR/USD** rank 7 — R1 +$0.083, R2 RSI 57.9 (+2.92), R2a OK, R3 +$0.72, notional $20.39M, 24h +3.20%.
+- **SUI/USD** rank 8 — R1 +$0.006, R2 RSI 55.3 (+0.30 thin), R2a OK, R3 +$0.16, notional $18.90M, 24h +0.13%.
+
+Rejects (indicators.py):
+- SOL/USD — R5 (already open)
+- XRP/USD — R1 -$0.016 + R2 RSI 39.0 (far short)
+- ADA/USD — R1 -$0.002 + R2 RSI 43.9
+- XDG/USD — R1 + R2 RSI 42.0
+- LINK/USD — R1 -$0.015 + R2 RSI 51.1
+- LTC/USD — R1 -$0.72 + R2 RSI 43.8
+- AVAX/USD — R1 -$0.032 + R2 RSI 49.7
+- TAO/USD — R1 PASS + R3 PASS but R2 RSI 52.2 (below 55 floor)
+- TRX/USD — R1 + R2 (RSI 17.2 extreme) + R3 + R4a (thin $1M)
+- ONDO/USD — NOT EVALUATED (indicators.py config still lists FARTCOIN not ONDO — route to routine-04-harness for config drift)
+
+**News (Firecrawl)**: skipped this wake per v0.2 informational-only design. No entry executable regardless (see Decision) — time budget preserved.
+
+**Sentiment (Kraken spread)**: N/A this wake — no eligible entry to size.
+
+**Decision**: Rule 8 selects **BTC/USD** (rank 1 winner among 5 full-pass candidates BTC/ETH/HYPE/NEAR/SUI). Sizing:
+- Equity $10,228.56 → trade risk $153.43 (1.500%)
+- BTC 2×ATR = $426.23 → size = 153.43/426.23 = 0.35998 BTC
+- Position cost (fill 84,380 × 1.0005 slippage = 84,422.19) = 0.35998 × 84,422.19 = **$30,388** — **CASH-FAIL** ($30,388 vs $1,173.45 available cash)
+- Also BTC-cluster would add SOL(cluster) + BTC(cluster) = 2/2 (at cap, but still legal)
+
+Rule-8-fallback cascade (mandate-derived cash-fit constraint, per lessons.md P-W27-CASHFIT precedent):
+- ETH cost $20,986 → CASH-FAIL
+- HYPE cost $11,861 → CASH-FAIL
+- NEAR cost $3,443 → CASH-FAIL
+- SUI cost $5,118 → CASH-FAIL
+
+**All 5 candidates cash-blocked.** Thinnest cost NEAR at $3,443 requires 2.93× available cash. No entry executable this wake.
+
+### CASHFIT pattern reproduction
+
+This wake perfectly reproduces the `lessons.md` 2026-07-05 P-W27-CASHFIT archetype (score 9, active): SOL locks 88.9% of equity ($9,091 of $10,228), leaving 11.5% cash. At 1.5%-per-trade risk sizing against 1H 2×ATR stops, EVERY entry-eligible universe pair costs more than available cash — the smallest notional (NEAR at ~2.94% ATR/price and cost $3,443) is still 2.93× the cash buffer, and the largest (BTC at ~0.51% ATR/price, cost $30,388) is 25.9× cash. This is the 3rd cash-binding wake since inception (W24 BTC 0.72% partial-fill; W25 BTC structurally unfillable; this wake all-5-blocked). Not a scoring event on its own — evidence base for P-W27-CASHFIT proposal continues to grow.
+
+### Day stats (PT 2026-09-26)
+
+- **Day PnL**: **-$80.96 / -0.79%** (ADA -$44.92 realized + SOL -$36.04 MTM from entry).
+- **Trades opened**: 1 (SOL 12:00Z). **Trades closed**: 1 (ADA 06:00Z replay).
+- **Win rate today**: 0/1 = 0.00%.
+- **BULL 30d**: **-2.43%** (equity $10,228.56). **BULL 7d**: **-2.43%** (same window).
+- **BTC-hold 30d**: **+6.21%** (BTC $79.5k → $84.4k). **7d**: **+10.51%**.
+- **BULL vs BTC-hold 30d**: **-8.64pp behind**. **7d**: **-12.94pp behind**.
+
+### Watchdog findings (9 total, +1 vs midday)
+
+- A heartbeat: routine-06 no commit in 12d (200h cadence exceeded) — route to routine-04-harness Sat 09-26.
+- A heartbeat: routine-07 no commit in 12d (30h cadence exceeded) — route to routine-04-harness Sat 09-26.
+- C dirty-tree: 4 uncommitted 06-29 carry-over files (spec + replay cache + replay result + replay script). Deferred to a dedicated cleanup wake.
+- D stale-MTM (×5): variants rack (v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive). Expected — rack frozen since 07-10 scheduler outage.
+- **F unpushed (NEW this wake)**: local main is 1 commit ahead of origin (midday commit `d79b0d6` did not push). This EOD commit will push both.
+
+Telegram: watchdog auto-sent per --telegram flag.
+
+### Lessons check
+
+Reviewed today's trades:
+- 1 stop-out-equivalent (ADA -0.29R exit-ema20-2bar earlier today, already logged overnight).
+- 0 winners past 4R.
+- No entry immediately reversed (no entry executed this wake).
+
+**No new lesson to append this wake.** The CASHFIT pattern reproduction is already logged as an active score-9 lesson (P-W27-CASHFIT pending). The 3-day rule-8-winner stop-out cluster (NEAR 09-23 -1.01R + ADA 09-26 -0.29R) is anti-pattern-watch material for routine-04-harness weekly memo, not yet a lesson archetype (both trades executed the strategy correctly; losses were single-bar reversal noise, no rule fired incorrectly).
+
+### Off-schedule Saturday fire flag
+
+Cron `0 21 * * 1-5` should not fire Sat. Third consecutive off-schedule Saturday fire today (overnight 06:20Z, midday 20:00Z, EOD 04:27Z 09-27 = 21:27 PT 09-26). Slot identity guard confirmed the prompt named `bull-03-eod` and body matched "Routine 03 — End-of-Day Journal" — no mis-slot violation. Executed per routine spec anyway. **All three of today's Saturday fires need routine-04-harness scheduler audit** — Task Scheduler mask may have drifted from Mon-Fri to include Sat.
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (midday rebuild), trade_log.md (last 30d), research_log.md tail, lessons.md tail, skills/{decide,log-trade,telegram}.md, universe.md.
+- **Fetched**: kraken_multi_ticker 15 pairs; kraken_ohlcv SOLUSD 120×1H (EMA20 rebuild + 24h low); `python scripts/indicators.py` (authoritative closed-bar indicators, 04:26:45Z); `python scripts/watchdog.py --telegram`.
+- **Wrote**:
+  - `portfolio.md` — rewritten with EOD MTM (SOL @ 120.59 close), equity $10,228.56, DD 7.59%, entry-scan reject cascade, kill-switches all clear.
+  - `research_log.md` — this entry.
+  - **NO write** to `trade_log.md` (no exits, no entries).
+  - **NO write** to `lessons.md` (no new lesson archetype).
+  - **NO archive** (not last trading day of month; 09-30 is next Wed).
+- **NOTIFY**: Mandatory EOD Telegram card sent per skills/telegram.md + routine 03 NOTIFY spec.
+
+### Compact log row
+
+2026-09-27T04:27Z | routine-03-eod | EOD | PT 2026-09-26 21:27 **SAT OFF-SCHEDULE #3-of-3-today** (cron Mon-Fri) | 0 exits, 0 entries (5 full-pass candidates BTC/ETH/HYPE/NEAR/SUI all cash-blocked — CASHFIT archetype reproduced); SOL holds -0.23R at MTM $120.59; equity $10,228.56 (day -$80.96 / -0.79%); DD 7.29% → 7.59% (+0.30pp); regime 5a PASS 8/15 median +0.13% (recovered from midday 3/15 -0.89%, +5 positive count in 8h); SBD CLEAR both legs; watchdog 9 findings (+1 F unpushed midday commit); Telegram EOD card sent.
