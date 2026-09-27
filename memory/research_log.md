@@ -8398,3 +8398,5 @@ Cron `0 6 * * 1-5` (Mon-Fri) should not fire Sun 09-27. **4th consecutive off-sc
 2026-09-27T13:15Z | routine-01-overnight | wake | PT 2026-09-27 06:15 **SUN OFF-SCHEDULE #4-of-4** (cron Mon-Fri) | 0 exits, 0 entries (6 full-pass candidates BTC/ETH/SUI/TAO/XDG/NEAR all cash-blocked — 2nd consecutive CASHFIT wake); SOL holds +1.10R at MTM $123.33 (peak close +1.64R this wake — ratchet still 0.36R shy of arming); equity $10,434.30 (+$205.74 unrealized MTM vs EOD); DD 7.59% → 5.73% (-1.86pp); regime 5a PASS 11/15 median +0.84% (recovered from EOD 8/15 +0.13%); SBD CLEAR both legs; watchdog 8 findings (F unpushed cleared by EOD push); silent Telegram (no OPEN/CLOSE/kill/news).
 
 2026-09-27T17:08:27Z | harness | day-gate | not Saturday, skipping | no action
+
+2026-09-27T17:40Z | allocation | routine-05 W39 | momentum 100%, 30d -1.30R / 90d +0.49R (leave-alone rule), 90d BTC-delta not-yet-computable (cross-window outage), 7d Δ -11.01pp / 30d Δ -6.69pp / since-inception Δ -7.00pp | no allocation change proposed, no pending strategy edit to apply, W39 memo scaffold created (allocation-only, routine-04 harness memo absent)
