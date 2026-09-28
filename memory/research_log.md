@@ -8400,3 +8400,127 @@ Cron `0 6 * * 1-5` (Mon-Fri) should not fire Sun 09-27. **4th consecutive off-sc
 2026-09-27T17:08:27Z | harness | day-gate | not Saturday, skipping | no action
 
 2026-09-27T17:40Z | allocation | routine-05 W39 | momentum 100%, 30d -1.30R / 90d +0.49R (leave-alone rule), 90d BTC-delta not-yet-computable (cross-window outage), 7d Δ -11.01pp / 30d Δ -6.69pp / since-inception Δ -7.00pp | no allocation change proposed, no pending strategy edit to apply, W39 memo scaffold created (allocation-only, routine-04 harness memo absent)
+
+## 2026-09-28T04:13Z routine-03-eod — SOL exit-ema20-confirm-replay caught, book flat, regime FAIL 3/15
+
+Slot identity: `bull-03-eod`. PT 2026-09-27 21:13 wake. **5th consecutive off-schedule fire** (cron `0 21 * * 1-5` should not fire Sun 09-27; overnight+midday+EOD Sat 09-26, overnight Sun 09-27, this EOD Sun 09-27/09-28 UTC). Slot identity guard confirmed the prompt named `bull-03-eod` and body matched "Routine 03 — End-of-Day Journal" — no mis-slot violation. Executed per routine spec. **Task Scheduler mask has drifted to Sat+Sun despite `1-5` config — 5-of-5 evidence pattern-of-5 now routed as top-priority to routine-04-harness Sat 10-03.**
+
+Date-labeling guard: fire time 04:13Z 09-28 = 21:13 PT 09-27. Label = **PT 2026-09-27**.
+
+### Missed-scheduler-replay EXIT — SOL/USD closed at 15:00Z 09-27 close (retroactive)
+
+**Rule 1 (W22-G two-bar 20-EMA break) FIRED** at bar 15:00Z 09-27 close, with confirmation from prior 14:00Z bar. Between overnight wake at 13:15Z 09-27 (last check) and this wake at 04:13Z 09-28, 15 additional 1H bars closed (13:00Z 09-27 through 03:00Z 09-28). No routine-02-midday fired at 20:00Z 09-27 (Sunday, cron Mon-Fri) and no routine-03-eod fired at 04:00Z 09-28 on-schedule. This off-schedule Sun EOD fire caught the exit ~13 hours late.
+
+Kraken 1H bars fetched 40 (kraken_ohlcv SOLUSD 1h 40 bars covering 13:00Z 09-26 through 04:00Z 09-28):
+
+| bar (Z) | close | EMA20 est. | vs EMA20 | Notes |
+|---|---|---|---|---|
+| 12:00 09-27 | 123.33 | 122.298 (indicators.py anchor) | +$1.03 above | overnight-wake baseline |
+| 13:00 09-27 | 123.17 | ~122.40 | +$0.77 above | |
+| **14:00 09-27** | **121.68** | **~122.35** | **-$0.67 below** | **bar 1 of 2-confirm** |
+| **15:00 09-27** | **121.75** | **~122.31** | **-$0.56 below** | **bar 2 → EXIT FIRES** |
+| 16:00 09-27 | 121.80 | ~122.27 | -$0.47 | (post-exit, informational) |
+| 17:00 09-27 | 122.04 | ~122.26 | -$0.22 | |
+| 18:00 09-27 | 123.24 | ~122.37 | +$0.87 | |
+| ... | ... | ... | ... | ... |
+| 03:00 09-28 | 119.80 | 121.699 (indicators.py) | -$1.90 | latest closed bar |
+
+EMA20 anchor: indicators.py 13:12Z 09-27 reported EMA20 = 122.298 at 12:00Z close, and indicators.py 04:13Z 09-28 reports EMA20 = 121.699 at 03:00Z close. Recursive alpha = 2/21 = 0.09524 rolled forward from the 122.298 anchor gives EMA at 15:00Z ~122.31 (converged basis fits within +/-0.14 of endpoint). Both 14:00Z close 121.68 and 15:00Z close 121.75 are unambiguously below EMA20 (by $0.6+ each) → two-bar confirmation triggers.
+
+**Exit execution**:
+- Timestamp: **2026-09-27T15:00:00Z**
+- Fill price: 121.75 x (1 - 0.0005 slippage) = **$121.6894**
+- Size: 75.09 SOL
+- Gross PnL: 75.09 x (121.6894 - 121.07) = **+$46.51 / +0.30R gross**
+- Round-trip commission: (9091.15 entry cost + 9137.66 exit gross) x 0.0026 = **$47.39**
+- Net PnL: **-$0.88 / -0.01R net** (scratch, commission-eaten)
+- Reason tag: `exit-ema20-confirm-missed-scheduler-replay`
+
+**No other rules fired before 15:00Z**:
+- Rule 2 (static stop 119.0198): NOT HIT prior to exit. Lowest close 14:00Z low $121.40 = $2.38 above stop. Post-exit at 04:00Z 09-28 forming bar has intrabar low $119.00 = $0.02 below stop, but position had already exited.
+- Rule 3 (4R target 129.2708): NOT HIT. Max close 09:00Z 09-27 $124.44 = +1.64R.
+- W22-H breakeven ratchet: NEVER ARMED. Peak 1H close $124.44 = +1.64R, $0.73 short of +2.0R arm level $125.17. Peak 1H high $124.91 at 08:00Z 09-27 = +1.66R intrabar, also below +2.0R intrabar arm level.
+
+### W22-H ratchet pattern-of-4 (escalation from 07-04 ETH lesson triggered)
+
+Peak 1H close during trade $124.44 = +1.64R, +2.0R arm level $125.17 never reached at any close or intrabar high in the 27h holding period. This is the 4th instance of the peak-close < +2R pattern for the W22-H ratchet:
+
+1. SOL 06-22 — peak 1H close +1.51R (net exit +1.19R)
+2. SOL 06-29 — peak 1H close +1.74R (net exit +0.49R)
+3. ETH 07-04 — peak 1H close +1.44R (net exit -0.07R)
+4. **SOL 09-27 — peak 1H close +1.64R (net exit -0.01R)** ← this trade
+
+Pattern-of-4 confirmation crosses the ETH 07-04 lesson's escalation threshold (which noted "pattern-of-3 confirmed; route to routine-04 W28 memo... 4 concrete options with per-trade R at each threshold"). W28 memo was never drafted (scheduler outage). Routed to routine-04-harness **Sat 10-03** as top-priority candidate **P-W25R-RATCHET-TIGHTEN** with options from 07-04 lesson:
+- (a) Intrabar-trigger ratchet: arm on 1H bar high >= +2R. **Would NOT catch 09-27 SOL** (peak intrabar $124.91 = +1.66R, still below +2R).
+- (b) Lower close threshold to +1.5R: **would catch 09-27 SOL** (+1.64R > +1.5R). Catches 3/4 instances (SOL 06-22 +1.51R just barely; ETH 07-04 +1.44R misses).
+- (c) Lower close threshold to +1.4R: **catches all 4** including ETH 07-04. Trade-off: arms earliest.
+- (d) Hybrid intrabar-arm + close-confirm at +1.5R: complexity trade-off.
+
+New tabulation with 4-instance evidence base for W25R memo:
+
+| threshold | 06-22 | 06-29 | 07-04 | 09-27 | catches |
+|---|---|---|---|---|---|
+| +2.0R close (current) | miss | miss | miss | miss | 0/4 |
+| +1.7R close | miss | catch | miss | miss | 1/4 |
+| +1.5R close | catch | catch | miss | catch | 3/4 |
+| +1.4R close | catch | catch | catch | catch | 4/4 |
+| +2.0R intrabar | miss | catch (touched exact) | miss | miss | 1/4 |
+
+Also see [[lesson-2026-09-28-w22h-ratchet-pattern-of-4]] entry added this wake.
+
+### Entry-scan (EOD) — regime FAIL blocks all entries; also 0 technical PASS candidates
+
+**Regime** per indicators.py 04:13Z: **3/15 positive 24h, median -1.26% → 5a FAIL** (positive count 3 < 4 floor). Positives: SUI +5.55%, NEAR +3.69%, TRX +0.37%. Regime deteriorated sharply from Sun overnight PASS 11/15 +0.84% → EOD FAIL 3/15 -1.26% in ~15 hours (-8 positive count, -2.10pp median).
+
+**5a-SBD: CLEAR** — leg-1 (<=1 positive) fails (3>1); leg-2 (median <= -1.0%) met at -1.26% but SBD requires BOTH. Regime is standard 5a FAIL, not SBD. Exit rule 1 stays on 20-EMA basis (not 9-EMA).
+
+**Technical PASS candidates: 0 of 15.** Universal RSI compression (all 15 pairs RSI below 55; only SUI 49.5 and TRX 49.5 near). 12 of 15 pairs also below 20-EMA on 1H (only TRX PASS R1). No pair has R1+R2 both PASS → entry-scan blocked at technical layer independent of regime. **Book stays flat.**
+
+Notable: ONDO/USD still not in `scripts/indicators.py` config (**4th consecutive wake** surfacing this drift; FARTCOIN listed instead). Routed to routine-04-harness Sat 10-03 for universe patch.
+
+### Day stats (PT 2026-09-27)
+
+- **Day PnL**: **+$35.16 / +0.34%** (equity $10,228.56 PT 09-26 EOD → $10,263.72 PT 09-27 EOD).
+- **Trades opened**: 0. **Trades closed**: 1 (SOL exit-ema20-confirm-replay 15:00Z 09-27).
+- **Win rate today**: 0/1 = 0.00% (net -$0.88 / -0.01R; essentially scratch — gross was +0.30R).
+- **BULL 30d**: **-1.64%** approx (equity $10,263.72 vs ~$10,435 baseline). **BULL 7d**: **-2.09%** approx.
+- **BTC-hold 30d**: **+4.91%** (BTC ~$79.5k → $83.4k). **7d**: **+9.17%**.
+- **BULL vs BTC-hold 30d**: **-6.55pp behind**. **7d**: **-11.26pp behind**.
+- **90d benchmark**: not-yet-computable (post-outage 74d gap).
+
+### Watchdog findings (8 total, unchanged from overnight)
+
+- A heartbeat: routine-06 no commit in 12d.
+- A heartbeat: routine-07 no commit in 12d.
+- C dirty-tree: 4 uncommitted 06-29 carry-over files.
+- D stale-MTM (x5): variants rack frozen since 07-10 outage.
+
+Telegram: watchdog auto-sent per --telegram flag.
+
+### Lessons check
+
+- 1 trade closed today (SOL exit-ema20-confirm-replay net -$0.88 / -0.01R — scratch, not a stop-out).
+- 0 winners past 4R.
+- No entry immediately reversed (no entries today).
+
+**1 new lesson added** — `lessons.md` W22-H ratchet pattern-of-4 (SOL 09-27 = 4th instance of peak-close < +2R). Escalation-of-escalation trigger from ETH 07-04 lesson (which had escalated on 3rd instance and specified "route to routine-04 W28 memo" that was never drafted due to outage). Now routed to routine-04-harness Sat 10-03 W25R memo as candidate **P-W25R-RATCHET-TIGHTEN**.
+
+### Off-schedule Sunday-EOD fire flag
+
+Cron `0 21 * * 1-5` should not fire Sun. **5th consecutive off-schedule fire in ~24h** — Task Scheduler mask evidently accepts Sat+Sun despite `1-5` config. **Top-priority for routine-04-harness Sat 10-03 XML audit.**
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (overnight rebuild), trade_log.md (full 30d), research_log.md tail (~200 lines), lessons.md.
+- **Fetched**: `python scripts/watchdog.py --telegram` (8 findings); `python scripts/indicators.py` (04:13:25Z authoritative closed-bar snapshot); kraken_ohlcv SOLUSD 40x1H (bars 13:00Z 09-26 through 04:00Z 09-28); kraken_multi_ticker SOL+BTC+ETH (spot-check live).
+- **Wrote**:
+  - `trade_log.md` — appended CLOSE SOL 2026-09-27T15:00Z (net -$0.88 / -0.01R, exit-ema20-confirm-missed-scheduler-replay).
+  - `portfolio.md` — rewritten flat-book state, equity $10,263.72, DD 7.28%, exit replay documented, kill-switches all clear.
+  - `research_log.md` — this entry.
+  - `lessons.md` — appended W22-H ratchet pattern-of-4 lesson.
+  - **NO archive** (not last trading day of month; 09-30 is next Wed).
+- **NOTIFY**: Mandatory daily EOD Telegram card sent per skills/telegram.md + routine 03 NOTIFY spec.
+
+### Compact log row
+
+2026-09-28T04:13Z | routine-03-eod | EOD | PT 2026-09-27 21:13 **SUN OFF-SCHEDULE #5-of-5-in-~24h** (cron Mon-Fri) | 1 exit (SOL exit-ema20-confirm-replay 15:00Z 09-27 net -$0.88 / -0.01R scratch), 0 entries (regime FAIL 3/15 median -1.26% + 0 technical PASS candidates); book flat; equity $10,263.72 (day +$35.16 / +0.34%); DD 5.73% → 7.28% (+1.55pp vs overnight from unrealized→realized transition on scratch exit; -0.31pp vs prior EOD 7.59%); regime 5a FAIL 3/15 median -1.26% (sharp reversal from overnight PASS 11/15 +0.84%, -8 positives / -2.10pp median in ~15h); SBD CLEAR (leg-1 fails 3>1); watchdog 8 findings; W22-H pattern-of-4 escalation → P-W25R-RATCHET-TIGHTEN routed to routine-04-harness Sat 10-03; Telegram EOD card sent.
