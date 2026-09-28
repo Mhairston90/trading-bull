@@ -8524,3 +8524,92 @@ Cron `0 21 * * 1-5` should not fire Sun. **5th consecutive off-schedule fire in 
 ### Compact log row
 
 2026-09-28T04:13Z | routine-03-eod | EOD | PT 2026-09-27 21:13 **SUN OFF-SCHEDULE #5-of-5-in-~24h** (cron Mon-Fri) | 1 exit (SOL exit-ema20-confirm-replay 15:00Z 09-27 net -$0.88 / -0.01R scratch), 0 entries (regime FAIL 3/15 median -1.26% + 0 technical PASS candidates); book flat; equity $10,263.72 (day +$35.16 / +0.34%); DD 5.73% → 7.28% (+1.55pp vs overnight from unrealized→realized transition on scratch exit; -0.31pp vs prior EOD 7.59%); regime 5a FAIL 3/15 median -1.26% (sharp reversal from overnight PASS 11/15 +0.84%, -8 positives / -2.10pp median in ~15h); SBD CLEAR (leg-1 fails 3>1); watchdog 8 findings; W22-H pattern-of-4 escalation → P-W25R-RATCHET-TIGHTEN routed to routine-04-harness Sat 10-03; Telegram EOD card sent.
+
+## 2026-09-28T13:13Z routine-01-overnight — 2 tech-PASS candidates (ETH, LINK) blocked by 5a FAIL; book flat
+
+Slot identity: `bull-01-overnight`. **First on-schedule Mon 06:00 PT fire** after 5 consecutive off-schedule Sat/Sun fires (06-27 sat-overnight/midday/eod, 09-27 sun-overnight/eod). Cron `0 6 * * 1-5` correctly fired Mon 09-28 at 13:13Z = 06:13 PT. Slot identity guard confirmed. Book was flat entering wake (SOL/USD exited retroactively 15:00Z 09-27 by prior EOD replay).
+
+### VERIFY
+
+- Kill switches: **all CLEAR** (equity $10,263.72, DD 7.28% from peak $11,068.89, 5.22pp headroom to warn; no MTM change — flat book).
+- Watchdog 8 findings (unchanged from prior 2 wakes — A×2 heartbeat routine-06/07, C dirty-tree 4 files, D×5 stale-MTM variants). Not kill switches; routed to routine-04-harness Sat 10-03.
+
+### Technical
+
+**Regime**: **3/15 positive 24h, median −1.58% → 5a FAIL** (indicators.py 13:12:40Z). Positives: LINK (+3.99%), NEAR (+0.38%), TRX (+0.34%). Regime rotation vs prior EOD (04:13Z 09-28): SUI +5.55% → −5.13% (fell out); LINK newly positive at +3.99%; NEAR and TRX held marginal. Median deteriorated slightly (−1.26% → −1.58%). Positive count unchanged (3).
+
+**5a-SBD**: **CLEAR** — leg-1 (≤1 positive) fails (3>1); leg-2 (median ≤ −1.0%) met at −1.58% but SBD requires BOTH. Regime is standard 5a FAIL. Exit rule 1 stays on 20-EMA (moot; book flat).
+
+**Full-pass technical check per indicators.py 13:12Z (rules 1+2+2a+3+4a; 720×1H + converged 4H bars all 15 pairs)**:
+
+| Pair | R1 | R2 | R3 | R4a | Verdict |
+|---|---|---|---|---|---|
+| BTC | PASS +$8.95 | FAIL RSI 47.5 | FAIL −$381 | OK | R2+R3 fail |
+| **ETH** | **PASS +$22.6** | **PASS RSI 58.5** | **PASS +$1.28** | **OK $61.34M** | **FULL PASS** |
+| SOL | PASS +$0.034 | FAIL RSI 48.0 | PASS | OK | R2 fail (+ 5b cooldown til 15:00Z) |
+| HYPE | FAIL | FAIL RSI 46.8 | FAIL | OK | reject |
+| XRP | PASS +$0.023 | PASS RSI 58.2 | FAIL −$0.009 | OK | R3 near-miss ($0.009 gap) |
+| SUI | FAIL | FAIL RSI 43.1 | PASS | OK | reject |
+| TAO | FAIL | FAIL RSI 43.6 | PASS | OK | reject |
+| XDG | FAIL | FAIL RSI 47.1 | FAIL | OK | reject |
+| NEAR | PASS +$0.011 | FAIL RSI 50.7 | PASS | OK | R2 fail |
+| ADA | PASS +$0.0027 | FAIL RSI 53.5 | PASS | OK | R2 near-miss (RSI 53.5 vs 55) |
+| **LINK** | **PASS +$0.75** | **PASS RSI 69.9** | **PASS +$0.73** | **OK $15.97M** | **FULL PASS** |
+| LTC | FAIL | FAIL RSI 48.7 | PASS | OK | reject |
+| FARTCOIN | FAIL | FAIL RSI 37.1 | FAIL | OK $2.02M | reject |
+| TRX | PASS +$0.001 | PASS RSI 60.8 | FAIL −$0.004 | FAIL $1.03M | R3+R4a fail |
+| AVAX | FAIL | FAIL RSI 42.5 | PASS | OK | reject |
+
+**Technical PASS: 2 pairs — ETH (rank 2) and LINK (rank 13).** LINK is the standout with cleanest margins: R1 +5.4% above EMA20, R2 RSI 69.9 (well clear of 55 floor and 80 ceiling), R3 +5.5% above 4H EMA50, R4a comfortable $15.97M. ETH's margins are tight but pass: R1 +0.84%, R2 RSI 58.5 (only +3.5 over floor), R3 +0.05% (very tight $1.28 above EMA50).
+
+**Regime blocks both.** Rule 5a: 3/15 positive < 4-floor. If regime had passed, Rule 8 tiebreaker would prefer **ETH (rank 2)** over LINK (rank 13) per notional volume. Note the counter-intuitive tiebreaker outcome — LINK has materially stronger technicals but rank-1 wins.
+
+**Near-miss watch for next wakes**:
+- ETH: tight R3 margin (+$1.28 above EMA50 on $2,690 price = 0.05%); could flip either way on next 4H bar.
+- ADA: R2 RSI 53.5 vs 55 (−1.5); a small up-move could flip PASS.
+- XRP: R3 FAIL by −$0.009 (0.6% gap); needs 4H strength.
+- BTC: R2 RSI 47.5 well below (−7.5); regime-linked, would need broader crypto rally.
+
+### News
+
+**Skipped this wake** — regime 5a FAIL blocks all new entries irrespective of news, so pulling headlines for the 2 tech-PASS candidates (ETH, LINK) is informational only per v0.2 (news cannot veto or force). Deferred to a wake where regime passes to avoid Firecrawl consumption on non-actionable signals. Not a Firecrawl-unavailable event.
+
+### Sentiment
+
+**Skipped this wake** — same reason as News; sentiment pass is informational only in v0.2 and any tech-PASS entries are blocked by 5a FAIL regardless. Would query spread + depth for ETH and LINK if regime were PASS.
+
+### Decision
+
+- **0 entries opened** — regime 5a FAIL blocks the 2 tech-PASS candidates.
+- **0 exits triggered** — book was flat entering wake.
+- **0 rejects logged individually** — technical rejects captured in the table above; the 13 non-passing pairs are all rule-1 or rule-2 fails with clear margins, no borderline exits deserving individual write-up.
+- **No stops hit overnight** — irrelevant (no open positions).
+- **No new entries** to place.
+
+### Pattern-of-2 emerging: LINK vs ETH tiebreaker archetype
+
+Rule 8 tiebreaker (prefer highest 30d notional rank) is designed to prevent same-bar cluster fills. But it produces a counter-intuitive outcome here: LINK has objectively stronger momentum (RSI 69.9 vs ETH 58.5; R3 +5.5% vs +0.05%; 24h +3.99% vs −0.62%) yet ETH would win the tie because notional rank 2 > 13. If regime clears next wake AND both remain tech-PASS, we would enter ETH not LINK — potentially foregoing the stronger signal for higher liquidity. **Not proposing a rule change** (pattern-of-1 is insufficient), but flagging for routine-04 backlog: is notional-rank the right tiebreaker, or should it be strongest technical margins? Note: rule 8 was added W18 specifically to prevent cluster fills, not to select-for-strength.
+
+Adding to routine-04-harness Sat 10-03 memo backlog: candidate P-W25R-RULE8-TIEBREAK-STRENGTH (evidence-track only; needs 3–4 arcs before proposal).
+
+### Off-schedule fire tracker (cleared this wake)
+
+- Prior 5 fires (Sat 09-26 overnight/midday/eod, Sun 09-27 overnight/eod) all off-schedule.
+- **This wake is on-schedule** (Mon 09-28 06:00 PT = 13:00Z; fired at 13:12Z with ~13min drift acceptable for Task Scheduler).
+- Confirms cron does fire Mon-Fri correctly; the misconfiguration is that it ALSO fires Sat+Sun. Task Scheduler XML audit still on routine-04-harness Sat 10-03 for pattern-of-5 fix.
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (post-EOD rebuild), trade_log.md (~30d tail), research_log.md (~7d tail), lessons.md (tail).
+- **Fetched**: `python scripts/watchdog.py --telegram` (8 findings, unchanged); `python scripts/indicators.py` (13:12:40Z closed-bar snapshot, 15 pairs 720×1H + converged 4H).
+- **Wrote**:
+  - `portfolio.md` — header timestamp updated, regime section refreshed with 2 tech-PASS candidates, kill-switch section refreshed for this wake.
+  - `research_log.md` — this entry.
+  - **NO write** to `trade_log.md` (no exits, no entries).
+  - **NO write** to `lessons.md` (no new archetype; LINK-vs-ETH tiebreaker is pattern-of-1).
+  - **NO write** to `universe.md` (not first-of-month; next refresh 10-01 Thursday).
+- **NOTIFY**: silent per NOTIFY spec — no kill-switch, no OPEN, no stop-out CLOSE, no ACTIONABLE news classified, no universe refresh. Absence of message = "all clear, nothing to flag."
+
+### Compact log row
+
+2026-09-28T13:13Z | routine-01-overnight | wake | PT 2026-09-28 06:13 **first on-schedule Mon fire post-5-off-schedule-Sat/Sun** | 0 exits, 0 entries (2 tech-PASS ETH+LINK blocked by 5a FAIL 3/15 median −1.58%); book flat; equity $10,263.72 (unchanged); DD 7.28% (unchanged); regime 5a FAIL 3/15 positive (LINK +3.99% / NEAR +0.38% / TRX +0.34%); SBD CLEAR (leg-1 fails); watchdog 8 findings unchanged; rule 8 tiebreaker note (LINK stronger, ETH would win by rank) → routine-04 backlog P-W25R-RULE8-TIEBREAK-STRENGTH (pattern-of-1); silent Telegram (no OPEN/CLOSE/kill/news/universe).

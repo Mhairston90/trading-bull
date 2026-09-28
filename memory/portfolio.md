@@ -1,7 +1,7 @@
 # BULL Portfolio State
 
 > **Rebuilt each wake** from `trade_log.md`; the log remains the source of truth.
-> **Last rebuild:** 2026-09-28T04:13Z routine-03-eod (PT 2026-09-27 21:13) — SOL/USD exit-ema20-confirm replayed retroactively at 15:00Z 09-27 close; book now flat.
+> **Last rebuild:** 2026-09-28T13:13Z routine-01-overnight (PT 2026-09-28 06:13) — **first on-schedule Mon fire after 5 off-schedule Sat/Sun fires**; book flat (no exits, no entries this wake).
 
 ## Account
 
@@ -61,49 +61,49 @@ Open positions: **0 / 8** (strategy cap 0/4; BTC cluster 0/2).
 
 ## Exit-rule replay — no other positions (book was single-position SOL)
 
-## Entry-scan (EOD 04:13Z 09-28) — regime FAIL blocks all new entries
+## Entry-scan (overnight 13:12Z 09-28) — regime FAIL blocks all new entries; 2 tech-PASS candidates blocked
 
-**Regime**: **3/15 positive 24h, median −1.26% → 5a FAIL** (positive count 3 < 4 floor).
+**Regime**: **3/15 positive 24h, median −1.58% → 5a FAIL** (positive count 3 < 4 floor).
 
-Positive pairs: SUI (+5.55%), NEAR (+3.69%), TRX (+0.37%).
+Positive pairs: LINK (+3.99%), NEAR (+0.38%), TRX (+0.34%). Rotation from EOD positives (SUI +5.55% dropped to −5.13%; LINK new positive at +3.99%; NEAR held marginally positive).
 
-**5a-SBD**: CLEAR — leg-1 (≤1 positive) not met (3 > 1); leg-2 (median ≤ −1.0%) met at −1.26% but SBD requires BOTH legs. Regime is standard 5a FAIL, not SBD.
+**5a-SBD**: CLEAR — leg-1 (≤1 positive) fails (3 > 1); leg-2 (median ≤ −1.0%) met at −1.58% but SBD requires BOTH. Regime is standard 5a FAIL, not SBD.
 
-**Full-pass technical check per indicators.py 04:13Z (rules 1+2+2a+3+4a)**: **0 pairs pass R1+R2**. All 15 fail either R1 or R2 (mostly both). Not one pair has a close above its 20-EMA with RSI ≥ 55.
+**Full-pass technical check per indicators.py 13:12Z (rules 1+2+2a+3+4a)**: **2 pairs FULL PASS — ETH and LINK** (first non-zero tech-PASS count in 3 wakes). Both blocked by 5a FAIL. If regime had passed, rule 8 tiebreaker would prefer **ETH (rank 2)** over LINK (rank 13).
 
-| Pair | R1 (>EMA20) | R2 (RSI≥55) | R3 (4H>EMA50) | Verdict |
-|---|---|---|---|---|
-| BTC | FAIL −$904 | FAIL RSI 31.2 | FAIL −$161 | technical reject |
-| ETH | FAIL −$29.31 | FAIL RSI 31.0 | FAIL −$15.95 | technical reject |
-| SOL | FAIL −$1.90 | FAIL RSI 36.4 | PASS +$2.80 | R1+R2 fail |
-| HYPE | FAIL −$1.80 | FAIL RSI 28.1 | FAIL −$2.03 | technical reject |
-| XRP | FAIL −$0.025 | FAIL RSI 33.6 | FAIL | technical reject |
-| SUI | FAIL −$0.010 | FAIL RSI 49.5 | PASS +$0.175 | R1+R2 fail (but top gainer +5.55%) |
-| TAO | FAIL −$12.64 | FAIL RSI 33.4 | PASS +$8.48 | R1+R2 fail |
-| XDG | FAIL | FAIL RSI 33.4 | FAIL | technical reject |
-| NEAR | FAIL −$0.065 | FAIL RSI 47.9 | PASS +$0.70 | R1+R2 fail (+3.69%) |
-| ADA | FAIL | FAIL RSI 39.3 | PASS | R1+R2 fail |
-| LINK | FAIL | FAIL RSI 40.0 | PASS | R1+R2 fail |
-| LTC | FAIL | FAIL RSI 44.6 | PASS | R1+R2 fail |
-| FARTCOIN | FAIL | FAIL RSI 31.0 | FAIL | R4a $1.25M <$2M also |
-| TRX | PASS +$0.00012 | FAIL RSI 49.5 | FAIL | R2+R3+R4a fail |
-| AVAX | FAIL | FAIL RSI 41.0 | PASS | R1+R2 fail |
+| Pair | R1 (>EMA20) | R2 (RSI≥55) | R3 (4H>EMA50) | R4a | Verdict |
+|---|---|---|---|---|---|
+| BTC | PASS +$8.95 | FAIL RSI 47.5 | FAIL −$381 | OK | R2+R3 fail |
+| ETH | **PASS +$22.6** | **PASS RSI 58.5** | **PASS +$1.28** | OK | **FULL PASS** — blocked by 5a |
+| SOL | PASS +$0.03 | FAIL RSI 48.0 | PASS +$1.57 | OK | R2 fail (also 5b cooldown til 15:00Z) |
+| HYPE | FAIL −$0.01 | FAIL RSI 46.8 | FAIL −$1.49 | OK | technical reject |
+| XRP | PASS +$0.023 | PASS RSI 58.2 | FAIL −$0.009 | OK | R3 fail (near miss) |
+| SUI | FAIL | FAIL RSI 43.1 | PASS +$0.115 | OK | R1+R2 fail |
+| TAO | FAIL | FAIL RSI 43.6 | PASS +$6.71 | OK | R1+R2 fail |
+| XDG | FAIL | FAIL RSI 47.1 | FAIL | OK | technical reject |
+| NEAR | PASS +$0.011 | FAIL RSI 50.7 | PASS +$0.57 | OK | R2 fail |
+| ADA | PASS +$0.0027 | FAIL RSI 53.5 | PASS +$0.001 | OK | R2 fail (near-miss RSI) |
+| LINK | **PASS +$0.75** | **PASS RSI 69.9** | **PASS +$0.73** | OK | **FULL PASS** — blocked by 5a |
+| LTC | FAIL | FAIL RSI 48.7 | PASS +$4.37 | OK | R1+R2 fail |
+| FARTCOIN | FAIL | FAIL RSI 37.1 | FAIL | OK $2.02M | technical reject |
+| TRX | PASS +$0.001 | PASS RSI 60.8 | FAIL −$0.004 | FAIL $1.03M | R3+R4a fail |
+| AVAX | FAIL | FAIL RSI 42.5 | PASS +$0.14 | OK | R1+R2 fail |
 
-**Verdict**: **0 entry-eligible pairs.** Even if regime were PASS, no pair clears R1+R2 (universal RSI compression below 55; 12 of 15 pairs below 20-EMA on 1H). Entry-scan blocked at technical layer irrespective of the 5a FAIL. Book stays flat.
+**Verdict**: **2 technical-PASS pairs (ETH, LINK)** — both blocked by regime 5a FAIL. Book stays flat. Rule 8 tiebreaker if regime recovered: ETH (rank 2 notional) > LINK (rank 13).
 
 Note: ONDO/USD still not in `scripts/indicators.py` config (4th consecutive wake) — FARTCOIN listed instead. Routed to routine-04-harness Sat 10-03 for universe config patch.
 
-## Active kill-switch state (routine-03-eod 2026-09-28T04:13Z / PT 2026-09-27 21:13)
+## Active kill-switch state (routine-01-overnight 2026-09-28T13:13Z / PT 2026-09-28 06:13)
 
-- Daily loss cap (PT 2026-09-27): **+$35.16 net gain** for the day (equity $10,228.56 → $10,263.72). CLEAR (5% cap; positive day).
-- Consecutive-loss cap: **3 losses** (NEAR 09-23 −1.01R, ADA 09-26 −0.29R, SOL 09-27 −0.01R). Streak = 3 of 7. CLEAR. **Watch:** SOL was a scratch (net −$0.88); strict definition of "losing trading day" per guardrails treats today as neutral-to-slight-loss depending on interpretation (day PnL was +$35.16 net so the *day* is a win; the *trade* was a −0.01R fractional loss). Conservative view: streak-of-3 losing trades, but only 1 losing day (09-26) in the last 7.
-- Max drawdown: **7.28%** from peak $11,068.89. CLEAR (25% cap, 12.5% warn, **5.22pp headroom to warn**; +1.55pp vs overnight 5.73%; -0.31pp vs prior EOD 7.59%).
+- Daily loss cap (PT 2026-09-28 in-progress): flat book, 0.00% P&L intra-day. CLEAR.
+- Consecutive-loss cap: **3 losses** (NEAR 09-23 −1.01R, ADA 09-26 −0.29R, SOL 09-27 −0.01R scratch). Streak = 3 of 7. CLEAR.
+- Max drawdown: **7.28%** from peak $11,068.89 (unchanged; book flat, no MTM). CLEAR (25% cap, 12.5% warn, **5.22pp headroom to warn**).
 - Equity floor: **$10,263.72 > $7,500** (+$2,763.72). CLEAR.
 - Exposure: **0.00%** / 4% used (flat book). CLEAR.
 - Cluster cap: **0/2 BTC-cluster**. CLEAR.
 - Universe/liquidity: N/A (flat book).
-- 5b cooldown: SOL just exited 15:00Z 09-27 → 24h cooldown active until 15:00Z 09-28. NEAR 09-23T14Z is 111h ago > 24h; ADA 09-26T06Z is 47h ago > 24h.
-- **Regime 5a: FAIL 3/15 positive, median −1.26%** — new entries blocked by rule regardless (and no technical PASS candidates exist).
+- 5b cooldown: **SOL cooldown active until 15:00Z 09-28** (1h 47m remaining from wake); NEAR 09-23T14Z (119h ago) CLEAR; ADA 09-26T06Z (55h ago) CLEAR. SOL was tech-fail anyway (R2 RSI 48.0).
+- **Regime 5a: FAIL 3/15 positive, median −1.58%** — new entries blocked (would otherwise fire on ETH per Rule 8 tiebreaker).
 - **5a-SBD: CLEAR** — leg-1 (≤1 positive) fails (3>1); regime is 5a FAIL only, not SBD.
 - MCP availability: Kraken ticker + OHLCV + indicators.py + watchdog all healthy. CLEAR.
 - **All Ring 3 kill switches CLEAR.**
