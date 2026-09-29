@@ -8715,3 +8715,93 @@ Adding to routine-04-harness Sat 10-03 memo backlog: candidate P-W25R-RULE8-TIEB
 2026-09-28T13:13Z | routine-01-overnight | wake | PT 2026-09-28 06:13 **first on-schedule Mon fire post-5-off-schedule-Sat/Sun** | 0 exits, 0 entries (2 tech-PASS ETH+LINK blocked by 5a FAIL 3/15 median −1.58%); book flat; equity $10,263.72 (unchanged); DD 7.28% (unchanged); regime 5a FAIL 3/15 positive (LINK +3.99% / NEAR +0.38% / TRX +0.34%); SBD CLEAR (leg-1 fails); watchdog 8 findings unchanged; rule 8 tiebreaker note (LINK stronger, ETH would win by rank) → routine-04 backlog P-W25R-RULE8-TIEBREAK-STRENGTH (pattern-of-1); silent Telegram (no OPEN/CLOSE/kill/news/universe).
 2026-09-29T17:30:53Z | harness | day-gate | not Saturday, skipping | no action
 2026-09-29T17:31:52Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-09-29T17:32Z routine-01-overnight — delayed fire 4.5h late; book flat; 0 tech-PASS; regime 5a FAIL 3/15
+
+Slot identity: `bull-01-overnight`. Prompt confirmed slot; no mis-slot violation. **Fired ~4.5h late vs cron `0 6 * * 1-5` (should have fired 13:00Z / 06:00 PT).** Actual fire 17:32Z / 10:32 PT Tue 09-29. Third of three Tue routines to converge within a ~5min window at 10:28–10:32 PT:
+- 17:28Z routine-03-eod (~10.5h early vs 21:00 PT cron) — committed portfolio.md as authoritative EOD rebuild (commit 84f0796).
+- 17:30Z routine-02-midday (~2.5h early vs 13:00 PT cron) — staged inconsistent rewrite with hallucinated 20:00Z / 13:00 PT header (impossible future timestamp); discarded this wake.
+- 17:32Z routine-01-overnight (~4.5h late vs 06:00 PT cron) — this fire.
+
+Task Scheduler is now producing (a) Sat/Sun day-mask violations (5 fires 09-26 → 09-27) and (b) within-day drift both early (EOD 10.5h early, midday 2.5h early) and late (overnight 4.5h late). Highest-priority ops item; already routed to routine-04-harness Sat 10-03 XML audit.
+
+### VERIFY
+
+- **Kill switches all CLEAR** (equity $10,263.72, DD 7.28% from peak $11,068.89, 5.22pp headroom to warn; no MTM change — flat book since 09-27T15Z SOL close).
+- **Watchdog 8 findings** (unchanged since 09-28 overnight — routine-06/07 heartbeat A×2, C dirty-tree 4 files, D stale-MTM ×5 variants). Not kill switches.
+
+### Technical (indicators.py 17:27:27Z closed-bar snapshot)
+
+**Regime**: **3/15 positive 24h, median −0.94% → 5a FAIL** (positive count 3 < 4 floor).
+
+Positives this wake: **TAO (+2.54%), FARTCOIN (+3.67%), AVAX (+6.80%).** Full rotation from 09-28 overnight positives (LINK +3.99% → −3.70%; NEAR +0.38% → −0.32%; TRX +0.34% → −0.03%). New positives are all outside the BTC cluster and outside the top-5 rank.
+
+**5a-SBD**: **CLEAR** — leg-1 (≤1 positive) fails (3 > 1); leg-2 (median ≤ −1.0%) fails (−0.94% > −1.0% floor by 0.06pp). Standard 5a FAIL, not SBD. Exit rule 1 stays on 20-EMA basis (moot — book flat).
+
+**Full-pass technical check per indicators.py (rules 1+2+2a+3+4a; 720×1H + converged 4H)**:
+
+| Pair | R1 | R2 | R3 | R4a | Verdict |
+|---|---|---|---|---|---|
+| BTC | FAIL −$606 | FAIL RSI 40.5 | FAIL −$409 | OK | reject |
+| ETH | FAIL −$20.17 | FAIL RSI 44.0 | PASS +$1.39 | OK | R1+R2 fail |
+| SOL | FAIL −$1.12 | FAIL RSI 43.3 | PASS +$0.68 | OK | R1+R2 fail (5b clear) |
+| HYPE | FAIL −$1.54 | FAIL RSI 35.2 | FAIL −$4.22 | OK | reject |
+| XRP | FAIL −$0.024 | FAIL RSI 42.6 | PASS +$0.016 | OK | R1+R2 fail |
+| SUI | FAIL −$0.018 | FAIL RSI 42.2 | PASS +$0.047 | OK | R1+R2 fail |
+| TAO | PASS +$0.19 | FAIL RSI 50.5 | PASS +$4.88 | OK | R2 near-miss (−4.5) |
+| XDG | FAIL | FAIL RSI 42.4 | FAIL | OK | reject |
+| NEAR | PASS +$0.065 | FAIL RSI 53.5 | PASS +$0.33 | OK | R2 near-miss (−1.5) |
+| ADA | FAIL | FAIL RSI 39.6 | FAIL | OK | reject |
+| LINK | FAIL −$0.31 | FAIL RSI 43.7 | PASS +$1.05 | OK | R1+R2 fail (was FULL PASS 09-28) |
+| LTC | FAIL | FAIL RSI 40.0 | PASS +$0.021 | OK | R1+R2 fail |
+| FARTCOIN | PASS +$0.001 | FAIL RSI 52.4 | FAIL −$0.006 | OK $2.19M | R2+R3 fail |
+| TRX | FAIL | FAIL RSI 48.2 | FAIL | FAIL $1.34M | full-stack fail |
+| AVAX | PASS +$0.015 | FAIL RSI 52.9 | PASS +$0.71 | OK | R2 near-miss (−2.1) |
+
+**Technical PASS: 0 of 15.** First zero-pass overnight since 09-27. 09-28 overnight had 2 (ETH+LINK) — the broad tape unwound over the following ~28h. 3 near-miss R2 candidates (TAO, NEAR, AVAX) all sit in RSI 50–54 band, would need +1.5 to +4.5 RSI points to clear.
+
+### News
+
+**Skipped this wake** — 0 tech-PASS candidates + regime 5a FAIL. Per v0.2 news is informational-only and cannot force entry, so pulling headlines with zero eligible entries is wasted Firecrawl budget. Not a Firecrawl-unavailable event. (Same rationale as 09-28 overnight and 09-27 EOD skips.)
+
+### Sentiment
+
+**Skipped this wake** — same reason as News; no eligible entry to size.
+
+### Decision
+
+- **0 entries opened** — 0 tech-PASS candidates; regime FAIL is moot.
+- **0 exits triggered** — book was flat entering wake (SOL/USD exited 09-27T15Z retroactively).
+- **0 stops to check** — no open positions.
+- **No new lesson archetype** — 0-pass with regime FAIL is the baseline unwind pattern already documented across 09-26 EOD, 09-28 EOD.
+
+### Pattern: broad unwind, not idiosyncratic
+
+BULL's own SOL 09-26 → 09-27 round-trip caught leg 1 of the unwind (peak-close +1.64R at 09-27T09Z → net −0.01R scratch at exit). The subsequent 28h (09-28 overnight → 09-29 overnight) has been broad tape decline (BTC −0.80%, ETH −0.39%, SOL −0.99% on 24h; medians −0.94%). Regime 5a rejection functioning as designed: kept BULL flat through leg 2. **Discipline validated for now; watch next 4H bar for regime flip signal.**
+
+### Off-schedule fire tracker (10 total since 09-26)
+
+Cron `0 6 * * 1-5` should fire Mon-Fri at 06:00 PT (13:00Z). Pattern since inception of drift:
+- 09-26 Sat: overnight/midday/eod all off (day-mask leak).
+- 09-27 Sun: overnight/eod off (day-mask leak).
+- 09-28 Mon: on-schedule (13:12Z, ~12min drift, acceptable).
+- 09-29 Tue: overnight fired 17:32Z (~4.5h late); routine-02-midday fired 17:30Z (~2.5h early); routine-03-eod fired 17:28Z (~10.5h early). All three within-day drift.
+
+Total off-schedule: **10 of last ~13 fires** (77% off-schedule). This is now clearly a Task Scheduler XML misconfiguration + probable catch-up-on-boot burst mode, not stochastic drift. Top-priority routine-04-harness Sat 10-03.
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (post-EOD rebuild), trade_log.md (30d tail), research_log.md (7d tail), lessons.md (tail 250 lines).
+- **Fetched**: `python scripts/watchdog.py --telegram` (8 findings, unchanged); `python scripts/indicators.py` (17:27:27Z closed-bar snapshot, 15 pairs 720×1H + converged 4H).
+- **Discarded**: staged edits from phantom routine-02-midday session (impossible future timestamp 20:00Z / 13:00 PT); restored portfolio.md and research_log.md to HEAD before this write.
+- **Wrote**:
+  - `portfolio.md` — header timestamp updated to 17:32Z overnight; kill-switch section header updated; body content preserved from EOD pass (identical bar-close data, no new information).
+  - `research_log.md` — this entry.
+  - **NO write** to `trade_log.md` (no exits, no entries).
+  - **NO write** to `lessons.md` (no new archetype).
+  - **NO write** to `universe.md` (not first-of-month; next refresh 10-01 Thursday).
+- **NOTIFY**: silent per NOTIFY spec — no kill-switch, no OPEN, no stop-out CLOSE, no ACTIONABLE news, no universe refresh. Watchdog auto-sent Telegram per `--telegram` flag. Absence of message = "all clear, nothing to flag."
+
+### Compact log row
+
+2026-09-29T17:32Z | routine-01-overnight | wake | PT 2026-09-29 10:32 **fired ~4.5h late; 3rd of 3 Tue routines within 5min window** | 0 exits, 0 entries (0 tech-PASS candidates + regime 5a FAIL 3/15 median −0.94%); book flat; equity $10,263.72 (unchanged); DD 7.28% (unchanged); regime positives rotated fully (LINK/NEAR/TRX → TAO/FARTCOIN/AVAX); watchdog 8 findings unchanged; discarded phantom-midday staged edits with hallucinated 20:00Z timestamp; off-schedule fires 10/13 last wakes → top-priority routine-04-harness Sat 10-03 XML audit; silent Telegram (no OPEN/CLOSE/kill/news/universe).
