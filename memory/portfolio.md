@@ -1,7 +1,7 @@
 # BULL Portfolio State
 
 > **Rebuilt each wake** from `trade_log.md`; the log remains the source of truth.
-> **Last rebuild:** 2026-09-28T13:13Z routine-01-overnight (PT 2026-09-28 06:13) — **first on-schedule Mon fire after 5 off-schedule Sat/Sun fires**; book flat (no exits, no entries this wake).
+> **Last rebuild:** 2026-09-29T17:30Z routine-02-midday (PT 2026-09-29 10:30) — **off-schedule Tue midday fire ~2.5h early vs cron 13:00 PT**; book flat, no MTM change, no exits.
 
 ## Account
 
@@ -93,20 +93,26 @@ Positive pairs: LINK (+3.99%), NEAR (+0.38%), TRX (+0.34%). Rotation from EOD po
 
 Note: ONDO/USD still not in `scripts/indicators.py` config (4th consecutive wake) — FARTCOIN listed instead. Routed to routine-04-harness Sat 10-03 for universe config patch.
 
-## Active kill-switch state (routine-01-overnight 2026-09-28T13:13Z / PT 2026-09-28 06:13)
+## Active kill-switch state (routine-02-midday 2026-09-29T17:30Z / PT 2026-09-29 10:30)
 
-- Daily loss cap (PT 2026-09-28 in-progress): flat book, 0.00% P&L intra-day. CLEAR.
+- Daily loss cap (PT 2026-09-29 in-progress): flat book, 0.00% P&L intra-day. CLEAR.
 - Consecutive-loss cap: **3 losses** (NEAR 09-23 −1.01R, ADA 09-26 −0.29R, SOL 09-27 −0.01R scratch). Streak = 3 of 7. CLEAR.
 - Max drawdown: **7.28%** from peak $11,068.89 (unchanged; book flat, no MTM). CLEAR (25% cap, 12.5% warn, **5.22pp headroom to warn**).
 - Equity floor: **$10,263.72 > $7,500** (+$2,763.72). CLEAR.
 - Exposure: **0.00%** / 4% used (flat book). CLEAR.
 - Cluster cap: **0/2 BTC-cluster**. CLEAR.
 - Universe/liquidity: N/A (flat book).
-- 5b cooldown: **SOL cooldown active until 15:00Z 09-28** (1h 47m remaining from wake); NEAR 09-23T14Z (119h ago) CLEAR; ADA 09-26T06Z (55h ago) CLEAR. SOL was tech-fail anyway (R2 RSI 48.0).
-- **Regime 5a: FAIL 3/15 positive, median −1.58%** — new entries blocked (would otherwise fire on ETH per Rule 8 tiebreaker).
-- **5a-SBD: CLEAR** — leg-1 (≤1 positive) fails (3>1); regime is 5a FAIL only, not SBD.
-- MCP availability: Kraken ticker + OHLCV + indicators.py + watchdog all healthy. CLEAR.
+- 5b cooldown: SOL 09-26T12Z (**76h ago**) CLEAR; ADA 09-26T06Z (**82h ago**) CLEAR; NEAR 09-23T14Z (**168h ago**) CLEAR. All expired.
+- **Regime 5a: FAIL 3/15 positive live-ticker, median −0.82%** — informational only; midday does not run entry scan per routine spec.
+- **5a-SBD: CLEAR** — leg-1 (≤1 positive) fails (3>1); leg-2 (median ≤ −1.0%) fails (−0.82 > −1.0). Standard 5a FAIL, not SBD.
+- MCP availability: Kraken multi-ticker healthy (15/15 pairs returned in one call). CLEAR.
 - **All Ring 3 kill switches CLEAR.**
+
+### Midday note (09-29T17:30Z)
+
+Book flat since 09-27T15Z SOL close. No positions to mark, no exits to evaluate. Live-ticker regime deteriorated vs 09-25T20Z midday (was 13/15 positive median +3.14%; now 3/15 positive median −0.82%). Bar-close authoritative regime not recomputed at midday. Next entry decision is tomorrow overnight (13:00Z 09-30 = 06:00 PT Wed). No Telegram notify (no kill switch, no exit, no DD-warning threshold crossed).
+
+**Off-schedule fire flag:** routine fired at 17:30Z (10:30 PT) vs cron `0 13 * * 1-5` (13:00 PT) — ~2.5h early. Same Task Scheduler drift pattern flagged in prior overnight ops notes (5-of-5 pattern routed to routine-04-harness Sat 10-03 for cron audit). This adds 6th off-schedule instance. Off-schedule fire did no harm here (flat book, midday routine bars entries anyway).
 
 ## Ops notes
 

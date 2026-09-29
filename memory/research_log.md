@@ -4,6 +4,43 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-09-29T17:30Z routine-02-midday — book flat, no exits, regime 5a FAIL
+
+Slot identity: `bull-02-midday`. PT 2026-09-29 10:30 wake, **OFF-SCHEDULE ~2.5h early** vs cron `0 13 * * 1-5` (13:00 PT). 6th off-schedule fire in recent pattern (5 previously routed to routine-04-harness Sat 10-03 for cron audit).
+
+### State summary
+
+- Equity **$10,263.72** unchanged (book flat since 09-27T15Z SOL CLOSE).
+- No open positions → **no MTM**, **no exits** to evaluate. Trade log untouched this wake.
+- Drawdown from peak $11,068.89: **7.28%** unchanged. CLEAR (25% cap, 12.5% warn, **5.22pp headroom to warn**).
+- PT 2026-09-29 fresh-day realized P&L: **$0.00** (midday routine bars new entries by spec).
+
+### Live-ticker regime snapshot (~17:30Z, informational — no entry scan permitted at midday)
+
+**3/15 positive 24h, median −0.82%.** 5a FAIL (positive count 3 < 4 floor). SBD CLEAR: leg-1 (≤1 positive) fails at 3>1; leg-2 (median ≤ −1.0%) fails at −0.82% > −1.0%. Standard 5a FAIL, not SBD.
+
+Positive pairs: AVAX (+4.72%), FARTCOIN (+4.48%), NEAR (+1.25%). Weakest: LINK (−5.30%), SUI (−2.94%), LTC (−2.57%). BTC modest −0.44%, ETH modest −0.47%.
+
+Regime deterioration vs. prior midday snapshot (09-25T20:00Z was 13/15 positive median +3.14%). Weekend/Monday saw material give-back; live-ticker read only, bar-close authoritative regime not recomputed at midday per routine spec. Next authoritative entry-scan is tomorrow overnight (13:00Z 09-30 = 06:00 PT Wed).
+
+### Kill-switch snapshot (all CLEAR)
+
+- Daily loss cap (PT 09-29 in-progress): flat book, 0.00% P&L. **CLEAR**.
+- Consecutive-loss cap: **3 losses** (NEAR 09-23, ADA 09-26, SOL 09-27 scratch). Streak = 3 of 7. **CLEAR**.
+- Max drawdown: **7.28%** from peak $11,068.89 (unchanged; flat book, no MTM movement). **CLEAR** — 5.22pp headroom to 12.5% warn.
+- Equity floor: **$10,263.72 > $7,500** (+$2,763.72 headroom). **CLEAR**.
+- Exposure: **0.00% / 4%** used (flat book). **CLEAR**.
+- Cluster cap: **0/2 BTC-cluster**. **CLEAR**.
+- 5b cooldown: SOL 09-26T12Z (76h ago) **CLEAR**; ADA 09-26T06Z (82h ago) **CLEAR**; NEAR 09-23T14Z (**168h** ago) **CLEAR**.
+- MCP availability: Kraken multi-ticker healthy (15/15 pairs returned in one call). **CLEAR**.
+- **All Ring 3 kill switches CLEAR.**
+
+### Ops notes
+
+- **Off-schedule Tue midday fire ~2.5h early** (17:30Z / 10:30 PT vs cron 13:00 PT). Off-schedule pattern now 6-of-6 across the last week; routed to routine-04-harness Sat 10-03 for Task Scheduler XML audit (routing already in place from overnight ops notes).
+- No Telegram notification per skills/telegram.md — no kill switch, no exit, no drawdown warning threshold (12.5%) crossed.
+- Watchdog re-check deferred to next overnight (routine spec is lean — no watchdog invocation at midday).
+
 ## 2026-09-25T20:00Z routine-02-midday — book flat, no exits, regime recovery persists
 
 Slot identity: `bull-02-midday`. PT 2026-09-25 13:00 wake, ON-SCHEDULE.
