@@ -4,6 +4,69 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-09-29T17:28Z routine-03-eod — book flat, EOD summary, regime 5a FAIL, ZERO tech-PASS
+
+Slot identity: `bull-03-eod`. PT 2026-09-29 10:28 wake, **OFF-SCHEDULE ~10.5h early** vs cron `0 21 * * 1-5` (21:00 PT). 7th off-schedule fire in recent pattern (Task Scheduler now producing both day-mask violations AND within-day early triggers; routed to routine-04-harness Sat 10-03).
+
+### State summary
+
+- Equity **$10,263.72** unchanged (book flat since 09-27T15Z SOL close).
+- No open positions → **no MTM**, **no exits** to evaluate. Trade log untouched this wake.
+- Drawdown from peak $11,068.89: **7.28%** unchanged. CLEAR (25% cap, 12.5% warn, **5.22pp headroom**).
+- PT 2026-09-29 day P&L: **$0.00** (no trades).
+- Missed slots since 09-27 EOD: Mon 09-28 midday/EOD, Tue 09-29 overnight — all book-flat, no missed activity.
+
+### Regime read (indicators.py 17:27Z bar-close authoritative)
+
+**5a FAIL: 3/15 positive 24h, median −0.94%.** Positive: TAO (+2.54%), FARTCOIN (+3.67%), AVAX (+6.80%). SBD CLEAR (leg-1 fails: 3 > 1; leg-2 fails: −0.94 > −1.0 floor). Regime is standard 5a FAIL — margin −1 below 4-floor.
+
+Progression across last 3 wakes:
+- 09-28T13:13Z overnight: 3/15 positive median −1.58% (5a FAIL, SBD leg-2 met but leg-1 failed)
+- 09-29T17:30Z midday (live-ticker informational): 3/15 positive median −0.82%
+- 09-29T17:28Z EOD (this wake, bar-close): 3/15 positive median −0.94%
+
+Trajectory: regime FAIL persistent through 09-28 → 09-29 window; positive count flat at 3 but composition rotated (LINK/NEAR/TRX 09-28 → AVAX/FARTCOIN/TAO 09-29). Median edged from −1.58% (borderline SBD leg-2) to −0.94% (marginal above SBD floor) — modest de-escalation of downside pressure but still no recovery to 5a PASS.
+
+### Entry-scan verdict — 0 tech-PASS pairs (regime FAIL is moot)
+
+| Pair | R1+R2+R3+R4a | Notes |
+|---|---|---|
+| BTC | R1+R2+R3 fail | RSI 40.5 |
+| ETH | R1+R2 fail | Was FULL PASS 09-28; RSI collapsed 58.5 → 44.0 in 28h |
+| SOL | R1+R2 fail | RSI 43.3; 5b clear |
+| TAO | R2 fail (near-miss RSI 50.5) | R1 pass, R3 pass — closest to full-pass |
+| NEAR | R2 fail (near-miss RSI 53.5) | R1 pass, R3 pass |
+| AVAX | R2 fail (near-miss RSI 52.9) | R1 pass, R3 pass |
+| LINK | R1+R2 fail | Was FULL PASS 09-28; RSI collapsed 69.9 → 43.7 |
+| Rest | reject | Various R1/R2/R3 combined fails |
+
+**Zero tech-PASS**. First zero-pass wake since 09-27 EOD. Momentum unwind is broad (BTC -0.43%, ETH -0.45%, SOL -0.87% 24h) — not idiosyncratic.
+
+### Kill switches
+
+All 8 Ring-3 checks CLEAR (daily loss 0.00%, consec-loss 3/7, DD 7.28% with 5.22pp headroom, equity $10,263.72 > $7,500, exposure 0/4%, cluster 0/2, universe N/A, MCP healthy). 5b cooldowns all expired.
+
+### Actions taken this wake
+
+- Portfolio.md rewritten (EOD authoritative pass; superseded midday 17:30Z intermediate write).
+- Trade log untouched (no OPEN, no CLOSE events).
+- No new lessons added — flat-book day with no fresh trade data.
+- No monthly archive (Sept 30 = last trading day = next wake's job).
+- Telegram EOD card sent per routine spec.
+
+### News scan — skipped
+
+No tech-PASS candidates → no Firecrawl news pass required per routine spec (news scan is per-candidate).
+
+### Ops carry-over
+
+- Off-schedule fires 6 (midday) and 7 (this EOD) added to the pattern queue → routine-04-harness Sat 10-03 cron audit remains top priority. New failure mode: within-day early trigger (~10.5h early for EOD; ~2.5h early for midday) is distinct from the Sat/Sun day-mask drift observed 09-27→09-28.
+- 4 untracked files from 06-29 still uncommitted; deferred to Sat routine-04-harness.
+- Routine-06/07 heartbeats overdue >12d; deferred.
+- W22-H ratchet pattern-of-4 still outstanding for W25R memo (Sat 10-03).
+
+---
+
 ## 2026-09-29T17:30Z routine-02-midday — book flat, no exits, regime 5a FAIL
 
 Slot identity: `bull-02-midday`. PT 2026-09-29 10:30 wake, **OFF-SCHEDULE ~2.5h early** vs cron `0 13 * * 1-5` (13:00 PT). 6th off-schedule fire in recent pattern (5 previously routed to routine-04-harness Sat 10-03 for cron audit).
