@@ -8714,3 +8714,4 @@ Adding to routine-04-harness Sat 10-03 memo backlog: candidate P-W25R-RULE8-TIEB
 
 2026-09-28T13:13Z | routine-01-overnight | wake | PT 2026-09-28 06:13 **first on-schedule Mon fire post-5-off-schedule-Sat/Sun** | 0 exits, 0 entries (2 tech-PASS ETH+LINK blocked by 5a FAIL 3/15 median −1.58%); book flat; equity $10,263.72 (unchanged); DD 7.28% (unchanged); regime 5a FAIL 3/15 positive (LINK +3.99% / NEAR +0.38% / TRX +0.34%); SBD CLEAR (leg-1 fails); watchdog 8 findings unchanged; rule 8 tiebreaker note (LINK stronger, ETH would win by rank) → routine-04 backlog P-W25R-RULE8-TIEBREAK-STRENGTH (pattern-of-1); silent Telegram (no OPEN/CLOSE/kill/news/universe).
 2026-09-29T17:30:53Z | harness | day-gate | not Saturday, skipping | no action
+2026-09-29T17:31:52Z | allocation | day-gate | not Sunday, skipping | no action
