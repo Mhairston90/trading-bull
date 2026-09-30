@@ -4,6 +4,60 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-09-30T20:00Z routine-02-midday — SOL stop-out intrabar, book flat, DD 9.04%, all Ring 3 clear
+
+Slot identity: `bull-02-midday`. PT 2026-09-30 13:00 wake, **ON-SCHEDULE** vs cron `0 13 * * 1-5` (13:00 PT). Third on-schedule fire in a row. Label date per date-labeling guard: PT calendar date at fire = **2026-09-30**.
+
+### State summary
+
+- **SOL/USD long stopped out intrabar at 14:00Z** (7h before this routine wake). 1H bar low $118.41 pierced 2×ATR stop $119.6039. Closed at stop price per routine-02-midday spec.
+- Equity: **$10,068.04** (prior $10,278.55 mark-to-bid at 13:13Z; realized loss $195.68 crystallized the unrealized $36.49 gain into net day loss).
+- Book flat post-close. No exit-rule evaluation needed on other pairs (none open).
+- Drawdown from peak $11,068.89: **9.04%** (widened from 7.13% at overnight). CLEAR (25% cap, 12.5% warn, **3.46pp headroom to warn**).
+- Day P&L for PT 2026-09-30: **−$195.68 / −1.91%**.
+- Streak: 4 consecutive losses (NEAR 09-23, ADA 09-26, SOL 09-27 scratch, SOL 09-30 stop) — 3 away from 7-day full-pause kill switch.
+
+### Midday-scan exit check
+
+- Only 1 open position at wake (SOL long, entered 13:00Z).
+- Live-ticker at 20:00Z: SOL bid $117.51, ask $117.52, spread 1c (~0.85 bps).
+- 1H OHLCV since entry showed **14:00Z low $118.41** clearly below stop $119.6039 (−118 basis points beyond stop).
+- Exit-rule 2 (static stop) fired first — no need to evaluate exit-rule 1 (two 1H closes < 20-EMA) which would have needed 15:00Z + 16:00Z confirmation.
+- Close price: $119.6039 exactly (stop-level fill per routine spec).
+- Post-stop-out price action (informational only): 15:00Z close 119.25, 16:00Z 120.26, 17:00Z 119.17, 18:00Z 118.66, 19:00Z 117.17, 20:00Z (forming) 117.54. Six full bars below stop; validated the exit-timing decision.
+
+### Trade math — SOL/USD 66.4462 @ 121.9209 → 119.6039 (1h hold)
+
+- Gross PnL = (119.6039 − 121.9209) × 66.4462 = **−$153.96**
+- Open commission (0.26% × $8,101.13): **$21.06**
+- Close commission (0.26% × $7,947.17): **$20.66**
+- Total commissions: **$41.72**
+- **Net PnL: −$195.68** (−1.91% of prior equity)
+- R at exit: **−1.00 gross** (fill exactly at stop). Net R ≈ −1.27 after commissions.
+
+### Kill-switch proximity summary
+
+- Daily loss: −1.91% vs 5% cap → **3.09pp headroom** ✅
+- Drawdown: 9.04% vs 12.5% warn → **3.46pp headroom** ✅
+- Drawdown vs 25% pause: 15.96pp headroom ✅
+- Equity floor: $10,068 vs $7,500 → $2,568 headroom ✅
+- Consecutive losses: 4 vs 7 pause → **3 losses headroom** ⚠️ (tightening)
+
+### Cluster-cap / cooldown state
+
+- Cluster BTC-corr {BTC, ETH, SOL, TAO, AVAX, SUI, LINK}: 0/2 used post-close.
+- **5b cooldown: SOL blocked 24h from stop-out** (until 2026-10-01T14:00Z; recovered from prior 09-27 cooldown expiration).
+- Other pair cooldowns (NEAR 09-23, ADA 09-26): all expired.
+
+### Ops notes
+
+- **On-schedule streak: 3** (04:12Z EOD 09-29, 13:13Z overnight 09-30, 20:00Z midday 09-30 — all within ~15min of cron). Task Scheduler drift self-corrected; sat-audit still owed by routine-04-harness.
+- **Entry-bar warning that was NOT actioned**: 13:00Z entry-bar closed at 120.97, below fill $121.9209 — but v0.4 strategy has no "close-below-fill on entry bar" rule (would require a new gated proposal). Lesson candidate: whether entry-bar failure signal warrants v0.5 examination. Deferring to routine-04-harness Sat 10-03 for evidence review.
+- **Rule-8 cash-fit fallback risk**: this is the second rule-8 cash-fit pick to lose in 4 days (09-26 ADA rule-8-winner → −0.29R; 09-30 SOL rule-8-cashfit → −1.00R). Watching whether cash-fit fallback pattern has structurally worse expectancy than rank-1/2 picks would take.
+- **Notify Telegram**: exit happened → send exit-notice card per routine spec.
+
+---
+
 ## 2026-09-30T04:12Z routine-03-eod — book flat, on-schedule authoritative EOD, regime 5a PASS 12/15 (recovered), ZERO tech-PASS
 
 Slot identity: `bull-03-eod`. PT 2026-09-29 21:12 wake, **ON-SCHEDULE** vs cron `0 21 * * 1-5` (21:00 PT) — 12-minute drift only, first on-schedule fire since 09-27. Label date per date-labeling guard: PT calendar date at fire = **2026-09-29**. Supersedes the off-schedule 17:28Z 09-29 EOD pass ~7h earlier.
