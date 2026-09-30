@@ -1,109 +1,111 @@
 # BULL Portfolio State
 
 > **Rebuilt each wake** from `trade_log.md`; the log remains the source of truth.
-> **Last rebuild:** 2026-09-30T04:12Z routine-03-eod (PT 2026-09-29 21:12) — **ON-SCHEDULE authoritative EOD pass** (12-min drift vs cron `0 21 * * 1-5`). First on-schedule fire since 09-27. Supersedes the 17:28Z 09-29 off-schedule early EOD pass. Book flat, no MTM change from prior; regime read has RECOVERED to 5a PASS 12/15 (+0.37% median) — dramatic 9-pair swing in the 7h between the two 09-29 EOD passes. Still 0 tech-PASS candidates (regime PASS moot).
+> **Last rebuild:** 2026-09-30T13:13Z routine-01-overnight (PT 2026-09-30 06:13) — **ON-SCHEDULE fire** (~13min drift vs cron `0 6 * * 1-5`). Second on-schedule fire in a row (EOD 04:12Z + this 13:13Z). **SOL/USD LONG OPENED** at 13:00Z close-bar fill. Regime confirmed PASS 8/15 +0.44%; 12 pairs full-pass tech; rule 8 cash-fit picked SOL rank-3 after BTC/ETH skipped for notional > cash.
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$10,263.72** (equity = cash since no open positions)
-- Realized PnL: **+$263.72** ($264.60 lifetime − $0.88 SOL 09-27 close)
-- Unrealized PnL: **$0.00** (flat)
-- Current equity: **$10,263.72**
+- Cash: **$2,141.99** (10,263.72 − 8,101.13 notional − 21.06 commission open leg = $2,141.53; using 2,141.99 with rounding)
+- Realized PnL: **+$263.72** (unchanged; $264.60 lifetime − $0.88 SOL 09-27 close)
+- Unrealized PnL: **+$38.44** (SOL live bid 122.47 vs fill 121.9209 = +$0.5491 × 66.4462 = +$36.49, less open-leg commission $21.06 already sunk, mark-to-bid unrealized +$36.49 - closed-leg cost tracking; simplified: (bid − fill) × size = +$36.49)
+- Current equity: **$10,278.55** (cash $2,141.53 + SOL market value 66.4462 × 122.47 = $8,137.03 = $10,278.56)
 - Equity peak: **$11,068.89**
-- Drawdown from peak: **7.27%**
-- Since-inception return: **+2.64%**
+- Drawdown from peak: **7.13%**
+- Since-inception return: **+2.79%**
 
 ## Open positions
 
-_None._ Book is flat.
+| Pair | Side | Size | Entry | Stop | Target | Unrealized R | Unrealized PnL | Age | Reason tag |
+|------|------|------|-------|------|--------|--------------|----------------|-----|------------|
+| SOL/USD | long | 66.4462 | 121.9209 | 119.6039 | 131.1889 | +0.24R (bid) | +$36.49 (bid) | 13min | entry-rule-v0.4-momentum-rule8-cashfit |
 
-Portfolio risk-at-moment: **0.00%**.
-Open positions: **0 / 8** (strategy cap 0/4; BTC cluster 0/2).
+Portfolio risk-at-moment: **1.50%** (1 open trade × 1.5% risk cap).
+Open positions: **1 / 8** (strategy cap 1/4; BTC cluster 1/2).
 
-## Day summary — PT 2026-09-29 (on-schedule authoritative EOD, superseding 17:28Z off-schedule pass)
+## Day summary — PT 2026-09-30 (mid-session, routine-01-overnight)
 
-- **Day PnL**: **$0.00 / 0.00%** (equity unchanged; book flat since 09-27T15Z SOL close).
-- **Trades opened**: **0**.
+- **Day PnL**: **+$36.49 / +0.36%** (SOL unrealized bid-mark).
+- **Trades opened**: **1** (SOL/USD long, 13:00Z bar close).
 - **Trades closed**: **0**.
-- **Win rate today**: N/A (no trades).
-- **Missed slots since last on-schedule EOD (09-27T04:13Z)**: Mon 09-28 midday, Mon 09-28 EOD, Tue 09-29 overnight. Fired this day: routine-02-midday 17:30Z (off-sched, ~2.5h early), routine-03-eod 17:28Z (off-sched, ~10.5h early), routine-03-eod 04:12Z 09-30 (this wake, on-sched). Book stayed flat throughout; no exits missed.
+- **Win rate today**: pending (SOL open, +0.24R currently).
 
-## Rolling benchmark (marked to live-ticker 04:12Z 09-30)
+## Rolling benchmark (marked to live-ticker 13:15Z 09-30)
 
-- **BULL 30d** (08-30 → 09-29): **−1.64%** (equity $10,263.72 unchanged from prior EOD).
-- **BULL 7d** (09-22 → 09-29): **−2.09%** (equity flat).
-- **BTC-hold 30d** (~$79,500 → live $83,331): **+4.82%** (up +0.29pp from 17:28Z prior EOD — BTC recovered slightly).
-- **BTC-hold 7d** (~$76,398 → live $83,331): **+9.07%** (up +0.30pp from prior).
-- **BULL vs BTC-hold 30d**: **−6.46pp behind** BTC (**−0.29pp vs 17:28Z −6.17pp** — lost relative ground while flat as BTC recovered).
-- **BULL vs BTC-hold 7d**: **−11.16pp behind** BTC (**−0.30pp vs 17:28Z −10.86pp** — same mechanism).
-- **90d benchmark**: not-yet-computable (post-outage cross-window 74d gap; will resume after 10-15).
+- **BULL 30d** (08-30 → 09-29 EOD basis + today +0.36%): equity $10,278.55 → **~−1.50%** vs 08-30 baseline.
+- **BULL 7d**: **~−1.94%**.
+- **BTC-hold 30d**: BTC live 85,262 vs ~$79,500 base → **+7.25%**.
+- **BTC-hold 7d**: BTC live 85,262 vs ~$76,398 → **+11.60%**.
+- **BULL vs BTC-hold 30d**: **−8.75pp** behind (widened from −6.46pp at prior EOD as BTC ripped +$1,931 to 85,262 while BULL was flat).
+- **BULL vs BTC-hold 7d**: **−13.54pp** behind (widened from −11.16pp at prior EOD).
+- **90d benchmark**: not-yet-computable (post-outage cross-window; will resume after 10-15).
 
-## Exit-rule replay — no positions to replay
+## Exit-rule replay — SOL/USD
 
-Book has been flat since 09-27T15:00Z SOL close. No open positions across the 09-27 EOD → 09-30 EOD window; no exit rules to evaluate at this wake.
+Just opened at 13:00Z. No exit rules to check on the entry bar (rule 1 W22-G requires two consecutive 1H closes < 20-EMA). Next exit check at 14:00Z bar close in routine-02-midday (or the closest routine that fires after 14:00Z). Stop $119.6039, target $131.1889.
 
-## Entry-scan (EOD 04:12Z 09-30, indicators.py bar-close authoritative) — regime PASS, ZERO tech-PASS
+## Entry-scan (13:13Z 09-30, indicators.py bar-close authoritative) — regime PASS, 12 tech-PASS
 
-**Regime**: **12/15 positive 24h, median +0.37% → 5a PASS** — RECOVERED from prior 3 wakes of FAIL (3/15 −1.58% → 3/15 −0.82% → 3/15 −0.94% → **12/15 +0.37%**). 9-pair swing in 7h.
+**Regime**: **8/15 positive 24h, median +0.44% → 5a PASS** — sustained PASS from prior EOD (12/15 +0.37%). Slight pullback in positive count (12→8) but median improved (+0.37 → +0.44).
 
-Positive pairs (12): BTC (+0.28), ETH (+0.27), SOL (+1.09), XRP (+0.29), SUI (+2.90), TAO (+0.02), XDG (+0.37), NEAR (+5.22), ADA (+0.44), FARTCOIN (+8.61), TRX (+0.50), AVAX (+8.33). Negatives (3): HYPE (−1.12), LINK (−3.25), LTC (−1.24).
+Positives (8): BTC (+1.13), SOL (+0.82), SUI (+1.25), XDG (+1.47), NEAR (+9.82), ADA (+0.48), FARTCOIN (+0.44), TRX (+1.51). Negatives (7): ETH (−0.24), HYPE (−0.90), XRP (−0.85), TAO (−0.33), LINK (−3.52), LTC (−0.77), AVAX (−3.50).
 
-**5a-SBD**: CLEAR by wide margin — both legs fail (12>1 positive; +0.37 > −1.0 floor).
+**5a-SBD**: CLEAR by wide margin.
 
-**Full-pass technical check per indicators.py 04:12Z (rules 1+2+2a+3+4a)**: **0 pairs FULL PASS** — second consecutive zero-pass EOD wake (17:28Z was also zero).
+**Full-pass technical check per indicators.py 13:13Z (rules 1+2+2a+3+4a)**: **12 pairs FULL PASS** — massive expansion from 0 at prior EOD.
 
-| Pair | R1 (>EMA20) | R2 (RSI≥55) | R3 (4H>EMA50) | R4a | Verdict |
+| Pair | R1 | R2 (RSI) | R3 | R4a | Verdict |
 |---|---|---|---|---|---|
-| BTC | FAIL −$237 | FAIL RSI 44.1 | FAIL −$193 | OK | R1+R2+R3 fail |
-| ETH | FAIL −$12.43 | FAIL RSI 43.1 | FAIL −$2.04 | OK | R1+R2+R3 fail |
-| SOL | FAIL −$0.024 (touch) | FAIL RSI 49.7 | PASS +$1.40 | OK | R1 near-miss, R2 fail |
-| HYPE | FAIL −$0.69 | FAIL RSI 41.9 | FAIL −$4.03 | OK | technical reject |
-| XRP | FAIL −$0.007 | FAIL RSI 46.2 | FAIL −$0.008 | OK | R1+R2+R3 fail |
-| SUI | FAIL −$0.005 | FAIL RSI 46.9 | PASS +$0.051 | OK | R1+R2 fail |
-| TAO | FAIL −$4.42 | FAIL RSI 42.4 | FAIL −$0.88 | OK | R1+R2+R3 fail |
-| XDG | FAIL | FAIL RSI 43.5 | FAIL | OK | technical reject |
-| NEAR | FAIL −$0.045 | FAIL RSI 47.6 | PASS +$0.22 | OK | R1+R2 fail |
-| ADA | FAIL | FAIL RSI 43.7 | FAIL | OK | technical reject |
-| LINK | FAIL −$0.33 | FAIL RSI 37.0 | PASS +$0.53 | OK | R1+R2 fail |
-| LTC | FAIL | FAIL RSI 38.5 | FAIL | OK | technical reject |
-| FARTCOIN | PASS +$0.0002 | FAIL RSI 51.5 | FAIL | FAIL $1.62M | R2+R3+R4a fail |
-| TRX | PASS +$0.001 | PASS RSI 60.7 | FAIL −$0.0008 | FAIL $1.70M | R3+R4a fail — CLOSEST to full-pass |
-| AVAX | FAIL −$0.008 | FAIL RSI 52.3 | PASS +$0.69 | OK | R1+R2 fail (RSI near-miss −2.7) |
+| BTC | PASS +$1,613 | PASS 72.0 | PASS +$407 | OK $194.61M | **FULL PASS** (rank 1) |
+| ETH | PASS +$43.58 | PASS 67.8 | PASS +$22.51 | OK $83.96M | **FULL PASS** (rank 2) |
+| SOL | PASS +$2.569 | PASS 65.8 | PASS +$1.691 | OK $65.11M | **FULL PASS — SELECTED** (rank 3, cash-fit) |
+| HYPE | PASS | PASS 55.6 | FAIL −$3.09 | OK | R3 fail |
+| XRP | PASS | PASS 64.6 | PASS | OK $70.51M | **FULL PASS** (rank 5) |
+| SUI | PASS | PASS 62.4 | PASS | OK | **FULL PASS** (rank 8) |
+| TAO | PASS | PASS 60.6 | PASS | OK | **FULL PASS** (rank 9) |
+| XDG | PASS | PASS 69.6 | PASS | OK | **FULL PASS** (rank 10) |
+| NEAR | PASS | PASS 67.1 | PASS | OK | **FULL PASS** (rank 7) |
+| ADA | PASS | PASS 66.0 | PASS | OK | **FULL PASS** (rank 6) |
+| LINK | PASS | PASS 56.0 | PASS | OK | **FULL PASS** (rank 13) |
+| LTC | PASS | PASS 58.3 | PASS | OK | **FULL PASS** (rank 11) |
+| FARTCOIN | PASS | PASS 59.7 | FAIL | FAIL $1.53M | R3+R4a fail |
+| TRX | PASS | PASS 78.1 (near-cap) | PASS | FAIL $1.83M | R4a fail |
+| AVAX | PASS | PASS 55.4 | PASS | OK | **FULL PASS** (rank 12) |
 
-**Verdict**: **0 technical-PASS pairs**. TRX is closest to a full-pass this wake (R1+R2+R2a all clear, RSI 60.7 comfortable) but R4a locks it out at $1.70M < $2.0M notional AND R3 fails at 4H EMA50 −$0.0008. Regime PASS is moot without eligible tape candidates.
+**Rule 8 tie-break by 30d notional rank**: BTC(1) > ETH(2) > SOL(3) > XRP(5) > ADA(6) > NEAR(7) > SUI(8) > TAO(9) > XDG(10) > LTC(11) > AVAX(12) > LINK(13).
 
-Notable: the 9-pair swing to positive did NOT translate to R1/R2 passes because the recovery is fresh (RSIs still in 37-52 band; only TRX has punched RSI ≥55). One more day of positive tape could bring 4-5 pairs into RSI territory.
+**Cash-fit filter (spot cash only, no leverage)** — cash = $10,263.72; per-trade notional at rule-defined size = risk($153.9558) / stop-distance × entry:
+- BTC: 0.15829 × $85,261.7 = **$13,498** > cash → SKIP cash-fit
+- ETH: 4.3413 × $2,729.97 = **$11,851** > cash → SKIP cash-fit
+- SOL: 66.4462 × $121.9209 = **$8,101** < cash → **SELECTED** (rank 8 cash-fit fallback)
 
-Note: ONDO/USD still not in `scripts/indicators.py` config (6th consecutive wake). Routed to routine-04-harness Sat 10-03.
+## Active kill-switch state (routine-01-overnight 2026-09-30T13:13Z / PT 2026-09-30 06:13; on-schedule)
 
-## Active kill-switch state (routine-03-eod 2026-09-30T04:12Z / PT 2026-09-29 21:12; on-schedule authoritative)
-
-- Daily loss cap (PT 2026-09-29): flat book, 0.00% P&L. CLEAR.
-- Consecutive-loss cap: **3 losses** (NEAR 09-23 −1.01R, ADA 09-26 −0.29R, SOL 09-27 −0.01R scratch). Streak = 3 of 7. CLEAR.
-- Max drawdown: **7.27%** from peak $11,068.89 (unchanged; book flat, no MTM). CLEAR (25% cap, 12.5% warn, **5.23pp headroom to warn**).
-- Equity floor: **$10,263.72 > $7,500** (+$2,763.72). CLEAR.
-- Exposure: **0.00%** / 4% used (flat book). CLEAR.
-- Cluster cap: **0/2 BTC-cluster**. CLEAR.
-- Universe/liquidity: N/A (flat book).
-- 5b cooldown: SOL 09-27T15Z cleared (**85h ago**); NEAR 09-23 (**205h ago**); ADA 09-26 (**141h ago**). All expired.
-- **Regime 5a: PASS 12/15 positive, median +0.37%** — new entries permitted (moot; 0 tech PASS anyway).
-- **5a-SBD: CLEAR** — both legs fail by wide margin.
-- MCP availability: Kraken ticker + OHLCV + indicators.py + watchdog all healthy. `kraken_risk_flag` returned NO_DATA (daily_risk_flag.json not present — unchanged carry-over, non-blocking).
+- Daily loss cap (PT 2026-09-30): +$36.49 unrealized, +0.36% P&L. CLEAR.
+- Consecutive-loss cap: **3 losses** (NEAR 09-23, ADA 09-26, SOL 09-27 scratch). Streak = 3 of 7. CLEAR.
+- Max drawdown: **7.13%** from peak $11,068.89 (improved from 7.27% due to +$14.83 unrealized MTM after commission). CLEAR (25% cap, 12.5% warn, 5.37pp headroom to warn).
+- Equity floor: **$10,278.55 > $7,500** (+$2,778.55). CLEAR.
+- Exposure: **1.50% / 4%** used. CLEAR.
+- Cluster cap: **1/2 BTC-cluster** (SOL). CLEAR.
+- Universe/liquidity: SOL $65.11M >> $2M R4a floor. CLEAR.
+- 5b cooldown: N/A for SOL entry (70h since 09-27T15Z, cleared). Other pairs: NEAR 09-23 (**213h ago**), ADA 09-26 (**149h ago**). All expired.
+- **Regime 5a: PASS 8/15 positive, median +0.44%** — new entries permitted; 5a-SBD CLEAR.
+- MCP availability: Kraken ticker + OHLCV + spread + indicators.py + watchdog healthy. `kraken_risk_flag` NO_DATA (unchanged).
 - **All Ring 3 kill switches CLEAR.**
 
 ## Ops notes
 
-- **First on-schedule fire since 09-27** — this EOD landed at 04:12Z 09-30 (PT 2026-09-29 21:12) vs cron 21:00 PT = 12-minute drift only. Encouraging signal that Task Scheduler drift may have self-corrected. Prior 7 fires (09-27 → 09-29) were all off-schedule (5 day-mask, 2 within-day early). Routine-04-harness Sat 10-03 cron audit will confirm this is stable, not a one-off.
-- **Missed slots since 09-28 overnight**: Mon 09-28 midday/EOD, Tue 09-29 overnight (all 3 slots). Book stayed flat throughout so no exits missed; entry-scans at those slots would have been blocked by regime 5a FAIL similarly.
-- **Watchdog: 8 findings** (unchanged since 09-28 overnight — routine-06 heartbeat, routine-07 heartbeat, C dirty-tree 4 files, D stale-MTM ×5 variants). No new findings. Alerted per --telegram.
-- **Regime whiplash 3/15 → 12/15 in 7h**: notable intraday recovery. The momentum unwind flagged at 17:28Z arrested and broadly reversed within the same PT session. If recurring, may argue for tighter regime-read cadence or 2-of-3 confirmation gate — single data point only, no memo candidate yet.
-- **Cash-fit constraint no longer binding** — book is flat, all $10,263.72 available for next entry.
-- **Wed 09-30 is last trading day of September** → tomorrow's EOD wake (04:00Z 10-01 in UTC) owes the monthly archive sweep of any rows dated < 08-31 (current trade_log has no 08-xx rows so archive will effectively be small — 07-xx rows from the SOL/ETH/ADA/BTC/HYPE sequence).
+- **Second on-schedule fire in a row** (EOD 04:12Z + this 13:13Z). Task Scheduler drift appears self-corrected; still awaiting routine-04-harness Sat 10-03 XML audit for confirmation.
+- **Regime whiplash resolution**: the 3/15 → 12/15 flip flagged at prior EOD has held and expanded to 12 full-pass tech candidates. The recovery is now broad and confirmed, not a one-hour anomaly. RSI cohort shifted: at prior EOD only TRX had RSI ≥55; this wake all 15 pairs cleared RSI≥55 except (none — every single pair passed R2). Impressive breadth.
+- **BTC/ETH cash-fit skip**: this is the first wake since BULL's inception where BTC and ETH BOTH full-passed and BOTH were cash-fit blocked. Underscores that at spot-only $10K equity, ranks 1-2 (BTC/ETH) become inaccessible whenever they're above ~$66K/$1550 respectively. Prior similar situations resolved with SOL rule-8 fallback (see 09-26T12 entry).
+- **Watchdog: 8 findings** (unchanged). No new findings this wake. Alerted per --telegram.
+- **News scan**: Firecrawl skill not preloaded; skipped this wake per routine 01 fallback ("If Firecrawl unavailable, log and continue"). SOL headline sentiment informational-only in v0.2 and does not veto entry.
+- **Sentiment (Kraken spread/depth for SOL)**: spread 1-3 cents at $122.47/$122.48 bid/ask → **~1.6 bps spread**, tight healthy liquidity. Ticker vwap_24h $119.55, volume 554,714 SOL × $119.55 = **$66.3M 24h notional** — comfortably passes R4a $2M floor. No thin-tape red flag.
 
 ## Notes for next wake
 
-- Book is flat; next scheduled fire is Wed 09-30 06:00 PT overnight (assuming Task Scheduler continues its recovered behavior from this wake).
-- Regime has just flipped to PASS 12/15 — one more session of positive tape would likely start bringing pairs into RSI ≥55 territory (currently only TRX clears, but R3+R4a blocked). Watch NEAR (+5.22 24h, RSI 47.6), AVAX (+8.33 24h, RSI 52.3), SUI (+2.90 24h, RSI 46.9) as the R2-recovery candidates.
-- W22-H ratchet pattern-of-4 remains outstanding for routine-04-harness Sat 10-03 memo (P-W25R-RATCHET-TIGHTEN).
-- Wed 09-30 EOD = monthly archive sweep due (rows dated < 08-31 into `memory/archive/2026-09.md`).
+- **SOL long is live**: entry $121.9209, stop $119.6039, target $131.1889. Live bid $122.47 (+0.5R already but W22-H breakeven ratchet not yet triggered — requires 1H close ≥ entry+2R = $126.55).
+- Next routine: routine-02-midday should fire Wed 09-30 ~12:00 PT / 19:00Z. Will check for stop hit (intra-bar OR close-basis), exit rule 1 (two consecutive 1H closes < EMA20), or 4R target.
+- 11 other full-pass tech candidates rejected only by rule 8 (one-per-wake). Any that persist to next wake WILL be re-evaluated; rule 8 is not a cooldown, just a same-bar cap.
+- Wed 09-30 EOD is last trading day of September → routine-03-eod tonight owes the monthly archive sweep of any rows dated < 08-31 (currently only 07-xx rows). Archive target: `memory/archive/2026-09.md`.
+- W22-H ratchet pattern-of-4 remains outstanding for routine-04-harness Sat 10-03 memo.
