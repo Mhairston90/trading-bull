@@ -9004,3 +9004,4 @@ Tag: `rule8-cashfit`. Precedent: 2026-07-10 BTC entry used same fallback.
 2026-09-30T13:13Z | routine-01-overnight | wake | PT 2026-09-30 06:13 **on-schedule 2/2 in a row** | 1 OPEN (SOL/USD long 66.4462 @ 121.9209, stop 119.6039, target 131.1889, rule8-cashfit rank-3), 0 exits; 12/15 full-pass tech (BTC/ETH cash-fit skipped, SOL selected); regime 5a PASS 8/15 +0.44% median; equity $10,278.55 (+0.14% MTM); DD 7.13%; watchdog 8 findings unchanged; Telegram sent (new OPEN).
 
 2026-09-30T17:09:18Z | harness | day-gate | not Saturday, skipping | no action
+2026-09-30T17:40:43Z | allocation | day-gate | not Sunday, skipping | no action
