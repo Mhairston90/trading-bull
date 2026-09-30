@@ -4,6 +4,97 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-09-30T04:12Z routine-03-eod — book flat, on-schedule authoritative EOD, regime 5a PASS 12/15 (recovered), ZERO tech-PASS
+
+Slot identity: `bull-03-eod`. PT 2026-09-29 21:12 wake, **ON-SCHEDULE** vs cron `0 21 * * 1-5` (21:00 PT) — 12-minute drift only, first on-schedule fire since 09-27. Label date per date-labeling guard: PT calendar date at fire = **2026-09-29**. Supersedes the off-schedule 17:28Z 09-29 EOD pass ~7h earlier.
+
+### State summary
+
+- Equity **$10,263.72** unchanged (book flat since 09-27T15Z SOL close, 85h ago).
+- No open positions → **no MTM**, **no exits** to evaluate. Trade log untouched this wake.
+- Drawdown from peak $11,068.89: **7.27%** unchanged. CLEAR (25% cap, 12.5% warn, **5.23pp headroom**).
+- PT 2026-09-29 day P&L: **$0.00** (no trades — this wake nor the 17:28Z one).
+- Missed slots since 09-27 EOD: Mon 09-28 midday/EOD, Tue 09-29 overnight — all book-flat.
+
+### Regime read (indicators.py 04:12Z bar-close authoritative) — **PASS RECOVERED**
+
+**5a PASS: 12/15 positive 24h, median +0.37%.** SBD CLEAR by wide margin (leg-1 fails 12>1; leg-2 fails +0.37 > −1.0 floor).
+
+Progression across last 4 wakes (dramatic recovery in the 7h between the two 09-29 EOD passes):
+- 09-28T13:13Z overnight: 3/15 positive median −1.58% (5a FAIL, SBD leg-2 met)
+- 09-29T17:30Z midday (live-ticker informational): 3/15 positive median −0.82% (FAIL)
+- 09-29T17:28Z EOD (off-schedule, bar-close): 3/15 positive median −0.94% (FAIL)
+- **09-30T04:12Z EOD (this wake, bar-close): 12/15 positive median +0.37% (PASS)** — 9-pair swing to positive in a single 7h window
+
+Positive pairs (12): BTC (+0.28), ETH (+0.27), SOL (+1.09), XRP (+0.29), SUI (+2.90), TAO (+0.02), XDG (+0.37), NEAR (+5.22), ADA (+0.44), FARTCOIN (+8.61), TRX (+0.50), AVAX (+8.33). Negatives (3): HYPE (−1.12), LINK (−3.25), LTC (−1.24).
+
+Interpretation: broad-tape late-session bounce — the momentum unwind flagged at 17:28Z arrested and reversed within the same PT day. NEAR (+5.22) is a notable recovery from the 09-23 stop-out pair; AVAX (+8.33) and FARTCOIN (+8.61) lead absolute % but FARTCOIN remains R4a-blocked at $1.62M notional.
+
+### Entry-scan verdict — 0 tech-PASS pairs (regime PASS is moot)
+
+| Pair | R1+R2+R2a+R3+R4a | Notes |
+|---|---|---|
+| BTC | R1+R2+R3 fail | RSI 44.1, close −$237 below EMA20 |
+| ETH | R1+R2+R3 fail | RSI 43.1, close −$12.43 below EMA20 |
+| SOL | R1+R2 fail, R3 pass | RSI 49.7, near-miss R1 (−$0.024 → EMA touch) |
+| SUI | R2 fail (RSI 46.9), R3 pass | R1 fail −$0.005 |
+| NEAR | R2 fail (RSI 47.6), R3 pass | +5.22% 24h but momentum-under RSI |
+| LINK | R2 fail (RSI 37.0), R3 pass | −3.25% 24h continues its 09-28 → 09-29 unwind |
+| FARTCOIN | R1 pass, R2+R3+R4a fail | R4a FAIL $1.62M < $2.0M |
+| TRX | R1+R2 pass (RSI 60.7), R3+R4a fail | R4a FAIL $1.70M < $2.0M; R3 fail |
+| AVAX | R1+R2 fail, R3 pass | RSI 52.3 (near-miss R2 −2.7) |
+| Rest | reject | Various R1/R2/R3 combined fails |
+
+**Zero tech-PASS**. Second consecutive zero-pass EOD wake (both 09-29 passes). TRX comes closest to full pass (R1+R2+R2a all clear, RSI 60.7) but R4a locks it out at $1.70M notional and R3 fails at 4H EMA50. No universe pair has the combination of momentum + 4H trend + $2M+ liquidity this wake.
+
+### Kill switches
+
+All 8 Ring-3 checks CLEAR:
+- Daily loss cap: 0.00% flat, cap 5% — CLEAR
+- Consecutive-loss: 3/7 (NEAR 09-23, ADA 09-26, SOL 09-27) — CLEAR
+- Max drawdown: 7.27% (peak $11,068.89), cap 25% — CLEAR (**5.23pp headroom to 12.5% warn**)
+- Equity floor: $10,263.72 > $7,500 (+$2,763.72) — CLEAR
+- Exposure: 0.00% of 4% used — CLEAR
+- Cluster cap: 0/2 BTC-cluster — CLEAR
+- Universe: N/A (flat book)
+- MCP availability: Kraken ticker + OHLCV + indicators.py + watchdog all healthy — CLEAR
+- 5b cooldowns: SOL 09-27T15Z 85h ago CLEAR; NEAR 09-23 205h CLEAR; ADA 09-26 141h CLEAR — all expired
+- **All Ring 3 CLEAR.**
+
+### Rolling benchmark (marked to live-ticker 04:12Z 09-30)
+
+- **BULL 30d** (~08-30 → 09-29): **−1.64%** (equity unchanged this wake).
+- **BULL 7d** (09-22 → 09-29): **−2.09%** (equity flat).
+- **BTC-hold 30d** (~$79,500 → live $83,331): **+4.82%** (up +0.29pp from 17:28Z prior EOD as BTC recovered slightly).
+- **BTC-hold 7d** (~$76,398 → live $83,331): **+9.07%** (up +0.30pp from prior).
+- **BULL vs BTC-hold 30d**: **−6.46pp behind** BTC (was −6.17pp at 17:28Z — **0.29pp worse** as BTC recovered ~0.28% while BULL sat flat).
+- **BULL vs BTC-hold 7d**: **−11.16pp behind** BTC (was −10.86pp — same mechanism, −0.30pp).
+- 90d benchmark: not-yet-computable (post-outage cross-window 74d gap; resumes after 10-15).
+
+### Actions taken this wake
+
+- Portfolio.md rewritten (authoritative EOD pass; supersedes 17:28Z off-schedule pass).
+- Trade log untouched (no OPEN, no CLOSE events).
+- No new lessons added — flat-book day, no fresh trade data material to distill.
+- No monthly archive (Wed 09-30 is last trading day of September = tomorrow's EOD job).
+- Watchdog: 8 findings unchanged (routine-06/07 heartbeats, C dirty-tree, D stale-MTM ×5). Alerted per --telegram.
+- Telegram EOD card sent per routine spec.
+
+### News scan — skipped
+
+No tech-PASS candidates → no Firecrawl news pass required per routine spec.
+
+### Ops carry-over
+
+- **First on-schedule fire since 09-27** (12-min drift vs cron). Prior 7 fires were off-schedule (5 day-mask drift, 2 within-day early). Encouraging signal that Task Scheduler has recovered — routine-04-harness Sat 10-03 cron audit still queued to confirm this is stable, not a one-off.
+- 4 untracked files from 06-29 still uncommitted; deferred to Sat routine-04-harness.
+- Routine-06/07 heartbeats overdue >12d; deferred.
+- W22-H ratchet pattern-of-4 (P-W25R-RATCHET-TIGHTEN) queued for Sat 10-03 W25R memo.
+- W25R candidates queued for Sat: P-W25R-SAMESESSION-STOP-GATE, P-W25R-POSTOUTAGE-DEFER-HEURISTIC, P-W25R-RATCHET-TIGHTEN, ONDO/USD indicators.py addition.
+- **Regime whiplash observation** (worth watching): 3/15 → 12/15 positive-pair swing in 7h is a wide intraday range. If this becomes a recurring pattern of within-day regime instability, it may argue for shifting the regime read cadence tighter or for a 2-of-3 confirmation gate. Single data point — track only for now, no memo candidate yet.
+
+---
+
 ## 2026-09-29T17:28Z routine-03-eod — book flat, EOD summary, regime 5a FAIL, ZERO tech-PASS
 
 Slot identity: `bull-03-eod`. PT 2026-09-29 10:28 wake, **OFF-SCHEDULE ~10.5h early** vs cron `0 21 * * 1-5` (21:00 PT). 7th off-schedule fire in recent pattern (Task Scheduler now producing both day-mask violations AND within-day early triggers; routed to routine-04-harness Sat 10-03).
