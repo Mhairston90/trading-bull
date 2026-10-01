@@ -3,7 +3,7 @@
 > **Append-only. Source of truth.** `portfolio.md` is rebuilt from this file each wake.
 > Each entry = one trade event (open or close).
 > Rows older than 30 days are moved to `memory/archive/YYYY-MM.md` by routine #3 on the last trading day of the month.
-> **Last monthly archive:** 2026-06-30 (routine-03-eod) — moved 31 May-dated rows to `memory/archive/2026-06.md`.
+> **Last monthly archive:** 2026-10-01 (routine-03-eod catch-up sweep) — moved 29 June+July-dated rows to `memory/archive/2026-10.md` (Jul/Aug/Sep EOD archive cycles missed due to scheduler outage 07-10 → 09-20 and the Sep 30 EOD missed-fire).
 
 ## Schema
 
@@ -12,35 +12,6 @@
 
 ## Entries
 
-| 2026-06-13T04:00:00Z | OPEN | TAO/USD | long | 32.985 | 217.286 | 212.6226 | 235.9396 | — | — | entry-rule-v0.4-momentum |
-| 2026-06-13T09:00:00Z | CLOSE | TAO/USD | long | 32.985 | 237.3015 | — | — | +4.04 | +621.22 | exit-4R-target-missed-scheduler-replay |
-| 2026-06-13T15:00:00Z | OPEN | BTC/USD | long | 0.168 | 64188.10 | 63720.62 | 66058.02 | — | — | entry-rule-v0.4-momentum |
-| 2026-06-14T13:00:00Z | CLOSE | BTC/USD | long | 0.168 | 64240.66 | — | — | -0.60 | -47.27 | exit-ema20-confirm-missed-scheduler-replay |
-| 2026-06-16T12:00:00Z | OPEN | ETH/USD | long | 5.1162 | 1797.88 | 1766.13 | 1924.87 | — | — | entry-rule-v0.4-momentum |
-| 2026-06-16T15:00:00Z | CLOSE | ETH/USD | long | 5.1162 | 1765.25 | — | — | -1.32 | -214.33 | exit-stop-hit-missed-scheduler-replay |
-| 2026-06-17T04:00:00Z | OPEN | HYPE/USD | long | 56.342770 | 74.4972 | 71.6714 | 85.8004 | — | — | entry-rule-v0.4-momentum |
-| 2026-06-17T12:00:00Z | CLOSE | HYPE/USD | long | 56.342770 | 71.6356 | — | — | -1.15 | -182.64 | exit-stop-hit-missed-scheduler-replay |
-| 2026-06-17T17:00:00Z | OPEN | SOL/USD | long | 104.454002 | 73.7268 | 72.2288 | 79.7189 | — | — | entry-rule-v0.4-momentum-rule8-fallback |
-| 2026-06-17T18:00:00Z | CLOSE | SOL/USD | long | 104.454002 | 72.1927 | — | — | -1.28 | -199.87 | exit-stop-hit |
-| 2026-06-20T13:00:00Z | OPEN | SOL/USD | long | 121.5347 | 71.17 | 69.9072 | 76.2212 | — | — | entry-rule-v0.4-momentum |
-| 2026-06-22T15:00:00Z | CLOSE | SOL/USD | long | 121.5347 | 73.08 | — | — | +1.51 | +232.13 | exit-ema20-confirm-missed-scheduler-replay |
-| 2026-06-22T16:00:00Z | CLOSE | SOL/USD | long | 121.5347 | 73.0435 | — | — | +1.19 | +182.13 | correction-previous-row |
-| 2026-06-27T16:00:00Z | OPEN | SOL/USD | long | 110.1608 | 72.7364 | 71.3184 | 78.4084 | — | — | entry-rule-v0.4-momentum |
-| 2026-06-27T19:00:00Z | CLOSE | SOL/USD | long | 110.1608 | 71.2827 | — | — | -1.29 | -201.55 | exit-stop-hit-intrabar |
-| 2026-06-29T04:00:00Z | OPEN | SOL/USD | long | 82.3578 | 72.6163 | 70.7563 | 80.0563 | — | — | entry-rule-v0.4-momentum |
-| 2026-06-30T04:00:00Z | CLOSE | SOL/USD | long | 82.3578 | 73.9030 | — | 80.0563 | +0.49 | +74.48 | exit-ema20-confirm-missed-scheduler-replay |
-| 2026-07-01T04:00:00Z | OPEN | SOL/USD | long | 87.5709 | 75.3538 | 73.5918 | 82.4019 | — | — | entry-rule-v0.4-momentum |
-| 2026-07-03T20:00:00Z | CLOSE | SOL/USD | long | 87.5709 | 82.5987 | — | 82.4019 | +3.88 | +598.56 | exit-4R-target-missed-scheduler-replay |
-| 2026-07-03T23:00:00Z | OPEN | ETH/USD | long | 5.7481 | 1756.9580 | 1728.5520 | 1870.5820 | — | — | entry-rule-v0.4-momentum-rule8-fallback |
-| 2026-07-05T01:00:00Z | CLOSE | ETH/USD | long | 5.7481 | 1764.128 | — | — | -0.07 | -11.38 | exit-ema20-confirm-missed-scheduler-replay |
-| 2026-07-05T03:00:00Z | OPEN | ADA/USD | long | 24624 | 0.190146 | 0.183522 | 0.216642 | — | — | entry-rule-v0.4-momentum |
-| 2026-07-05T10:00:00Z | CLOSE | ADA/USD | long | 24624 | 0.186604 | — | — | -0.68 | -110.94 | exit-ema20-confirm-missed-scheduler-replay |
-| 2026-07-06T16:00:00Z | OPEN | BTC/USD | long | 0.16899 | 63679.4 | 62724.55 | 67498.80 | — | — | entry-rule-v0.4-momentum |
-| 2026-07-07T03:00:00Z | CLOSE | BTC/USD | long | 0.16899 | 63125.0 | — | — | -0.58 | -93.69 | exit-ema20-confirm |
-| 2026-07-07T12:00:00Z | OPEN | HYPE/USD | long | 106.725 | 72.05 | 70.5499 | 78.0504 | — | — | entry-rule-v0.4-momentum-rule8-winner |
-| 2026-07-07T18:00:00Z | CLOSE | HYPE/USD | long | 106.725 | 70.5146 | — | — | -1.02 | -163.87 | exit-stop-hit-intrabar |
-| 2026-07-10T03:00:00Z | OPEN | BTC/USD | long | 0.16438 | 63925.85 | 63184.34 | 66891.89 | — | — | entry-rule-v0.4-momentum-rule8-cashfit |
-| 2026-07-10T19:00:00Z | CLOSE | BTC/USD | long | 0.16438 | 63758.30 | — | — | -0.23 | -27.54 | exit-ema20-2bar-recovery (18:00Z and 19:00Z closes below converged 1H EMA20; recovered from the scheduler outage using the full local Kraken-derived 1H cache) |
 | 2026-09-23T13:00:00Z | OPEN | NEAR/USD | long | 577.6 | 4.72836 | 4.45616 | 5.81716 | — | — | entry-rule-v0.4-momentum-rule8-winner |
 | 2026-09-23T14:00:00Z | CLOSE | NEAR/USD | long | 577.6 | 4.45393 | — | — | -1.01 | -172.30 | exit-stop-hit-intrabar |
 | 2026-09-26T04:00:00Z | OPEN | ADA/USD | long | 19263 | 0.256346 | 0.248318 | 0.288458 | — | — | entry-rule-v0.4-momentum-rule8-winner |
@@ -49,3 +20,4 @@
 | 2026-09-27T15:00:00Z | CLOSE | SOL/USD | long | 75.09 | 121.6894 | — | — | -0.01 | -0.88 | exit-ema20-confirm-missed-scheduler-replay (14:00Z close 121.68 and 15:00Z close 121.75 both below converged 1H EMA20 ~122.20 / ~122.16 — W22-G two-bar confirmation; retroactive replay — Sun 09-27 routines 02-midday and 03-eod did not fire off-schedule so exit was recovered at routine-03-eod off-schedule Sun replay 21:12 PT / 04:13Z 09-28; gross +$46.51 / +0.30R flipped to net −$0.88 / −0.01R by 0.05% slippage + 0.26% round-trip commission $47.39) |
 | 2026-09-30T13:00:00Z | OPEN | SOL/USD | long | 66.4462 | 121.9209 | 119.6039 | 131.1889 | — | — | entry-rule-v0.4-momentum-rule8-cashfit (rank-3 pick after BTC/ETH skipped cash-fit — BTC notional $13,498 > $10,264 cash, ETH notional $11,851 > $10,264 cash; SOL notional $8,101 fits. Full-pass tech per indicators.py 13:13Z: R1 +$2.57, R2 RSI 65.8, R2a OK, R3 +$1.69, R4a $65.1M. Regime 5a PASS 8/15 +0.44% median. Cluster 0→1/2. 5b cleared (SOL 09-27T15Z stop-out was 70h ago > 24h). Fill = 121.86 × 1.0005 slippage = 121.9209; stop 121.9209 − 2×ATR(1.1585) = 119.6039; target 4R = 131.1889; size = 153.9558 / 2.317 = 66.4462) |
 | 2026-09-30T14:00:00Z | CLOSE | SOL/USD | long | 66.4462 | 119.6039 | — | — | -1.00 | -195.68 | exit-stop-hit-intrabar (14:00Z 1H bar low $118.41 pierced 2×ATR stop $119.6039; routine-02-midday closes at stop price per routine spec. Gross PnL = (119.6039 − 121.9209) × 66.4462 = −$153.96; commissions open $21.06 + close $20.66 = $41.72; net −$195.68. Held 1h. SOL live bid at midday-scan 20:00Z = $117.51 (well below stop), confirming price rejected the entry-bar breakout. Trade was rank-3 cash-fit pick when BTC/ETH would not fit; single-bar failure suggests entry-bar $122.79 high was the local top before −4.10% reversal within same 15:00Z bar.) |
+| 2026-10-01T07:00:00Z | OPEN | ADA/USD | long | 22838 | 0.253472 | 0.246859 | 0.279923 | — | — | entry-rule-v0.4-momentum-rule8-cashfit (rank-6 pick after BTC/ETH skipped cash-fit — BTC notional $15,310 > $10,068 cash, ETH notional $13,481 > $10,068 cash; SOL rank-3 fail R2 RSI 53.0; HYPE rank-4 fail R3; XRP rank-5 fail R2+R3; ADA rank-6 fits. Full-pass tech per indicators.py 07:13Z: R1 +$0.004783, R2 RSI 62.4, R2a OK, R3 +$0.005598, R4a $6.92M. Regime 5a PASS 14/15 +1.30% median (strongest in weeks). Cluster 0→0/2 (ADA not in BTC-cluster). 5b cleared (ADA 09-26T06Z stop-out was 121h ago > 24h). Fill = 0.253345 × 1.0005 slippage = 0.253472; stop 0.253472 − 2×ATR(0.0033063) = 0.246859; target 4R = 0.279923; size = 151.0206 / 0.0066126 = 22,838 ADA. EOD-fire delayed ~3h13m: Wed 09-30 21:00 PT cron fired at Thu 10-01 00:13 PT / 07:13Z. Candle 07:00Z is just-closed bar for this fire.) |

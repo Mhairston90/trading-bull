@@ -9059,3 +9059,76 @@ Tag: `rule8-cashfit`. Precedent: 2026-07-10 BTC entry used same fallback.
 
 2026-09-30T17:09:18Z | harness | day-gate | not Saturday, skipping | no action
 2026-09-30T17:40:43Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-10-01T07:13Z — routine-03-eod (delayed Wed 09-30 EOD fire; +3h13m late)
+
+### VERIFY
+- **Slot identity**: bull-03-eod. Task body references Routine 03 EOD. No mismatch.
+- **Fire timing**: nominal Wed 09-30 21:00 PT (04:00Z 10-01); actual 07:13Z 10-01 = 00:13 PT Thu — **3h13m late, crossed PT midnight**. Date-labeling guard literally says "PT fire-time date" → labeling this EOD **2026-10-01**. Flagging the Wed-trading-day coverage in Notes.
+- **Kill switches CLEAR** entering wake (equity $10,068.04, DD 9.04%, 3.46pp headroom to warn).
+- **Watchdog 8 findings unchanged** (routine-06/07 heartbeat A×2, C dirty-tree 4 files, D stale-MTM ×5 variants). Telegram-alerted via --telegram.
+
+### Technical (indicators.py 07:13Z closed-bar snapshot, 720×1H + converged 4H)
+
+**Regime**: **14/15 positive 24h, median +1.30% → 5a PASS**. **Strongest regime read in weeks**. Only negative: TRX (−0.03%, essentially flat). SBD CLEAR by wide margin.
+
+**Full-pass tech per indicators.py (R1+R2+R2a+R3+R4a)**: 7 of 15 — BTC, ETH, TAO, XDG, NEAR, ADA, AVAX. Fails: SOL (R2 RSI 53.0), HYPE (R3 −$0.75), XRP (R2+R3), SUI (R2), LINK (R2 RSI 50.5), LTC (R2 RSI 51.9), FARTCOIN (R2+R3+R4a), TRX (R1+R2+R4a).
+
+### Rule 8 tie-break by 30d notional rank
+Order: BTC(1) > ETH(2) > ADA(6) > NEAR(7) > TAO(9) > XDG(10) > AVAX(12).
+
+### Cash-fit filter (spot only, $10,068.04 cash)
+- **BTC**: 151.0206 / 829.34 = 0.18211 BTC × $84,078.4 = **$15,310** > $10,068 → SKIP.
+- **ETH**: 151.0206 / 30.402 = 4.9674 ETH × $2,713.8 = **$13,481** > $10,068 → SKIP.
+- **ADA**: 151.0206 / 0.0066126 = 22,838 ADA × $0.253472 = **$5,789** < $10,068 → **SELECTED**.
+Tag: `rule8-cashfit`. 3rd cashfit instance (prior: 07-10 BTC, 09-30 SOL).
+
+### News
+Firecrawl skipped (informational-only in v0.2; broad +1.30% median regime is bullish-constructive).
+
+### Sentiment (Kraken ticker/spread for ADAUSD @ 07:15Z)
+- Spread 8.7bps / 0.034% — tight.
+- 24h vol 28.5M × VWAP $0.25 = **$7.12M notional** (R4a $2M floor by 3.5×).
+- 24h change +2.47%, range $0.241279/$0.256745, current $0.252572 — mid-upper range, not at ceiling.
+- No sentiment red flag.
+
+### pre_entry_check for ADA/USD
+All 13 checks ACCEPT. See portfolio.md detail block.
+
+### Decision
+- **1 entry opened**: ADA/USD long, 22,838 @ fill $0.253472 (close $0.253345 × 1.0005 slippage), stop $0.246859, target $0.279923 (4R).
+- **0 exits triggered** — book flat entering wake post Wed SOL stop.
+- **Day summary (PT 09-30 trading day)**: realized −$195.68 / −1.91% (SOL stop); add ADA unrealized ~−$37 → total ~−$233 / −2.28%.
+- **Equity**: $10,031.22 (live-ticker MTM). Peak $11,068.89 unchanged. DD 9.37%.
+
+### Monthly archive (catch-up sweep)
+- Moved 29 rows (dated < 2026-09-01) from `trade_log.md` to new `memory/archive/2026-10.md`.
+- Scope: all June + July 2026 rows. Jul/Aug/Sep EOD archive cadence missed due to 07-10 → 09-20 scheduler outage + Sep 30 missed-fire.
+- First row remaining in live log: 2026-09-23T13:00:00Z NEAR OPEN.
+- Live log now 23 rows (down from 51).
+
+### Watchdog findings (8 total, unchanged from overnight)
+- A heartbeat: routine-06 dead ≥12 days; routine-07 dead ≥12 days.
+- C dirty-tree: 4 untracked files (sentinel spec doc + routine07 replay artifacts).
+- D stale-MTM: 5 variant portfolios with stale rebuilds (routine 04/06 variant maintenance).
+
+### Lessons check
+- **W22-H ratchet pattern-of-4** (lesson 09-27) already slated for Sat 10-03 W25R memo. No new instance this wake (ADA just entered).
+- **ADA 09-26 archetype parallel** flagged in portfolio.md Ops notes but not a new lesson — same strategy behavior, different outcome TBD.
+- **Rule-8-cashfit pattern-of-3** flagged in portfolio.md Ops notes; still subject to P-W27-CASHFIT pending user `[Y/N]`.
+- **No new `lessons.md` entry this wake** (no new archetype).
+
+### Actions taken
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (prior midday), trade_log.md 30d, research_log.md 7d, lessons.md (partial), skills/decide.md, log-trade.md, telegram.md.
+- **Fetched**: `python scripts/watchdog.py --telegram` (8 findings unchanged); `python scripts/indicators.py` (07:13Z closed-bar, 15 pairs); Kraken `kraken_ticker`+`kraken_spread` for ADAUSD; Kraken `kraken_ticker` for XBTUSD.
+- **Wrote**:
+  - `trade_log.md` — 1 OPEN row (ADA/USD 10-01T07:00:00Z); header updated with 2026-10 archive note; 29 pre-Sep rows removed.
+  - `memory/archive/2026-10.md` — new file, 29 rows with summary stats.
+  - `portfolio.md` — rewritten; 1 open position (ADA); equity $10,031.22; DD 9.37%; all kill switches CLEAR.
+  - `research_log.md` — this entry.
+  - **No write** to `lessons.md` (no new archetype).
+  - **No write** to `strategy.md` or `guardrails.md` (unchanged).
+- **NOTIFY**: Telegram EOD card sent per routine-03-eod mandatory NOTIFY spec.
+
+### Compact log row
+2026-10-01T07:13Z | routine-03-eod | delayed Wed 09-30 EOD fire +3h13m late (00:13 PT Thu) | 1 OPEN (ADA/USD long 22,838 @ 0.253472, stop 0.246859, target 0.279923, rule8-cashfit rank-6 after BTC/ETH cash-blocked); 7/15 full-pass tech; regime 5a PASS 14/15 +1.30% median (strongest in weeks); equity $10,031.22; DD 9.37%; monthly archive catch-up (29 rows → 2026-10.md); watchdog 8 findings unchanged; Telegram EOD card sent.
