@@ -9253,3 +9253,4 @@ All 13 checks ACCEPT. See portfolio.md detail block.
 
 ### Compact log row
 2026-10-01T07:13Z | routine-03-eod | delayed Wed 09-30 EOD fire +3h13m late (00:13 PT Thu) | 1 OPEN (ADA/USD long 22,838 @ 0.253472, stop 0.246859, target 0.279923, rule8-cashfit rank-6 after BTC/ETH cash-blocked); 7/15 full-pass tech; regime 5a PASS 14/15 +1.30% median (strongest in weeks); equity $10,031.22; DD 9.37%; monthly archive catch-up (29 rows → 2026-10.md); watchdog 8 findings unchanged; Telegram EOD card sent.
+2026-10-01T17:40:02Z | allocation | day-gate | not Sunday, skipping | no action
