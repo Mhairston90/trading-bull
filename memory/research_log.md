@@ -4,6 +4,127 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-10-01T13:20Z — routine-01-overnight (on-schedule) — ADA STOP-OUT + regime crystallized 14/15→1/15 SBD-ACTIVE
+
+### VERIFY
+
+- **Slot identity**: bull-01-overnight. Task body references Routine 01 Overnight. No mismatch.
+- **Fire timing**: 13:12Z vs cron 13:00Z = +12min on-schedule drift. First on-schedule overnight since 09-30.
+- **Kill switches CLEAR** entering wake (equity ~$10,031 EOD, DD 9.37%, 3.13pp headroom to 12.5% warn).
+- **Watchdog 8 findings unchanged** (routine-06/07 heartbeat A×2, C dirty-tree 4 files, D stale-MTM ×5 variants). Telegram-alerted via --telegram.
+
+### DO — Position check: ADA/USD STOP-OUT at 08:00Z
+
+ADA position opened at prior wake routine-03-eod (10-01T07:00Z) @ $0.253472, stop $0.246859. Overnight 1H bars pulled via Kraken `kraken_ohlcv`:
+
+| Bar | High | Low | Close |
+|---|---|---|---|
+| 07:00Z | 0.254122 | **0.247342** | 0.248423 |
+| 08:00Z | 0.249134 | **0.2452** | 0.246470 |
+| 09:00Z | 0.247786 | 0.245757 | 0.246324 |
+| 10:00Z | 0.248006 | 0.243232 | 0.247758 |
+| 11:00Z | 0.249338 | 0.246467 | 0.249007 |
+| 12:00Z | 0.249374 | 0.246824 | 0.247496 |
+| 13:00Z (forming) | 0.247641 | 0.245062 | 0.2457 |
+
+**Stop pierced at 08:00Z: low $0.2452 < stop $0.246859 by $0.001659 (0.67% below stop).** Executed paper exit at stop price $0.246859 × 0.9995 slippage = $0.246736.
+
+**Trade math:**
+- Gross PnL = (0.246736 − 0.253472) × 22,838 = **−$153.85**
+- Open comm (0.26% × $5,788.79): **$15.05**
+- Close comm (0.26% × $5,634.95): **$14.65**
+- Total commissions: **$29.70**
+- **Net PnL: −$183.55 / −1.02R gross / −1.22R net**
+- Hold: 1 bar (1 hour).
+
+Appended CLOSE row to trade_log at 2026-10-01T08:00:00Z.
+
+### Technical (indicators.py 13:12Z closed-bar snapshot, 720×1H + converged 4H)
+
+**Regime: 1/15 positive 24h, median −2.74% → 5a FAIL + SBD ACTIVE.**
+
+Only positive: HYPE (+2.35%).
+Negatives (14): BTC (−1.82), ETH (−1.38), SOL (−3.73), XRP (−3.09), ADA (−2.45), SUI (−2.71), NEAR (−4.51), TAO (−3.21), XDG (−2.83), LTC (−1.67), AVAX (−2.99), LINK (−2.74), FARTCOIN (−4.71), TRX (−2.17).
+
+**5a-SBD classification**: (i) **1/15** positive ≤ **1** required → PASS; (ii) **median −2.74%** ≤ **−1.0%** required → PASS → **SBD ACTIVE** (both legs clear by wide margin).
+
+**Full-pass tech check (R1+R2+R2a+R3+R4a)**: **0 of 15** pairs full-pass. Universal R2 FAIL (RSI<55 everywhere; max RSI = HYPE 52.4). No candidates for entry regardless of 5a FAIL.
+
+### Rule 8 + cash-fit filter
+
+**N/A — regime 5a FAIL blocks all new entries this wake. No pairs would full-pass even without the regime block.**
+
+### News
+
+**Firecrawl skipped this wake** per routine 01 fallback ("If Firecrawl unavailable, log `Firecrawl unavailable — skipped this wake` and continue"). News informational-only; no entry candidates anyway so no news-tag needed.
+
+### Sentiment
+
+**N/A — no entry candidates. Book flat post-ADA stop.**
+
+### Decision
+
+- **1 exit executed**: ADA/USD stop-out at 08:00Z (−1.02R, −$183.55 net).
+- **0 entries** — regime 5a FAIL + SBD ACTIVE + 0 tech-PASS candidates.
+- **Book flat** post-ADA stop (0/8 positions).
+
+### Regime crystallization pattern — 4th instance (pattern-of-4 escalation)
+
+**Entry wake (10-01T07:13Z routine-03-eod)**: regime 14/15 positive, median **+1.30%** — strongest regime read in weeks, SBD CLEAR by massive margin, 7 full-pass tech candidates.
+
+**This wake (10-01T13:12Z routine-01-overnight, 6h later)**: regime 1/15 positive, median **−2.74%** → **5a FAIL + SBD ACTIVE**.
+
+**Delta**: 13 pairs flipped positive→negative; median moved −4.04pp in 6 hours. **Largest single-wake regime whiplash on record for BULL.**
+
+**Pattern-of-4 table** (SBD-crystallization-within-15h after fresh entry):
+
+| # | Date | Entry wake | Stop wake | Pair | Hold | Net R | 09-23 ref |
+|---|---|---|---|---|---|---|---|
+| 1 | 2026-06-17 | 12/15 +1.17% (17Z) | 1/15 −3.37% (03Z 06-18) | SOL | 1h | −1.28R | lesson 06-17 rule-8-fallback |
+| 2 | 2026-07-07 | 12/15 +1.95% (12Z) | 1/15 −2.94% (04Z 07-08) | HYPE | 6h | −1.02R | lesson 07-07 live-ticker-leading |
+| 3 | 2026-09-23 | 4/15 −0.86% (13Z) | 1/15 −6.18% (04Z 09-24) | NEAR | 1h | −1.01R | lesson 09-23 pattern-of-3-escalation |
+| 4 | **2026-10-01** | **14/15 +1.30% (07Z)** | **1/15 −2.74% (13Z)** | **ADA** | **1h** | **−1.02R** | **this wake** |
+
+**Key insight**: ADA 10-01 entry was taken under the *strongest regime read of the series* (14/15 is unprecedented in the 4-instance history), yet still fell victim to the same crystallization pattern. This definitively invalidates any hypothesis that "stronger regime at entry wake protects against this failure mode". The regime strength at point-in-time snapshot is uncorrelated with 15h-forward regime stability.
+
+**Routing**: adding new lesson entry (score 9) and escalating P-W25R-SAMESESSION-STOP-GATE from pattern-of-3 (09-23 lesson) to pattern-of-4 for Sat 10-03 routine-04-harness W25R memo. Options from 09-23 lesson still apply:
+- (a) Regime-margin gate (reject when positive_count = 4) — would NOT have caught ADA 10-01 (14/15 way above margin).
+- (b) Two-wake regime-confirmation gate — WOULD have caught ADA 10-01 (prior-prior wake 09-30T13Z regime was 8/15 +0.44%, not strong enough to clear a strict two-wake-both-≥10/15 confirmation).
+- (c) Live-ticker vs bar-close divergence gate — need to check pre-entry divergence at 07:13Z EOD; if live ticker was already showing deterioration at that time, this would catch 10-01. (Flagged for 10-03 memo investigation.)
+- (d) **NEW: Rate-of-change regime velocity cap** — reject entries when (count_positive_this_wake − count_positive_prior_wake) ≥ X. Prior wake 09-30T13Z regime was 8/15; this wake jumped to 14/15 in 18h = +6/15 flip. Rapid *bullish* flips may be as predictive of crystallization as bearish flips. Would catch 10-01 (6-pair bullish flip) and probably not catch the others (06-17/07-07 entries had steady 12/15 regimes for multiple prior wakes).
+
+### Lessons check
+
+- **Added new lesson** `2026-10-01 — Pattern-of-4 escalation: ADA stop-out under STRONGEST regime read confirms crystallization-within-15h fails regardless of entry-wake regime strength` (score **9**, status active, routes to Sat 10-03 W25R memo).
+- W22-H ratchet pattern-of-4 (lesson 09-27) unchanged — still routed to 10-03.
+- Rule-8-cashfit pattern-of-3→4 (ADA 10-01 is 3rd cashfit entry; or 4th counting informal 06-17 fallback) still subject to P-W27-CASHFIT pending.
+- **No new lesson for cashfit** — pattern already documented in 06-17 lesson at score 9.
+
+### Watchdog findings (8, unchanged from EOD)
+
+- A heartbeat: routine-06 dead ≥12 days; routine-07 dead ≥12 days.
+- C dirty-tree: 4 untracked files (sentinel spec doc + routine07 replay artifacts).
+- D stale-MTM: 5 variant portfolios with stale rebuilds.
+
+### Actions taken
+
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (post-EOD rebuild), universe.md, trade_log.md (30d tail), research_log.md (7d tail), lessons.md (partial 205 lines).
+- **Fetched**: `python scripts/watchdog.py --telegram` (8 findings unchanged); `python scripts/indicators.py` (13:12Z closed-bar, 15 pairs); Kraken `kraken_multi_ticker` (15 pairs overnight); Kraken `kraken_ohlcv` ADAUSD 1h×10 for stop-piercing verification.
+- **Wrote**:
+  - `trade_log.md` — 1 CLOSE row (ADA/USD 10-01T08:00:00Z, −1.02R / −$183.55).
+  - `portfolio.md` — rewritten; book flat; equity $9,884.51; DD 10.70%; 5-of-7 consecutive-loss streak noted; SBD ACTIVE flagged.
+  - `research_log.md` — this entry.
+  - `lessons.md` — new entry at top (pattern-of-4 escalation).
+  - **No write** to `strategy.md` or `guardrails.md` (unchanged).
+  - **No write** to `universe.md` (not first-of-month; next 11-01).
+- **NOTIFY**: Telegram alert sent per NOTIFY spec (stop-out CLOSE triggers notification).
+
+### Compact log row
+
+2026-10-01T13:20Z | routine-01-overnight | wake | PT 2026-10-01 06:20 **on-schedule +12min** | 1 CLOSE (ADA/USD stop-out 08:00Z intrabar, −1.02R / −$183.55 net, held 1h bar) + 0 opens; regime crystallized 14/15 +1.30% → **1/15 −2.74% SBD ACTIVE** in 6h (largest whiplash on record); 0/15 tech-PASS; book flat; equity $9,884.51 (−1.46% vs EOD); DD **10.70%** (1.80pp headroom to warn); consecutive-loss **5/7** (2 away from pause); P-W25R-SAMESESSION-STOP-GATE escalated to pattern-of-4; new lesson score 9; Telegram alert sent.
+
+---
+
 ## 2026-09-30T20:00Z routine-02-midday — SOL stop-out intrabar, book flat, DD 9.04%, all Ring 3 clear
 
 Slot identity: `bull-02-midday`. PT 2026-09-30 13:00 wake, **ON-SCHEDULE** vs cron `0 13 * * 1-5` (13:00 PT). Third on-schedule fire in a row. Label date per date-labeling guard: PT calendar date at fire = **2026-09-30**.
