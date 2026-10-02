@@ -1,102 +1,99 @@
 # BULL Portfolio State
 
 > **Rebuilt each wake** from `trade_log.md`; the log remains the source of truth.
-> **Last rebuild:** 2026-10-01T13:20Z routine-01-overnight (PT 2026-10-01 06:20) — on-schedule fire. **ADA stop-out intrabar at 08:00Z closed book flat.** Regime crystallized 14/15 +1.30% → 1/15 -2.74% SBD-ACTIVE between entry (7h ago) and this wake — 4th instance of same-session-stop-after-regime-crystallization pattern.
+> **Last rebuild:** 2026-10-02T04:12Z routine-03-eod (PT 2026-10-01 21:12) — on-schedule Thu EOD fire. **1 OPEN: SOL/USD long rule-8-cashfit rank-3 after BTC/ETH cash-blocked.** Regime recovered from 1/15 SBD-ACTIVE overnight → 8/15 +0.08% PASS at EOD close (+7 breadth whiplash within same calendar day).
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$9,884.51** (prior $4,264.21 + ADA exit proceeds net $5,620.30)
-- Realized PnL (since inception): **−$115.51** (prior +$68.04 − ADA stop $183.55)
-- Unrealized PnL: **$0.00** (book flat)
-- Current equity: **$9,884.51** (cash-only, book flat)
+- Cash: **$1,141.42** ($9,884.51 prior − $8,743.09 SOL fill cost)
+- Realized PnL (since inception): **−$115.51** (unchanged — ADA stop already captured)
+- Unrealized PnL: **−$4.37** (SOL slippage drag at fill: 72.1076 × ($121.19 − $121.2506))
+- Current equity: **$9,880.14** (cash + position MTM at 04:12Z live-ticker $120.68 would be $9,841 — using 04:00Z close for consistency with entry bar)
 - Equity peak: **$11,068.89** (unchanged)
-- Drawdown from peak: **10.70%** (widened from 9.37% EOD by ADA stop-out)
-- Since-inception return: **−1.15%**
+- Drawdown from peak: **10.74%** (slight widening from 10.70% pre-entry from slippage drag)
+- Since-inception return: **−1.20%**
 
 ## Open positions
 
 | Pair | Side | Size | Entry fill | Stop (2×ATR) | Target (4R) | Current MTM | Unrealized $ | Unrealized R |
 |------|------|------|-----------|--------------|-------------|-------------|--------------|--------------|
-| — | — | — | — | — | — | — | — | — |
+| SOL/USD | long | 72.1076 | $121.2506 | $119.1944 | $129.4754 | $121.19 (04:00Z close) | −$4.37 | −0.03R |
 
-Portfolio risk-at-moment: **0.00%** of equity (book flat).
-Open positions: **0 / 8** (strategy cap 0/4; BTC-cluster 0/2).
+Portfolio risk-at-moment: **1.50%** of equity (1 position × 1.5% risk per trade).
+Open positions: **1 / 8** (strategy cap 1/4; BTC-cluster 1/2).
 
-## Day summary — PT 2026-10-01 Thu trading day (in-progress)
+## Day summary — PT 2026-10-01 Thu trading day
 
-- **Day PnL (realized)**: **−$183.55 / −1.82%** (ADA stop-out, 08:00Z = 01:00 PT).
-- **Trades opened**: **0** (ADA 07:00Z entry was logged under PT 10-01 EOD label).
-- **Trades closed**: **1** (ADA/USD 08:00Z intrabar stop).
+- **Day PnL (realized)**: **−$183.55 / −1.82%** (ADA stop-out 08:00Z = 01:00 PT).
+- **Day PnL (realized + unrealized)**: ~**−$187.92 / −1.87%** including SOL slippage drag.
+- **Trades opened today**: **2** (ADA 07:00Z PT 00:00; SOL 04:00Z 10-02 = PT 21:00 Thu — both on PT 10-01 calendar day).
+- **Trades closed today**: **1** (ADA/USD 08:00Z intrabar stop).
 - **Win rate today (closed only)**: **0/1** (0%).
 
-## Rolling benchmark (marked to live-ticker 2026-10-01T13:12Z)
+## Rolling benchmark (marked to EOD closed-bar 2026-10-02T04:00:00Z)
 
-- **BTC-hold 30d**: BTC live $83,556 vs ~$79,500 09-01 baseline → **~+5.1%** (pulled back further overnight from EOD $84,018).
-- **BTC-hold 7d**: ~+9.1%.
-- **BULL 30d** (equity $9,884.51 vs ~$10,440 09-01 baseline): **~−5.33%** (widened from EOD's −3.91% due to ADA stop).
-- **BULL 7d**: **~−5.72%**.
-- **BULL vs BTC-hold 30d**: **~−10.4pp behind** (widened from EOD's −9.6pp — BTC pullback modest, BULL stop was larger).
-- **BULL vs BTC-hold 7d**: **~−14.8pp behind**.
-- **90d benchmark**: not-yet-computable (post-outage cross-window; cumulative from pre-outage not comparable).
+- **BTC-hold 30d**: BTC closed-bar $85,480.6 vs ~$79,500 09-01 baseline → **~+7.5%** (expanded from morning's +5.1% on BTC's day rally +2.3%).
+- **BTC-hold 7d**: ~+10.9% (continuing to expand).
+- **BULL 30d** (equity $9,880.14 vs ~$10,440 09-01 baseline): **~−5.36%**.
+- **BULL 7d**: **~−5.76%**.
+- **BULL vs BTC-hold 30d**: **~−12.9pp behind** (widened from morning −10.4pp — BTC rallied through the day; BULL day net was small realized loss + near-flat SOL entry).
+- **BULL vs BTC-hold 7d**: **~−16.7pp behind**.
+- **90d benchmark**: not-yet-computable (post-outage cross-window).
 
-## ADA stop-out mechanics — 2026-10-01T08:00:00Z
+## New SOL entry mechanics — 2026-10-02T04:00:00Z (PT 2026-10-01 21:00 Thu close)
 
-- **Entry** (prior wake routine-03-eod 07:13Z): 22,838 ADA @ $0.253472 fill, stop $0.246859, target $0.279923, risk $151.03 (1.5% equity).
-- **Stop trigger**: 08:00Z 1H bar low $0.2452 pierced stop $0.246859 by $0.0017 (0.69% below stop).
-- **Fill**: $0.246736 (= $0.246859 × 0.9995 slippage).
-- **Gross PnL**: (0.246736 − 0.253472) × 22,838 = −$153.85.
-- **Commissions**: open $15.05 + close $14.65 = $29.70.
-- **Net PnL**: **−$183.55 / −1.02R**.
-- **Hold time**: 1 bar (1 hour).
-- **Peak unrealized during hold**: never positive — 07:00Z entry bar close was $0.253345, next bar (08:00Z) opened $0.248373 (-1.9% gap down) and ran to low $0.2452 pierce.
+- **Pre-entry rank evaluation**: BTC rank-1 (notional $15,196 > $9,884 cash → SKIP cash-fit); ETH rank-2 ($12,374 > $9,884 → SKIP); SOL rank-3 ($8,743 < $9,884 → SELECTED).
+- **Full-pass technical check per indicators.py 04:12Z** (720×1H + converged 4H): R1 +$2.48 (close $121.19 > EMA20 $118.71), R2 RSI 69.5 (>55), R2a OK (<80), R3 +$3.20 (4H close > 4H EMA50 $117.99), R4a $38.56M notional (>$2M floor, 19× cushion).
+- **Regime 5a**: 8/15 positive 24h, median +0.08% → PASS, SBD CLEAR. **Recovery from this morning overnight 1/15 −2.74% SBD-ACTIVE** (+7 breadth whiplash in 15h; companion to morning overnight 14/15 → 1/15 −13 flip).
+- **Cluster**: SOL in BTC-cluster {BTC, ETH, SOL, TAO, AVAX, SUI, LINK}. 0 → 1/2 ✓.
+- **5b cooldown**: SOL last stop-out 2026-09-30T14:00Z. Elapsed 38h > 24h → CLEAR.
+- **pre_entry_check**: all 8 checks ACCEPT (positions 0<8, cap 0<4, risk 0.00+1.50=1.50<4.00, per-trade 1.50≤1.50, in universe, not open, day loss 1.82<5.0, equity $9,884.51 > $7,500).
+- **Fill**: $121.19 × 1.0005 slippage = $121.2506.
+- **Stop (2×ATR)**: $121.2506 − $2.0562 = $119.1944 (ATR14 = $1.0281).
+- **Target (4R)**: $121.2506 + $8.2248 = $129.4754.
+- **Size**: $148.27 risk / $2.0562 risk-per-share = **72.1076 SOL**.
+- **Notional**: $8,743.09 (fits cash $9,884.51 with $1,141.42 buffer).
+- **Tag**: `rule8-cashfit`. **4th cashfit instance** (06-17 SOL fallback, 07-10 BTC, 09-30 SOL, 10-01 ADA, now 10-01 SOL).
 
-## Regime crystallization — 4th instance of same-session-stop-after-crystallization pattern
+## Entry context — elevated risk flags
 
-**Entry wake** (10-01T07:13Z EOD): 14/15 positive 24h, median **+1.30%** — strongest regime read in weeks, SBD CLEAR by wide margin.
-**This wake** (10-01T13:12Z overnight, 6h later): **1/15** positive, median **−2.74%** — 5a FAIL + SBD ACTIVE.
-**Delta**: 13 pairs flipped from positive to negative in 6 hours; median moved -4.04pp. This is the **largest regime whiplash of the 4 pattern instances by raw count**.
+- **Consecutive-loss streak = 5 of 7** (two more losing closes = 7-day full-pause kill switch requires user `RESUME`).
+- **Drawdown 10.74%**, 1.76pp headroom to 12.5% warn, 14.26pp to 25% full-pause.
+- **Two intraday regime whiplashes same day**: 14/15 +1.30% (overnight entry wake) → 1/15 −2.74% (overnight stop wake, 6h) → 8/15 +0.08% (this EOD wake, 15h). The W-20-type velocity rule would catch this entry (|ΔPositive| = +7 ≥ 6).
+- **Second SOL entry in 48h** (prior SOL 09-30T13Z stopped 1h later for −1.00R; 5b expired at 09-30T14Z + 24h = 10-01T14Z, now 10-02T04Z = 14h past clear).
+- **Pattern-of-4 cashfit becoming pattern-of-5** with this entry pending outcome.
+- **P-W25R-SAMESESSION-STOP-GATE** (option b + option d) and **P-W27-CASHFIT** both still pending user `[Y/N]` at Sat 10-03 routine-04-harness W25R memo.
+- Entry taken strictly per strategy v0.4 compliance. BULL does not autonomously edit strategy; proposed gates require Ring-2 approval.
 
-**Pattern instances** (companion lesson being added this wake):
-| Date | Entry wake regime | Stop wake regime | Pair | Entry→stop time | Net R |
-|---|---|---|---|---|---|
-| 2026-06-17 | 12/15 +1.17% | 1/15 −3.37% | SOL | 1h | −1.28R |
-| 2026-07-07 | 12/15 +1.95% | 1/15 −2.94% | HYPE | 6h | −1.02R |
-| 2026-09-23 | 4/15 −0.86% | 1/15 −6.18% | NEAR | 1h | −1.01R |
-| **2026-10-01** | **14/15 +1.30%** | **1/15 −2.74%** | **ADA** | **1h** | **−1.02R** |
+## Active kill-switch state (routine-03-eod 2026-10-02T04:12Z / PT 2026-10-01 21:12)
 
-Four instances in ~15 weeks (~1 per 4 weeks cadence). Routes to Sat 10-03 routine-04-harness W25R memo as **P-W25R-SAMESESSION-STOP-GATE** (upgraded from the 09-23 NEAR pattern-of-3 to pattern-of-4).
-
-## Active kill-switch state (routine-01-overnight 2026-10-01T13:20Z / PT 2026-10-01 06:20)
-
-- **Daily loss cap (PT 10-01 trading day)**: **−1.82% realized** (ADA stop). **CLEAR** (<5% cap; 3.18pp headroom).
+- **Daily loss cap (PT 10-01 trading day)**: **−1.87% realized+unrealized** (ADA $-183.55 + SOL slippage $-4.37). **CLEAR** (<5% cap; 3.13pp headroom).
 - **Consecutive-loss cap**: **5 losses** (NEAR 09-23, ADA 09-26, SOL 09-27 scratch, SOL 09-30, ADA 10-01). Streak = **5 of 7**. **CLEAR** (2-loss headroom to 7-day full-pause).
-- **Max drawdown: 10.70%** from peak $11,068.89 (widened from 9.37% EOD by ADA stop). **CLEAR** (25% cap, **1.80pp headroom to 12.5% warn** — tightening).
-- **Equity floor: $9,884.51 > $7,500** (+$2,384.51). **CLEAR**.
-- **Exposure: 0.00% / 4%** used. CLEAR (book flat).
-- **Cluster cap: 0/2 BTC-cluster**. CLEAR.
-- **Universe/liquidity**: book flat, no exposure to check.
-- **5b cooldown state**: ADA blocked until **2026-10-02T08:00Z** (24h from this stop-out); SOL blocked until **2026-10-01T14:00Z** (expires in ~40min). NEAR expired. 12 other pairs CLEAR.
-- **Regime 5a**: **FAIL 1/15 −2.74% median → SBD ACTIVE**. No new entries this wake regardless.
+- **Max drawdown: 10.74%** from peak $11,068.89 (ADA stop + SOL slippage). **CLEAR** (25% cap; 1.76pp headroom to 12.5% warn — tightening).
+- **Equity floor: $9,880.14 > $7,500** (+$2,380.14). **CLEAR**.
+- **Exposure: 1.50% / 4%** used. CLEAR.
+- **Cluster cap: 1/2 BTC-cluster**. CLEAR (1 slot remaining).
+- **Universe/liquidity**: SOL rank-3 in universe, $38.56M 24h notional far above R4a floor.
+- **5b cooldown state**: ADA blocked until **2026-10-02T08:00Z** (~4h). SOL now OPEN (not blocked). NEAR expired. 11 other pairs CLEAR.
+- **Regime 5a**: **PASS 8/15 +0.08% median → SBD CLEAR** (recovered from this morning's SBD-ACTIVE).
 - **MCP availability**: Kraken ticker + OHLCV + indicators.py healthy; Telegram script healthy; watchdog healthy.
 - **All Ring 3 kill switches CLEAR.**
 
 ## Ops notes
 
-- **Regime whiplash severity**: 14/15 +1.30% → 1/15 −2.74% in 6h is the largest intraday regime flip on record for BULL. The 09-29 EOD had a similar magnitude flip (3/15 → 12/15) but in the *opposite* (bullish) direction. These rapid flips are becoming the dominant regime behavior — of 7 wakes 09-23 through 10-01, 5 showed >8-pair regime flips vs prior wake. v0.4's point-in-time 5a snapshot cannot catch these transitions.
-- **ADA back-to-back stop-outs**: 2nd ADA stop-out in 5 days (09-26 at −0.29R scratch, 10-01 at −1.02R full-R). Entry archetype was similar both times (rule-8-cashfit or rule-8-winner on mid-range RSI). The 09-26 ADA was a 2-bar W22-G exit; 10-01 ADA was a 1-bar hard-stop. Different exit mechanisms, same outcome: ADA entries have failed 2/2 recent attempts.
-- **Rule-8-cashfit pattern-of-4**: this is the 4th rule-8-cashfit entry (07-10 BTC +0.23R-loss, 09-30 SOL −1.00R, 10-01 ADA −1.02R, counting ADA as the 3rd cashfit — plus the informal rule-8-fallback 06-17 SOL). Pattern-of-4 confirms the cashfit-fallback behavior is now operationally dominant. **P-W27-CASHFIT** proposal still pending user `[Y/N]` per lesson 2026-06-17.
-- **W22-H breakeven ratchet pattern-of-4**: still slated for Sat 10-03 routine-04-harness W25R memo as **P-W25R-RATCHET-TIGHTEN** (lesson 09-27).
-- **New P-W25R-SAMESESSION-STOP-GATE escalation**: this wake adds 4th instance (ADA 10-01) to the SBD-crystallization-within-15h pattern first identified by 09-23 NEAR lesson. The 09-23 lesson explicitly routed to Sat 09-26 memo (never fired due to Sat routine-04 not running); now routes to Sat 10-03 with pattern-of-4 evidence.
-- **Drawdown trajectory**: 10.70% is 1.80pp from 12.5% warn threshold. Two consecutive stop-outs = 1.33pp + 0.33pp = 1.66pp drawdown-growth per stop. One more full-R stop = ~12.0% DD; two more = ~13.3% DD (into warn). This is the first time DD has approached warn since the 09-20 scheduler-outage-recovery wake.
-- **Watchdog findings (8, unchanged)**: routine-06/07 heartbeat dead (A×2), dirty-tree 4 untracked files (C), stale-MTM 5 variant portfolios (D). Known-structural, Telegram-alerted.
+- **Regime double-whiplash day**: 14/15 → 1/15 → 8/15 in a single PT calendar day is unprecedented in BULL's 20-week history. Overnight was −13 breadth collapse; EOD is +7 breadth recovery. Net day: 14/15 → 8/15 = −6 breadth. Rapid-flip regimes are now the dominant tape behavior over the last ~2 weeks.
+- **SOL entry archetype parallel to 09-30**: same pair, same rule-8-cashfit tag, 48h apart. The 09-30 entry stopped 1h later. The 10-01 lesson explicitly identifies this archetype (same-session-stop-after-regime-crystallization) as pattern-of-4. If this SOL entry survives the overnight 05:00-13:00Z window without stop-out, it will be the first same-day-cashfit SOL to break the pattern. If it stops out before the next midday wake, it would form pattern-of-5 within the exact same calendar day as the pattern-of-4 escalation.
+- **Rule-8-cashfit cumulative P&L**: 06-17 SOL −$158, 07-10 BTC +$46, 09-30 SOL −$196, 10-01 ADA −$184 = **−$492 cumulative** over 4 cashfit entries. SOL 10-01 is 5th. Pending P-W27-CASHFIT would address the pattern.
+- **Drawdown trajectory**: 10.74% today, +0.04pp from this morning (SOL slippage only; ADA stop already in). One more full-R stop would push DD to ~12.1% (0.4pp from 12.5% warn). Two more = ~13.4% (into warn).
+- **Watchdog findings (8, unchanged)**: routine-06/07 heartbeat dead (A×2), dirty-tree 4 untracked files (C), stale-MTM 5 variant portfolios (D). Known-structural, Telegram-alerted every wake.
+- **Monthly archive**: 23 live rows this morning + 1 OPEN this wake = **24 rows** in trade_log.md. Comfortable size; next full archive sweep at month-end 2026-10-30/31.
 
 ## Notes for next wake
 
-- **Routine 02 midday** fires next ~20:00Z 10-01 = 13:00 PT Thu. Book flat; no positions to MTM. Entry scan under SBD-ACTIVE = reject all new entries per rule 5a-SBD unless regime clears by then.
-- **5b cooldowns**: ADA blocked until 10-02T08:00Z (18h+). SOL unlocks 10-01T14:00Z. NEAR expired long ago.
-- **Consecutive-loss streak**: 5/7. **Two more losing closes = 7-day full-pause kill switch** (REQUIRES user RESUME per guardrails). First time in the 2-away zone since the 09-23 recovery wake.
-- **Drawdown 10.70%**: 1.80pp headroom to 12.5% warn. Monitor closely.
-- **SBD defensive posture**: regime 5a + SBD ACTIVE blocks all new entries. If SBD persists for 2+ wakes, lessons.md observation about SBD cadence becoming more frequent is relevant.
-- **Monthly archive status**: 23 live rows in trade_log.md; comfortable size, no action needed until month-end.
-- **Open positions as of this wake**: NONE — book flat for first time since 10-01 EOD opened ADA.
+- **Routine 01 overnight** fires next ~13:00Z 10-02 Fri = 06:00 PT. SOL position to MTM against 12:00Z just-closed bar (8 bars after entry).
+- **5b cooldowns**: ADA blocked until 10-02T08:00Z (4h away). SOL now OPEN (not blocked). Other 13 pairs CLEAR.
+- **Consecutive-loss streak**: 5/7. Still 2 away from 7-day full-pause. SOL exit outcome will update the count (+1 loss → 6/7, scratch → 5/7, +1R or better → resets per guardrails).
+- **SBD/regime monitoring**: regime recovered to 8/15 but may whipsaw again overnight given the day's double-flip. Next wake re-evaluates.
+- **Open position stop management**: SOL stop at $119.1944 is the active stop (2×ATR). W22-H breakeven ratchet arms at close ≥ +2R unrealized ($121.2506 + 2 × $2.0562 = $125.3630). Not yet armed.
+- **Lesson update candidate**: if SOL survives overnight, update the 10-01 pattern lesson's "cumulative cashfit P&L" line and note the first same-archetype positive-outcome. If SOL stops out, the 10-01 lesson becomes pattern-of-5 with the fastest cadence on record (two instances same calendar day).

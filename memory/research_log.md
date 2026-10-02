@@ -9254,3 +9254,112 @@ All 13 checks ACCEPT. See portfolio.md detail block.
 ### Compact log row
 2026-10-01T07:13Z | routine-03-eod | delayed Wed 09-30 EOD fire +3h13m late (00:13 PT Thu) | 1 OPEN (ADA/USD long 22,838 @ 0.253472, stop 0.246859, target 0.279923, rule8-cashfit rank-6 after BTC/ETH cash-blocked); 7/15 full-pass tech; regime 5a PASS 14/15 +1.30% median (strongest in weeks); equity $10,031.22; DD 9.37%; monthly archive catch-up (29 rows → 2026-10.md); watchdog 8 findings unchanged; Telegram EOD card sent.
 2026-10-01T17:40:02Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-10-02T04:12Z — routine-03-eod (on-schedule Thu PT 10-01 fire)
+
+### VERIFY
+- **Slot identity**: bull-03-eod. Task body matches Routine 03 EOD. No mismatch.
+- **Fire timing**: PT 21:12 Thu / 04:12Z Fri — on-schedule (12m drift from 21:00 PT cron). **Date label per PT fire-time guard: 2026-10-01**.
+- **Kill switches CLEAR** entering wake (equity $9,884.51 cash-only, DD 10.70%, 1.80pp headroom to 12.5% warn).
+- **Watchdog 8 findings unchanged** (A×2 heartbeat, C 4-file dirty tree, D×5 variant stale-MTM). Telegram-alerted via --telegram.
+- **Open positions pre-scan**: 0 (book flat since 10-01T08:00Z ADA stop).
+
+### Technical (indicators.py 04:12Z closed-bar snapshot, 720×1H + converged 4H)
+
+**Regime**: **8/15 positive 24h, median +0.08% → 5a PASS, SBD CLEAR**. **Recovery from this morning overnight 1/15 −2.74% SBD-ACTIVE**. +7 breadth recovery in 15h — same calendar day as the overnight −13 collapse. **Double regime-whiplash within PT 2026-10-01**.
+
+Positives (8): BTC (+2.13), ETH (+0.92), SOL (+2.18), HYPE (+0.08), XRP (+0.58), SUI (+0.72), TAO (+0.25), LTC (+1.95).
+Negatives (7): XDG (−0.93), NEAR (−8.48), ADA (−0.53), LINK (−0.37), FARTCOIN (0.00 edge), TRX (−1.14), AVAX (−1.03).
+
+**Full-pass tech per indicators.py (R1+R2+R2a+R3+R4a)**:
+
+| Pair | R1 | R2 (RSI) | R2a | R3 | R4a | Verdict |
+|---|---|---|---|---|---|---|
+| BTC | PASS +$925 | PASS 70.8 | OK | PASS +$1,774 | OK $291.85M | **FULL PASS** (rank 1) |
+| ETH | PASS +$16.82 | PASS 61.3 | OK | PASS +$38.58 | OK $97.34M | **FULL PASS** (rank 2) |
+| SOL | PASS +$2.48 | PASS 69.5 | OK | PASS +$3.20 | OK $38.56M | **FULL PASS** (rank 3) |
+| HYPE | PASS +$0.66 | FAIL 54.8 | OK | FAIL −$0.44 | OK $10.15M | R2+R3 fail |
+| XRP | PASS +$0.012 | PASS 60.3 | OK | PASS +$0.009 | OK $54.24M | **FULL PASS** (rank 5) |
+| SUI | PASS +$0.011 | PASS 55.4 | OK | PASS +$0.061 | OK $13.00M | **FULL PASS** (rank 8) |
+| TAO | PASS +$2.74 | PASS 55.8 | OK | PASS +$4.82 | OK $7.54M | **FULL PASS** (rank 9) |
+| XDG | PASS +$0.0004 | FAIL 53.5 | OK | PASS +$0.0003 | OK $3.85M | R2 fail |
+| NEAR | FAIL −$0.028 | FAIL 45.4 | OK | PASS +$0.093 | OK $31.94M | R1+R2 fail |
+| ADA | PASS +$0.002 | PASS 56.1 | OK | PASS +$0.004 | OK $6.41M | **FULL PASS** (rank 6) — but 5b blocked |
+| LINK | PASS +$0.089 | FAIL 54.2 | OK | PASS +$0.408 | OK $6.55M | R2 fail |
+| LTC | PASS +$0.78 | PASS 63.0 | OK | PASS +$1.44 | OK $6.38M | **FULL PASS** (rank 11) |
+| FARTCOIN | PASS +$0.002 | PASS 55.8 | OK | FAIL −$0.0008 | FAIL $1.27M | R3+R4a fail |
+| TRX | FAIL −$0.0006 | FAIL 42.2 | OK | FAIL −$0.002 | FAIL $1.84M | R1+R2+R3+R4a fail |
+| AVAX | PASS +$0.021 | FAIL 50.8 | OK | PASS +$0.256 | OK $4.86M | R2 fail |
+
+**Technical PASS: 8 of 15** (BTC, ETH, SOL, XRP, SUI, TAO, ADA, LTC). ADA 5b-blocked until 10-02T08:00Z → effective pool of 7.
+
+### Rule 8 tie-break by 30d notional rank
+Order: BTC(1) > ETH(2) > SOL(3) > XRP(5) > SUI(8) > TAO(9) > LTC(11). (ADA skipped — 5b cooldown.)
+
+### Cash-fit filter (spot only, $9,884.51 cash)
+- **BTC**: size = 148.27 / 833.97 = 0.17778 BTC × $85,480.6 = **$15,196** > $9,884 → **SKIP cash-fit**.
+- **ETH**: size = 148.27 / 32.581 = 4.5508 ETH × $2,718.69 = **$12,374** > $9,884 → **SKIP cash-fit**.
+- **SOL**: size = 148.27 / 2.0562 = 72.1076 SOL × $121.2506 fill = **$8,743** < $9,884 → **SELECTED**.
+Tag: rule8-cashfit. **4th cashfit instance** (06-17 SOL fallback, 07-10 BTC, 09-30 SOL, 10-01 ADA → now 10-01 SOL).
+
+### News
+Firecrawl informational-only in v0.2; broader tape 8/15 +0.08% median is modestly bullish-recovery. No ACTIONABLE news this wake.
+
+### Sentiment (Kraken ticker/spread for SOLUSD @ 04:15Z)
+- **Spread**: $0.01-0.03 at $120.65/$120.68 bid/ask → **~1.7 bps** — very tight.
+- **24h volume**: 322,449 SOL × VWAP $118.31 = **$38.2M notional** — 19× above R4a $2M floor.
+- **Trades 24h**: 40,570 — deep tape.
+- **24h range**: $116.70 / $121.40, current $120.68 — in top 85% of range (near but not at ceiling).
+- **24h change**: +1.93% ticker (vs indicators.py bar-close basis +2.18%; small divergence normal).
+- **No sentiment red flag**. Last trade $120.68 is $0.57 below the 04:00Z bar close $121.19 (modest give-back in first 15m of 05:00Z bar — monitor).
+
+### pre_entry_check for SOL/USD
+All 8 checks ACCEPT:
+- open_positions=0 < 8 ✓
+- open_positions=0 < strategy.max_concurrent=4 ✓
+- new_trade_risk = $148.27 (1.50% of $9,884.51), portfolio_risk 0.00% + 1.50% = 1.50% < 4.00% ✓
+- new_trade_risk 1.50% ≤ 1.50% ✓
+- SOL/USD in universe (rank 3) ✓
+- SOL/USD not in open positions ✓
+- daily_loss_pct = 1.82% < 5.00% ✓
+- equity $9,884.51 > $7,500 ✓
+Plus: 5b expired (38h past 24h cooldown); cluster 0→1/2; regime PASS; rule-8 cashfit SELECTED.
+
+### Decision
+- **1 entry opened**: SOL/USD long, size 72.1076, fill $121.2506 (04:00Z close $121.19 × 1.0005 slippage), stop $119.1944, target $129.4754 (4R).
+- **0 exits triggered** — book flat entering wake.
+- **Elevated-risk notes documented** in portfolio.md and trade_log.md reason tag: 5 consecutive losses, DD 10.74%, double regime-whiplash same day, 2nd SOL entry in 48h, 4th cashfit instance. Entry taken strictly per strategy v0.4 compliance; proposed gates (option b + option d from 10-01 lesson, plus P-W27-CASHFIT) require Ring-2 approval at Sat 10-03 memo.
+
+### Day summary — PT 2026-10-01 Thu trading day
+- **Day PnL (realized)**: **−$183.55 / −1.82%** (ADA stop 08:00Z).
+- **Day PnL (realized + unrealized)**: ~**−$187.92 / −1.87%** (SOL $4.37 slippage drag).
+- **Trades opened today**: 2 (ADA 07:00Z, SOL 04:00Z 10-02 — both PT 10-01).
+- **Trades closed today**: 1 (ADA 08:00Z stop).
+- **Win rate today (closed only)**: 0/1.
+- **Equity EOD**: $9,880.14 (vs $10,068.04 at start of PT 10-01). Peak $11,068.89 unchanged. DD 10.74%.
+- **Rolling 30d: BULL −5.36% vs BTC-hold +7.5% → −12.9pp behind** (widened +2.5pp today — BTC +2.3% day rally while BULL took net loss).
+- **Rolling 7d: BULL −5.76% vs BTC-hold ~+10.9% → −16.7pp behind**.
+
+### Lessons check
+- **Pattern-of-4 same-session-stop lesson** (added this morning) already in lessons.md with score 9. No new lesson entry needed; this wake's SOL entry is pending outcome. If SOL stops out before next wake, add update note to the 10-01 lesson rather than new entry.
+- **No W22-H ratchet instance this wake** (no exits).
+- **Rule-8-cashfit pattern-of-5** pending if SOL completes. Current cumulative cashfit P&L: −$492 across 4 completed instances. Already covered by portfolio.md ops notes and P-W27-CASHFIT pending.
+- **No new lessons.md entry this wake** — same archetype as morning lesson; wait for SOL outcome.
+
+### Monthly archive
+- **Not last trading day of month** (10-01 is 1st Thu, archive next at 10-30 or 10-31). Catch-up sweep already completed at 07:13Z this morning. Live log: 23 rows + 1 new OPEN = 24 rows. No action.
+
+### Actions taken
+- **Read**: CLAUDE.md, guardrails.md, strategy.md v0.4, portfolio.md (post-ADA-stop overnight rebuild), trade_log.md 30d tail, research_log.md 7d tail, lessons.md (10-01 + 09-27 + 09-23 top entries), skills/decide.md, skills/log-trade.md, skills/telegram.md, universe.md.
+- **Fetched**: python scripts/watchdog.py --telegram (8 findings unchanged); python scripts/indicators.py (04:12Z closed-bar, 15 pairs 720×1H converged 4H); Kraken kraken_ticker + kraken_spread for SOLUSD (sentiment); Kraken kraken_ticker for XBTUSD (benchmark MTM).
+- **Wrote**:
+  - trade_log.md — 1 OPEN row (SOL/USD 2026-10-02T04:00:00Z).
+  - portfolio.md — rewritten with 1 open position (SOL), equity $9,880.14, DD 10.74%, all kill switches CLEAR + elevated-risk flag section.
+  - research_log.md — this entry.
+  - **NO write** to lessons.md (pending SOL outcome — same archetype as morning lesson).
+  - **NO write** to universe.md (not first-of-month).
+  - **NO write** to strategy.md or guardrails.md (unchanged, Ring-2-gated).
+- **NOTIFY**: Mandatory daily EOD card via scripts/telegram_send.py.
+
+### Compact log row
+2026-10-02T04:12Z | routine-03-eod | PT 2026-10-01 21:12 **on-schedule Thu EOD** | 1 OPEN (SOL/USD long 72.1076 @ 121.2506, stop 119.1944, target 129.4754, rule8-cashfit rank-3 after BTC/ETH cash-blocked); 0 exits; 8/15 full-pass tech (ADA 5b-blocked); regime 5a PASS 8/15 +0.08% RECOVERED from morning 1/15 SBD; double-whiplash day (14/15→1/15→8/15 within PT 10-01); equity $9,880.14 (-1.87% day); DD 10.74% (1.76pp from warn); 5 consecutive losses (2 to pause); 4th rule-8-cashfit instance; watchdog 8 unchanged; Telegram EOD card sent.
