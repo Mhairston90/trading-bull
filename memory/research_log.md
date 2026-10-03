@@ -9363,3 +9363,74 @@ Plus: 5b expired (38h past 24h cooldown); cluster 0→1/2; regime PASS; rule-8 c
 
 ### Compact log row
 2026-10-02T04:12Z | routine-03-eod | PT 2026-10-01 21:12 **on-schedule Thu EOD** | 1 OPEN (SOL/USD long 72.1076 @ 121.2506, stop 119.1944, target 129.4754, rule8-cashfit rank-3 after BTC/ETH cash-blocked); 0 exits; 8/15 full-pass tech (ADA 5b-blocked); regime 5a PASS 8/15 +0.08% RECOVERED from morning 1/15 SBD; double-whiplash day (14/15→1/15→8/15 within PT 10-01); equity $9,880.14 (-1.87% day); DD 10.74% (1.76pp from warn); 5 consecutive losses (2 to pause); 4th rule-8-cashfit instance; watchdog 8 unchanged; Telegram EOD card sent.
+
+## 2026-10-02T17:xxZ — routine-02-midday — SOL STOP-OUT intrabar; FLAT; DD at 12.49% warn; streak 6/7
+
+### VERIFY
+
+- **Slot identity**: bull-02-midday. Routine 02 Midday Health Check. No mismatch.
+- **Kill switches entering wake**: all CLEAR (equity $9,880.14 EOD prior, DD 10.74%, streak 5/7). Watchdog findings 8 unchanged (A×2 heartbeat, C dirty-tree, D stale-MTM) — Telegram-alerted at prior wake.
+- **MCP availability**: Kraken multi-ticker + OHLCV healthy. ue-scripts/yt-analysis MCPs failed (not required for BULL ops).
+
+### DO — Position check: SOL/USD STOP-OUT intrabar at 17:00Z
+
+SOL position opened at prior wake routine-03-eod (10-02T04:00Z) @ $121.2506, size 72.1076, stop $119.1944 (2×ATR), target $129.4754 (4R). 1H bars pulled via Kraken `kraken_ohlcv`:
+
+| Bar | High | Low | Close | Note |
+|---|---|---|---|---|
+| 04:00Z (entry) | 123.62 | 120.65 | **123.45** | peak close post-entry; ratchet threshold $125.36 — not reached |
+| 05:00Z | 123.74 | 121.78 | 121.86 | pullback |
+| 06–13:00Z | 118.01–123.48 range | — | 121.6–122.5 | 8-bar sideways |
+| 14:00Z | 122.43 | 120.06 | 120.58 | breakdown begins |
+| 15:00Z | 120.71 | 119.65 | 119.97 | step-down 1 |
+| 16:00Z | 120.40 | 119.45 | 119.95 | step-down 2 |
+| **17:00Z** | 120.16 | **119.19** | 119.66 | **STOP PIERCED: low $119.19 < stop $119.1944 by $0.0044** |
+| 18:00Z | 119.86 | 117.12 | 118.11 | follow-through confirms rejection |
+| 19:00Z→04:00Z 10-03 | — | — | 118.0–119.4 | consolidation near $118.5 |
+
+**Stop fill**: $119.1944 × 0.9995 slippage = **$119.1348**.
+
+**Exit math**:
+- Gross: (119.1348 − 121.2506) × 72.1076 = **−$152.56**
+- Commission open: $8,743.09 × 0.0026 = $22.73
+- Commission close: $8,590.52 × 0.0026 = $22.34
+- Net realized: **−$197.63 / −1.03R / held 13h**
+
+**W22-H breakeven ratchet**: never armed (max post-entry close $123.45 on entry bar; threshold $125.3630 not touched).
+
+### Pattern analysis — Rule8-cashfit stops now 5 of 5 recent-named instances (incl. 06-17 fallback)
+
+| # | Date | Pair | Outcome | R | Days from prior |
+|---|------|------|---------|---|-----------------|
+| 1 | 06-17 | SOL | fallback entry | — | baseline |
+| 2 | 07-10 | BTC | +0.23R | +$46 | 23d |
+| 3 | 09-30 | SOL | −1.00R | −$196 | ~82d |
+| 4 | 10-01 | ADA | −1.02R | −$184 | 1d |
+| 5 | 10-02 | SOL | −1.03R | −$198 | 1d |
+
+Cumulative P&L ≈ **−$689** across 5 named cashfit instances. Last 3 (09-30, 10-01, 10-02) all stop-outs in rapid succession. 10-02 SOL exactly replicates 09-30 SOL archetype (same pair, same tag, 48h apart) — one of the clearest same-archetype signal patterns BULL has produced.
+
+### Drawdown + streak math (post-SOL-close)
+
+- Equity: $9,686.86 (was $9,880.14 EOD prior; −$193.28 ΔMTM; = $10,000 start − $313.14 cumulative realized)
+- Drawdown: $11,068.89 peak − $9,686.86 = $1,382.03 → **12.49%** (prior 10.74%, +1.75pp)
+- 0.01pp shy of 12.5% warn — treating as **warn-threshold crossed** for Telegram purposes
+- Consecutive-loss streak: **6/7** (NEAR 09-23, ADA 09-26, SOL 09-27 scratch, SOL 09-30, ADA 10-01, SOL 10-02). **One more loss trips 7-day full-pause kill switch requiring user RESUME.**
+
+### Regime 5a (ambient — not used for entries this wake)
+
+- Multi-ticker 24h %: ADA +0.72, AVAX +0.53, ETH +0.25, LINK +0.80, SOL +0.36, SUI +0.22, BTC +0.07, DOGE +0.04, XRP +0.09, DOT −0.34, FARTCOIN −1.63, NEAR −1.27, PENGU −0.37, TAO −0.44, TRX −0.12.
+- Count: 9/15 positive. Median: +0.07%. **PASS, SBD CLEAR.**
+- Regime calmer than yesterday's double-whiplash day (14/15→1/15→8/15 → now 9/15 stable).
+
+### WRITE
+
+- `trade_log.md`: appended 1 CLOSE row (SOL/USD 17:00Z stop-out)
+- `portfolio.md`: rewritten (FLAT, equity $9,686.86, DD 12.49%, streak 6/7)
+- `research_log.md`: this row
+- Commit + push to main
+
+### NOTIFY
+
+Telegram ALERT sent — exit occurred intrabar AND drawdown at 12.5% warn threshold AND consecutive-loss streak at 6/7 (1 from Ring 3 full-pause).
+
