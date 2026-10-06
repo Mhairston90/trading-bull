@@ -1,8 +1,124 @@
 # BULL Research Log
 
-> **Append-only.** News and external research notes per routine run.
+> **Append-only.** New routine wakes insert at top (reverse-chronological).
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
+
+## 2026-10-06T04:13Z — routine-03-eod (PT 2026-10-05 21:13 Mon, on-schedule +13min) — NEAR OPEN under 4-floor marginal regime; routine-03 missed 10-02 and 10-05 is first main-routine wake since
+
+### VERIFY
+
+- **Slot identity**: bull-03-eod. Task body references Routine 03 — End-of-Day Journal. No mismatch — guard clear.
+- **Date label**: PT fire date = **2026-10-05 Mon**. UTC fire = 2026-10-06T04:13Z. Date-labeling guard applied: all "today" references = PT 10-05.
+- **Fire timing**: 04:13Z vs cron target 04:00Z = +13min on-schedule drift.
+- **Scheduler diagnosis**: last routine-03 was 2026-10-01 EOD (commit `deb4ac7`). Fri 10-02 EOD missed (unknown cause — possibly OS sleep or Task Scheduler hiccup). Sat 10-03 + Sun 10-04 are weekend non-fires (Mon-Fri cron). This 10-05 Mon fire is first routine-03 since 10-01 = 96h gap. Last routine-01 was 10-01 overnight (commit `4a54886`) = 111h gap. Watchdog A findings escalated accordingly.
+- **Kill switches entering wake**: equity $9,686.86 (prior wake close), DD 12.49% (0.01pp shy of 12.5% warn), streak 6/7 (1-loss headroom to Ring 3 7-day pause), equity floor $7,500 (2,186pp headroom), daily loss 0% (fresh day), exposure 0%, cluster 0/2. **All Ring 3 CLEAR entering wake**.
+- **Watchdog findings (10)**: routine-01 heartbeat 111h (A, NEW), routine-03 heartbeat 96h (A, NEW), routine-06/07 heartbeat (A×2, unchanged structural), dirty-tree 4 untracked (C, unchanged), stale-MTM 5 variants (D×5, unchanged). Telegram-alerted via `--telegram`.
+
+### DO — Final mark-to-market + EOD entry scan
+
+**Mark-to-market**: FLAT entering wake (SOL 10-02 was last close). Starting equity = $9,686.86. No MTM delta on open positions since there were none.
+
+**EOD entry scan (W19-E technical/news/sentiment, per routine-03-eod spec)**:
+
+#### Technical pass (indicators.py 04:13Z closed-bar, authoritative)
+
+Regime: **4/15 positive 24h, median −0.65% → 5a MARGINAL PASS at EXACT 4-floor. SBD CLEAR** (4>1 positive AND median −0.65% > −1.0%).
+
+Per-pair R1-R4a:
+
+| Rank | Pair | R1 (>EMA20) | R2 (RSI≥55) | R3 (4H>EMA50) | R4a notional | R5b cooldown | 24h % | Verdict |
+|---|---|---|---|---|---|---|---|---|
+| 1 | BTC/USD | FAIL −$244.1 | FAIL RSI 44.7 | PASS +$735.3 | OK $208.4M | n/a | −0.65 | **FAIL R1+R2** |
+| 2 | ETH/USD | FAIL −$10.56 | FAIL RSI 43.2 | PASS +$5.157 | OK $73.9M | n/a | −0.62 | **FAIL R1+R2** |
+| 3 | SOL/USD | FAIL −$0.52 | FAIL RSI 42.9 | PASS +$0.515 | OK $32.8M | CLEAR | −0.33 | **FAIL R1+R2** |
+| 4 | HYPE/USD | FAIL −$0.14 | FAIL RSI 52.0 | PASS +$3.026 | OK $17.9M | n/a | +3.26 | **FAIL R1+R2** |
+| 5 | XRP/USD | FAIL −$0.0065 | FAIL RSI 43.5 | FAIL −$0.0029 | OK $30.5M | n/a | −0.86 | **FAIL R1+R2+R3** |
+| 6 | ADA/USD | FAIL −$0.0015 | FAIL RSI 49.4 | PASS +$0.0137 | OK $18.8M | CLEAR | −1.09 | **FAIL R1+R2** |
+| 7 | NEAR/USD | **PASS +$0.086** | **PASS RSI 62.7** | **PASS +$0.363** | OK $25.5M | CLEAR | **+8.02** | **FULL PASS** ✓ |
+| 8 | SUI/USD | FAIL −$0.019 | FAIL RSI 40.9 | PASS +$0.021 | OK $13.1M | n/a | −3.41 | **FAIL R1+R2** |
+| 9 | TAO/USD | FAIL −$2.18 | FAIL RSI 45.0 | FAIL −$0.80 | OK $8.0M | n/a | −0.31 | **FAIL R1+R2+R3** |
+| 10 | XDG/USD | FAIL −$0.00065 | FAIL RSI 41.6 | PASS +$6.8e-5 | OK $4.6M | n/a | −1.37 | **FAIL R1+R2** |
+| 11 | LTC/USD | FAIL −$0.75 | FAIL RSI 36.3 | PASS +$0.24 | OK $6.3M | n/a | −1.13 | **FAIL R1+R2** |
+| 12 | AVAX/USD | **PASS +$0.143** | **PASS RSI 63.1** | **PASS +$0.273** | OK $8.8M | CLEAR | +2.26 | **FULL PASS** ✓ |
+| 13 | LINK/USD | FAIL −$0.15 | FAIL RSI 33.2 | FAIL −$0.26 | OK $4.5M | n/a | −2.68 | **FAIL R1+R2+R3** |
+| 14 | ONDO/USD | n/a (indicators row absent — likely a universe mapping gap post-07-01 refresh) | — | — | — | n/a | — | **SKIP (data gap, non-trading)** |
+| 15 | TRX/USD | FAIL −$0.00055 | FAIL RSI 39.9 | FAIL −$0.00054 | FAIL $1.0M | n/a | +0.05 | **FAIL R1+R2+R3+R4a** |
+
+Two pairs pass technical: **NEAR (rank 7)** and **AVAX (rank 12)**. R8 rank tiebreak: NEAR rank 7 > AVAX rank 12 → **NEAR wins deterministic**. Max 1 entry per wake per R8.
+
+Note: FARTCOIN was dropped in 07-01 universe refresh and replaced by ONDO; indicators.py row 13 appears to list FARTCOIN still (historical holdover) and ONDO (rank 14) absent. Non-blocking since neither would've passed R1+R2 anyway, but **ops note for routine-04**: verify indicators.py pair list matches current universe.md after next refresh.
+
+#### News pass (W19-E, informational-only in v0.2)
+
+Firecrawl scan bypassed this wake on budget grounds. The 4-floor regime (systemic signal) is the dominant risk, not single-pair news. Flagged as skipped-with-reason per W19-E spec (informational, non-blocking).
+
+#### Sentiment pass (W19-E, informational-only in v0.2)
+
+- **NEAR**: +8.02% 24h is strongest in the universe — single-name outlier against a −0.65% median regime. This is a **divergence signal**: NEAR is running while 11/15 pairs bleed. Interpretations: (a) NEAR-specific catalyst (unseen in bypassed news scan), (b) low-correlation idiosyncratic trade, (c) climactic late-stage momentum top (RSI 62.7 is mid-range, not climactic >80, so (c) is weaker). **Risk flavor**: single-name strength against weak market = either resilient edge OR eventual mean-reversion drag if regime deepens.
+- Kraken spread/depth not fetched this wake (indicators.py has notional confirmed, sufficient for R4a).
+
+#### Decision
+
+**EXECUTE NEAR entry** per strategy v0.4 R1-R8 compliance. Deterministic selection — no judgment call on technicals.
+
+**Judgment call made on entry acceptability** (documented for routine-04 memo pile):
+
+Arguments for DEFER/SKIP (unapproved Ring-2 overlays):
+- Regime at EXACT 4-floor matches 09-23 NEAR same-session stop archetype (score 9 lesson pattern-of-4 ADA 10-01).
+- Streak 6/7 — next loss = Ring 3 7-day full-pause requiring user `RESUME`.
+- Post-outage first-wake heuristic (score 6 lesson 09-23) would DEFER at regime ≤5 — routine-01 heartbeat 111h = post-outage conditions.
+- Pattern-of-4 option (a) regime-margin gate (reject at positive_count = 4) would BLOCK this entry.
+- Pattern-of-4 option (b) two-wake confirmation would BLOCK (prior wake 10-02 midday was 9/15, below ≥10/15 both-wake requirement).
+- Pattern-of-4 option (d) velocity-cap at |Δ|≥6 would NOT BLOCK (current Δ = 9/15 → 4/15 = −5, below velocity threshold by 1).
+- Routine-04-harness Sat 10-03 memo missed — no Ring-2 proposals have been voted since 10-01 ADA stop.
+
+Arguments for EXECUTE:
+- Strategy v0.4 R1-R8 deterministic PASS — no rule rejects.
+- No Ring 3 kill switch tripped (streak 6<7, DD 12.49%<25%, equity $9,686>$7,500, loss 0%<5%, exposure 0%<4%, cluster 0/2).
+- Routine-03-eod is entry-authorized per routine spec.
+- Mandate: strategy compliance is governing text; backlog proposals do not block execution.
+- Stylistic freedom clause in CLAUDE.md gives strategy design flexibility, NOT per-trade discretion against the approved strategy.
+- Expected-value calculation under pattern-of-4 base rate: P(stop) ~0.80, P(4R) ~0.05, EV ≈ −0.60R per trade (negative EV, but still mandate-compliant). Pattern-of-4 argues for Ring-2 approval urgency, not for discretionary deviation.
+
+**Resolution**: EXECUTE per strategy v0.4 compliance. All elevated-risk flags documented in trade_log entry's reason tag for audit.
+
+### Trade event
+
+**OPEN NEAR/USD 2026-10-06T04:00:00Z** — 775 units @ $5.254826 fill, stop $5.067336, target 4R $6.004786. Risk $145.30 (1.502% equity). Notional $4,072.49 fits cash $9,686.86 with $5,603.80 buffer. Open commission $10.59.
+
+### Lessons scan
+
+No new lessons appended this wake. Entry outcome will add 1 data point to P-W25R-SAMESESSION-STOP-GATE evidence base:
+- WIN (reach 4R target or EMA-20 confirm exit above entry): partly falsifies pattern-of-4 at 4-floor regime; raises probability of regime-strength-at-floor NOT being a 1:1 predictor.
+- LOSS (stop-out at $5.067336): pattern-of-5, raises Ring-2 urgency for P-W25R-SAMESESSION-STOP-GATE options (a)/(b) to top-of-stack; also trips Ring 3 7-day pause.
+- SCRATCH (EMA-20 confirm exit near entry): neutral data point.
+
+### Day summary stats (PT 2026-10-05 Mon)
+
+- Day PnL realized: $0.00 / 0.00%.
+- Day PnL unrealized change vs PT-midnight: −$12.47 / −0.129% (open commission + slippage drag on NEAR).
+- Trades opened: 1 (NEAR). Trades closed: 0. Win rate today (closed only): n/a.
+- New equity: $9,674.39 (−0.129% vs prior wake $9,686.86).
+- Drawdown: 12.60% from peak $11,068.89 (**first wake above 12.5% warn** by 0.10pp).
+- Rolling 7-day BULL: ~−3.91% (vs BTC-hold ~+1.29% = −5.2pp behind).
+- Rolling 30-day BULL: ~−7.69% (vs BTC-hold ~+7.1% = −14.8pp behind).
+- 90-day benchmark: not-yet-computable (post-outage cross-window).
+
+### Monthly archive
+
+Not last trading day of month (10-05 Mon). No archive sweep.
+
+### COMMIT
+
+`routine-03-eod 2026-10-05: equity $9,674, day −0.13%, 1 trade`
+
+### NOTIFY
+
+Mandatory EOD card sent via `scripts/telegram_send.py`. DD warn flagged in Notes section.
+
+---
+
 
 ## 2026-10-01T13:20Z — routine-01-overnight (on-schedule) — ADA STOP-OUT + regime crystallized 14/15→1/15 SBD-ACTIVE
 
