@@ -4,6 +4,44 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-10-10T17:08Z — routine-04-harness (PT 2026-10-10 10:08 Sat, on-cadence Sat 10:00 PT slot) — HARNESS SKIPPED, TV MCP down, Ring 3 still TRIPPED
+
+### VERIFY
+
+- **Slot identity**: `bull-04-harness`. Task body references Routine 04 — AutoStrategy Harness. No mismatch — guard clear.
+- **Date label**: PT fire date = **2026-10-10 Sat**. Day-gate PASSED (today IS Saturday). Full routine attempted.
+- **Fire timing**: 10:08 PT vs cron target 10:00 PT = +8m. On cadence.
+- **Kraken MCP**: healthy — XBTUSD smoke test returned last $82,991.80, spread $0.10, 70,035 trades/24h.
+- **TradingView MCP**: **FAILED** — `tv_health_check` returned `CDP connection failed after 5 attempts: fetch failed`. TV Desktop not running with CDP enabled on this host.
+- **Kill-switch state (entering wake)**: unchanged from 10-10T06:53Z routine-03-eod — streak **7/7 Ring 3 TRIPPED**, DD **14.00%** warn-breach, equity $9,518.79 flat, exposure 0%. **FULL PAUSE REMAINS IN EFFECT. USER `RESUME` REQUIRED.**
+
+### DO — harness SKIPPED per guardrails.md
+
+Per strategy.md Verify clause: *"If either [TV or Kraken] fails: skip harness, write skip reason to research_log, Telegram ALERT."* TV MCP failure triggers skip.
+
+- **No variant generation** this wake. The 3-5 variants / backtest sweep / weekly memo output deferred to next Saturday harness (2026-10-17) or earlier manual re-run after TV Desktop restored.
+- **No weekly memo** written for W41 (2026-10-05 → 2026-10-11) by this run. Content that would have been produced:
+  - **Performance recap**: Ring 3 TRIPPED mid-week via 7/7 cashfit-class streak (NEAR 10-06 was the terminal 7th). Equity $9,518.79, DD 14.00%, zero trades after pause.
+  - **Pending Ring-2 proposals carried forward**: P-W27-CASHFIT, P-W25R-SAMESESSION-STOP-GATE (NEAR 10-06 is 2nd confirming data point), P-W25R-RATCHET-TIGHTEN, P-W25R-POSTOUTAGE-DEFER-HEURISTIC. All still awaiting user Y/N/D.
+  - **Scheduler outage** 10-05 → 10-10 (~4-day gap in routine fires) likely contributed to delayed NEAR exit timestamping; needs resolution before trading resumes.
+- **Lessons pruning**: not performed this wake (deferred to next harness).
+- **Idea bank sweep**: not performed this wake.
+- **Competitor read (Codex)**: not performed this wake.
+- **Parameter-sweep autoloop (Phase 1)**: not performed this wake.
+
+### Telegram ALERT
+
+Sent via `scripts/telegram_send.py` — single-ALERT describing TV-MCP-down + harness-skip + Ring-3-still-tripped-no-change. User `RESUME` still required before any trading can resume regardless of harness state.
+
+### Next action
+
+- **Next routine wakeup**: routine-05-allocation Sunday 2026-10-11 ~09:00 PT. Day-gate passes if today is Sun; otherwise skip. Expect allocation routine to also need user attention since Ring 3 pause is still active.
+- **User action required** (no change from prior wakes):
+  1. Investigate TV Desktop launch / CDP state on host so next Sat harness has data
+  2. Address pending Ring-2 proposals (SAMESESSION-STOP-GATE, CASHFIT, POSTOUTAGE-DEFER, RATCHET-TIGHTEN)
+  3. Address scheduler outage root cause
+  4. Send `RESUME` after addressing items 2-3
+
 ## 2026-10-10T06:53Z — routine-03-eod (PT 2026-10-09 23:53 Fri, ~2h53m late vs 21:00 PT target) — Ring 3 TRIP day-close journal, Day PnL $0 on-day (NEAR loss attributed 10-06), FULL PAUSE held
 
 ### VERIFY
