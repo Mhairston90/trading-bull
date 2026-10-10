@@ -4,7 +4,7 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
-## 2026-10-10T06:53Z — routine-03-eod (PT 2026-10-09 23:53 Thu Fri, ~2h53m late vs 21:00 PT target) — Ring 3 TRIP day-close journal, Day PnL $0 on-day (NEAR loss attributed 10-06), FULL PAUSE held
+## 2026-10-10T06:53Z — routine-03-eod (PT 2026-10-09 23:53 Fri, ~2h53m late vs 21:00 PT target) — Ring 3 TRIP day-close journal, Day PnL $0 on-day (NEAR loss attributed 10-06), FULL PAUSE held
 
 ### VERIFY
 
