@@ -9754,3 +9754,52 @@ Multi-ticker partial: BTC $82,720 +0.20%, ETH $2,492.67 +0.29%, SOL $109.77 +0.6
 Telegram ALERT required (per spec): Ring 3 kill switch tripped + exit occurred intrabar + drawdown crossed higher. Priority: RING 3 FULL PAUSE notification demanding user `RESUME` reply.
 2026-10-10T06:58:14Z | harness | day-gate | not Saturday, skipping | no action
 2026-10-10T06:59:19Z | allocation | day-gate | not Sunday, skipping | no action
+
+
+## 2026-10-10T13:12Z — Routine 01 overnight (duplicate-slot fire, Ring 3 held)
+
+### Context
+
+- Fire slot: `bull-01-overnight` scheduled 06:00 PT Mon-Fri. Today is **Sat 2026-10-10 06:12 PT** — weekend fire outside the cron window, but invocation was received so routine ran per spec. Prior labeled "routine-01-overnight" wake at 2026-10-10T06:54Z was in fact the belated midday replay (per portfolio.md note). This 13:12Z fire is the first distinct overnight-cadence wake since the 10-05 EOD gap.
+- Elapsed since the midday replay commit (`3249131` @ 06:54Z): **~6.3h**. No price-affecting event in window (account flat).
+
+### VERIFY
+
+- **Ring 3 state: TRIPPED and held** — consecutive-loss streak 7/7 from NEAR 10-06 stop. User `RESUME` still required. No new entries authorized by any routine.
+- Drawdown 14.00% (unchanged; flat account, no MTM movement possible).
+- Equity $9,518.79 > $7,500 floor (2018pp headroom).
+- Open positions: 0 (flat).
+- All MCPs that BULL uses (Kraken ticker/OHLCV, Firecrawl, Telegram) available; ue-scripts failed (not needed for BULL ops).
+
+### Watchdog findings (8, auto-alerted via Telegram)
+
+- A heartbeat: no routine-06 commit in last 12d (cadence 200h) — may be dead
+- A heartbeat: no routine-07 commit in last 12d (cadence 30h) — may be dead
+- C dirty-tree: 4 uncommitted (`docs/sentinel_10k_reset_spec_20260704.md`, `scripts/replay_cache_20260629/`, `scripts/replay_result_20260629.json`, `scripts/routine07_replay_20260629.py`) — stranded from prior session
+- D stale-MTM × 5 (variant portfolios with open positions, last rebuild 1747–2516h ago; variants/v0.13-trend-confirm, v0.14-recovery-trend, v0.3-vol-compression, v0.5-cluster-cap-tight, v0.7-vol-comp-defensive)
+
+Per routine spec: watchdog findings are informational, not kill switches. Noted; continuing. The dirty-tree stranded files pre-date this routine and are not BULL's to clean during an overnight pass.
+
+### DO
+
+1. Overnight price pull: **skipped** — Ring 3 tripped, no entries possible, no open positions requiring stop-check. Running a 15-pair pull would consume context budget without actionable output.
+2. Position check: **n/a — flat.**
+3. Entry scan: **skipped — Ring 3 tripped, routine-01 explicitly directs skip-to-NOTIFY on kill-switch trip.**
+4. News scan: **skipped — no technical-PASS candidates (no scan).**
+4a. Sentiment pass: **skipped — same reason.**
+5. New entries: **blocked — Ring 3 TRIPPED.**
+6. Research_log: this row.
+7. First-of-month universe refresh: not applicable (10th of month).
+
+### Pending user-action items (unchanged from midday 10-09 replay)
+
+1. Review NEAR 10-06 stop-out and the pattern-of-7 rule8-cashfit-class evidence (6 losses of 7 instances, ≈−$857 cumulative)
+2. Resolve pending Ring-2 proposals (SAMESESSION-STOP-GATE, CASHFIT, POSTOUTAGE-DEFER-HEURISTIC, RATCHET-TIGHTEN) with Y/N/D on Telegram
+3. Investigate scheduler gap root cause (routines 01/02/03 all missed 10-06 through 10-09)
+4. Send `RESUME` only after at least some of the above are addressed
+5. Pending W22-G exit-interpretation audit note (preserved in portfolio.md) — NEAR 10-06 EMA20 two-bar exit would have fired at 10-06T13:00Z (fill ~$5.1449, −0.59R, net ≈−$106) vs. the committed stop-hit at 10-06T17:00Z (fill $5.064802, −1.01R, net −$168.06). Both are a 7th loss and trip Ring 3; magnitude differs ≈$62. Routed to next routine-04-harness Sat memo.
+
+### WRITE / NOTIFY
+
+- `research_log.md`: this row only. No trade_log, no portfolio.md changes (state unchanged, no MTM movement, no entries, no exits).
+- Telegram: silent per NOTIFY criteria (no new Ring-3 trip — already tripped; no new OPEN/CLOSE; no actionable news; no universe refresh). Watchdog already sent its own alert at 13:12:42Z.
