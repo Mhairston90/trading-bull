@@ -9614,3 +9614,4 @@ Multi-ticker partial: BTC $82,720 +0.20%, ETH $2,492.67 +0.29%, SOL $109.77 +0.6
 
 Telegram ALERT required (per spec): Ring 3 kill switch tripped + exit occurred intrabar + drawdown crossed higher. Priority: RING 3 FULL PAUSE notification demanding user `RESUME` reply.
 2026-10-10T06:58:14Z | harness | day-gate | not Saturday, skipping | no action
+2026-10-10T06:59:19Z | allocation | day-gate | not Sunday, skipping | no action
