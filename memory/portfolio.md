@@ -1,100 +1,89 @@
 # BULL Portfolio State
 
 > **Rebuilt each wake** from `trade_log.md`; the log remains the source of truth.
-> **Last rebuild:** 2026-10-06T04:13Z routine-03-eod (PT 2026-10-05 21:13 Mon) — on-schedule (+13min drift). First main-routine commit since 10-02 midday (routine-03 EOD missed on 10-02 Fri; weekend non-fire 10-03 Sat & 10-04 Sun; this is first wake since). **NEW ENTRY: NEAR/USD @ $5.254826 (rule-8-winner, rank-7 deterministic after ranks 1-6 all fail R1/R2 technical)**. Marginal 4-floor regime entry — exact 09-23 NEAR archetype flagged in research_log.
+> **Last rebuild:** 2026-10-10T06:30Z routine-02-midday replay (PT 2026-10-09 23:30 Thu) — on-schedule for 13:00 PT? NO — this fire is actually ~10h late vs the 13:00 PT target; it appears to be the first routine wake since the 10-05 EOD commit (101h gap, routines 01/02/03 all dead per prior watchdog A×3 flags). **CRITICAL: NEAR 10-06 stop-out detected retroactively — closed at stop $5.067336 fill $5.064802 for −1.01R / −$168.06. CONSECUTIVE-LOSS STREAK NOW 7/7 → RING 3 KILL SWITCH TRIPPED. FULL PAUSE. USER `RESUME` REQUIRED.**
 
 ## Account
 
 - Starting equity: **$10,000.00**
-- Cash: **$5,603.78** ($9,686.86 prior − $4,072.49 NEAR notional − $10.59 open commission)
-- Realized PnL (since inception): **−$313.14** (unchanged from 10-02)
-- Unrealized PnL: **−$1.88** (NEAR slippage drag at mark; open commission is in cash reduction)
-- Current equity: **$9,674.39** (cash $5,603.78 + NEAR MTM $4,070.61)
+- Cash: **$9,518.79** ($5,603.78 prior + NEAR exit proceeds $3,925.22 − close commission $10.21)
+- Realized PnL (since inception): **−$481.20** (prior −$313.14 + NEAR 10-06 −$168.06)
+- Unrealized PnL: **$0.00** (flat)
+- Current equity: **$9,518.79**
 - Equity peak: **$11,068.89** (unchanged)
-- Drawdown from peak: **12.60%** — **BREACHES 12.5% warn threshold by 0.10pp** (first wake above warn)
-- Since-inception return: **−3.26%**
+- Drawdown from peak: **14.00%** — **BREACHES 12.5% warn by 1.50pp; still below 25% kill cap by 11.00pp**
+- Since-inception return: **−4.81%**
 
 ## Open positions
 
-| Pair | Side | Size | Entry | Stop | Target 4R | Current | Unrealized $ | Unrealized R | Stop distance | Portfolio risk |
-|---|---|---|---|---|---|---|---|---|---|---|
-| NEAR/USD | long | 775 | $5.254826 | $5.067336 | $6.004786 | $5.2524 | −$1.88 | −0.01R | $0.18749 | 1.502% |
+**NONE — flat.** NEAR 10-06 position closed at stop-hit intrabar replay.
 
-Portfolio risk-at-moment: **1.502%** of equity (one position, 2×ATR stop distance $0.18749 × 775 = $145.30 vs $9,674.39 equity).
-Open positions: **1 / 8** (strategy cap 1/4; BTC-cluster 0/2 — NEAR is not in the cluster).
+Portfolio risk-at-moment: **0.00%** of equity.
+Open positions: **0 / 8** (strategy cap 0/4; BTC-cluster 0/2).
 
-## Day summary — PT 2026-10-05 Mon trading day
+## Day summary — PT 2026-10-09 Thu trading day (midday replay)
 
-- **Day PnL (realized)**: **$0.00 / 0.00%** of PT-midnight equity (no closes today).
-- **Day PnL (unrealized change vs PT-midnight)**: **−$12.47 / −0.129%** (= open commission $10.59 + slippage $1.88 on NEAR entry).
-- **Trades opened today**: **1** (NEAR @ 04:00Z = PT 2026-10-05 21:00 Mon close).
-- **Trades closed today**: **0**.
-- **Win rate today (closed only)**: n/a (no closes).
+- **Day PnL (realized)**: NEAR −$168.06 attributed to original 10-06 close date, not 10-09. **No same-day closes attributable to 10-09 trading day.** Day-anchored PnL vs PT-midnight equity ≈ $0.00 for 10-09 window (the −$168.06 was realized on 10-06 UTC = PT 10-06 Tue).
+- **Trades opened today**: 0 (routine-02-midday is not entry-authorized per spec).
+- **Trades closed today (replay-attributed)**: 1 (NEAR @ 10-06T17:00Z stop fill, recovered this wake).
+- **Win rate today (closed only)**: 0% (1 loss).
 
-## NEAR entry mechanics — 2026-10-06T04:00:00Z (PT 2026-10-05 21:00 Mon)
+## NEAR exit mechanics — 2026-10-06T17:00:00Z (replay-detected this wake)
 
-- **Trigger**: strategy v0.4 R1-R8 full-pass deterministic (not fallback). Rank-7 pair wins because ranks 1-6 all fail R1 (close < EMA20) and/or R2 (RSI < 55) technically; rank 12 AVAX also fully passes but loses R8 rank tiebreak to NEAR.
-- **Technical (per indicators.py 04:13Z closed-bar)**: R1 close $5.2524 > EMA20 $5.16644 by $0.08596 ✓; R2 RSI 62.7 > 55 ✓; R2a RSI < 80 ✓; R3 4H close > 4H EMA50 by $0.3628 ✓; R4a notional $25.50M > $2.0M ✓; R5 no open NEAR ✓; R5a regime 4/15 positive (EXACT floor, marginal PASS) median −0.65%; R5a-SBD CLEAR (4>1 and −0.65>−1.0); R5b cooldown cleared (NEAR 09-23T14Z stop was 283h ago); R6 0→1/4 strategy cap ✓; R6a NEAR not in BTC-cluster ✓; R7 1.502% < 4% cap ✓; R8 rank-7 wins over rank-12 AVAX ✓.
-- **Sizing**: risk 1.5% × $9,686.86 = $145.3029; stop distance 2×ATR = $0.18749; size = $145.3029 / $0.18749 = 774.98 → **775 NEAR**; fill $5.2524 × 1.0005 slippage = $5.254826; stop $5.067336; target 4R $6.004786; notional $4,072.49 fits cash $9,686.86 with $5,603.80 buffer.
-- **Open commission**: 0.26% × $4,072.49 = $10.59.
-- **News (W19-E, informational)**: no base-asset NEAR scan this wake (Firecrawl bypassed on-schedule for budget; the 4-floor regime is the dominant risk signal, not single-pair news).
-- **Sentiment (W19-E, informational)**: NEAR +8.02% 24h change is the strongest in the universe — single-name strength against a −0.65% median regime is itself a divergence signal (NEAR running while the rest of the market bleeds).
+- **Trigger**: intrabar stop-hit. 1H bar 10-06 17:00Z low $5.0258 pierced 2×ATR stop $5.067336 by $0.0415.
+- **Fill**: $5.067336 × 0.9995 slippage = **$5.064802**.
+- **Gross PnL**: (5.064802 − 5.254826) × 775 = **−$147.27**.
+- **Commissions**: open $10.59 (already paid at entry) + close $10.21 = **$20.80**.
+- **Net PnL**: **−$168.06** (R = −1.0135 → **−1.01R**).
+- **Hold time**: 13h (entry 10-06T04:00Z → stop 10-06T17:00Z).
+- **W22-H breakeven ratchet**: never armed. Max close post-entry $5.5048 (10-08 06:00Z). +2R trigger would have required close ≥ $5.629806 — missed by $0.1250.
+- **Peak price reached**: $5.5948 high (10-08 07:00Z) = $0.4100 shy of 4R target $6.004786.
+- **Post-stop price action**: continued down to $4.4404 low (10-09 00:00Z), −$0.63 below stop. Market-wide liquidation cascade 10-08 15:00Z (NEAR −7.4% hourly on $1.6M-trade pukebar) coincided with likely SBD regime. Price has since recovered to $5.18 by 10-10 06:00Z but trade already closed at stop.
 
-## Rolling benchmark (marked at EOD 2026-10-06T04:13Z, NEAR filled)
+## Replay context — this wake
 
-- **BTC price now**: $85,493.1 (per indicators.py 1H close).
-- **BTC-hold 30d**: BTC $85,493 vs ~$79,800 09-05 baseline → **~+7.1%**. BTC continues steady grind; +$933 since 10-02 midday mark ($84,560 → $85,493).
-- **BTC-hold 7d**: BTC $85,493 vs ~$84,400 09-28 baseline → **~+1.29%**.
-- **BULL 30d** (equity $9,674.39 vs ~$10,480 09-05 estimate): **~−7.69%**.
-- **BULL 7d** (equity $9,674.39 vs ~$10,068 09-28 estimate): **~−3.91%**.
-- **BULL vs BTC-hold 30d**: **~−14.8pp behind** (widened from 10-02 −13.6pp by BTC +0.9pp + BULL −0.3pp this period).
-- **BULL vs BTC-hold 7d**: **~−5.2pp behind** (improved from −17.5pp 10-02 as 7d window rolled past the 09-27→10-02 loss cluster).
-- **90d benchmark**: not-yet-computable (post-outage cross-window still spans the gap).
+- **Routine 02 midday** fired after a 101h gap from last routine-03-eod 10-05. First opportunity to detect the 10-06T17:00Z stop-hit was 10-06 overnight (routine-01) which did not fire; then 10-06 midday (routine-02) which did not fire; etc.
+- Watchdog flags from prior wake (routines 01/02/03 all dead) were accurate predictors; this wake confirms the gap caused a 4-day open-position exposure that extended through a market-wide liquidation (NEAR $4.44 low on 10-09, well below stop).
+- **No MTM-based opportunity loss** was created by the delay: stop would have been hit at same intrabar price regardless of routine timing. The delayed exit timestamp is cosmetic — fill price is the stop level per routine spec.
 
-## Entry context — this wake
+## Active kill-switch state (routine-02-midday replay 2026-10-10T06:30Z)
 
-- **Routine 03 EOD is entry-authorized** per routine spec. Full universe scan executed via indicators.py.
-- Entry selection was deterministic — single pair survived R1-R8 at rank R8 tiebreak. No judgment call on technicals.
-- **Judgment call made on entry acceptability**: with regime at EXACT 4-floor matching 09-23 NEAR same-session stop archetype + streak 6/7 + routine-04 memo missed (no Ring-2 approved mitigations) + three pending Ring-2 proposals (options a/b/d from 10-01 lesson, plus post-outage DEFER heuristic) that would all BLOCK this entry — this is a strategy-v0.4-compliant HIGH-RISK entry. Executed per mandate (strategy compliance is the governing text; backlog proposals do not block execution).
-
-## Active kill-switch state (routine-03-eod 2026-10-06T04:13Z / PT 2026-10-05 21:13 Mon)
-
-- **Daily loss cap (PT 10-05 trading day)**: **0.00% realized, −0.129% unrealized** vs PT-midnight equity $9,686.86. **CLEAR** (<5% cap; 4.87pp headroom).
-- **Consecutive-loss cap**: **6 losses** (NEAR 09-23, ADA 09-26, SOL 09-27 scratch, SOL 09-30, ADA 10-01, SOL 10-02). Streak **6/7**. **CLEAR but 1-loss headroom.** NEAR 10-06 stop-out would trip Ring 3; user `RESUME` required.
-- **Max drawdown**: **12.60% from peak $11,068.89**. **BREACHES 12.5% warn threshold by 0.10pp** — first time above warn. Still well below 25% kill cap (12.40pp headroom). Telegram EOD card will flag.
-- **Equity floor: $9,674.39 > $7,500** (+$2,174.39). **CLEAR** (2174pp headroom).
-- **Exposure: 1.502% / 4%** used. **CLEAR** (2.498pp headroom).
-- **Cluster cap: 0/2 BTC-cluster**. **CLEAR** (NEAR not in cluster).
-- **Universe/liquidity**: NEAR R4a $25.50M >> $2.0M floor. **CLEAR**.
-- **5b cooldown state**: no fresh cooldowns post-NEAR entry. SOL 10-02T17Z stop cleared at 10-03T17Z. ADA 10-01T08Z stop cleared at 10-02T08Z. All 14 remaining pairs CLEAR.
-- **Regime 5a (ambient this wake)**: 4/15 positive 24h (HYPE +3.26, NEAR +8.02, AVAX +2.26, TRX +0.05), 11/15 negative (BTC −0.65, ETH −0.62, SOL −0.33, XRP −0.86, SUI −3.41, TAO −0.31, XDG −1.37, ADA −1.09, LINK −2.68, LTC −1.13, FARTCOIN −6.80). Median −0.65%. **MARGINAL PASS at EXACT 4-floor, SBD CLEAR**.
-- **MCP availability**: Kraken multi-ticker (via indicators.py REST) healthy; Telegram script healthy; ue-scripts and yt-analysis MCP failed (not needed for BULL ops).
-- **All Ring 3 kill switches CLEAR** but DD now 0.10pp above 12.5% warn + streak 1 loss away from Ring 3 full-pause.
+- **Daily loss cap (PT 10-09 trading day)**: 0.00% realized vs PT-midnight equity (the −$168.06 realized attributes to 10-06 trading day, not 10-09). **CLEAR by day-anchored measure; but see 7-day cumulative below.**
+- **Consecutive-loss cap**: **7 losses** (NEAR 09-23, ADA 09-26, SOL 09-27 scratch, SOL 09-30, ADA 10-01, SOL 10-02, NEAR 10-06). Streak **7/7**. **RING 3 TRIP — FULL PAUSE REQUIRED. USER `RESUME` NEEDED BEFORE ANY NEW ENTRIES.**
+- **Max drawdown**: **14.00% from peak $11,068.89**. BREACHES 12.5% warn by 1.50pp. **CLEAR of 25% kill cap** (11.00pp headroom).
+- **Equity floor: $9,518.79 > $7,500** (+$2,018.79). **CLEAR** (2018pp headroom).
+- **Exposure: 0.00% / 4%** used. **CLEAR** (position flat).
+- **Cluster cap: 0/2 BTC-cluster**. **CLEAR** (flat).
+- **MCP availability**: Kraken ticker + OHLCV healthy via kraken MCP. ue-scripts and yt-analysis MCPs failed (not needed for BULL ops).
+- **Ring 3 state**: **TRIPPED on consecutive-loss cap (7/7).** Also warn-breached on drawdown but not kill-cap. All open positions already flat (NEAR exit this wake was the only open position).
 
 ## Ops notes
 
-- **W22-H ratchet state**: not yet armed on NEAR (needs +2R close = NEAR close ≥ $5.629806). Currently NEAR at $5.2524 = +0.00R unrealized.
-- **Pattern-of-6 rule8-cashfit-class** (loosely counting rule-8-winner as same class since all 5 prior were rank-pivot picks): 06-17 SOL fallback, 07-10 BTC +0.23R, 09-30 SOL −1.00R, 10-01 ADA −1.02R, 10-02 SOL −1.03R, 10-05 NEAR (open). This entry is **not strictly cashfit** since NEAR notional $4,072 fits cash $9,686 easily; it's rank-pivot because ranks 1-6 fail R1/R2 technically. Classification: **rank-pivot-tech-only** (not cashfit).
-- **Pending Ring-2 proposals (all still backlog)**:
+- **Entry authorization: SUSPENDED.** Routine-02-midday is already not entry-authorized by spec, but regardless — Ring 3 kill switch is now TRIPPED. No new entries by any routine until user replies `RESUME` to Telegram ALERT.
+- **Pattern-of-7 rule8-cashfit-class** (06-17 SOL fallback, 07-10 BTC +0.23R, 09-30 SOL −1.00R, 10-01 ADA −1.02R, 10-02 SOL −1.03R, 10-06 NEAR −1.01R). 6 of 7 instances are losses. Cumulative P&L across 6 losing instances ≈ −$857. The only winner (07-10 BTC +0.23R) is 83d old and arguably from a different regime.
+- **NEAR 2x-stop in 14 days**: 09-23 (−$172) and 10-06 (−$168). Same pair, same rule-8 trigger class, both under elevated-regime risk. P-W25R-SAMESESSION-STOP-GATE (score 9 lesson from 10-01 ADA, which cited NEAR 09-23 archetype) remains Ring-2 unapproved; 10-06 NEAR materially strengthens the evidence base for that proposal.
+- **Pending Ring-2 proposals** (all still backlog, all would have blocked the 10-05 NEAR entry):
   - P-W27-CASHFIT (routine-04-harness W25R)
-  - P-W25R-SAMESESSION-STOP-GATE (options a/b/d from 10-01 ADA lesson, score 9)
+  - P-W25R-SAMESESSION-STOP-GATE (options a/b/d from 10-01 ADA lesson, score 9) — **NEAR 10-06 is 2nd confirming data point this month**
   - P-W25R-RATCHET-TIGHTEN (from 09-27 SOL W22-H lesson, score 8)
-  - P-W25R-POSTOUTAGE-DEFER-HEURISTIC (from 09-23 lesson, score 6)
-  - Sat 10-03 memo missed (routine-04-harness watchdog A — 96h+ since last routine-03 and no routine-04 since 09-23 memo-prep). User `[Y/N]` on prior proposals also pending.
-- **Watchdog findings (10, +2 from prior wake)**: routine-01 heartbeat dead 111h (A, NEW escalation — was previously tracked but now above 80h threshold), routine-03 heartbeat dead 96h (A, NEW escalation), routine-06/07 heartbeat dead (A×2, unchanged), dirty-tree 4 untracked files (C, unchanged), stale-MTM 5 variant portfolios (D×5, unchanged). Telegram-alerted via --telegram.
-- **Scheduler diagnosis**: 10-02 EOD missed (last routine-03 was 10-01). 10-03 Sat non-fire (Mon-Fri cron). 10-04 Sun non-fire. 10-05 Mon EOD this is first wake since. Cron appears to have skipped 10-02 Fri EOD — unknown cause; possibly OS sleep or scheduler service hiccup. The 10-05 Mon EOD fire this wake is on-schedule (+13min drift from 21:00 PT target).
-- **Drawdown trajectory**: 12.49% (prior wake) → 12.60% (this wake, +0.11pp from NEAR open-commission + slippage drag alone). NEAR hitting stop would add ~$145 realized → DD ~14.1%. NEAR hitting 4R target would add ~$580 realized → DD ~6.6%.
-- **Consecutive-loss trajectory**: 6/7 (unchanged, no closes this wake). NEAR stop-out = 7/7 → Ring 3 full-pause requires `RESUME`.
+  - P-W25R-POSTOUTAGE-DEFER-HEURISTIC (from 09-23 lesson, score 6) — **would have DEFERRED the 10-05 NEAR entry on gap-dead state**
+- **Scheduler diagnosis**: no routine fires between 10-05T04:13Z EOD and 10-10T06:30Z this wake = ~122h gap. Routine-01 overnight did not fire 10-06/10-07/10-08/10-09. Routine-02 midday did not fire 10-06/10-07/10-08/10-09. Routine-03 EOD did not fire 10-06/10-07/10-08. This is the longest contiguous routine outage since 09-20 scheduler-recovery. Root cause unknown — possibly OS sleep or scheduler service hiccup; needs investigation at next harness.
+- **Drawdown trajectory**: 12.60% (10-05 EOD) → 14.00% (now, post-NEAR-stop) = +1.40pp from the single stop-out. If NEAR had been exited at 10-09 00:00Z low ($4.4404) instead of the 10-06 stop, drawdown would be ~17.3% — the W22 2×ATR stop capped the loss at −1R even under a 15%-further-down continuation.
+- **Benchmark**: not re-computed this wake (replay-focused). BTC spot $82,720 per multi-ticker, down from $85,493 at 10-05 EOD = −3.2% BTC over 4-5 days. BULL now −4.81% since inception vs BTC-hold estimated −3-4% approximate same period; delta likely slightly widened but needs proper daily-anchored computation at next EOD.
 
 ## Lessons status
 
-No new lessons appended this wake. The NEAR entry under exact 4-floor regime is a direct companion case to [[lesson-2026-09-23-same-session-stop-after-regime-crystallization]] (score 8, NEAR 09-23) and [[lesson-2026-10-01-pattern-of-4]] (score 9, ADA 10-01). Outcome of this NEAR trade (expected within 1-24h) will add 1 more data point to the P-W25R-SAMESESSION-STOP-GATE evidence base — a WIN would partly falsify the pattern; a LOSS would be pattern-of-5 and strengthen Ring-2 urgency.
+- Pattern-of-7 rule8-cashfit-class now explicitly a HIGH-PRIORITY lesson target. Consecutive-loss streak hitting 7/7 is a Ring 3 trip — this is NOT a routine learning event but a mandate-level safety event.
+- NEAR 10-05 entry under exact 4-floor regime materialized as predicted stop-out — companion to [[lesson-2026-09-23-same-session-stop-after-regime-crystallization]] and [[lesson-2026-10-01-pattern-of-4]]. Will be formalized at next routine-04-harness as pattern-of-5 confirmation (NEAR 09-23, ADA 10-01, SOL 10-02 same-day entries, SOL 09-30 same-day, NEAR 10-06 2d-after-entry — the 2d hold on NEAR extends the archetype slightly).
+- Lesson appending deferred to routine-01 or routine-04 (not this routine's job per spec).
 
 ## Notes for next wake
 
-- **Routine 01 overnight** fires at ~04:00 PT 10-06 (= 11:00Z). Will MTM NEAR position against overnight 1H bars. Priority action: check whether 05:00Z, 06:00Z, 07:00Z, 08:00Z bars kept NEAR above EMA20 (currently $5.16644, trailing up at ~2% per hour). Stop at $5.067336 — intraday NEAR 24h low was $4.918 (per indicators.py historical bars), so stop is above session-local lows.
-- **Routine 02 midday** fires ~12:00 PT 10-06 (= 19:00Z). Will MTM mid-session NEAR state.
-- **Priority watch**: NEAR 24h = +8.02% while market −0.65% median = NEAR running against the tape. Could continue (strong signal) or reverse (profit-taking into weak market). The 4-floor regime adds systemic risk — if regime tips to 3/15 or below mid-trade, cross-market selling could drag NEAR with it even if NEAR-specific signal holds.
-- **Ring 3 proximity**: streak 6/7 + DD 12.60% both near trip thresholds. One stop-out = 7-day pause. Monitor closely.
-- **5b cooldowns**: no active cooldowns post-NEAR entry. All 14 non-NEAR pairs CLEAR.
-- **Regime monitoring**: 4-floor marginal is 1-pair move from SBD risk (if any 1 of HYPE/NEAR/AVAX/TRX flips negative → 3/15 → 5a FAIL, no new entries + SBD defensive exits trigger if also median ≤−1.0%).
+- **TRADING HALTED** until user `RESUME`. All routines should still fire for monitoring/MTM but reject any entry pre-check (per guardrails `kill_switch_tripped`).
+- **Scheduler investigation required**: 4-day gap in routine fires caused delayed-exit cosmetic timing but did NOT affect realized PnL (stop fill is deterministic). Still, the gap needs resolution before trading resumes — otherwise even a RESUME would risk the same gap-exposure dynamic recurring.
+- **User action required**:
+  1. Review this NEAR stop-out and the pattern-of-7 cashfit-class evidence
+  2. Resolve pending Ring-2 proposals (SAMESESSION-STOP-GATE, CASHFIT, POSTOUTAGE-DEFER, RATCHET-TIGHTEN) with Y/N/D
+  3. Investigate scheduler gap root cause
+  4. Send `RESUME` only after at least some of the above are addressed — ideally with explicit strategy-v0.4 change approved
+- **Next routine wakeup**: routine-01-overnight would next fire ~04:00 PT 10-10 (= 11:00Z 10-10). Will MTM (no positions) and verify kill-switch state still TRIPPED. No entry scanning until RESUME.

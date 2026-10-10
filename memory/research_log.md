@@ -9550,3 +9550,66 @@ Cumulative P&L ≈ **−$689** across 5 named cashfit instances. Last 3 (09-30, 
 
 Telegram ALERT sent — exit occurred intrabar AND drawdown at 12.5% warn threshold AND consecutive-loss streak at 6/7 (1 from Ring 3 full-pause).
 
+
+## 2026-10-10T06:30Z — Routine 02 midday replay (first wake since 10-05 EOD, 122h gap)
+
+### Context
+
+- Scheduled fire: 13:00 PT 2026-10-09 Thu (= 20:00Z 10-09). Actual fire: ~06:30Z 10-10 = ~23:30 PT 10-09 Thu, ~10.5h late vs schedule.
+- First routine wake since 10-05T04:13Z EOD = 122h gap. Routines 01/02/03 all dead per prior A×3 watchdog flags. Scheduler root cause TBD.
+
+### Position check — NEAR 10-05 PT entry
+
+- Entry: 2026-10-06T04:00Z @ $5.254826, stop $5.067336, target $6.004786, size 775 NEAR.
+- Fetched Kraken 1H OHLCV 120 bars (entry bar through now).
+- **Finding: 2×ATR stop pierced intrabar at 2026-10-06T17:00Z** (bar low $5.0258 vs stop $5.067336, pierced by $0.0415). First opportunity to detect was routine-01 overnight 10-06 which did not fire; detected this wake via replay.
+- Stop fill = $5.067336 × 0.9995 slippage = $5.064802. Realized **−$168.06 / −1.01R.**
+- W22-H breakeven ratchet: never armed (max close post-entry $5.5048 on 10-08 06:00Z vs $5.629806 trigger).
+- Peak price reached: $5.5948 high 10-08 07:00Z = $0.4100 shy of 4R target.
+- Post-stop price action: continued collapse through 10-08 15:00Z market-wide liquidation (NEAR hourly −7.4% on $1.6M-trade bar), bottomed 10-09 00:00Z at $4.4404 (−12.5% below stop), recovered to $5.18 by 10-10.
+
+### Realized state update
+
+| Metric | Prior (10-05 EOD) | This wake | Δ |
+|---|---|---|---|
+| Realized PnL (cum) | −$313.14 | −$481.20 | −$168.06 |
+| Equity | $9,674.39 (incl. NEAR unreal) | $9,518.79 (flat) | −$155.60 |
+| Drawdown | 12.60% | 14.00% | +1.40pp |
+| Open positions | 1 (NEAR) | 0 | −1 |
+| Consecutive-loss streak | 6/7 | **7/7** | +1 → **RING 3 TRIP** |
+
+### Kill-switch state
+
+- **Ring 3 TRIPPED**: 7 consecutive losing trades. Full pause required. User `RESUME` needed.
+- Drawdown 14.00% breaches 12.5% warn by 1.50pp but well below 25% kill cap (11.00pp headroom).
+- Equity $9,518.79 > $7,500 floor (2018pp headroom).
+- All positions flat.
+- All MCPs that BULL uses are healthy (Kraken ticker + OHLCV verified).
+
+### Pattern-of-7 rule8-cashfit-class
+
+| # | Date | Pair | R | $ |
+|---|---|---|---|---|
+| 1 | 06-17 | SOL (fallback) | — | ~scratch |
+| 2 | 07-10 | BTC | +0.23 | ~+$30 |
+| 3 | 09-30 | SOL | −1.00 | −$196 |
+| 4 | 10-01 | ADA | −1.02 | −$184 |
+| 5 | 10-02 | SOL | −1.03 | −$198 |
+| 6 | 10-06 | NEAR | −1.01 | −$168 |
+
+6 of 7 losses, 1 marginal winner from a different regime 83d ago. Cumulative across 6 recent instances ≈ −$746. The W25R proposals (CASHFIT, SAMESESSION-STOP-GATE, POSTOUTAGE-DEFER) would have blocked 3-4 of these.
+
+### Regime 5a (ambient — not used, routine-02 is no-entry)
+
+Multi-ticker partial: BTC $82,720 +0.20%, ETH $2,492.67 +0.29%, SOL $109.77 +0.65%. Barely-positive post-crash tape. Full universe scan skipped per routine-02 lean budget.
+
+### WRITE
+
+- `trade_log.md`: appended 1 CLOSE row (NEAR/USD 10-06T17:00Z stop-hit replay)
+- `portfolio.md`: fully rewritten (FLAT, equity $9,518.79, DD 14.00%, streak 7/7, Ring 3 TRIP)
+- `research_log.md`: this row
+- Commit + push to main
+
+### NOTIFY
+
+Telegram ALERT required (per spec): Ring 3 kill switch tripped + exit occurred intrabar + drawdown crossed higher. Priority: RING 3 FULL PAUSE notification demanding user `RESUME` reply.
