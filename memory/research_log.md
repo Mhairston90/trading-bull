@@ -9841,3 +9841,4 @@ Per routine spec: watchdog findings are informational, not kill switches. Noted;
 
 - `research_log.md`: this row only. No trade_log, no portfolio.md changes (state unchanged, no MTM movement, no entries, no exits).
 - Telegram: silent per NOTIFY criteria (no new Ring-3 trip — already tripped; no new OPEN/CLOSE; no actionable news; no universe refresh). Watchdog already sent its own alert at 13:12:42Z.
+2026-10-10T17:40:02Z | allocation | day-gate | not Sunday, skipping | no action
