@@ -4,6 +4,53 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-10-10T20:00Z — routine-02-midday (PT 2026-10-10 13:00 Sat, OFF-CADENCE Mon-Fri cron fired Sat) — flat, Ring 3 still TRIPPED, no action
+
+### VERIFY
+
+- **Slot identity**: `bull-02-midday`. Task body references Routine 02 — Midday Health Check. No mismatch.
+- **Date label**: PT fire date = **2026-10-10 Sat**. Cron is `0 13 * * 1-5` (Mon-Fri) — this fire is **OFF-CADENCE** (Saturday). Routine executed anyway since scheduler fired; monitoring-only impact (no entries authorized by this routine regardless).
+- **Fire timing**: 13:00 PT target. Executed as scheduled.
+- **Kraken MCP**: healthy — multi_ticker returned 5 pairs (BTC $83,024.2, ETH $2,511.38, SOL $110.40, NEAR $5.3345, ADA $0.252932).
+
+### Kill-switch state (unchanged from overnight 06:54Z)
+
+- **Portfolio**: flat (0 positions). No MTM delta.
+- **Cash / Equity**: $9,518.79 (unchanged).
+- **Drawdown from peak $11,068.89**: **14.00%**. BREACHES 12.5% warn by 1.50pp; CLEAR of 25% kill cap by 11.00pp.
+- **Equity floor**: $9,518.79 > $7,500 (+$2,018.79 headroom). CLEAR.
+- **Consecutive-loss streak**: **7/7**. **RING 3 TRIPPED** — FULL PAUSE in effect. User `RESUME` still required.
+- **Exposure**: 0.00% / 4%. CLEAR (flat).
+- **Cluster**: 0/2 BTC-cluster. CLEAR (flat).
+- **Daily realized loss (PT 10-10 Sat)**: 0.00% (no closes). CLEAR.
+
+### Ambient context (informational only — not acted on)
+
+- BTC $83,024.2 (+0.57% 24h), ETH $2,511.38 (+1.05%), SOL $110.40 (+1.23%), NEAR $5.3345 (+9.33%), ADA $0.252932 (+4.10%).
+- 5/5 sampled pairs green on 24h. Partial recovery from the 10-08T15Z liquidation cascade. NEAR has recovered to $5.33 — now **above** the 10-06 stop fill $5.065 by $0.27, and back **above** entry price $5.255 by $0.08. Had the stop not fired, the position would be ~scratch unrealized (post-commissions still slightly red). This does not change the realized −$168.06 — reporting cosmetic only.
+- SOL $110.40 remains well below the 10-02 stop fill $119.13 (−$8.73 below). No recovery dynamic there.
+
+### DO
+
+- **Mark-to-market**: no positions to MTM. Equity unchanged $9,518.79.
+- **Exit check**: no positions.
+- **Drawdown check**: 14.00% from peak, unchanged. No new breach of 25% kill-cap.
+- **Entry scan**: NOT PERFORMED — routine-02 is management-only per spec; also Ring 3 TRIPPED halts entries.
+
+### WRITE
+
+- `trade_log.md`: no update (no exits).
+- `portfolio.md`: timestamp refresh only; content unchanged (still flat, Ring 3 TRIPPED).
+- `research_log.md`: this row.
+
+### Notes
+
+- **No Telegram ALERT**: kill-switch state unchanged from overnight 10-10 wake; no new exit; drawdown did not cross a new warn threshold (14.00% unchanged). Routine notify conditions not met.
+- **Scheduler note**: this is the **first off-cadence weekend fire** of routine-02-midday observed in recent operation. Cron `0 13 * * 1-5` should NOT fire Saturday. Possible scheduler drift or manual trigger. Flag for next routine-04-harness or routine-03-eod scheduler-health review.
+- **Pending Ring-2 proposals** (all still backlog since routine-04-harness 10-10 skipped due to TV MCP down): P-W27-CASHFIT, P-W25R-SAMESESSION-STOP-GATE, P-W25R-RATCHET-TIGHTEN, P-W25R-POSTOUTAGE-DEFER-HEURISTIC. User `RESUME` still required before any new entries.
+
+---
+
 ## 2026-10-10T17:08Z — routine-04-harness (PT 2026-10-10 10:08 Sat, on-cadence Sat 10:00 PT slot) — HARNESS SKIPPED, TV MCP down, Ring 3 still TRIPPED
 
 ### VERIFY
