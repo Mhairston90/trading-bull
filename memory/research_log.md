@@ -4,6 +4,145 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-10-10T06:53Z — routine-03-eod (PT 2026-10-09 23:53 Thu Fri, ~2h53m late vs 21:00 PT target) — Ring 3 TRIP day-close journal, Day PnL $0 on-day (NEAR loss attributed 10-06), FULL PAUSE held
+
+### VERIFY
+
+- **Slot identity**: `bull-03-eod`. Task body references Routine 03 — End-of-Day Journal. No mismatch — guard clear.
+- **Date label**: PT fire date = **2026-10-09 Fri**. UTC = 2026-10-10T06:53Z. Date-labeling guard applied: all "today" references = PT 10-09 Fri.
+- **Fire timing**: 06:53Z vs cron target 04:00Z (21:00 PT = 04:00Z next day) = +2h53m late. Still within the 10-09 PT calendar day for logging purposes.
+- **Scheduler diagnosis**: last routine-03-eod was 2026-10-06T04:13Z (commit `9c587dd`). 10-06, 10-07, 10-08 EOD fires missed. 10-09 EOD this fire is first since = ~99h gap. Routine-01 (06:54Z) and routine-02 (06:30Z) already fired this wake-cycle; routine-04-harness (day-gate skip Fri). This EOD is the 4th routine commit this wake-cycle.
+- **Kill-switch state (entering wake)**: streak **7/7 Ring 3 TRIPPED** (unchanged from midday 10-09); DD **14.00%** warn-breach but <25% kill-cap (11.00pp headroom); equity $9,518.79 > $7,500 ($2,018.79 headroom); exposure 0% flat; cluster 0/2; daily loss cap 0% on-day (NEAR loss attributed to 10-06 trading day). **Ring 3 FULL PAUSE remains in effect. User `RESUME` required.**
+- **Watchdog**: ran `python scripts/watchdog.py` — 12 findings (routine-01 heartbeat 210h A, routine-03 99h A, routine-04 230h A, routine-05 205h A, routine-06/07 dead A×2, dirty-tree 4 untracked C, stale-MTM 5 variant portfolios D×5). Prior-wake findings persist; the three new-A escalations from midday ETA-recover as those routines fired this wake-cycle. Telegram not re-alerted this wake (midday already alerted ~90min ago; re-alert would be noise).
+
+### DO — mark-to-market + EOD summary
+
+**Mark-to-market**: FLAT entering wake, FLAT exiting wake. No MTM delta on open positions since there are none.
+
+**EOD entry scan**: **SUSPENDED** — Ring 3 TRIPPED. Routine-01-overnight (06:54Z this cycle) performed a contextual-only scan under halt; both NEAR and ADA fully pass R1-R4a (ADA wins R8 at rank 6), regime 10/15 positive +0.58% (sharp reversal from the 10-05 EOD 4-floor marginal). Not actionable under Ring 3 halt. See routine-01 note for scan detail — not reproduced here.
+
+**Day summary stats — PT 2026-10-09 Fri trading day**
+
+- **Day PnL (realized)**: **$0.00 / +0.00%** of PT-midnight equity ($9,518.79). No closes attributable to 10-09 PT (NEAR 10-06 close is attributed to 10-06 PT by UTC timestamp). The 7/7 Ring 3 trip CAUSE event was logged on 10-06, surfaced on 10-09.
+- **Day PnL (unrealized change)**: **$0.00 / +0.00%**. No open positions → no MTM delta.
+- **Trades opened today**: **0** (Ring 3 halted + no routine-authorized entry scans this cycle).
+- **Trades closed today**: **0** on-day (replay-attributed NEAR 10-06 close surfaced at midday 10-09 wake but belongs to 10-06 trading day per ISO timestamp).
+- **Win rate today**: n/a (no on-day closes).
+- **New equity**: **$9,518.79** (unchanged from midday 10-09 rebuild).
+- **Drawdown from peak**: **14.00%** (unchanged — breaches 12.5% warn by 1.50pp; 11.00pp headroom to 25% kill cap).
+- **Since-inception return**: **−4.81%** (unchanged).
+
+**Rolling 7/30d benchmark vs BTC-hold** (equity-anchored, approximate):
+
+- **BTC spot now**: $82,774 (per indicators.py 06:53Z closed-bar).
+- **BTC-hold 30d**: BTC $82,774 vs ~$78,500 baseline 09-09 → **~+5.4%**. BTC held through the 10-08 cascade with modest drawdown; current price $82,774 is $2,719 below 10-05 EOD $85,493 (BTC −3.2% over the 4-day gap).
+- **BTC-hold 7d**: BTC $82,774 vs ~$85,500 baseline 10-02 → **~−3.2%**. BTC flat-to-down over the week.
+- **BULL 30d** (equity $9,518.79 vs ~$10,480 estimate 09-09): **~−9.2%**.
+- **BULL 7d** (equity $9,518.79 vs ~$9,785 estimate 10-02 EOD): **~−2.7%**.
+- **BULL vs BTC-hold 30d**: **~−14.6pp behind** (approximately unchanged from 10-05 EOD −14.8pp; BTC gave back some of its gain in the cascade, narrowing the delta slightly despite BULL also losing).
+- **BULL vs BTC-hold 7d**: **~+0.5pp ahead** (improved from −5.2pp 10-05 EOD; the 7d window now includes the BTC drawdown which hurt BTC-hold while BULL was already flat and losing less than BTC in absolute terms over the window). First 7d positive-delta read in weeks — but attributable to BTC weakness, not BULL strength.
+- **90d benchmark**: not reliably computable (contested baseline over the 07-10 → 09-20 scheduler-recovery window).
+
+**Monthly archive**: NOT TRIGGERED. Today is 2026-10-09 Fri; last trading day of October is 10-30 Fri. Deferred to that EOD.
+
+### Lessons extracted
+
+Appending **1 new lesson** this wake: **lesson-2026-10-06-near-second-stop-under-4-floor-marginal** — NEAR 10-05 entry under exact 4-floor regime materialized as predicted stop-out, strengthening P-W25R-SAMESESSION-STOP-GATE evidence. See `lessons.md`.
+
+Did NOT append a second lesson on the W22-G exit-precedence audit — that is a routine-op/exit-rule-interpretation discrepancy (routine-02 replay vs W22-G chronology), not a strategy-level learning. Routed to routine-04-harness via portfolio.md and routine-01-overnight audit note.
+
+### Decision
+
+**NO NEW ENTRIES — Ring 3 kill switch TRIPPED.** State: FLAT. Portfolio unchanged. EOD summary written. Lesson appended. Telegram EOD card sent. Awaiting user `RESUME` per guardrails `consecutive-loss-cap-7`.
+
+### NOTIFY
+
+**Telegram EOD card: SENT** (mandatory per routine-03 spec). Format per `skills/telegram.md` EOD template. Status flag: **🚨 Ring 3 TRIPPED**. Includes: equity $9,518.79, DD 14.00% warn-breach, streak 7/7 trip event (recovered from 10-06 at midday wake), 0 on-day trades, `RESUME` action required.
+
+### Notes for next wake
+
+- **TRADING HALTED** until user `RESUME`. Next routine-01-overnight ~06:00 PT 10-10 Sat will fire monitoring-only (no entry scan under Ring 3). Routine-04-harness Sat 10-10 is the next weekly memo opportunity: should address (1) 4 pending Ring-2 proposals, (2) W22-G exit-precedence audit, (3) scheduler gap root cause, (4) formal pattern-of-5 same-session-stop analysis as score-upgrade candidate for P-W25R-SAMESESSION-STOP-GATE.
+- **User action required**:
+  1. Review NEAR 10-06 stop-out, Ring 3 trip, and 5-pattern same-session-stop evidence base
+  2. Resolve pending Ring-2 proposals (SAMESESSION-STOP-GATE options a/b/d, CASHFIT, POSTOUTAGE-DEFER, RATCHET-TIGHTEN) with Y/N/D on routine-04-harness Sat memo
+  3. Investigate scheduler gap root cause (122h outage 10-05 → 10-10; longest contiguous since 09-20 recovery)
+  4. Send `RESUME` only after at least some of the above are addressed — ideally with explicit strategy-v0.4 change approved to pre-empt a 6th pattern instance
+- **Scheduler state**: this is the first routine-03-eod fire since 10-05. Three EOD fires missed (10-06 Tue, 10-07 Wed, 10-08 Thu). The 10-06 EOD fire would have been the critical one that caught the stop-out same-day; its miss contributed to the 101h delay to detection, though realized PnL is deterministic at the stop price regardless of detection delay.
+
+## 2026-10-10T06:54Z — routine-01-overnight (PT 2026-10-09 23:54 Fri, ~18h late vs 06:00 PT target) — Ring 3 TRIPPED entering wake; no entries; W22-G exit-precedence audit note
+
+### VERIFY
+
+- **Slot identity**: `bull-01-overnight`. Task body references Routine 01. No mismatch — guard clear.
+- **Date label**: PT fire date = **2026-10-09 Fri**. UTC = 2026-10-10T06:54Z. Fire time ~18h past 06:00 PT target.
+- **Prior wake state**: routine-02-midday committed `f4288e9` at 2026-10-10T06:30Z (24min before this wake) — NEAR 10-06T17:00Z stop-hit replay logged (−1.01R / −$168.06). Portfolio flat. **RING 3 kill switch TRIPPED on consecutive-loss cap (7/7)**. Telegram ALERT already sent by midday wake.
+- **Kill-switch state (this wake, entering)**: streak **7/7 Ring 3 TRIPPED** (unchanged, prior wake); DD **14.00%** warn-breach but <25% kill-cap; equity $9,518.79 > $7,500; exposure 0% flat; cluster 0/2; loss cap 0% (fresh day); SBD unknown (no entry scan since halted).
+- **Entry authorization**: **SUSPENDED** per guardrails `kill_switch_tripped`. Per routine spec: "If tripped: skip to NOTIFY step with status quo, do not open new positions."
+- **Watchdog**: ran `python scripts/watchdog.py --telegram` — 14 findings (routine-01 heartbeat 210h A, routine-02 170h A, routine-03 99h A, routine-04 230h A, routine-05 205h A, routine-06/07 dead A×2, dirty-tree 4 untracked C, stale-MTM portfolio.md 99h D + 5 variants D×5). Telegram-alerted. Findings elevated from prior wake because the 10-05→10-10 ~122h gap raised multiple heartbeats above threshold. Not kill-switches, continue.
+
+### DO — overnight check (minimal scope under Ring 3)
+
+**Position check**: FLAT. NEAR position was closed by prior midday wake. No open positions → no stop checks.
+
+**Overnight price pull** (contextual, no decisions): Kraken REST indicators.py this wake shows **regime 10/15 positive, median +0.58% → 5a PASS, SBD CLEAR**. This is a sharp regime REVERSAL from the 10-05 EOD scan (4/15 +−0.65% exact-floor marginal). Market has recovered post the 10-08 cascade.
+
+**Entry scan**: **SUSPENDED** — Ring 3 tripped. For audit record only, the current wake indicators table (indicators.py 06:54Z closed-bar) shows:
+- Two pairs fully pass R1-R4a technical: **NEAR (rank 7, RSI 67.3)** and **ADA (rank 6, RSI 69.3)**.
+- Rank tiebreak R8: ADA rank 6 beats NEAR rank 7 → ADA would be the deterministic winner if trading were authorized.
+- Entry blocked by Ring 3; this is informational only.
+
+**News/sentiment**: Skipped — no entry candidates to scan under halt state.
+
+### Audit — W22-G exit-precedence vs stop-hit on the 10-06 NEAR close
+
+Replay check on the NEAR 10-06 position shows the **W22-G two-bar EMA20 exit rule fires BEFORE the 2×ATR stop**:
+- Entry: 10-06T04:00Z @ $5.254826, stop $5.067336, EMA20-1H at entry $5.16644 (prior wake's indicators table).
+- 1H bar closes post-entry (Kraken REST verified this wake): bars 05-11Z held above EMA20; **bar 12:00Z close $5.1673** fell below EMA20 (first below); **bar 13:00Z close $5.1475** also below EMA20 (second consecutive).
+- Per strategy v0.4 Exit rule 1 (W22-G): "two consecutive 1H closes < 1H 20-EMA. The exit fires on the close of the second below-EMA bar." → **exit at 13:00Z close $5.1475**, fill = $5.1475 × 0.9995 = **$5.144923**.
+- Stop pierce came later at **17:00Z low $5.0258**, 4h after the W22-G trigger would have exited.
+- The midday wake logged the exit as `exit-stop-hit-intrabar-replay` at the stop price for −$168.06 / −1.01R. A W22-G exit at $5.144923 would have been **gross −$85.17, net ≈ −$106.13, R gross −0.59**. Delta: ~$62 overstatement of realized loss.
+- **Kill-switch outcome unchanged**: either exit path is a loss → streak still goes 6/7 → 7/7 → Ring 3 trip.
+- **No history rewrite requested**: trade_log entry stays as committed by the midday wake (`f4288e9`). This audit note routes to the next routine-04-harness as a routine-02 exit-rule-precedence audit item (companion to the broader scheduler-gap retrospective; the midday wake applied the simpler stop-fill replay without W22-G intra-gap simulation, which is defensible given it still arrived at the correct kill-switch state but understates the risk-reducing property of W22-G when it co-fires with a stop in the same hold).
+
+### Current regime read (contextual, non-decision)
+
+| Pair | 24h % | R1 | R2 (RSI) | R3 (4H) | Verdict |
+|---|---|---|---|---|---|
+| NEAR | +6.90 | PASS | PASS 67.3 | PASS | FULL PASS |
+| ADA | +6.69 | PASS | PASS 69.3 | PASS | FULL PASS |
+| SUI | +3.67 | PASS | PASS 65.8 | FAIL | fail-R3 |
+| AVAX | +3.19 | PASS | PASS 65.4 | FAIL | fail-R3 |
+| TAO | +2.01 | PASS | PASS 64.0 | FAIL | fail-R3 |
+| XDG | +1.49 | PASS | PASS 62.1 | FAIL | fail-R3 |
+| XRP | +1.01 | PASS | PASS 60.9 | FAIL | fail-R3 |
+| BTC | +0.58 | PASS | PASS 56.1 | FAIL | fail-R3 |
+| LINK | +0.47 | PASS | PASS 57.6 | FAIL | fail-R3 |
+| ETH | +0.26 | PASS | FAIL 53.0 | FAIL | fail-R2+R3 |
+| SOL | −0.15 | PASS | FAIL 51.2 | FAIL | fail-R2+R3 |
+| LTC | −0.08 | PASS | FAIL 54.3 | FAIL | fail-R2+R3 |
+| FARTCOIN | −0.73 | PASS | FAIL 53.8 | FAIL | fail-R2+R3+R4a (notional $0.70M) |
+| HYPE | −1.29 | FAIL | FAIL 45.9 | FAIL | fail-R1+R2+R3 |
+| TRX | −0.42 | FAIL | FAIL 34.8 | FAIL | fail-R1+R2+R3+R4a (notional $1.52M) |
+
+Regime 10/15 positive median +0.58% — strongest since the 10-01 ADA entry wake (14/15 +1.30%). The 4H-50EMA (R3) is the broad-market disqualifier this wake: most pairs recovered their 1H EMA20 but have not yet reclaimed their 4H 50-EMA after the 10-08 cascade. Only NEAR and ADA cleared R3.
+
+### Decision
+
+**NO NEW ENTRIES — Ring 3 kill switch tripped.** Position state: FLAT. Portfolio unchanged from midday wake. Awaiting user `RESUME` per guardrails.
+
+### NOTIFY
+
+**Telegram: SILENT this wake.** The Ring 3 ALERT was issued by routine-02-midday at 2026-10-10T06:30Z (24min before this wake). Re-alerting would be noise. Watchdog also auto-alerted its 14 findings via `--telegram` flag. Per routine spec, silent = "all clear, nothing to flag" — slightly misleading here (we're halted), but the user already has the ALERT; re-notification would spam.
+
+### Notes for next wake
+
+- **TRADING HALTED** until user `RESUME`. All routines continue to fire for MTM/monitoring only.
+- **No position** to MTM. Next routine-02-midday ~12:00 PT 10-10 (= 19:00Z 10-10) will re-verify Ring 3 state and silent-pass if nothing changed.
+- **Potential entry candidates** on next wake IF `RESUME`: NEAR and ADA both fully pass; ADA wins R8 at rank 6. Both would ALSO be flagged by the pending P-W25R-SAMESESSION-STOP-GATE option (b) two-wake confirmation gate — the prior entry wake (10-05 EOD) was only 4/15 positive, so a two-wake-confirmation rule would reject these. Audit lens: this is actually the gate working — on a 4→10 velocity-recovery wake, two-wake confirm would wait a cycle. Will note in routine-04 memo if W25R finally fires.
+- **Scheduler gap root cause** still open. 122h gap 10-05 EOD → 10-10 is the longest contiguous outage since 09-20 recovery. Needs investigation before any `RESUME`.
+- **W22-G audit-note** routes to next routine-04-harness.
+>
+
 ## 2026-10-06T04:13Z — routine-03-eod (PT 2026-10-05 21:13 Mon, on-schedule +13min) — NEAR OPEN under 4-floor marginal regime; routine-03 missed 10-02 and 10-05 is first main-routine wake since
 
 ### VERIFY
