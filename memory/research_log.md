@@ -4,6 +4,60 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-10-11T13:12Z — routine-01-overnight (PT 2026-10-11 06:12 Sat, OFF-CADENCE Mon-Fri cron fired Sat) — flat, Ring 3 still TRIPPED, 0 trades, 0 research items
+
+### VERIFY
+
+- **Slot identity**: `bull-01-overnight`. Task body references Routine 01 — Overnight Recap. No mismatch — guard clear.
+- **Date label**: PT fire time 06:12 Sat 10-11 → PT calendar date at fire = **2026-10-11 Sat**. UTC fire 13:12Z 10-11. Cron `0 6 * * 1-5` → **OFF-CADENCE** Saturday fire (third consecutive Sat off-cadence: midday 10-10, EOD 10-10, now overnight 10-11). Scheduler drift pattern persists.
+- **Kraken MCP**: healthy — multi_ticker returned 5 pairs (BTC $82,994.8, ETH $2,502.17, SOL $109.29, NEAR $5.3675, ADA $0.247106).
+- **Ops watchdog** (`scripts/watchdog.py --telegram`): **8 findings** — identical class mix to last wake. **A heartbeat ×2** (routine-06 and routine-07 both dead ≥12 days, no commits in cadence window). **C dirty-tree ×1** (same 4 pre-existing untracked paths: `docs/sentinel_10k_reset_spec_20260704.md`, `scripts/replay_cache_20260629/`, `scripts/replay_result_20260629.json`, `scripts/routine07_replay_20260629.py` — stranded from prior sessions, not touched). **D stale-MTM ×5** (variants v0.3/v0.5/v0.7/v0.13/v0.14 — now 1771–2540h stale). Watchdog Telegram ALERT sent per its own flag.
+
+### Kill-switch state (unchanged from EOD 04:12Z)
+
+- **Portfolio**: flat (0 positions). No MTM delta.
+- **Cash / Equity**: $9,518.79 (unchanged).
+- **Realized PnL since inception**: −$481.20 (unchanged — no closes).
+- **Drawdown from peak $11,068.89**: **14.00%**. BREACHES 12.5% warn by 1.50pp; CLEAR of 25% kill cap by 11.00pp.
+- **Equity floor**: $9,518.79 > $7,500 (+$2,018.79 headroom). CLEAR.
+- **Consecutive-loss streak**: **7/7**. **RING 3 TRIPPED** — FULL PAUSE in effect. User `RESUME` still required.
+- **Exposure**: 0.00% / 4%. CLEAR (flat).
+- **Cluster**: 0/2 BTC-cluster. CLEAR (flat).
+- **Daily realized loss (PT 10-11 Sat)**: 0.00% vs PT-midnight equity $9,518.79. CLEAR.
+
+### Ambient context (informational — Ring 3 TRIPPED halts entries)
+
+- BTC $82,994.8 (+0.10% 24h), ETH $2,502.17 (−0.08%), SOL $109.29 (−0.64%), NEAR $5.3675 (+1.44%), ADA $0.247106 (−0.67%).
+- Mixed 24h breadth on the 5-pair sample (2/5 green: BTC, NEAR). Overnight recovery from EOD's 5/5-red tape; nothing extreme. BTC back above $83K after wobbling below at EOD. NEAR +1.44% intraday leading but still below the 10-05 entry $5.255.
+- SOL $109.29 still well below the 10-02 stop fill $119.13; unchanged thesis.
+
+### DO — overnight recap steps
+
+1. **Overnight price pull**: Kraken multi_ticker on 5 bellwethers (full-15 sample skipped under pause; no actionable use for the extra 10). Done — see Ambient above.
+2. **Position stop check**: **0 open positions** → no stop checks to run. Nothing to close.
+3. **Entry scan (Technical pass)**: **NOT PERFORMED.** Ring 3 TRIPPED (streak 7/7). Per guardrails: "FULL PAUSE, flat all paper positions at market, require RESUME". All 15 universe pairs rejected regardless of technical reads. Scan short-circuited at kill-switch pre-check.
+4. **News scan**: **NOT PERFORMED.** No technical-PASS candidates → no candidates to news-score. Firecrawl not invoked.
+4a. **Sentiment pass**: **NOT PERFORMED.** No technical-PASS candidates → no candidates to depth/spread-score.
+5. **Place eligible new entries**: **NONE.** Entry authorization suspended per Ring 3.
+6. **Research_log entries**: this row. No REJECT rows (no entry scan ran, so no per-pair technical rows).
+7. **First-of-month universe refresh**: today is 2026-10-11 Sat, not the 1st. **SKIP.** (Also 10-01 Thu would have been the first-weekday-of-month trigger — already passed; next refresh ~2026-11-02 Mon.)
+
+### WRITE
+
+- `trade_log.md`: no update (0 opens, 0 closes).
+- `portfolio.md`: timestamp refresh to this wake; content unchanged (still flat, Ring 3 TRIPPED, DD 14.00%).
+- `research_log.md`: this row.
+- `universe.md`: not first-of-month → no update.
+- `lessons.md`: no update (no closes, no news-triggered material).
+
+### Notes
+
+- **Ring 3 FULL PAUSE** continues (streak 7/7 cashfit-class). Pending Ring-2 proposals (P-W27-CASHFIT, P-W25R-SAMESESSION-STOP-GATE, P-W25R-RATCHET-TIGHTEN, P-W25R-POSTOUTAGE-DEFER-HEURISTIC) all still backlog; next natural review at routine-04-harness (next on-cadence Sat 2026-10-17 or sooner if user triggers).
+- **Scheduler drift note**: 3 consecutive Saturday off-cadence fires suggests cron may have been edited away from `1-5` days, OR Task Scheduler is firing missed Fri runs on Sat catchup. Routine-06 and routine-07 still dead ≥12d (opposite problem). Deferred to on-cadence harness or user action.
+- **NOTIFY decision**: no new OPEN/CLOSE, no ACTIONABLE news, no universe refresh, Ring 3 was already TRIPPED prior to this wake (not newly tripped). Per routine spec: **silent** — no Telegram from this routine. (Watchdog already fired its own ALERT independently.)
+
+---
+
 ## 2026-10-11T04:12Z — routine-03-eod (PT 2026-10-10 21:12 Sat, OFF-CADENCE Mon-Fri cron fired Sat) — flat, Ring 3 still TRIPPED, 0 trades, EOD card sent
 
 ### VERIFY
