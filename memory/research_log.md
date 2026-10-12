@@ -10169,3 +10169,4 @@ Findings identical in composition to the 10-10 and 10-11 wakes (deltas on stale-
 - Telegram: silent per NOTIFY criteria (no new Ring-3 trip — already tripped; no new OPEN/CLOSE; no actionable news; no universe refresh). Watchdog sent its own alert at 13:13:02Z.
 
 2026-10-12T17:08:56Z | harness | day-gate | not Saturday, skipping | no action
+2026-10-12T17:40:27Z | allocation | day-gate | not Sunday, skipping | no action
