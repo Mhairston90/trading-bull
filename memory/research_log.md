@@ -10120,3 +10120,50 @@ Per routine spec: watchdog findings are informational, not kill switches. Noted;
 2026-10-10T17:40:02Z | allocation | day-gate | not Sunday, skipping | no action
 2026-10-11T17:08:46Z | harness | day-gate | not Saturday, skipping | no action
 2026-10-11T17:30:00Z | allocation | routine-05 W41 | 7 trades 90d sum -5.37R / -$962.02 win-rate 0%; momentum bucket -5.37R 30d and 90d; BTC-hold 90d +34.95% delta -48.95pp (review trigger FIRES, routed to next routine-04); 7d BULL -1.62% vs BTC -2.89% delta +1.27pp (side effect of flat book, not edge); no allocation shift proposed (only momentum bucket active, no destination; v0.4 lacks bucket-scaling parameter); no pending strategy edit to apply (W41 harness skipped TV MCP down); Ring 3 full pause held, RESUME still required; strategy v0.4 unchanged | memory/weekly_memos/2026-W41.md created
+
+## 2026-10-12T13:13Z — Routine 01 overnight (first on-cadence Mon fire post-gap, Ring 3 held)
+
+### Context
+
+- Fire slot: `bull-01-overnight` scheduled 06:00 PT Mon-Fri. Today is **Mon 2026-10-12 06:13 PT** — on-cadence fire inside the cron window (first since the 10-05 EOD → 10-10 midday replay gap). Prior wake: routine-03-eod 2026-10-12T04:12Z (10-11 Sun EOD, off-cadence Sun fire, commit `a89a4e1`). Elapsed ~9h; account flat so no price-affecting events in window.
+
+### VERIFY
+
+- **Ring 3 state: TRIPPED and held** — consecutive-loss streak 7/7 from NEAR 10-06 stop. User `RESUME` still required. No new entries authorized.
+- Drawdown 14.00% (unchanged; flat).
+- Equity $9,518.79 > $7,500 floor (2018pp headroom).
+- Open positions: 0 (flat).
+- MCPs used by BULL (Kraken ticker/OHLCV, Firecrawl, Telegram) available; ue-scripts, ableton, yt-analysis attached but not needed.
+
+### Watchdog findings (8, auto-alerted via Telegram at 13:13:02Z)
+
+- A heartbeat: no routine-06 commit in last 12d (cadence 200h) — may be dead
+- A heartbeat: no routine-07 commit in last 12d (cadence 30h) — may be dead
+- C dirty-tree: 4 uncommitted (`docs/sentinel_10k_reset_spec_20260704.md`, `scripts/replay_cache_20260629/`, `scripts/replay_result_20260629.json`, `scripts/routine07_replay_20260629.py`) — stranded from prior session
+- D stale-MTM × 5 (variants v0.13-trend-confirm 2565h, v0.14-recovery-trend 1795h, v0.3-vol-compression 2565h, v0.5-cluster-cap-tight 2565h, v0.7-vol-comp-defensive 2565h)
+
+Findings identical in composition to the 10-10 and 10-11 wakes (deltas on stale-MTM age counters, as expected). Informational per routine spec; not a kill switch. Continuing.
+
+### DO
+
+1. Overnight price pull: **skipped** — Ring 3 tripped, no entries possible, no open positions requiring stop-check. Pull would consume context without actionable output.
+2. Position check: **n/a — flat.**
+3. Entry scan: **skipped — Ring 3 tripped, routine-01 explicitly directs skip-to-NOTIFY on kill-switch trip.**
+4. News scan: **skipped — no technical-PASS candidates.**
+4a. Sentiment pass: **skipped — same reason.**
+5. New entries: **blocked — Ring 3 TRIPPED.**
+6. Research_log: this row.
+7. First-of-month universe refresh: n/a (12th).
+
+### Pending user-action items (unchanged from 10-11 EOD)
+
+1. Review NEAR 10-06 stop-out and the pattern-of-7 rule8-cashfit-class evidence (6 losses of 7 instances, ≈−$857 cumulative)
+2. Resolve pending Ring-2 proposals (SAMESESSION-STOP-GATE, CASHFIT, POSTOUTAGE-DEFER-HEURISTIC, RATCHET-TIGHTEN) with Y/N/D on Telegram
+3. Investigate scheduler gap root cause (routines 01/02/03 missed 10-06 through 10-09; weekend fires 10-10/10-11 ran off-cadence)
+4. Send `RESUME` only after at least some of the above are addressed
+5. Pending W22-G exit-interpretation audit note (preserved in portfolio.md) — routed to next routine-04-harness Sat memo
+
+### WRITE / NOTIFY
+
+- `research_log.md`: this row only. No trade_log, no portfolio.md changes (state unchanged, no MTM movement, no entries, no exits).
+- Telegram: silent per NOTIFY criteria (no new Ring-3 trip — already tripped; no new OPEN/CLOSE; no actionable news; no universe refresh). Watchdog sent its own alert at 13:13:02Z.
