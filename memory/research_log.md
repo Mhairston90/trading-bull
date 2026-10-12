@@ -10170,3 +10170,54 @@ Findings identical in composition to the 10-10 and 10-11 wakes (deltas on stale-
 
 2026-10-12T17:08:56Z | harness | day-gate | not Saturday, skipping | no action
 2026-10-12T17:40:27Z | allocation | day-gate | not Sunday, skipping | no action
+
+## 2026-10-12T20:41Z — Routine 02 midday (on-cadence Mon)
+
+### Context
+
+- Fire slot: `bull-02-midday` scheduled 13:00 PT Mon-Fri. **Mon 2026-10-12 13:41 PT — on-cadence midday fire** (second on-cadence fire this day after routine-01-overnight 13:13Z). Elapsed since routine-01-overnight: ~7.5h. Account flat so no price-affecting events in window.
+
+### VERIFY
+
+- **Ring 3 state: TRIPPED and held** — consecutive-loss streak 7/7 from NEAR 10-06 stop. User `RESUME` still required. No new entries authorized by any routine.
+- Daily loss cap (PT 10-12 trading day): 0.00% realized (flat). CLEAR by day-anchored measure.
+- Drawdown: **14.00% from peak $11,068.89** (unchanged; flat). Above 12.5% warn by 1.50pp; below 25% kill cap by 11.00pp. No new warn-threshold crossing this wake (12.5% was already breached pre-wake).
+- Equity floor: **$9,518.79 > $7,500** (+$2,018.79). CLEAR.
+- Exposure: **0.00% / 4%** used. CLEAR.
+- Cluster cap: 0/2 BTC-cluster. CLEAR.
+- MCPs used by BULL (Kraken ticker, Firecrawl, Telegram): Kraken healthy; ue-scripts/yt-analysis failed-to-connect but not needed for BULL midday ops.
+
+### Ambient market read (Kraken multi-ticker 20:41Z)
+
+| Pair | Last | 24h % | 24h High | 24h Low |
+|------|------|-------|----------|---------|
+| BTC/USD | $82,974.50 | −0.84% | $84,250.00 | $82,208.30 |
+| ETH/USD | $2,519.83 | −0.57% | $2,576.94 | $2,501.23 |
+| SOL/USD | $108.53 | −2.43% | $113.27 | $107.03 |
+| NEAR/USD | $5.5158 | −6.35% | $5.999 | $5.3659 |
+| ADA/USD | $0.242905 | −3.59% | $0.256934 | $0.240634 |
+
+- **0/5 sampled green 24h** (full-sample red). Sharp deterioration from overnight-wake read (BTC/ETH/SOL were all barely positive 10 hours ago). NEAR/ADA/SOL leading losses — same cohort that was in the pattern-of-7 losing streak. Had any new entry been authorized, the regime 5a gate would almost certainly fail (universe-wide fade) and SBD 5a-SBD could be active (needs full 15-pair check if entries ever re-authorized).
+- Reinforces the pending P-W25R-SAMESESSION-STOP-GATE evidence: the 10-05→10-06 NEAR entry archetype (exact 4-floor regime → stop within same session) is now followed by a universe-wide fade day — consistent with the "regime crystallization" pattern that pending Ring-2 proposals target.
+
+### DO
+
+1. Mark-to-market: **n/a — flat.** No position prices to update.
+2. Exit check: **n/a — flat.** No positions to evaluate against strategy exits or 2×ATR stops.
+3. Drawdown check: **14.00% unchanged.** No kill-switch crossing this wake. 12.5% warn remains breached (same state as prior wakes); no new 12.5% re-crossing event (already crossed on 10-06 NEAR stop).
+4. Entry scan: **NOT PERFORMED** per routine spec (midday is management-only). Additionally blocked by Ring 3 trip.
+
+### Pending user-action items (unchanged from overnight 13:13Z this day)
+
+1. Review NEAR 10-06 stop-out and the pattern-of-7 rule8-cashfit-class evidence
+2. Resolve pending Ring-2 proposals (SAMESESSION-STOP-GATE, CASHFIT, POSTOUTAGE-DEFER-HEURISTIC, RATCHET-TIGHTEN) with Y/N/D on Telegram
+3. Investigate scheduler gap root cause (routines 01/02/03 missed 10-06 through 10-09)
+4. Send `RESUME` only after at least some of the above are addressed
+5. Pending W22-G exit-interpretation audit note (preserved in portfolio.md) — routed to next routine-04-harness Sat memo
+
+### WRITE / NOTIFY
+
+- `portfolio.md`: header updated to this wake timestamp + ambient market line (no numeric MTM delta — flat).
+- `trade_log.md`: no change (no exit, no entry).
+- `research_log.md`: this row.
+- Telegram: **silent** per NOTIFY criteria. No new Ring-3 trip (already tripped), no new exit (flat), no new warn-threshold crossing (12.5% already breached), no actionable news.
