@@ -10392,3 +10392,4 @@ Findings identical in composition to the 10-10 and 10-11 wakes (deltas on stale-
 2026-10-21T16:49:59Z | harness | day-gate | not Saturday, skipping | no action
 2026-10-21T16:50:59Z | allocation | day-gate | not Sunday (Wed), skipping | no action
 2026-10-21T17:09:11Z | harness | day-gate | not Saturday, skipping | no action
+2026-10-21T17:40:33Z | allocation | day-gate | not Sunday, skipping | no action
