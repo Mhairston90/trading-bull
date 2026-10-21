@@ -1,7 +1,7 @@
 # BULL Portfolio State
 
 > **Rebuilt each wake** from `trade_log.md`; the log remains the source of truth.
-> **Last rebuild:** 2026-10-21T16:50Z routine-03-eod (PT 2026-10-21 09:50 Wed — off-cadence early fire ~12h before the 21:00 PT slot; fires concurrently with routine-02-midday 16:48Z this day as part of 9-day scheduler-gap recovery). EOD day-anchored row posted for PT 2026-10-21 Wed trading day. Portfolio unchanged: flat, Ring 3 TRIPPED (streak 7/7). **FULL PAUSE REMAINS IN EFFECT. USER `RESUME` STILL REQUIRED.** Ambient at fire: BTC $84,635, ETH $2,515.33, SOL $108.48, NEAR $5.3171, ADA $0.2292 — **5/5 sampled green 24h**. Day PnL $0.00 (flat). EOD Telegram card sent per routine spec. BTC rolling 30d **−2.22%** / 7d **+3.79%**; BULL flat → vs BTC-hold 30d **+2.22pp** (defensive beat by being out), 7d **−3.79pp** (opportunity cost of halted state during BTC bounce).
+> **Last rebuild:** 2026-10-21T20:05Z routine-02-midday (PT 2026-10-21 13:05 Wed — **on-cadence** 13:00 PT midday slot; follows the 16:48Z off-cadence recovery fire ~3h17m prior and the 16:50Z off-cadence EOD ~3h15m prior as part of the same 9-day scheduler-gap recovery day). Portfolio unchanged: flat, Ring 3 TRIPPED (streak 7/7). **FULL PAUSE REMAINS IN EFFECT. USER `RESUME` STILL REQUIRED.** Ambient at fire: BTC $84,520.6, ETH $2,493.98, SOL $108.18, NEAR $5.3032, ADA $0.228031 — **5/5 sampled green 24h** (NEAR strongest +7.76%). Day PnL $0.00 (flat). No Telegram sent (no new Ring-3 trip, no exit, no new DD threshold crossing; DD still at 14.00% — already announced in prior wakes). Ambient drift from 16:48Z sample: BTC −0.14%, ETH −0.85%, SOL −0.28%, NEAR −0.26%, ADA −0.52% — mild intraday fade of the morning green but still fully positive 24h.
 >
 > **Scheduler-gap note (carried):** no routine fires between 2026-10-12T20:41Z and 2026-10-21T16:47Z = ~9.5 days. Third major scheduler outage in ~5 weeks (09-20, 10-10, 10-21 recoveries). Flagged for next harness Sat memo as recurring-A watchdog evidence. No open positions = no PnL impact; cosmetic ops gap.
 >
@@ -32,7 +32,7 @@ Open positions: **0 / 8** (strategy cap 0/4; BTC-cluster 0/2).
 - **Trades closed today**: 0.
 - **Win rate today**: n/a.
 
-## Active kill-switch state (routine-02-midday 2026-10-21T16:48Z)
+## Active kill-switch state (routine-02-midday 2026-10-21T20:05Z — on-cadence)
 
 - **Daily loss cap (PT 10-21 trading day)**: 0.00% realized vs PT-midnight equity $9,518.79. **CLEAR.**
 - **Consecutive-loss cap**: **7 losses** (NEAR 09-23, ADA 09-26, SOL 09-27 scratch, SOL 09-30, ADA 10-01, SOL 10-02, NEAR 10-06). Streak **7/7**. **RING 3 TRIP — FULL PAUSE REMAINS. USER `RESUME` NEEDED BEFORE ANY NEW ENTRIES.**
