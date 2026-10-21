@@ -4,6 +4,47 @@
 > Rows older than 30 days archived by routine #3 monthly sweep.
 >
 
+## 2026-10-21T16:48Z — routine-02-midday (PT 2026-10-21 09:48 Wed, OFF-CADENCE early fire) — flat, Ring 3 still TRIPPED, 0 trades, 9d-gap recovery
+
+### VERIFY
+
+- **Slot identity**: `bull-02-midday`. Task body references Routine 02 — Midday Health Check. No mismatch — guard clear.
+- **Fire cadence**: cron `0 13 * * 1-5` (Mon-Fri PT). Fire time 09:48 PT Wed → **OFF-CADENCE early by ~3h12m**. Scheduler drift adds to the gap evidence; not blocking (today is still a trading day).
+- **Scheduler gap**: last fire 2026-10-12T20:41Z routine-02-midday = **9d 23h ago**. Zero intervening routine fires (git log confirms). Longest gap since 10-05 → 10-10 (122h). This is the 3rd major scheduler outage in ~5 weeks (09-20, 10-10, 10-21 recoveries). Not a routine-02 job to fix; flagging for next harness Sat memo as watchdog-A evidence.
+- **Kraken MCP**: healthy — multi_ticker returned 5 pairs (BTC $84,634.7, ETH $2,515.23, SOL $108.51, NEAR $5.3171, ADA $0.229184).
+
+### Kill-switch state (unchanged from 10-12 fire)
+
+- **Portfolio**: flat (0 positions). No MTM delta.
+- **Cash / Equity**: $9,518.79 (unchanged).
+- **Realized PnL since inception**: −$481.20 (unchanged — no closes).
+- **Drawdown from peak $11,068.89**: **14.00%**. BREACHES 12.5% warn by 1.50pp; CLEAR of 25% kill cap by 11.00pp. **Warning threshold already crossed previously — not a new crossing this wake, so no Telegram ALERT per routine-02 spec.**
+- **Equity floor**: $9,518.79 > $7,500 (+$2,018.79 headroom). CLEAR.
+- **Consecutive-loss streak**: **7/7**. **RING 3 TRIPPED** — FULL PAUSE in effect. User `RESUME` still required. **Not a new trip, so no new Telegram ALERT this wake.**
+- **Exposure**: 0.00% / 4%. CLEAR (flat).
+- **Cluster**: 0/2 BTC-cluster. CLEAR (flat).
+- **Daily realized loss (PT 10-21 Wed)**: 0.00% vs PT-midnight equity. CLEAR.
+
+### Ambient context (informational — Ring 3 TRIPPED halts entries)
+
+- **BTC** $84,634.7 +2.05% 24h, high $84,840, low $82,294, vol 2,248 XBT
+- **ETH** $2,515.23 +2.81% 24h
+- **SOL** $108.51 +1.95% 24h
+- **NEAR** $5.3171 +8.04% 24h (leading green, 10-day recovery continues)
+- **ADA** $0.229184 +2.49% 24h
+- Sample breadth: **5/5 green** on 24h (full-sample relief). Sharp reversal from 10-12 midday full-sample red (0/5 green). Regime proper measurement deferred to overnight/EOD scope.
+
+### Actions
+
+- **Position management**: n/a (flat).
+- **Exit check**: n/a (no positions).
+- **Entry scan**: SUSPENDED per routine-02 spec AND Ring 3 trip. No entries attempted.
+- **MTM delta**: $0.00. Equity unchanged $9,518.79.
+- **Writes**: portfolio.md rewritten (fresh timestamp + ambient + scheduler-gap note). trade_log.md untouched (no events). research_log.md this row.
+- **Telegram**: silent (no new trip, no exits, warn threshold not newly crossed).
+
+---
+
 ## 2026-10-12T04:12Z — routine-03-eod (PT 2026-10-11 21:12 Sun, OFF-CADENCE Mon-Fri cron fired Sun) — flat, Ring 3 still TRIPPED, 0 trades, EOD card sent
 
 ### VERIFY
@@ -10221,3 +10262,70 @@ Findings identical in composition to the 10-10 and 10-11 wakes (deltas on stale-
 - `trade_log.md`: no change (no exit, no entry).
 - `research_log.md`: this row.
 - Telegram: **silent** per NOTIFY criteria. No new Ring-3 trip (already tripped), no new exit (flat), no new warn-threshold crossing (12.5% already breached), no actionable news.
+
+## 2026-10-21T16:47Z — Routine 01 overnight (off-cadence Wed after 9-day gap)
+
+### Context
+
+- Fire slot: `bull-01-overnight` scheduled 06:00 PT Mon-Fri. **Wed 2026-10-21 09:47 PT — off-cadence Wed fire ~3h47m past the 06:00 cron**. Elapsed since last BULL commit (routine-02-midday 10-12T20:41Z): **~212h / 8.8 days**. All five scheduled routines (01/02/03/04/05) dead > watchdog thresholds. Routine 06 (12d) and 07 (12d) also dead per watchdog.
+- Account flat since NEAR 10-06T17:00Z stop (routine-02 10-10 replay). Ring 3 still TRIPPED on 7/7 consecutive losses — no entries authorized until user `RESUME`.
+
+### VERIFY
+
+- **Ring 3 state: TRIPPED and held** — consecutive-loss streak 7/7. User `RESUME` still required. All entries blocked by guardrail.
+- Daily loss cap (PT 10-21 trading day): 0.00% realized (flat). CLEAR by day-anchored measure.
+- Drawdown: **14.00% from peak $11,068.89** (unchanged; flat). Above 12.5% warn by 1.50pp; below 25% kill cap by 11.00pp.
+- Equity floor: **$9,518.79 > $7,500** (+$2,018.79). CLEAR.
+- Exposure: **0.00% / 4%** used. CLEAR.
+- Cluster cap: 0/2 BTC-cluster. CLEAR.
+- MCPs: Kraken ticker healthy; ue-scripts failed (not needed); ableton/yt-analysis unused.
+- **Watchdog findings 13** (vs 11 at last wake): routines 01/02/03/04/05/06/07 all heartbeat-dead (expected — scheduler-wide outage), 4 uncommitted files (stranded from 2026-06-29 session; carried across many wakes), 5 stale variant portfolios (long-term stale). All informational — no new kill-switch condition.
+
+### Ambient market read (Kraken multi-ticker 16:47Z)
+
+| Pair | Last | 24h % |
+|------|------|-------|
+| BTC/USD | $84,630.0 | +2.04% |
+| ETH/USD | $2,514.99 | +2.80% |
+| SOL/USD | $108.50 | +1.94% |
+| HYPE/USD | $81.37 | +1.31% |
+| XRP/USD | $1.38419 | +3.72% |
+| ADA/USD | $0.229184 | +2.49% |
+| NEAR/USD | $5.3171 | +8.04% |
+| SUI/USD | $1.0495 | +1.99% |
+| TAO/USD | $277.066 | +1.24% |
+| XDG/USD | $0.0834563 | +2.23% |
+| LTC/USD | $62.15 | +0.97% |
+| AVAX/USD | $9.91 | +1.81% |
+| LINK/USD | $12.69643 | +3.07% |
+| ONDO/USD | $0.46696 | +3.17% |
+| TRX/USD | $0.332473 | +0.41% |
+
+- **15/15 pairs green 24h** — full-sample universe rally. Median 24h ≈ +2.0%. Regime 5a would PASS by comfortable margin (14+/15 positive); SBD cleanly inactive. NEAR leads +8.04% (notable: BULL's prior two NEAR stops now trading above the stop level — 10-06 stop $5.067, now $5.3171 → +$0.25 above stop; 09-23 stop $4.454, now $5.3171 → +$0.86 above stop). This is informational — mandate-locked FULL PAUSE prevents acting on any constructive regime read until user `RESUME`.
+- Context on gap: 212h gap means 8.8 days of absent monitoring. Had Ring 3 not been tripped, the Oct 12 → Oct 21 window would have presented multiple entry opportunities during this recovery (e.g., universe-wide positive breadth days likely occurred mid-window). Status quo rejection is the correct call per routine-01 spec regardless (`If tripped: skip to NOTIFY step with status quo, do not open new positions`).
+
+### DO
+
+1. Overnight price pull: completed above (ambient read, no actionable use).
+2. Position check: **n/a — flat.**
+3. Entry scan: **skipped — Ring 3 tripped**, routine-01 explicitly directs skip-to-NOTIFY on kill-switch trip.
+4. News scan: **skipped — no technical-PASS candidates.**
+4a. Sentiment pass: **skipped — same reason.**
+5. New entries: **BLOCKED — Ring 3 TRIPPED.**
+6. Research_log: this row.
+7. First-of-month universe refresh: n/a (21st).
+
+### Pending user-action items (unchanged, now 15 days stale)
+
+1. Review NEAR 10-06 stop-out + pattern-of-7 rule8-cashfit-class evidence (6 losses of 7 instances, ≈−$857 cumulative)
+2. Resolve pending Ring-2 proposals (SAMESESSION-STOP-GATE, CASHFIT, POSTOUTAGE-DEFER-HEURISTIC, RATCHET-TIGHTEN) with Y/N/D on Telegram
+3. Investigate scheduler gap root cause — now compounded: 10-05→10-10 outage (122h), 10-12→10-21 outage (212h). Scheduler fundamentally unreliable. **This is the longest contiguous full-stack outage in BULL's history** — Task Scheduler and/or OS sleep gating is clearly dropping cron fires routinely.
+4. Send `RESUME` only after at least some of the above are addressed
+5. Pending W22-G exit-interpretation audit note (preserved in portfolio.md) — routed to next routine-04-harness Sat memo
+
+### WRITE / NOTIFY
+
+- `portfolio.md`: header timestamp update + ambient market line (no numeric MTM delta — flat).
+- `trade_log.md`: no change (no exit, no entry).
+- `research_log.md`: this row.
+- Telegram: **silent** per NOTIFY criteria (no new Ring-3 trip, no new OPEN/CLOSE, no actionable news, no universe refresh). Watchdog sent its own alert at 16:47:23Z.
