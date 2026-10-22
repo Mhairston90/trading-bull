@@ -1,7 +1,7 @@
 # BULL Portfolio State
 
 > **Rebuilt each wake** from `trade_log.md`; the log remains the source of truth.
-> **Last rebuild:** 2026-10-21T20:05Z routine-02-midday (PT 2026-10-21 13:05 Wed — **on-cadence** 13:00 PT midday slot; follows the 16:48Z off-cadence recovery fire ~3h17m prior and the 16:50Z off-cadence EOD ~3h15m prior as part of the same 9-day scheduler-gap recovery day). Portfolio unchanged: flat, Ring 3 TRIPPED (streak 7/7). **FULL PAUSE REMAINS IN EFFECT. USER `RESUME` STILL REQUIRED.** Ambient at fire: BTC $84,520.6, ETH $2,493.98, SOL $108.18, NEAR $5.3032, ADA $0.228031 — **5/5 sampled green 24h** (NEAR strongest +7.76%). Day PnL $0.00 (flat). No Telegram sent (no new Ring-3 trip, no exit, no new DD threshold crossing; DD still at 14.00% — already announced in prior wakes). Ambient drift from 16:48Z sample: BTC −0.14%, ETH −0.85%, SOL −0.28%, NEAR −0.26%, ADA −0.52% — mild intraday fade of the morning green but still fully positive 24h.
+> **Last rebuild:** 2026-10-22T04:12Z routine-03-eod (PT 2026-10-21 21:12 Wed — **off-cadence early ~3h48m before 00:00Z 10-22 slot**; 3rd routine fire this UTC day after 16:48Z gap-recovery overnight and 20:05Z on-cadence midday; label date = PT fire-time 2026-10-21 per EOD date-labeling guard). Portfolio unchanged: flat, Ring 3 TRIPPED (streak 7/7). **FULL PAUSE REMAINS IN EFFECT. USER `RESUME` STILL REQUIRED.** Ambient at fire: BTC $82,809.8, ETH $2,441.6, SOL $105.38, NEAR $5.1014, ADA $0.220447 — **0/5 sampled green 24h**, FULL REGIME FLIP from midday's 5/5 green within ~8 hours (midday→EOD breadth swing: BTC −2.03%, ETH −2.10%, SOL −2.59%, NEAR −3.81%, ADA −3.33% — mean −2.77%). Day PnL $0.00 (flat). Telegram EOD card sent per routine-03 NOTIFY mandatory daily rule.
 >
 > **Scheduler-gap note (carried):** no routine fires between 2026-10-12T20:41Z and 2026-10-21T16:47Z = ~9.5 days. Third major scheduler outage in ~5 weeks (09-20, 10-10, 10-21 recoveries). Flagged for next harness Sat memo as recurring-A watchdog evidence. No open positions = no PnL impact; cosmetic ops gap.
 >
@@ -25,14 +25,18 @@
 Portfolio risk-at-moment: **0.00%** of equity.
 Open positions: **0 / 8** (strategy cap 0/4; BTC-cluster 0/2).
 
-## Day summary — PT 2026-10-21 Wed trading day
+## Day summary — PT 2026-10-21 Wed trading day (EOD close)
 
 - **Day PnL (realized)**: $0.00 (no closes).
-- **Trades opened today**: 0 (routine-02-midday is not entry-authorized per spec; also Ring 3 TRIPPED).
+- **Trades opened today**: 0 (Ring 3 TRIPPED blocks all entries; routine-03 EOD scan also skipped per strategy §Entries no-kill-switch gate).
 - **Trades closed today**: 0.
 - **Win rate today**: n/a.
+- **New equity**: $9,518.79 (unchanged).
+- **Rolling 30d BULL**: −9.19% (sum of 7 losses −$963.02 / 30d-ago equity ~$10,481.81).
+- **Rolling 30d BTC-hold**: −3.93% (BTC 09-22T00:00Z close $86,196.7 → now $82,809.8).
+- **Delta BULL − BTC (30d)**: **−5.26pp** — BULL lagging BTC-hold.
 
-## Active kill-switch state (routine-02-midday 2026-10-21T20:05Z — on-cadence)
+## Active kill-switch state (routine-03-eod 2026-10-22T04:12Z — PT 2026-10-21 21:12 EOD)
 
 - **Daily loss cap (PT 10-21 trading day)**: 0.00% realized vs PT-midnight equity $9,518.79. **CLEAR.**
 - **Consecutive-loss cap**: **7 losses** (NEAR 09-23, ADA 09-26, SOL 09-27 scratch, SOL 09-30, ADA 10-01, SOL 10-02, NEAR 10-06). Streak **7/7**. **RING 3 TRIP — FULL PAUSE REMAINS. USER `RESUME` NEEDED BEFORE ANY NEW ENTRIES.**
@@ -40,32 +44,32 @@ Open positions: **0 / 8** (strategy cap 0/4; BTC-cluster 0/2).
 - **Equity floor: $9,518.79 > $7,500** (+$2,018.79). **CLEAR.**
 - **Exposure: 0.00% / 4%** used. **CLEAR** (flat).
 - **Cluster cap: 0/2 BTC-cluster**. **CLEAR** (flat).
-- **MCP availability**: Kraken multi_ticker healthy (returned 5 pairs). ue-scripts MCP failed (not needed for BULL ops).
+- **MCP availability**: Kraken multi_ticker healthy (5 pairs). Kraken 1d OHLCV healthy (35 bars for benchmark). ue-scripts MCP failed (not needed for BULL ops).
 - **Ring 3 state**: **TRIPPED on consecutive-loss cap (7/7).** No new entries by any routine until user `RESUME`.
 
 ## Ops notes
 
-- **Entry authorization: SUSPENDED.** Ring 3 trip + routine-02 spec both block entries.
-- **Scheduler gap:** 9d 23h since last fire. Routine-01 overnight did not fire 10-13 through 10-21 (9 missed fires). Routine-03 EOD missed 10-12 Mon-Fri. Routine-04 harness missed Sat 10-17. Routine-05 allocation missed Sun 10-18. Pattern-of-N (where N = count of scheduler-outage recoveries): now 3rd major outage in ~5 weeks (09-20 recovery, 10-10 recovery, 10-21 recovery).
+- **Entry authorization: SUSPENDED.** Ring 3 trip blocks all entries. Routine-03 EOD scan also skipped per strategy §Entries no-kill-switch gate.
+- **Scheduler status:** EOD slot fired ~3h48m **early** off-cadence (04:12Z vs expected ~05:00Z for 21:00 PT cron on standard time). Third routine fire this UTC day (16:48Z overnight-recovery, 20:05Z midday on-cadence, 04:12Z EOD early). Behaviorally benign — label date correct per PT fire-time (2026-10-21).
 - **Pending Ring-2 proposals** (all backlog, user action required):
   - P-W27-CASHFIT (routine-04-harness W25R)
   - P-W25R-SAMESESSION-STOP-GATE (options a/b/d from 10-01 ADA lesson, pattern-of-7 strengthened)
   - P-W25R-RATCHET-TIGHTEN (from 09-27 SOL W22-H lesson, score 8)
-  - P-W25R-POSTOUTAGE-DEFER-HEURISTIC (from 09-23 lesson, score 6) — would have DEFERRED the 10-05 NEAR entry on gap-dead state (would also apply today if a RESUME came with the gap not yet closed)
-- **Benchmark**: not re-computed this wake (lean midday). BTC spot $84,635 (recovered from $82,974 at 10-12 midday ≈ +2.0% over 9d). BULL now −4.81% since inception (unchanged — flat). Delta narrowed slightly as BTC also drifted; proper daily-anchored computation at next EOD.
-- **Market tone shift:** 10-12 was full-sample red (0/5 green); today is full-sample green (5/5 green). Regime measurement deferred to overnight/EOD (not routine-02 scope).
+  - P-W25R-POSTOUTAGE-DEFER-HEURISTIC (from 09-23 lesson, score 6) — would have DEFERRED the 10-05 NEAR entry on gap-dead state
+- **Benchmark (EOD daily-anchored)**: BTC 30d change = $86,196.7 → $82,809.8 = **−3.93%**. BULL 30d = −$963.02 / ~$10,481.81 = **−9.19%**. Delta **−5.26pp**. BULL lagging BTC-hold over 30d (consistent with 7-loss streak). Since-inception BULL −4.81%; BTC spot has drifted enough that the BULL-vs-BTC gap narrowed modestly from midday framing.
+- **Market tone shift (intraday 10-21 PT):** midday 5/5 green → EOD 0/5 red within ~8h; mean sampled drawdown −2.77%. **Near-miss regime-crystallization-within-15h instance #5** archetype — had Ring 3 been cleared pre-midday and an entry authorized, this fade would likely have put the position stop-pierce proximate. Reinforces P-W25R-POSTOUTAGE-DEFER-HEURISTIC + P-W25R-SAMESESSION-STOP-GATE urgency; routed to next harness Sat memo.
 
 ## Lessons status
 
 - Pattern-of-7 rule8-cashfit-class remains documented. No new trades = no new lesson evidence this wake.
-- Lesson appending deferred to routine-01 or routine-04 (not this routine's job per spec).
+- EOD per routine spec can append up to 2 lessons; none appended this wake — a flat Ring-3-tripped day with no closes provides no within-trade evidence. The intraday breadth-flip (5/5→0/5) is ambient regime data, not a BULL trade lesson; routed to next harness Sat memo as further W25R evidence.
 
 ## Notes for next wake
 
 - **TRADING HALTED** until user `RESUME`. All routines fire for monitoring/MTM but reject any entry pre-check (per guardrails `kill_switch_tripped`).
-- **Scheduler gap** needs user visibility: this is the 3rd major outage in ~5 weeks. Even if user `RESUME`s today, same gap-exposure dynamic could recur. Flagging for next harness-Sat memo.
+- **Scheduler status:** today's three fires (16:48Z overnight-recovery, 20:05Z midday on-cadence, 04:12Z EOD off-cadence early) indicate the scheduler is now responsive again after the 9.5d outage. Watch for any further gaps; still flagged for next harness-Sat memo.
 - **User action required**:
   1. Resolve pending Ring-2 proposals with Y/N/D
   2. Investigate scheduler gap root cause
   3. Send `RESUME` only after at least some of the above are addressed
-- **Next routine wakeup**: whichever cron fires next — routine-03-eod ~21:00 PT today (04:00Z 10-22) if scheduler healthy, otherwise next recovery wake.
+- **Next routine wakeup**: whichever cron fires next — routine-01-overnight ~05:00 PT 10-22 (12:00Z) if scheduler healthy, otherwise next recovery wake.
